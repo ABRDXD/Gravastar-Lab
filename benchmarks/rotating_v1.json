@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "model": "toy-c3-v1",
+  "preset_id": "rapid_rotation_project_v1",
+  "parameter_provenance": "M,a,Lambda from arXiv:2309.00551v2 section III.I; shell radii and validation box are project choices",
+  "parameters": {"M": "1", "a": "0.875", "Lambda": "0.5", "r_in": "1.5", "r_out": "1.8"},
+  "domain": {"r_min": "0.25", "r_max": "10", "theta_min": "0.05", "radial_samples": 81, "angular_samples": 25},
+  "reference": {"decimal_digits": 70, "finite_difference_step": "1e-9"},
+  "thresholds": {
+    "metric": 2e-12,
+    "inverse": 2e-11,
+    "dg": 2e-10,
+    "ddg": 2e-9,
+    "drrr": 2e-8,
+    "curvature": 2e-8,
+    "analytic_curvature": 2e-9,
+    "identity": 2e-11,
+    "matching": 1e-22,
+    "reference_refinement": 1e-24,
+    "convergence_ratio_min": 3.0
+  }
+}

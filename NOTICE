@@ -1,0 +1,20 @@
+GravastarLab
+Copyright (C) 2026 GravastarLab contributors
+
+Original project source is licensed under the GNU General Public License,
+version 3 or, at your option, any later version (GPL-3.0-or-later).
+The full license is provided in LICENSE.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See LICENSE for the full terms.
+
+Scientific model reference:
+S. Ilijic and A. DeBenedictis, arXiv:2309.00551v2.
+See docs/MODEL.md and docs/SOURCE_AUDIT.md for the equation mapping, locally
+chosen benchmark parameters, coordinate restrictions, and scientific limits.
+
+No KerrLab implementation, renderer, assets, or validation claims are imported.
+External tool/runtime observations and future dependency decisions are recorded
+in THIRD_PARTY.md. No endorsement by the cited authors or dependency authors
+is implied.

@@ -1,0 +1,25 @@
+# Build and environment artifacts
+build/
+.venv/
+.cache/
+__pycache__/
+*.pyc
+*.tmp
+*.log
+compile_commands.json
+
+# Local results and third-party sources
+results/local/
+third_party/sources/
+
+# Editor and IDE metadata
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
