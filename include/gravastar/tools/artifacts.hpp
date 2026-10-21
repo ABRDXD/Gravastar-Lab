@@ -106,11 +106,11 @@ inline Json manifest(const fs::path &project) {
   };
   for (const auto &name : {"CMakeLists.txt", "CMakePresets.json"})
     take(root / name, "computational");
-  for (const auto &name :
-       {"README.md", "PLAN.md", "LICENSE", "NOTICE", "THIRD_PARTY.md"})
+  for (const auto &name : {"AGENTS.md", "README.md", "README.txt", "PLAN.md",
+                           "LICENSE", "NOTICE", "THIRD_PARTY.md"})
     take(root / name, "documentation");
   for (const auto &name :
-       {"include", "src", "reference", "python", "tests", "benchmarks", "tools",
+       {"include", "src", "reference", "tests", "benchmarks", "tools",
         "schemas", "scenes", "shaders", "plugins", "third_party", "docs"}) {
     auto p = root / name;
     if (fs::is_symlink(p))

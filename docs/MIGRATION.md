@@ -56,3 +56,6 @@ is retained as regression input, not as a second accepted preset.
 5. Final reports and source manifest are generated from the final source tree.
    The remote baseline reviewed was `a316415cc7bd44246a3b0e222d6cca91066d1f6b`;
    its only difference from local `42de923` was a README blank line.
+   Before publication, `main` advanced to `d183225` through the backup merge,
+   adding only `README.txt`. That file is preserved byte-for-byte; its historical
+   Python instructions are superseded by `README.md` and this migration record.

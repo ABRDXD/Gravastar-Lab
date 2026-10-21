@@ -10,7 +10,40 @@ void require(bool b, const std::string &message) {
   if (!b)
     throw std::runtime_error(message);
 }
+bool permitted_source(const fs::path &path) {
+  static const std::set<std::string> names{"LICENSE", "NOTICE", ".gitignore",
+                                           ".gitkeep", ".clang-format"};
+  static const std::set<std::string> extensions{".cpp",  ".hpp", ".cmake",
+                                                ".json", ".md",  ".txt"};
+  return names.contains(path.filename().string()) ||
+         extensions.contains(path.extension().string());
+}
+void language_policy(const fs::path &root) {
+  const std::set<std::string> ignored{".git",   "build",  "results",
+                                      ".cache", ".venv",  "__pycache__",
+                                      ".idea",  ".vscode"};
+  for (fs::recursive_directory_iterator it(root), end; it != end; ++it) {
+    const auto path = it->path();
+    if (ignored.contains(path.filename().string())) {
+      it.disable_recursion_pending();
+      continue;
+    }
+    if (fs::is_symlink(path))
+      throw std::runtime_error("source symlink requires review: " +
+                               path.string());
+    if (it->is_regular_file() && !permitted_source(path))
+      throw std::runtime_error("unapproved source format: " + path.string());
+  }
+  std::cout << "C++20 source-format policy passed\n";
+}
 int self_test(const fs::path &self) {
+  require(permitted_source("code.cpp") && permitted_source("api.hpp") &&
+              permitted_source("CMakeLists.txt") &&
+              !permitted_source("automation.py") &&
+              !permitted_source("automation.sh") &&
+              !permitted_source("automation.js") &&
+              !permitted_source("automation"),
+          "source-format allow list");
   require(
       u::sha256("") ==
           "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -105,6 +138,7 @@ int main(int argc, char **argv) {
              "gravastar_tools workflow [--root PATH] [--preset "
              "headless-release|headless-debug|sanitizers] [--jobs N] [--config "
              "benchmarks/FILE.json] [--output results/FILE.json]\n";
+      std::cout << "gravastar_tools language-policy [--root PATH]\n";
       return 0;
     }
     fs::path root = GRAVASTAR_SOURCE_ROOT,
@@ -133,6 +167,10 @@ int main(int argc, char **argv) {
         throw std::invalid_argument("unknown option " + flag);
     }
     root = fs::canonical(root);
+    if (command == "language-policy") {
+      language_policy(root);
+      return 0;
+    }
     output = u::result_path(root, output);
     if (command == "manifest") {
       auto current = u::manifest(root);

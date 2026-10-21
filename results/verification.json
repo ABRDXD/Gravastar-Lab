@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "record_type": "CTest outcomes transcribed from command output",
+  "date": "2026-10-21",
+  "compiler": "GNU 16.2.1",
+  "cplusplus": 202002,
+  "computational_source_sha256": "c86a9cda0406c96252a0ba700449d9ac9ae86701afe5cc18009aab8a8c3e494e",
+  "source_root": "/home/abrsdxd/Projects/GravastarLab-Cpp20",
+  "release": {
+    "configure": ["cmake", "--preset", "headless-release"],
+    "test": ["ctest", "--preset", "headless-release"],
+    "passed": 9,
+    "total": 9,
+    "exit_code": 0,
+    "elapsed_seconds": 12.69,
+    "scientific_seconds": 7.69
+  },
+  "debug": {
+    "configure": ["cmake", "--preset", "headless-debug"],
+    "test": ["ctest", "--preset", "headless-debug"],
+    "passed": 9,
+    "total": 9,
+    "exit_code": 0,
+    "elapsed_seconds": 141.62,
+    "scientific_seconds": 85.50
+  },
+  "sanitizers_initial": {
+    "test": ["ctest", "--preset", "sanitizers"],
+    "exit_code": 8,
+    "passed": 1,
+    "total": 9,
+    "elapsed_seconds": 325.35,
+    "diagnostics": [
+      "LeakSanitizer cannot operate under ptrace in this sandbox",
+      "Unoptimized scientific test exceeded its 300 second timeout"
+    ],
+    "acceptance": "not accepted as a sanitizer pass"
+  },
+  "sanitizers_optimized": {
+    "configure": ["cmake", "--preset", "sanitizers", "-B", "build/sanitizers-optimized", "-DCMAKE_BUILD_TYPE=RelWithDebInfo"],
+    "test": ["ctest", "--test-dir", "build/sanitizers-optimized", "--output-on-failure"],
+    "environment": {"ASAN_OPTIONS": "detect_leaks=0"},
+    "passed": 9,
+    "total": 9,
+    "exit_code": 0,
+    "elapsed_seconds": 351.96,
+    "scientific_seconds": 214.80,
+    "sanitizer_diagnostics": "none found in CTest LastTest.log"
+  },
+  "leak_checking": "unverified; requires a host without this tracing limitation",
+  "publication": {
+    "authorized": true,
+    "observed_main": "d183225ed0d1489e503536bef11417042524580c",
+    "remote_modified": false,
+    "blockers": [
+      "Shell Git: Could not resolve hostname github.com",
+      "Connected GitHub API tree creation: HTTP 403 Resource not accessible by integration"
+    ]
+  },
+  "timing_scope": "observed wall times with overlapping local work; not rendering throughput"
+}

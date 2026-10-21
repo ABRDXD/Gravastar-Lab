@@ -68,6 +68,10 @@ graphics, or GUI library. C++ standard runtimes and local build tools
 are recorded in [ENVIRONMENT.md](ENVIRONMENT.md) and
 [THIRD_PARTY.md](../THIRD_PARTY.md). No Electron runtime, npm lockfile,
 Windows toolchain, KerrLab coefficient table, or historical report is adopted.
+The native migration additionally uses installed header-only C++
+`nlohmann_json 3.12.0` for JSON reports and tools, with its MIT notice retained.
+The independent integer, rational, decimal and polynomial code is original
+C++20 and has no linked numerical-library dependency.
 
 Later compiled dependencies must be reviewed and pinned before integration.
 Installed package version numbers are observations, not immutable source pins

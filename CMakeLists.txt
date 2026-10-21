@@ -38,13 +38,8 @@ if(BUILD_TESTING)
     add_test(NAME validation_failure_isolation COMMAND gravastar_validation_failures
         $<TARGET_FILE:gravastar_validate> ${CMAKE_CURRENT_SOURCE_DIR})
     set_tests_properties(validation_failure_isolation PROPERTIES TIMEOUT 300)
-    # Preserve the earlier API and its coverage while its owner reviews consolidation.
-    add_library(gravastar_legacy_geometry STATIC src/geometry/metric.cpp src/geometry/curvature.cpp)
-    target_link_libraries(gravastar_legacy_geometry PUBLIC gravastar_geometry)
-    add_executable(gravastar_legacy_tests tests/geometry_tests.cpp)
-    target_link_libraries(gravastar_legacy_tests PRIVATE gravastar_legacy_geometry)
-    add_test(NAME legacy_geometry_coverage COMMAND gravastar_legacy_tests)
     add_test(NAME tools_migration COMMAND gravastar_tools self-test)
+    add_test(NAME cpp20_language_policy COMMAND gravastar_tools language-policy)
     add_test(NAME rotating_geometry COMMAND gravastar_validate
         --output results/local/ctest_rotating.json)
     set_tests_properties(rotating_geometry PROPERTIES TIMEOUT 300 LABELS scientific)
@@ -56,6 +51,8 @@ if(BUILD_TESTING)
     target_link_libraries(gravastar_geometry_tests PRIVATE gravastar_geometry)
     add_test(NAME geometry_unit COMMAND gravastar_geometry_tests)
     add_test(NAME benchmark_help COMMAND gravastar_benchmark --help)
+    add_test(NAME benchmark_shell_endpoint COMMAND gravastar_benchmark
+        evaluate toy 1 0.875 0.5 1.5 1.8 1.5 1.2 shell)
     add_test(NAME benchmark_reject_axis COMMAND gravastar_benchmark
         evaluate toy 1 0.875 0.5 1 2 1.5 0)
     set_tests_properties(benchmark_reject_axis PROPERTIES WILL_FAIL TRUE)

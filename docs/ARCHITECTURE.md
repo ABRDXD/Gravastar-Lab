@@ -59,14 +59,14 @@ digests. Build/results/cache/VCS trees are excluded; selected symlinks are rejec
 Two separately renamed report/manifest files are not one transaction; compare
 their computational digests after an interruption. Hashes identify bytes, not authorship.
 
-## Preserved earlier implementation
+## Consolidated implementation
 
-`metric.hpp`, `metric.cpp`, `curvature.cpp`, `geometry_tests.cpp`, and
-`benchmarks/rotating.json` were present in the shared baseline. They are retained
-for their owner's review. Their tests run as `legacy_geometry_coverage`.
-This alternate API shares production jets and is **not** an independent
-reference. Its `[1.8,2.2]` shell is not the accepted `rotating_v1.json` preset;
-its old configuration schema is not consumed by `gravastar_validate`.
+The earlier `metric.hpp` API, duplicate implementation, and unused configuration
+were retired after their coverage was ported to `tests/cpp_geometry.cpp`.
+The `[1.8,2.2]` shell remains regression input; `rotating_v1.json` is the sole
+accepted preset. See `MIGRATION.md` for the pre-removal verification record.
+CTest also enforces an allow list of C++/CMake source and data/document formats;
+this format check supplements review of the C++20 architectural constraint.
 
 P2 optics, GYOTO, chart transitions, central continuation, GPU/desktop work,
 recording and stability research remain outside this implementation.

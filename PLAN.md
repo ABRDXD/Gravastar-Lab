@@ -1,6 +1,6 @@
 # GravastarLab implementation plan
 
-Status: **implementation authorized; P0/P1 implementation under verification**
+Status: **P0 bounded-domain specification and P1 geometry benchmark implemented**
 (2026-10-21). The earlier planning-only boundary was explicitly lifted by the
 user. The subsequent C++20-only instruction supersedes all earlier language
 choices. See `docs/STATUS.md` for measured acceptance and unresolved gates.
@@ -8,6 +8,9 @@ choices. See `docs/STATUS.md` for measured acceptance and unresolved gates.
 All scientific references, tests, benchmarks, validation and development tools
 must be C++20. CMake is limited to build/dependency configuration and CTest
 registration. No other implementation or automation language may be introduced.
+Future GPU stages must satisfy this same constraint. Historical shader-tool
+proposals below do not authorize GLSL/HLSL source; a compatible C++20 GPU build
+strategy remains unresolved and must be established before P3 implementation.
 
 ## Objective
 
@@ -619,8 +622,10 @@ questions whose answers can be found in the references or local environment.
 - [x] Create the Markdown plan before implementation.
 - [x] Record the planning-only session boundary.
 - [x] Expand architecture, work packages, acceptance, risks, and handoff details.
-- [ ] Complete P0 environment, provenance, model, and coordinate decisions.
-- [ ] Implement and validate P1 rotating geometry benchmark.
+- [x] Complete P0 environment, provenance, model, and bounded P1 chart decisions;
+      full ray-domain extension remains a documented P2 gate.
+- [x] Implement and validate P1 rotating geometry benchmark for the fixed
+      project-selected preset; independent audit remains requested.
 - [ ] Implement and validate P2 reference optics and GYOTO integration.
 - [ ] Implement and compare P3 Vulkan optics.
 - [ ] Implement and verify P4 desktop studio.

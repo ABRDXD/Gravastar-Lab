@@ -130,6 +130,11 @@ At both joins compare induced metric and outward-normal extrinsic curvature
 `K_AB=(partial_r g_AB)/(2 sqrt(g_rr))`, `A,B in {t,theta,phi}`,
 using the same outward normal convention on both sides. Endpoint polynomial
 identities enforce all radial derivatives through order three.
+Production tests explicitly select `Region::shell` at both endpoints so that
+clamping cannot substitute a constant branch. They compare the shell with
+de Sitter/core at the inner endpoint and Kerr/exterior at the outer endpoint.
+The independent reference differentiates an analytic continuation of the shell
+polynomial; approach sequences additionally check convergence from each side.
 
 Effective stress-energy is `T_ab=G_ab/(8 pi)`; the cosmological contribution
 is included once. A negative `T_ab k^a k^b` for an explicitly null vector
