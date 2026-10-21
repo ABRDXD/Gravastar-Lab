@@ -2,8 +2,8 @@
 
 Audit date: **2026-10-20**, beginning at 21:11 IST. These are observations from
 the implementation session, not guarantees about another shell or machine.
-The authorized P0/P1 scope uses a headless C++20 build and an independent Python
-standard-library calculation. No global packages were installed.
+Updated 2026-10-21: P0/P1 uses C++20 throughout, including the independent
+reference and development tools. No global packages were installed.
 
 ## Host and toolchain
 
@@ -16,37 +16,26 @@ standard-library calculation. No global packages were installed.
 | GCC / G++ | `16.2.1 20260810`; Arch package `16.2.1+r23+gd564253eb6c8-1` |
 | CMake | `4.4.4` |
 | Ninja | `1.13.2` |
-| Python | `/usr/bin/python3`, `3.14.8`; GCC-built CPython |
-| Decimal backend | Standard-library `decimal`, libmpdec `4.0.1` |
+| JSON library | Installed header-only C++ `nlohmann_json 3.12.0` |
 | pkg-config | `3.0.10` |
 
-The P1 build uses only the C++ standard library and ordinary compiler/system
-runtimes. It must configure and run without a GPU, window system, network, or
-KerrLab checkout. Fast-math is excluded from the reference build.
+Production geometry uses the C++ standard library and ordinary compiler/system
+runtimes. Validation/tools additionally use nlohmann/json. It configures and runs
+without a GPU, window system, network, or KerrLab checkout. Fast-math is disabled.
 
-## Scientific Python decision
+## Scientific reference decision
 
-System Python reports NumPy `2.5.4`; SciPy, SymPy, mpmath, and pytest were absent.
-The project-local `.venv` already existed when this audit began and contained
-Python `3.14.8` and pip `26.2.1`, with none of those scientific packages installed.
-The environment was not modified by this audit.
+The user's C++20-only constraint supersedes the initial Python prototype.
+Its migration is documented in `MIGRATION.md`. The `.venv` and caches in the
+original working directory are not source dependencies and were not modified.
 
-P1 therefore uses **Python's standard-library `decimal` at 60 decimal digits**
-with an independently expanded metric and high-precision numerical differences.
-Trigonometric series and precision/refinement checks belong to that reference
-implementation and must be checked explicitly. Merely setting Decimal precision
-does not establish 60 correct digits in a differentiated result. The C++ evaluator
-does not supply the Python formulas or derivatives.
-
-There are no third-party Python dependency pins for P1 because it requires no
-third-party Python packages. The measured interpreter/backend versions above
-record the actual validation environment. NumPy's presence is not a hidden
-requirement. A future mpmath/SymPy cross-check can be added with a pinned local
-environment and preserved notices, but is not represented as performed here.
-
-Package acquisition through the execution environment was unavailable during the
-session because DNS/network access was restricted. The standard-library choice
-also makes the headless benchmark reproducible offline from its source checkout.
+Boost.Multiprecision headers were absent. GMP and MPFR were present but were
+not adopted. The reference uses original C++20 arbitrary integers, normalized
+rationals and fixed-decimal arithmetic at 90 places, with 110-place refinement.
+Arithmetic and transcendental identities have their own CTest checks; the place
+count is not an accuracy claim for curvature. No packages or language
+dependencies were installed. Restricted local DNS prevented downloading the
+paper source archive during P0.
 
 ## Graphics and later-stage dependencies
 
@@ -91,8 +80,6 @@ df -h .
 cmake --version
 g++ --version
 ninja --version
-python3 --version
-python3 -c 'import decimal; print(decimal.__libmpdec_version__)'
 pkg-config --modversion vulkan
 pkg-config --modversion glfw3
 pkg-config --modversion libpng

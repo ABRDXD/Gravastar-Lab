@@ -2,7 +2,10 @@
 
 Audit date: **2026-10-20**. Original GravastarLab code is
 **GPL-3.0-or-later**; see [LICENSE](LICENSE). The P1 geometry implementation
-and independent Python checks contain no vendored third-party implementation.
+and independent C++20 reference contain no vendored third-party implementation.
+The validation/tool JSON adapter uses the installed header-only C++ dependency
+`nlohmann_json 3.12.0`, required exactly by CMake. Its MIT notice is preserved in
+`third_party/licenses/nlohmann-json-3.12.0.txt`; no Python runtime is required.
 The scientific equation source and excluded KerrLab code are documented in
 [docs/PROVENANCE.md](docs/PROVENANCE.md).
 
@@ -14,22 +17,25 @@ The scientific equation source and excluded KerrLab code are documented in
 | libstdc++ / libgcc | Arch `16.2.1+r23+gd564253eb6c8-1` | System C++ runtime, not bundled | Installed `bits/c++config.h` states GPL-3.0-or-later with GCC Runtime Library Exception 3.1 |
 | CMake | `4.4.4` | External build tool, not bundled | Actual `/usr/share/licenses/cmake/LICENSE.rst` inspected; BSD-3-Clause terms |
 | Ninja | `1.13.2` | External build tool, not bundled | Actual `/usr/share/licenses/ninja/COPYING` inspected; Apache-2.0 text |
-| CPython | `3.14.8` | External interpreter and standard library, not bundled | PSF license and incorporated notices; no Python implementation copied |
-| `decimal` / libmpdec | libmpdec `4.0.1` | Part of the installed Python runtime | No separate vendored library; backend version recorded for reproducibility |
+| nlohmann/json | `3.12.0`, upstream release `v3.12.0` | System header-only C++ library for validator/tools; not bundled | MIT; installed notice copied verbatim; source `https://github.com/nlohmann/json/tree/v3.12.0` |
 
 The C++ runtime's installed grant explicitly includes the GCC exception.
 Its upstream text permits eligible compiled combinations subject to its stated
 terms. [GCC Runtime Library Exception 3.1](https://raw.githubusercontent.com/gcc-mirror/gcc/master/COPYING.RUNTIME).
-The Python project identifies current Python releases as GPL compatible and
-documents its separate incorporated-software notices.
-[Python license documentation](https://docs.python.org/3/license.html).
 These choices permit the planned GPL project without relicensing external
 tools as GravastarLab code.
 
-No NumPy, SciPy, SymPy, mpmath, or pytest dependency is required by P1. The Python
-reference uses standard-library Decimal arithmetic; its own formulas and
-trigonometric evaluation are original project implementation. There is no
-third-party Python lockfile to maintain for this stage.
+No interpreter or non-C++ language dependency is used by P1. The reference's
+integer, rational, fixed-decimal and trigonometric arithmetic are original
+C++20 implementation. GMP/MPFR were detected but not adopted. No language
+runtime or global package was installed for the migration.
+
+Installed `json.hpp` SHA-256:
+`88d7eb42b19599cab48856576dd4ea52538df72ad7c57200c50de98bda246458`.
+Preserved MIT notice SHA-256:
+`46a65cffd1ea955132d95a8dd921640714a8d6b537d2e4e482d31145ae95b603`.
+The former identifies the installed entry header, not every transitive header;
+the exact package version is the dependency constraint. The library is unmodified.
 
 The audited toolchain versions are the tested environment, not claims of
 reproducible binary identity across compiler or library versions. No network

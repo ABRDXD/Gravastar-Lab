@@ -1,0 +1,1348 @@
+{
+  "checks": [
+    {
+      "name": "exact shell radial root count",
+      "passed": true,
+      "roots": 0
+    },
+    {
+      "name": "exact shell positive Bernstein certificate",
+      "passed": true
+    },
+    {
+      "name": "core and exterior analytic positivity",
+      "passed": true
+    },
+    {
+      "failures": 0,
+      "name": "sampled Lorentzian inertia, azimuthal causality and ZAMO",
+      "passed": true
+    },
+    {
+      "comparison": "<=",
+      "measured": 5.3290705182007514e-15,
+      "name": "sampled inverse identity absolute",
+      "passed": true,
+      "threshold": 2e-11
+    },
+    {
+      "maximum_condition": 1126.231336065953,
+      "minimum_eigenvalue_magnitude": 0.0018345703797835733,
+      "name": "coordinate conditioning margins",
+      "passed": true
+    },
+    {
+      "comparison": "<=",
+      "measured": 2.5470740430876957e-15,
+      "name": "sampled determinant identity",
+      "passed": true,
+      "threshold": 2e-11
+    },
+    {
+      "comparison": "<=",
+      "measured": 3.4607805743243244e-13,
+      "name": "independent curvature",
+      "passed": true,
+      "threshold": 2e-10
+    },
+    {
+      "comparison": "<=",
+      "measured": 7.349709276921582e-14,
+      "name": "independent ddg",
+      "passed": true,
+      "threshold": 2e-11
+    },
+    {
+      "comparison": "<=",
+      "measured": 1.2377878393351122e-14,
+      "name": "independent dg",
+      "passed": true,
+      "threshold": 5e-12
+    },
+    {
+      "comparison": "<=",
+      "measured": 1.8758328224066645e-12,
+      "name": "independent drrr",
+      "passed": true,
+      "threshold": 1e-09
+    },
+    {
+      "comparison": "<=",
+      "measured": 2.827007197547358e-15,
+      "name": "independent inverse",
+      "passed": true,
+      "threshold": 1e-12
+    },
+    {
+      "comparison": "<=",
+      "measured": 2.3811330552895928e-15,
+      "name": "independent metric",
+      "passed": true,
+      "threshold": 1e-12
+    },
+    {
+      "comparison": "<=",
+      "measured": 3.4607805743243244e-13,
+      "name": "analytic limits",
+      "passed": true,
+      "threshold": 2e-10
+    },
+    {
+      "name": "exact C3 endpoint conditions",
+      "passed": true
+    },
+    {
+      "name": "join 1.500000 side -1 C3 approach",
+      "passed": true
+    },
+    {
+      "name": "join 1.500000 side 1 C3 approach",
+      "passed": true
+    },
+    {
+      "name": "join 1.800000 side -1 C3 approach",
+      "passed": true
+    },
+    {
+      "name": "join 1.800000 side 1 C3 approach",
+      "passed": true
+    },
+    {
+      "comparison": "<=",
+      "measured": 3.257562082797732e-31,
+      "name": "analytic branch matching through order 3",
+      "passed": true,
+      "threshold": 1e-26
+    },
+    {
+      "comparison": "<=",
+      "measured": 4.1531494732762984e-32,
+      "name": "extrinsic curvature matching",
+      "passed": true,
+      "threshold": 1e-26
+    },
+    {
+      "comparison": "<=",
+      "measured": 0.0,
+      "name": "production explicit shell C0 join",
+      "passed": true,
+      "threshold": 1e-12
+    },
+    {
+      "comparison": "<=",
+      "measured": 0.0,
+      "name": "production explicit shell C1 join",
+      "passed": true,
+      "threshold": 5e-12
+    },
+    {
+      "comparison": "<=",
+      "measured": 0.0,
+      "name": "production explicit shell C2 join",
+      "passed": true,
+      "threshold": 2e-11
+    },
+    {
+      "comparison": "<=",
+      "measured": 0.0,
+      "name": "production explicit shell C3 join",
+      "passed": true,
+      "threshold": 1e-09
+    },
+    {
+      "comparison": "<=",
+      "measured": 0.0,
+      "name": "production explicit shell outward-normal extrinsic curvature",
+      "passed": true,
+      "threshold": 5e-12
+    },
+    {
+      "name": "fourth-order finite difference convergence",
+      "passed": true
+    },
+    {
+      "comparison": "<=",
+      "measured": 5.51469440574963e-29,
+      "name": "reference step refinement",
+      "passed": true,
+      "threshold": 1e-26
+    },
+    {
+      "comparison": "<=",
+      "measured": 1.168031132710334e-71,
+      "name": "reference 90 to 110 decimal-place refinement",
+      "passed": true,
+      "threshold": 1e-26
+    },
+    {
+      "name": "computational source unchanged during run",
+      "passed": true
+    }
+  ],
+  "compiler": "16.2.1 20260810",
+  "computational_source_sha256": "215b6a7ed6a6b1db33aaf60de947fb105539815fef100af348916bf81a4b4f8c",
+  "configuration": {
+    "domain": {
+      "angular_samples": 25,
+      "r_max": "10",
+      "r_min": "0.25",
+      "radial_samples": 81,
+      "theta_min": "0.05"
+    },
+    "model": "toy-c3-v1",
+    "parameter_provenance": "M,a,Lambda from arXiv:2309.00551v2 section III.I; shell radii and validation box are project choices",
+    "parameters": {
+      "Lambda": "0.5",
+      "M": "1",
+      "a": "0.875",
+      "r_in": "1.5",
+      "r_out": "1.8"
+    },
+    "preset_id": "rapid_rotation_project_v1",
+    "reference": {
+      "decimal_places": 90,
+      "finite_difference_step": "1e-9",
+      "implementation": "independent C++20 fixed decimal",
+      "refinement_decimal_places": 110
+    },
+    "schema_version": 1,
+    "threshold_provenance": "Frozen after first C++20 pilot: metric 2.4e-15, derivatives 1.3e-14/7.4e-14/1.9e-12, curvature 3.5e-13; margins cover observed cancellation and host/compiler variability only",
+    "thresholds": {
+      "analytic_curvature": 2e-10,
+      "convergence_ratio_min": 12.0,
+      "curvature": 2e-10,
+      "ddg": 2e-11,
+      "dg": 5e-12,
+      "drrr": 1e-09,
+      "identity": 2e-11,
+      "inverse": 1e-12,
+      "matching": 1e-26,
+      "maximum_coordinate_condition": 100000.0,
+      "metric": 1e-12,
+      "minimum_eigenvalue_magnitude": 0.0001,
+      "reference_refinement": 1e-26
+    }
+  },
+  "convergence": {
+    "ratios_dg_ddg_K": [
+      [
+        15.908038563787523,
+        16.002291025102497,
+        16.644011583389283
+      ],
+      [
+        15.97714836754439,
+        16.000596211901577,
+        16.162132095491632
+      ]
+    ],
+    "reference_precision_error": 1.168031132710334e-71,
+    "reference_step_error": 5.51469440574963e-29,
+    "refinement": [
+      {
+        "ddg": 9.422708195760265e-07,
+        "dg": 1.4011174137130008e-06,
+        "h": 0.004,
+        "kretschmann": 3.6516956250039195e-07
+      },
+      {
+        "ddg": 5.8883494750714366e-08,
+        "dg": 8.807606343766686e-08,
+        "h": 0.002,
+        "kretschmann": 2.1939996897432528e-08
+      },
+      {
+        "ddg": 3.68008129015315e-09,
+        "dg": 5.51262724808781e-09,
+        "h": 0.001,
+        "kretschmann": 1.3574939721939662e-09
+      }
+    ]
+  },
+  "cplusplus": 202002,
+  "domain": {
+    "box": {
+      "angular_samples": 25,
+      "r_max": "10",
+      "r_min": "0.25",
+      "radial_samples": 81,
+      "theta_min": "0.05"
+    },
+    "ergoregion_sample_count": 427,
+    "kretschmann_range": [
+      -0.694571429610526,
+      2439.8990741923535
+    ],
+    "maximum_coordinate_condition": 1126.231336065953,
+    "minimum_absolute_coordinate_eigenvalue": 0.0018345703797835733,
+    "minimum_g_phiphi": 0.0018344982004478087,
+    "minimum_zamo_lapse_squared": 0.07490933014218709,
+    "ricci_scalar_range": [
+      -40.29925694790967,
+      37.01779960031989
+    ],
+    "samples": 4150
+  },
+  "elapsed_seconds": 5.928046734,
+  "energy": {
+    "acceptance_role": "diagnostic only",
+    "cosmological_term": "included once via T=G/(8*pi)",
+    "dynamical_stability": "not assessed",
+    "finding": "NEC violation witnessed",
+    "minimum_witness": {
+      "Tkk": -2.259849494392311,
+      "null_residual": 6e-90,
+      "null_vector": [
+        1.6142702162638831,
+        0.0,
+        0.0,
+        -0.3553607209663123
+      ],
+      "r": 1.575,
+      "theta": 1.5707963267948966
+    },
+    "tensor_classification": "not assessed"
+  },
+  "error_norm": "max |production-reference|/(1+|reference|); inverse identity and vacuum Ricci use absolute errors",
+  "executable_sha256": "47460d1e0cefb09fbc98e0646195ce2152edc75ddcf6402fe3cf052497529206",
+  "full_interior_optics": "not implemented; extension and axis charts unresolved",
+  "host": {
+    "machine": "x86_64",
+    "release": "7.2.11-arch1-1",
+    "system": "Linux"
+  },
+  "independent": {
+    "analytic_maximum": 3.4607805743243244e-13,
+    "maxima": {
+      "curvature": 3.4607805743243244e-13,
+      "ddg": 7.349709276921582e-14,
+      "dg": 1.2377878393351122e-14,
+      "drrr": 1.8758328224066645e-12,
+      "inverse": 2.827007197547358e-15,
+      "metric": 2.3811330552895928e-15
+    },
+    "samples": [
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 6.67e-14,
+          "ddg": 2.3378093975473427e-16,
+          "dg": 4.106956756783814e-17,
+          "drrr": 1.529959253257012e-15,
+          "inverse": 1.9700732842862394e-16,
+          "metric": 1.158963318435513e-16
+        },
+        "family": 0,
+        "kretschmann": 0.6666666666666666,
+        "r": 0.25,
+        "ricci_scalar": 2.0,
+        "theta": 0.05
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 3.4607805743243244e-13,
+          "ddg": 7.349709276921582e-14,
+          "dg": 7.408675307968385e-15,
+          "drrr": 1.8758328224066645e-12,
+          "inverse": 2.827007197547358e-15,
+          "metric": 7.589255420196106e-16
+        },
+        "family": 0,
+        "kretschmann": 0.6666666666666666,
+        "r": 0.25,
+        "ricci_scalar": 2.0,
+        "theta": 1.5707963267948966
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 8.4022e-14,
+          "ddg": 3.9248780510283674e-16,
+          "dg": 1.0417733283512073e-16,
+          "drrr": 1.529959253257012e-15,
+          "inverse": 2.3362664855377474e-15,
+          "metric": 1.158963318435513e-16
+        },
+        "family": 0,
+        "kretschmann": 0.6666666666666666,
+        "r": 0.25,
+        "ricci_scalar": 2.0,
+        "theta": 3.0915926535897933
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 4.0412e-14,
+          "ddg": 2.258391825592353e-16,
+          "dg": 5.153472982281177e-17,
+          "drrr": 6.661338147750939e-16,
+          "inverse": 5.904074896372302e-17,
+          "metric": 6.138361919916759e-17
+        },
+        "family": 0,
+        "kretschmann": 0.6666666666666666,
+        "r": 1.0,
+        "ricci_scalar": 2.0,
+        "theta": 0.05
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 8.86e-16,
+          "ddg": 6.013322231473772e-16,
+          "dg": 1.9175762813438924e-16,
+          "drrr": 2.3314683517128287e-15,
+          "inverse": 4.180830528343926e-17,
+          "metric": 1.0513051305130513e-16
+        },
+        "family": 0,
+        "kretschmann": 0.6666666666666666,
+        "r": 1.0,
+        "ricci_scalar": 2.0,
+        "theta": 1.5707963267948966
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 9.317e-14,
+          "ddg": 2.258391825592353e-16,
+          "dg": 1.2803210947044822e-16,
+          "drrr": 6.661338147750939e-16,
+          "inverse": 2.357938917590328e-15,
+          "metric": 6.138361919916759e-17
+        },
+        "family": 0,
+        "kretschmann": 0.6666666666666666,
+        "r": 1.0,
+        "ricci_scalar": 2.0,
+        "theta": 3.0915926535897933
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 2.3135053931843144e-14,
+          "ddg": 2.1578694361087574e-16,
+          "dg": 5.2157077844399805e-17,
+          "drrr": 6.661338147750939e-16,
+          "inverse": 5.5270002178190383e-17,
+          "metric": 3.097404653545413e-17
+        },
+        "family": 0,
+        "kretschmann": 0.6666666666666666,
+        "r": 1.4999,
+        "ricci_scalar": 2.0,
+        "theta": 0.05
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 3.48018221698123e-16,
+          "ddg": 6.96586178184846e-16,
+          "dg": 3.274826602318745e-16,
+          "drrr": 1.0658141036401503e-14,
+          "inverse": 5.042010408364277e-17,
+          "metric": 1.0660734177020726e-16
+        },
+        "family": 0,
+        "kretschmann": 0.6666666666666666,
+        "r": 1.4999,
+        "ricci_scalar": 2.0,
+        "theta": 1.5707963267948966
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 4.7444094897927115e-14,
+          "ddg": 3.136774056524505e-16,
+          "dg": 2.0543724013268953e-16,
+          "drrr": 6.661338147750939e-16,
+          "inverse": 2.4263190999439117e-15,
+          "metric": 3.097404653545413e-17
+        },
+        "family": 0,
+        "kretschmann": 0.6666666666666666,
+        "r": 1.4999,
+        "ricci_scalar": 2.0,
+        "theta": 3.0915926535897933
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 3.0762894522036545e-14,
+          "ddg": 2.256255020255184e-16,
+          "dg": 5.846037028469683e-17,
+          "drrr": 3.3306690738754696e-16,
+          "inverse": 1.1057863062640825e-16,
+          "metric": 2.378451179361949e-17
+        },
+        "family": 0,
+        "kretschmann": 0.6666666666666666,
+        "r": 1.5,
+        "ricci_scalar": 2.0,
+        "theta": 0.05
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 6.44e-16,
+          "ddg": 6.96586178184846e-16,
+          "dg": 3.2751524097289497e-16,
+          "drrr": 7.993605777301127e-15,
+          "inverse": 2.178495817230899e-16,
+          "metric": 8.101822752985543e-17
+        },
+        "family": 0,
+        "kretschmann": 0.6666666666666666,
+        "r": 1.5,
+        "ricci_scalar": 2.0,
+        "theta": 1.5707963267948966
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 3.0762894522036545e-14,
+          "ddg": 2.3504661865787614e-16,
+          "dg": 2.5216824888001166e-16,
+          "drrr": 3.3306690738754696e-16,
+          "inverse": 2.367332338119693e-15,
+          "metric": 2.378451179361949e-17
+        },
+        "family": 0,
+        "kretschmann": 0.6666666666666666,
+        "r": 1.5,
+        "ricci_scalar": 2.0,
+        "theta": 3.0915926535897933
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 7.426177326584695e-15,
+          "ddg": 3.327615253201726e-16,
+          "dg": 8.412175473982854e-17,
+          "drrr": 8.756058577262444e-14,
+          "inverse": 3.5396539022928454e-16,
+          "metric": 1.0088235096018696e-16
+        },
+        "family": 0,
+        "kretschmann": 0.6667830852528998,
+        "r": 1.5001,
+        "ricci_scalar": 2.000174531741235,
+        "theta": 0.05
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 8.179516360814372e-16,
+          "ddg": 1.7888652530507514e-15,
+          "dg": 3.2754782388615253e-16,
+          "drrr": 1.0166568077880942e-13,
+          "inverse": 8.092078577770547e-17,
+          "metric": 2.8238560433812247e-16
+        },
+        "family": 0,
+        "kretschmann": 0.6668226296349002,
+        "r": 1.5001,
+        "ricci_scalar": 2.000233764767091,
+        "theta": 1.5707963267948966
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 7.01080563989824e-14,
+          "ddg": 3.327615253201726e-16,
+          "dg": 1.3973582744767263e-16,
+          "drrr": 8.756058577262444e-14,
+          "inverse": 1.903011431986435e-15,
+          "metric": 1.0088235096018696e-16
+        },
+        "family": 0,
+        "kretschmann": 0.6667830852528998,
+        "r": 1.5001,
+        "ricci_scalar": 2.000174531741235,
+        "theta": 3.0915926535897933
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 1.0205801736702002e-13,
+          "ddg": 5.614332317280795e-15,
+          "dg": 3.6067539572470685e-15,
+          "drrr": 9.26493493976593e-14,
+          "inverse": 1.350451671982644e-15,
+          "metric": 1.5881192495633398e-15
+        },
+        "family": 0,
+        "kretschmann": -0.6801878828369873,
+        "r": 1.7999,
+        "ricci_scalar": -0.00015915442518543905,
+        "theta": 0.05
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 3.944899059666743e-15,
+          "ddg": 5.850982921744885e-15,
+          "dg": 3.5806919690164205e-15,
+          "drrr": 1.1428677901998051e-13,
+          "inverse": 1.3346790669772542e-15,
+          "metric": 1.3669202490123815e-15
+        },
+        "family": 0,
+        "kretschmann": 1.4114239754628748,
+        "r": 1.7999,
+        "ricci_scalar": -0.0001966734795633696,
+        "theta": 1.5707963267948966
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 1.0161393330490274e-13,
+          "ddg": 5.614332317280795e-15,
+          "dg": 3.6067539572470685e-15,
+          "drrr": 9.26493493976593e-14,
+          "inverse": 2.41443548025707e-15,
+          "metric": 1.5881192495633398e-15
+        },
+        "family": 0,
+        "kretschmann": -0.6801878828369873,
+        "r": 1.7999,
+        "ricci_scalar": -0.00015915442518543905,
+        "theta": 3.0915926535897933
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 1.851852005074761e-13,
+          "ddg": 5.856377392853591e-16,
+          "dg": 3.7289308744740045e-16,
+          "drrr": 8.875651589966677e-16,
+          "inverse": 2.144355772508717e-16,
+          "metric": 1.1644798194620716e-16
+        },
+        "family": 0,
+        "kretschmann": -0.6799255154558985,
+        "r": 1.8,
+        "ricci_scalar": 4.5536644522317385e-34,
+        "theta": 0.05
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 8.881784197001252e-16,
+          "ddg": 1.2340978184206047e-15,
+          "dg": 7.235257865760596e-16,
+          "drrr": 4.856675556639285e-15,
+          "inverse": 2.4170656720931404e-16,
+          "metric": 1.3300188582204697e-16
+        },
+        "family": 0,
+        "kretschmann": 1.4112573173691905,
+        "r": 1.8,
+        "ricci_scalar": 3.6190798248122076e-34,
+        "theta": 1.5707963267948966
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 7.172040739078511e-14,
+          "ddg": 6.190362931266893e-16,
+          "dg": 3.7289308744740045e-16,
+          "drrr": 8.875651589966677e-16,
+          "inverse": 2.1766232938978825e-15,
+          "metric": 1.1644798194620716e-16
+        },
+        "family": 0,
+        "kretschmann": -0.6799255154558985,
+        "r": 1.8,
+        "ricci_scalar": 4.5536644522317385e-34,
+        "theta": 3.0915926535897933
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 4.9460435747050724e-14,
+          "ddg": 2.6833794694526472e-15,
+          "dg": 1.7145281468328396e-15,
+          "drrr": 3.449908989797485e-15,
+          "inverse": 2.554018895874604e-16,
+          "metric": 7.703160740691329e-16
+        },
+        "family": 0,
+        "kretschmann": -0.6797013354493877,
+        "r": 1.8001,
+        "ricci_scalar": 4.54859646014488e-34,
+        "theta": 0.05
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 1.3322676295501878e-15,
+          "ddg": 2.378853287201484e-15,
+          "dg": 1.5485891778500086e-15,
+          "drrr": 3.4343006672190193e-15,
+          "inverse": 2.4781284754590737e-16,
+          "metric": 5.885407821765685e-16
+        },
+        "family": 0,
+        "kretschmann": 1.410786989720233,
+        "r": 1.8001,
+        "ricci_scalar": 3.6134449889934133e-34,
+        "theta": 1.5707963267948966
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 1.6359136267851682e-13,
+          "ddg": 2.6833794694526472e-15,
+          "dg": 1.7145281468328396e-15,
+          "drrr": 3.449908989797485e-15,
+          "inverse": 2.0130208466523216e-15,
+          "metric": 7.703160740691329e-16
+        },
+        "family": 0,
+        "kretschmann": -0.6797013354493877,
+        "r": 1.8001,
+        "ricci_scalar": 4.54859646014488e-34,
+        "theta": 3.0915926535897933
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 5.228117871052798e-15,
+          "ddg": 2.1936473449169761e-16,
+          "dg": 6.634323072330106e-17,
+          "drrr": 2.1153690901483088e-16,
+          "inverse": 1.0729156227725593e-16,
+          "metric": 1.1540968203218147e-16
+        },
+        "family": 0,
+        "kretschmann": -0.006682793400742661,
+        "r": 3.0,
+        "ricci_scalar": -2.6344932932901665e-35,
+        "theta": 0.05
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 2.7755575615628914e-17,
+          "ddg": 6.877985483514228e-16,
+          "dg": 1.326277689204632e-15,
+          "drrr": 3.2908108108108107e-15,
+          "inverse": 2.5630563798219585e-17,
+          "metric": 5.912240184757505e-17
+        },
+        "family": 0,
+        "kretschmann": 0.06584362139917696,
+        "r": 3.0,
+        "ricci_scalar": 3.6570781960466223e-38,
+        "theta": 1.5707963267948966
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 5.184741524999481e-14,
+          "ddg": 3.7090416956360443e-16,
+          "dg": 5.911245474585014e-16,
+          "drrr": 2.1153690901483088e-16,
+          "inverse": 2.084157415312837e-15,
+          "metric": 1.1540968203218147e-16
+        },
+        "family": 0,
+        "kretschmann": -0.006682793400742661,
+        "r": 3.0,
+        "ricci_scalar": -2.6344932932901665e-35,
+        "theta": 3.0915926535897933
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 6.433742427702782e-14,
+          "ddg": 1.369734320662337e-16,
+          "dg": 3.251516108912846e-17,
+          "drrr": 3.0391352464574807e-18,
+          "inverse": 4.2731878831686184e-17,
+          "metric": 4.165122666873777e-17
+        },
+        "family": 0,
+        "kretschmann": 4.064485978730678e-05,
+        "r": 10.0,
+        "ricci_scalar": -6.89189561053279e-36,
+        "theta": 0.05
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 1.3877787807814457e-16,
+          "ddg": 2.445500045544123e-15,
+          "dg": 1.2377878393351122e-14,
+          "drrr": 8.082074593966793e-16,
+          "inverse": 2.212810095946063e-17,
+          "metric": 6.841559339614487e-17
+        },
+        "family": 0,
+        "kretschmann": 4.8e-05,
+        "r": 10.0,
+        "ricci_scalar": -3.60794719526622e-39,
+        "theta": 1.5707963267948966
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 1.2118084313783584e-13,
+          "ddg": 5.423090836762728e-16,
+          "dg": 1.0270758367374333e-15,
+          "drrr": 3.0391352464574807e-18,
+          "inverse": 1.8274047555692874e-15,
+          "metric": 4.2123249504672723e-16
+        },
+        "family": 0,
+        "kretschmann": 4.064485978730678e-05,
+        "r": 10.0,
+        "ricci_scalar": -6.89189561053279e-36,
+        "theta": 3.0915926535897933
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 8.628275522465791e-14,
+          "ddg": 9.269406242167356e-16,
+          "dg": 1.6445622951350546e-16,
+          "drrr": 6.834028275947293e-16,
+          "inverse": 3.130117479029133e-16,
+          "metric": 1.5235775310296207e-16
+        },
+        "family": 0,
+        "kretschmann": 192.94188446879187,
+        "r": 1.53,
+        "ricci_scalar": 11.503554313720453,
+        "theta": 0.05
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 2.4685142476716817e-15,
+          "ddg": 1.2530645392791198e-15,
+          "dg": 3.897965609767801e-16,
+          "drrr": 5.876754201057303e-16,
+          "inverse": 2.879129575264433e-16,
+          "metric": 1.639756358085772e-16
+        },
+        "family": 0,
+        "kretschmann": 346.38460764099636,
+        "r": 1.53,
+        "ricci_scalar": 14.605245657909045,
+        "theta": 1.5707963267948966
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 8.628275522465791e-14,
+          "ddg": 9.269406242167356e-16,
+          "dg": 2.2368898698088725e-16,
+          "drrr": 1.4297587896748235e-15,
+          "inverse": 1.920317116932473e-15,
+          "metric": 1.5235775310296207e-16
+        },
+        "family": 0,
+        "kretschmann": 192.94188446879187,
+        "r": 1.53,
+        "ricci_scalar": 11.503554313720453,
+        "theta": 3.0915926535897933
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 2.2596191240766934e-14,
+          "ddg": 1.2753632120917218e-15,
+          "dg": 1.3919835583338271e-15,
+          "drrr": 1.7472916024694935e-15,
+          "inverse": 2.1923330931545563e-16,
+          "metric": 1.5367184277226186e-16
+        },
+        "family": 0,
+        "kretschmann": 1092.0097912387976,
+        "r": 1.575,
+        "ricci_scalar": 27.415519001512564,
+        "theta": 0.05
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 9.335648185227036e-16,
+          "ddg": 1.238763391052095e-15,
+          "dg": 1.3252175307311527e-15,
+          "drrr": 1.8497210228724573e-15,
+          "inverse": 2.1373452418422382e-16,
+          "metric": 1.3357886549157342e-16
+        },
+        "family": 0,
+        "kretschmann": 1862.4845775980812,
+        "r": 1.575,
+        "ricci_scalar": 35.23957022621166,
+        "theta": 1.5707963267948966
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 2.6299453716133407e-14,
+          "ddg": 1.2753632120917218e-15,
+          "dg": 1.3919835583338271e-15,
+          "drrr": 1.7472916024694935e-15,
+          "inverse": 2.229530581899781e-15,
+          "metric": 1.5367184277226186e-16
+        },
+        "family": 0,
+        "kretschmann": 1092.0097912387976,
+        "r": 1.575,
+        "ricci_scalar": 27.415519001512564,
+        "theta": 3.0915926535897933
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 2.9176739436055495e-14,
+          "ddg": 4.9440386693152806e-14,
+          "dg": 1.8075117104389768e-15,
+          "drrr": 1.5161756712661745e-15,
+          "inverse": 8.327394335916724e-16,
+          "metric": 1.0008112153922538e-15
+        },
+        "family": 0,
+        "kretschmann": 42.732529805882116,
+        "r": 1.65,
+        "ricci_scalar": 7.860115381645366,
+        "theta": 0.05
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 6.424265262077441e-14,
+          "ddg": 6.434574906738065e-14,
+          "dg": 1.8451625120735975e-15,
+          "drrr": 1.4657865237279262e-15,
+          "inverse": 1.0160480099132054e-15,
+          "metric": 9.872427183037271e-16
+        },
+        "family": 0,
+        "kretschmann": 115.7134083505716,
+        "r": 1.65,
+        "ricci_scalar": 9.637442720886815,
+        "theta": 1.5707963267948966
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 2.9381526623432715e-14,
+          "ddg": 4.9440386693152806e-14,
+          "dg": 1.8075117104389768e-15,
+          "drrr": 2.1841076324942768e-15,
+          "inverse": 2.4399575379985537e-15,
+          "metric": 1.0008112153922538e-15
+        },
+        "family": 0,
+        "kretschmann": 42.732529805882116,
+        "r": 1.65,
+        "ricci_scalar": 7.860115381645366,
+        "theta": 3.0915926535897933
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 1.7834121433212793e-14,
+          "ddg": 3.916335779498132e-15,
+          "dg": 1.2754940038877458e-15,
+          "drrr": 3.2809520820427104e-14,
+          "inverse": 6.922808592690283e-16,
+          "metric": 6.106792689613167e-16
+        },
+        "family": 0,
+        "kretschmann": 1373.0002323713095,
+        "r": 1.725,
+        "ricci_scalar": -31.71248341753527,
+        "theta": 0.05
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 3.348357826174337e-15,
+          "ddg": 4.085887468259299e-15,
+          "dg": 1.5406929731998668e-15,
+          "drrr": 1.6342024133895445e-14,
+          "inverse": 6.921525660164927e-16,
+          "metric": 5.63005490756563e-16
+        },
+        "family": 0,
+        "kretschmann": 2184.175411559886,
+        "r": 1.725,
+        "ricci_scalar": -39.898173481062074,
+        "theta": 1.5707963267948966
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 8.341798550970466e-15,
+          "ddg": 3.916335779498132e-15,
+          "dg": 1.2754940038877458e-15,
+          "drrr": 3.2809520820427104e-14,
+          "inverse": 2.2232152479628065e-15,
+          "metric": 6.106792689613167e-16
+        },
+        "family": 0,
+        "kretschmann": 1373.0002323713095,
+        "r": 1.725,
+        "ricci_scalar": -31.71248341753527,
+        "theta": 3.0915926535897933
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 1.0424185407174729e-13,
+          "ddg": 2.968571458895413e-15,
+          "dg": 5.189726684366562e-15,
+          "drrr": 4.845520895832961e-15,
+          "inverse": 2.0203659973979858e-15,
+          "metric": 1.904891902372683e-15
+        },
+        "family": 0,
+        "kretschmann": 131.75358815565258,
+        "r": 1.77,
+        "ricci_scalar": -10.66729105829646,
+        "theta": 0.05
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 3.3665035795353707e-15,
+          "ddg": 2.840302732407265e-15,
+          "dg": 5.532890265571786e-15,
+          "drrr": 4.8183985212298584e-15,
+          "inverse": 2.038141069577517e-15,
+          "metric": 1.9207034879980596e-15
+        },
+        "family": 0,
+        "kretschmann": 190.70820874090603,
+        "r": 1.77,
+        "ricci_scalar": -13.269114330177471,
+        "theta": 1.5707963267948966
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 7.452154976213914e-14,
+          "ddg": 2.968571458895413e-15,
+          "dg": 5.189726684366562e-15,
+          "drrr": 4.845520895832961e-15,
+          "inverse": 2.1521883974567316e-15,
+          "metric": 1.904891902372683e-15
+        },
+        "family": 0,
+        "kretschmann": 131.75358815565258,
+        "r": 1.77,
+        "ricci_scalar": -10.66729105829646,
+        "theta": 3.0915926535897933
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 4.903403076468797e-14,
+          "ddg": 7.105427357601002e-15,
+          "dg": 1.3322676295501878e-15,
+          "drrr": 2.1316282072803006e-14,
+          "inverse": 4.1822473685559585e-16,
+          "metric": 2.8e-16
+        },
+        "family": 3,
+        "kretschmann": 1.3654803202785831e-68,
+        "r": 0.25,
+        "ricci_scalar": -1.3799870739026376e-34,
+        "theta": 1.1
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 2.086e-15,
+          "ddg": 1.154884671060274e-15,
+          "dg": 2.0073996519591187e-16,
+          "drrr": 2.6645352591003757e-15,
+          "inverse": 1.0052670009479355e-16,
+          "metric": 7.164104687915838e-17
+        },
+        "family": 2,
+        "kretschmann": 0.6666666666666666,
+        "r": 1.0,
+        "ricci_scalar": 2.0,
+        "theta": 1.1
+      },
+      {
+        "a": 0.875,
+        "errors": {
+          "curvature": 5.551115123125783e-16,
+          "ddg": 2.7411489879017224e-16,
+          "dg": 3.373717010100992e-16,
+          "drrr": 4.297794025316838e-16,
+          "inverse": 3.297096021454312e-17,
+          "metric": 8.802749736014956e-17
+        },
+        "family": 1,
+        "kretschmann": 0.04402808975901419,
+        "r": 3.0,
+        "ricci_scalar": 1.0747311797038717e-38,
+        "theta": 1.1
+      },
+      {
+        "a": 0.0,
+        "errors": {
+          "curvature": 1.1102230246251565e-16,
+          "ddg": 3.663036372282988e-16,
+          "dg": 2.1249842443518211e-16,
+          "drrr": 1.3322676295501878e-15,
+          "inverse": 2.842930319918528e-17,
+          "metric": 1.7324462151135458e-16
+        },
+        "family": 1,
+        "kretschmann": 0.06584362139917696,
+        "r": 3.0,
+        "ricci_scalar": 7.945546566579433e-37,
+        "theta": 1.1
+      },
+      {
+        "a": 0.0,
+        "errors": {
+          "curvature": 3.738603094819225e-14,
+          "ddg": 8.82405549757505e-15,
+          "dg": 4.845027910449118e-15,
+          "drrr": 8.564906183703721e-15,
+          "inverse": 2.266613654435988e-15,
+          "metric": 2.3811330552895928e-15
+        },
+        "family": 0,
+        "kretschmann": 372.22598198704594,
+        "r": 1.65,
+        "ricci_scalar": -4.328474135292317,
+        "theta": 1.1
+      },
+      {
+        "a": -0.875,
+        "errors": {
+          "curvature": 4.703251351756784e-14,
+          "ddg": 5.4306192970269254e-14,
+          "dg": 1.955318913183107e-15,
+          "drrr": 1.3397230693036867e-15,
+          "inverse": 8.652607050965852e-16,
+          "metric": 1.0427037076108583e-15
+        },
+        "family": 0,
+        "kretschmann": 92.79344840007802,
+        "r": 1.65,
+        "ricci_scalar": 9.218586088370543,
+        "theta": 1.1
+      }
+    ],
+    "worst_cases": {
+      "curvature": {
+        "a": 0.875,
+        "family": 0,
+        "r": 0.25,
+        "theta": 1.5707963267948966
+      },
+      "ddg": {
+        "a": 0.875,
+        "family": 0,
+        "r": 0.25,
+        "theta": 1.5707963267948966
+      },
+      "dg": {
+        "a": 0.875,
+        "family": 0,
+        "r": 10.0,
+        "theta": 1.5707963267948966
+      },
+      "drrr": {
+        "a": 0.875,
+        "family": 0,
+        "r": 0.25,
+        "theta": 1.5707963267948966
+      },
+      "inverse": {
+        "a": 0.875,
+        "family": 0,
+        "r": 0.25,
+        "theta": 1.5707963267948966
+      },
+      "metric": {
+        "a": 0.0,
+        "family": 0,
+        "r": 1.65,
+        "theta": 1.1
+      }
+    }
+  },
+  "input_sha256": "8066bf0b85cf53f97141a55a64827b0274fbe4bec397c81fe8b63904e323bb33",
+  "matching": {
+    "approach": [
+      {
+        "errors_by_derivative_order": [
+          [
+            2.0562258157057464e-16,
+            2.764222823888749e-16,
+            1.0454358094122833e-15,
+            9.325873406851315e-15
+          ],
+          [
+            1.6408740199766163e-16,
+            6.140334554267537e-16,
+            1.0454358094122833e-15,
+            3.9968028886505635e-15
+          ],
+          [
+            1.7179702173307487e-16,
+            2.1744881412940628e-16,
+            1.154884671060274e-15,
+            5.3290705182007514e-15
+          ]
+        ],
+        "join": 1.5,
+        "side": -1,
+        "steps": [
+          0.001,
+          0.0001,
+          1e-05
+        ]
+      },
+      {
+        "errors_by_derivative_order": [
+          [
+            2.384182415099773e-09,
+            9.248693045424091e-06,
+            0.02070273010660102,
+            72.53320365483108
+          ],
+          [
+            2.4017064064559333e-13,
+            9.335659368872946e-09,
+            0.0002100708131715045,
+            7.386526979885171
+          ],
+          [
+            1.433882308225174e-16,
+            9.344500548105611e-12,
+            2.1037685812858854e-06,
+            0.7399923101752175
+          ]
+        ],
+        "join": 1.5,
+        "side": 1,
+        "steps": [
+          0.001,
+          0.0001,
+          1e-05
+        ]
+      },
+      {
+        "errors_by_derivative_order": [
+          [
+            1.364587192429149e-08,
+            2.0267464633356022e-05,
+            0.018923486903326785,
+            80.41060695341015
+          ],
+          [
+            1.368578351791154e-12,
+            2.036928869352474e-08,
+            0.00019155662600530175,
+            8.191383663428626
+          ],
+          [
+            1.2687338145122867e-15,
+            2.0381864017137336e-11,
+            1.917897980695247e-06,
+            0.8206504581720997
+          ]
+        ],
+        "join": 1.8,
+        "side": -1,
+        "steps": [
+          0.001,
+          0.0001,
+          1e-05
+        ]
+      },
+      {
+        "errors_by_derivative_order": [
+          [
+            9.79983173222108e-17,
+            5.719846242402286e-16,
+            5.292480660137309e-16,
+            6.2993094305305235e-15
+          ],
+          [
+            6.753781652397672e-16,
+            1.7353565262846729e-15,
+            2.4730497303655478e-15,
+            5.827519548345163e-15
+          ],
+          [
+            8.224449897568232e-16,
+            2.071210149482402e-15,
+            3.1936798301477326e-15,
+            4.866994200493773e-15
+          ]
+        ],
+        "join": 1.8,
+        "side": 1,
+        "steps": [
+          0.001,
+          0.0001,
+          1e-05
+        ]
+      }
+    ],
+    "boundary_map": {
+      "r_in": "shell vs de_sitter/core",
+      "r_out": "shell vs kerr/exterior"
+    },
+    "endpoint_maximum": 3.257562082797732e-31,
+    "extrinsic_maximum": 4.1531494732762984e-32,
+    "production_shell_endpoint_errors_C0_C3": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "production_shell_extrinsic_error": 0.0
+  },
+  "passed": true,
+  "published_figure_reproduction": "unresolved: source shell radii unavailable",
+  "radial_certificate": {
+    "core_factor_lower_bound": "5/8",
+    "exterior_delta_minimum": "649/1600",
+    "maximum_depth": 0,
+    "scope": "fixed preset; radial null surfaces, not a global event-horizon proof",
+    "shell_delta_lower_bound": 0.279625,
+    "shell_delta_lower_bound_exact": "2237/8000",
+    "shell_delta_upper_bound": 1.9078818181818182,
+    "shell_roots": 0,
+    "stationary_points": [
+      {
+        "Delta": 1.8906157265563361,
+        "radius": 1.5229023103176131,
+        "u_bracket": [
+          "41968927495/549755813888",
+          "83937854991/1099511627776"
+        ]
+      },
+      {
+        "Delta": 0.35423906275838113,
+        "radius": 1.755004672030509,
+        "u_bracket": [
+          "467301003391/549755813888",
+          "934602006783/1099511627776"
+        ]
+      }
+    ],
+    "subintervals": 1
+  },
+  "reference_decimal_places": 90,
+  "schema_version": 2
+}

@@ -60,10 +60,10 @@ derivative. The complementary polynomial near the outer endpoint reduces
 cancellation. Derivatives apply to **all** occurrences of `mu` and `lambda`,
 including `T` and `X`. Fast-math is disabled.
 
-The independent Python calculation expands components algebraically, evaluates
-the original polynomial in `x` at 70 decimal digits, inverts with Gauss-Jordan,
-and takes high-precision numerical differences. It does not import the C++
-expressions or AD. Five-point fourth-order differences provide first/second
+The independent C++20 reference expands components algebraically, evaluates
+the original polynomial in `x` using 90 fixed decimal places, inverts with
+Gauss-Jordan, and takes high-precision numerical differences. It includes no
+production geometry or AD header. Five-point fourth-order differences provide first/second
 derivatives; tensor products provide mixed derivatives. Nine-point differences
 and analytic branch continuation test radial matching through order three.
 The reference implements sine/cosine by reduced Taylor series; precision and
@@ -75,7 +75,7 @@ Curvature convention:
 `R_bd=R^a_bad`, `R=g^bd R_bd`.
 Consequently de Sitter has `R=4 Lambda`, `R_ab=Lambda g_ab`,
 `R_abcd=(Lambda/3)(g_ac g_bd-g_ad g_bc)`, `K=8 Lambda^2/3`.
-The Python reference builds the fully covariant Riemann tensor directly from
+The high-precision reference builds the fully covariant Riemann tensor directly from
 metric Hessians; C++ differentiates Christoffel symbols.
 
 ## Chart and interior decision
@@ -93,6 +93,10 @@ of tensor identities and angular reflection/spin reversal. Nontrivial chart
 transformations and position/momentum/frame transitions are P2 work.
 
 The singular-coordinate surfaces `D=0`, axes and `r=0` are rejected or excluded.
+Production rejects `sin(theta)^2 <= 64 epsilon_double` and
+`abs(D) <= 64 epsilon_double max(1,abs(B),abs(B L r^2/3),abs(2mr))`.
+These numerical guards are wider than the exact singular surfaces and are
+outside the accepted benchmark box.
 They must not become fictitious absorbing boundaries in a future renderer.
 Full interior optics is blocked pending a separately derived extension and
 chart atlas. Reference Kerr horizon crossing is also outside P1.

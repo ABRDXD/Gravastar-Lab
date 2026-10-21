@@ -1,8 +1,13 @@
 # GravastarLab implementation plan
 
-Status: **planning only** (2026-10-20). The user explicitly deferred all
-implementation to a later session. This document describes intended work;
-unchecked tasks are not implemented, tested, or scientifically validated.
+Status: **implementation authorized; P0/P1 implementation under verification**
+(2026-10-21). The earlier planning-only boundary was explicitly lifted by the
+user. The subsequent C++20-only instruction supersedes all earlier language
+choices. See `docs/STATUS.md` for measured acceptance and unresolved gates.
+
+All scientific references, tests, benchmarks, validation and development tools
+must be C++20. CMake is limited to build/dependency configuration and CTest
+registration. No other implementation or automation language may be introduced.
 
 ## Objective
 
@@ -32,7 +37,7 @@ are separate research milestones, not claims of the first release.
 ## Architecture and dependencies
 
 - C++20 and CMake; Vulkan compute, GLFW, Dear ImGui, and ImPlot for the desktop.
-- Independent Python calculations for scientific validation.
+- Independently implemented high-precision C++20 calculations for validation.
 - Separate geometry, integration, radiation, rendering, experiments, recording,
   and UI. Scientific modules must run headlessly.
 - Replaceable interfaces for metric evaluation and derivatives, integrators,
@@ -114,9 +119,9 @@ are separate research milestones, not claims of the first release.
 
 ## Session boundary and preliminary observations
 
-This session creates and refines Markdown only. Do not install dependencies,
-write application code, build binaries, run physics simulations, or claim any
-delivery milestone complete during this session.
+Historical boundary: the original planning session changed Markdown only.
+Implementation was subsequently authorized. The observations below describe
+that earlier session; current implementation choices are in `docs/ENVIRONMENT.md`.
 
 Preliminary read-only inspection found:
 
@@ -126,8 +131,8 @@ Preliminary read-only inspection found:
 - `nvidia-smi` could not communicate with the NVIDIA driver in this session.
   RTX 3050 rendering and performance are therefore unverified.
 - GLFW, Dear ImGui, ImPlot, and GYOTO availability has not been established.
-- Python SciPy was unavailable in the checked interpreter. Use a project-local
-  environment for scientific dependencies rather than modifying system Python.
+- The earlier Python dependency investigation is superseded by C++20-only
+  validation. Do not modify system packages for this project.
 - KerrLab's provenance notes identify an imported browser renderer without an
   upstream license grant. Do not copy that renderer into this project.
 - No KerrLab code, dependencies, or binary artifacts have been copied.
@@ -199,7 +204,7 @@ Mark interpolated, extrapolated, and unchecked configurations accordingly.
 
 ## Proposed repository layout
 
-The following is a future layout, not a list of files already created:
+The following is the overall target layout; only P0/P1 modules are implemented:
 
 ```text
 GravastarLab/
@@ -217,7 +222,7 @@ GravastarLab/
     rendering/vulkan/ experiments/ recording/ scene/ desktop/
   shaders/                    # Compute tracing and display passes
   plugins/gyoto/              # Adapter for the actual metric
-  python/                     # Independent scientific implementation
+  include/gravastar/reference/ # Independent C++20 scientific implementation
   tests/                      # Headless correctness and regression checks
   benchmarks/                 # Inputs and performance methodology
   scenes/                     # Versioned presets and animation examples
@@ -257,15 +262,15 @@ accumulation and diagnostics.
 Proposed command-line targets are `gravastar_benchmark`, `gravastar_trace`,
 `gravastar_render`, `gravastar_experiment`, and `gravastar_studio`. Names may be
 consolidated if a subcommand interface keeps the same headless capabilities.
-Python may initially orchestrate recording and experiments, but must use the
-same documented scene/job contracts as the desktop.
+C++20 tools orchestrate recording and experiments using the same documented
+scene/job contracts as the desktop.
 
 ## Numerical and scientific work packages
 
 ### Geometry and curvature
 
 - Implement reference geometry in C++ double precision without fast-math.
-- Independently derive Python expressions; do not merely bind the C++ evaluator
+- Independently derive reference C++20 expressions; do not merely reuse the production evaluator
   and describe that as an independent check.
 - Choose analytic expressions or automatic differentiation for production first
   derivatives; use convergent numerical differences as a cross-check.
@@ -324,7 +329,7 @@ compiler ABI, and license before selecting a revision.
 
 - Implement a real custom-metric adapter with correct units, derivative order,
   and coordinate conventions.
-- Compare GYOTO evaluation vectors with the independent Python and C++ results.
+- Compare GYOTO vectors with independent high-precision and production C++20 results.
 - Compare trajectories first, then disk events and frequency shifts, then images.
 - Keep GYOTO integration and the native CPU tracer separately identified.
   Agreement between two adapters sharing the same metric code alone does not
@@ -476,7 +481,7 @@ absolute/relative norms, thresholds, measured maxima, and failing samples.
 | Curvature | Constant-curvature core, vacuum exterior, shell | Invariant/reference residuals and refinement plots |
 | Domain | Rotating presets and candidate parameter cells | Signature/conditioning margins, refined root diagnostics, exclusions |
 | Geodesics | Escape, shell crossing, interior paths, near critical rays | Constraint and invariant drift; tolerance and event convergence |
-| Reference optics | Native CPU, Python fixtures, GYOTO | Trajectory, event, and redshift agreement with independent checks |
+| Reference optics | Native CPU, independent C++20 fixtures, GYOTO | Trajectory, event, and redshift agreement with independent checks |
 | GPU | Formula vectors and representative/difficult rays | Error distributions, failed-ray counts, CPU/GPU comparisons |
 | Images | Fixed scene, increasing ray accuracy and samples | Linear-radiance convergence plus separate display comparisons |
 | Recording | Known timeline and real rendered sequence | Frame/timestamp/order/hash checks and successful resume |
@@ -502,11 +507,11 @@ schedule to demonstrate preview independence. A low-resolution or synthetic
   any graphics dependencies.
 - Pin exact revisions or immutable archive hashes for compiled third-party code.
   Verify the actual license files and preserve notices before reuse.
-- Audit C++/Python scientific dependencies, GLFW, ImGui, ImPlot, GYOTO, Vulkan
+- Audit C++ scientific dependencies, GLFW, ImGui, ImPlot, GYOTO, Vulkan
   headers/loader, shader compiler, image libraries, and FFmpeg separately.
 - Record whether each dependency is linked, bundled, a build tool, or an external
   executable. Check compatibility with GPL-3.0-or-later and bundled codec options.
-- Use a project-local setup process; avoid global Python/package-manager changes.
+- Use a project-local C++20 setup process; avoid global package-manager changes.
 - Inspect KerrLab components and their provenance individually. Reimplement or
   obtain permission where license grants are absent. Keep a source/revision/file
   inventory for any lawful reuse; do not inherit historical validation claims.
@@ -550,7 +555,7 @@ desktop visualization and post-processing.
 | Stage | Work to deliver | Gate before proceeding |
 | --- | --- | --- |
 | P0: specification | Environment/provenance audit, source equation map, chart/interior decision, dependency pins | Scientific domain and build strategy documented |
-| P1: geometry | C++ metric, independent Python checks, benchmark report and accepted presets | Limits, derivatives, matching, curvature, and domain checks pass |
+| P1: geometry | C++20 metric, independent C++20 checks, benchmark report and accepted presets | Limits, derivatives, matching, curvature, and domain checks pass |
 | P2: reference optics | Observers, native adaptive tracer, GYOTO plugin, emission, reference images | Complete advertised ray domain and reference convergence accepted |
 | P3: GPU optics | Vulkan harness, derivative/ray agreement, radiance output | Measured accuracy and resource behavior accepted |
 | P4: desktop | GLFW/ImGui/ImPlot studio, controls, inspection and exports | Scientific labels, rendering behavior, and desktop smoke checks pass |
@@ -601,8 +606,7 @@ questions whose answers can be found in the references or local environment.
 ## Next-session starting instructions
 
 1. Read this plan and any applicable local `AGENTS.md` before changing files.
-2. Preserve the planning-only boundary until the user authorizes implementation
-   in a later session.
+2. Implementation is authorized. Preserve the C++20-only architectural constraint.
 3. When authorized, begin P0: audit the environment, inspect licenses, and write
    the precise model/chart specification. Do not start with cinematic effects.
 4. Implement the smallest reproducible geometry benchmark and independent

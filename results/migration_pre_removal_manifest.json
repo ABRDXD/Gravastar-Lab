@@ -1,0 +1,251 @@
+{
+  "algorithm": "sha256",
+  "computational_sha256": "215b6a7ed6a6b1db33aaf60de947fb105539815fef100af348916bf81a4b4f8c",
+  "digest_encoding": "UTF-8 compact JSON of sorted records and object keys",
+  "documentation_sha256": "c0051ac510ee97e1a102ed7938247d19f175eb3a0b92811d5950b805b0568e7b",
+  "file_count": 40,
+  "files": [
+    {
+      "bytes": 3657,
+      "path": "CMakeLists.txt",
+      "scope": "computational",
+      "sha256": "bc2f80d77e951c229eb871993065a816c07ae3b1925ace27c3185e219db4c0e0"
+    },
+    {
+      "bytes": 1430,
+      "path": "CMakePresets.json",
+      "scope": "computational",
+      "sha256": "ef922b9a446a167e0d2a78ccbc4bd6809e6abdd9c084548f91505e91bb5ea1df"
+    },
+    {
+      "bytes": 34674,
+      "path": "LICENSE",
+      "scope": "documentation",
+      "sha256": "fb981668c18a279e285fc4d83fba1e836cc84dd4daa73c9697d3cfd2d8aca6e0"
+    },
+    {
+      "bytes": 939,
+      "path": "NOTICE",
+      "scope": "documentation",
+      "sha256": "c5a9dcf68b4b2a5d22879d69900f66a9fbb4e54f94fa24f5e2bfc6ad283fcc0a"
+    },
+    {
+      "bytes": 36656,
+      "path": "PLAN.md",
+      "scope": "documentation",
+      "sha256": "d114763cbf0d5873771a1e7610cbd9e13c6e4bc5045f39229f4bbc1b46f0c5d5"
+    },
+    {
+      "bytes": 2555,
+      "path": "README.md",
+      "scope": "documentation",
+      "sha256": "ed98b8ed6035d819c27ddf7962a5b6ad9a0a889e4d180ec02f1ac5d661fdd17d"
+    },
+    {
+      "bytes": 6450,
+      "path": "THIRD_PARTY.md",
+      "scope": "documentation",
+      "sha256": "7150e45287b66768674a9eddb90dc5ff8e835c557211be7552bce1207c9fd60c"
+    },
+    {
+      "bytes": 1026,
+      "path": "benchmarks/rotating.json",
+      "scope": "computational",
+      "sha256": "972116b3bab062b4f8269d241e0ae8dd4d30e565cb130999de5c20032c2c6ccb"
+    },
+    {
+      "bytes": 1164,
+      "path": "benchmarks/rotating_v1.json",
+      "scope": "computational",
+      "sha256": "8066bf0b85cf53f97141a55a64827b0274fbe4bec397c81fe8b63904e323bb33"
+    },
+    {
+      "bytes": 4114,
+      "path": "docs/ARCHITECTURE.md",
+      "scope": "documentation",
+      "sha256": "2cb14a249f98f3d18091a2f9fb3a5a0b5f4b573b430ac843dc633b072d3608dd"
+    },
+    {
+      "bytes": 4976,
+      "path": "docs/ENVIRONMENT.md",
+      "scope": "documentation",
+      "sha256": "d85c2d3a3823c34d6fca1fd74fcc06bbcacb7832a149e5bc9f9a3ecbe589e10b"
+    },
+    {
+      "bytes": 7291,
+      "path": "docs/MODEL.md",
+      "scope": "documentation",
+      "sha256": "68de0c0489af37112ee37bf58bf9a6720a1a3ba75610a35337505a17b827aef2"
+    },
+    {
+      "bytes": 4060,
+      "path": "docs/PROVENANCE.md",
+      "scope": "documentation",
+      "sha256": "67ca8ecef25bab41c559179a68c67d914b0ee65fbe959822b5621d6e4a2fa1a6"
+    },
+    {
+      "bytes": 7344,
+      "path": "docs/SOURCE_AUDIT.md",
+      "scope": "documentation",
+      "sha256": "614e1febbbe3a4c9a1a53b9ce7e4e2274d896720d4186873cf7ffdfa3b90ed75"
+    },
+    {
+      "bytes": 1839,
+      "path": "include/gravastar/geometry/geometry.hpp",
+      "scope": "computational",
+      "sha256": "be767235a639b3494b4043937278d6cd32b920d8d2e86c89728ae7fcf0eb8524"
+    },
+    {
+      "bytes": 1179,
+      "path": "include/gravastar/geometry/metric.hpp",
+      "scope": "computational",
+      "sha256": "564eb682ac3a1b02a332181a734813540b27cd05fd05935ffc8af1c3999eb335"
+    },
+    {
+      "bytes": 2596,
+      "path": "include/gravastar/math/jet.hpp",
+      "scope": "computational",
+      "sha256": "381047885cfa8135e52eb0f2c37bc21303aacc24494e981ea80ce61ab9463261"
+    },
+    {
+      "bytes": 8368,
+      "path": "include/gravastar/reference/geometry.hpp",
+      "scope": "computational",
+      "sha256": "12c5f2abcfdeeba267df55872356278f35f0216c21e12a6725cc8ea5aa6efe3b"
+    },
+    {
+      "bytes": 12868,
+      "path": "include/gravastar/reference/number.hpp",
+      "scope": "computational",
+      "sha256": "2ebab15a252804e6765d24916a143dd12803a65adef28aae142be50effb4a2be"
+    },
+    {
+      "bytes": 6655,
+      "path": "include/gravastar/reference/polynomial.hpp",
+      "scope": "computational",
+      "sha256": "ed20ec12cb09100984a55c7abba2405b04c15060f55c0e2dc421bbdf9b18ea6e"
+    },
+    {
+      "bytes": 7756,
+      "path": "include/gravastar/tools/artifacts.hpp",
+      "scope": "computational",
+      "sha256": "6f7ef30883c5eed5c5e5827e3a04593960914117d584a2695862ef560afca1f1"
+    },
+    {
+      "bytes": 984,
+      "path": "include/gravastar/tools/process.hpp",
+      "scope": "computational",
+      "sha256": "26591a8c5c9cde9a5707946afb9c4f982f89a6091a8fe3a4e1b1dbfaf11aba83"
+    },
+    {
+      "bytes": 4102,
+      "path": "python/polynomial.py",
+      "scope": "computational",
+      "sha256": "1dddb598d0fcad350e38c0a8d9f24e9df3ef237f31254ed601da8617ba561cf3"
+    },
+    {
+      "bytes": 2500,
+      "path": "python/radial_bounds.py",
+      "scope": "computational",
+      "sha256": "3ec15cc1f07ee4719d087e8f2b119e3013861fb0ffc60581448dd95ca1ccbb25"
+    },
+    {
+      "bytes": 5245,
+      "path": "python/reference.py",
+      "scope": "computational",
+      "sha256": "ec37014872ccd2d2249d2f6993ebbca32ac6c145a6bf8c31128f1be897e4c18a"
+    },
+    {
+      "bytes": 20833,
+      "path": "python/validate.py",
+      "scope": "computational",
+      "sha256": "86e1ade21b3b2ee43d816e53230314d1f62ca210a95a0c6634b7195d839a8451"
+    },
+    {
+      "bytes": 5420,
+      "path": "src/experiments/benchmark.cpp",
+      "scope": "computational",
+      "sha256": "e2327ce021cc42db304bc61d835260cb682ebc13666dbf71ce3c0beb46db7272"
+    },
+    {
+      "bytes": 26719,
+      "path": "src/experiments/validate.cpp",
+      "scope": "computational",
+      "sha256": "b90057b4804ec3f8aa8922169786062820b0daeb4210adbbcc88109d51a74671"
+    },
+    {
+      "bytes": 2281,
+      "path": "src/geometry/curvature.cpp",
+      "scope": "computational",
+      "sha256": "fdaee0ebaa64bd6ae404849d019101722080425e8a0c8dff9f7a2d76a4a00e08"
+    },
+    {
+      "bytes": 10030,
+      "path": "src/geometry/geometry.cpp",
+      "scope": "computational",
+      "sha256": "e5146c0bf9a75556acfe6dcccc55fd46958cb030a21ad2bcd718dcf9582c5c1b"
+    },
+    {
+      "bytes": 3658,
+      "path": "src/geometry/metric.cpp",
+      "scope": "computational",
+      "sha256": "7761dbd7d712369eeebc962735e7b1a7defc1e40ba3111c73a5a2943e41d8f41"
+    },
+    {
+      "bytes": 12557,
+      "path": "tests/cpp_geometry.cpp",
+      "scope": "computational",
+      "sha256": "ac92f908fedf0b27ce69a71c4c613ec2399bb59906f20fe242735f9d17f3c885"
+    },
+    {
+      "bytes": 3832,
+      "path": "tests/geometry_tests.cpp",
+      "scope": "computational",
+      "sha256": "0bf4d6577c9677e83622ac427b9d2ec04f6c2ce610979bf40742c4c2a5f7bf59"
+    },
+    {
+      "bytes": 6377,
+      "path": "tests/reference_tests.cpp",
+      "scope": "computational",
+      "sha256": "17808b349ef55b51dccc4388c392216bbcf786c42ef9071969dca17b5dd2709e"
+    },
+    {
+      "bytes": 2389,
+      "path": "tests/validation_failures.cpp",
+      "scope": "computational",
+      "sha256": "51dcaae09c4af9d696455d35c2793ce837c0aa290ebca977b624c79d2b0c9f10"
+    },
+    {
+      "bytes": 0,
+      "path": "third_party/licenses/.gitkeep",
+      "scope": "computational",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 1076,
+      "path": "third_party/licenses/nlohmann-json-3.12.0.txt",
+      "scope": "computational",
+      "sha256": "46a65cffd1ea955132d95a8dd921640714a8d6b537d2e4e482d31145ae95b603"
+    },
+    {
+      "bytes": 6911,
+      "path": "tools/project.cpp",
+      "scope": "computational",
+      "sha256": "db88042c54be61a04d135fdfad6c3f7e17de6b1b62780422f7aaeb678d30c717"
+    },
+    {
+      "bytes": 7148,
+      "path": "tools/source_manifest.py",
+      "scope": "computational",
+      "sha256": "7a14e0ee757eb508141d1c3cf41c9a816dae28e49959f2eac745bc9cf69f3b45"
+    },
+    {
+      "bytes": 4647,
+      "path": "tools/validate.py",
+      "scope": "computational",
+      "sha256": "a2f644b74c6798fe836ebbc7a83b0217a6630b4fec7b7fa73adbe099fde0d573"
+    }
+  ],
+  "schema_version": 1,
+  "source_sha256": "a86f2d7436ca961c1f4c868c30809c260cb5447a85921eeb1eeb571b1eaaa321"
+}

@@ -64,7 +64,7 @@ The Raw tree's `THIRD_PARTY.md` had the same hash as the Restored copy.
 
 Original GravastarLab code uses GPL-3.0-or-later as specified in the plan.
 P1 has no vendored third-party implementation and no linked scientific,
-graphics, or GUI library. C++ and Python standard runtimes and local build tools
+graphics, or GUI library. C++ standard runtimes and local build tools
 are recorded in [ENVIRONMENT.md](ENVIRONMENT.md) and
 [THIRD_PARTY.md](../THIRD_PARTY.md). No Electron runtime, npm lockfile,
 Windows toolchain, KerrLab coefficient table, or historical report is adopted.

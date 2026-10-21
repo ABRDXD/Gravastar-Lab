@@ -5,18 +5,21 @@
   "parameter_provenance": "M,a,Lambda from arXiv:2309.00551v2 section III.I; shell radii and validation box are project choices",
   "parameters": {"M": "1", "a": "0.875", "Lambda": "0.5", "r_in": "1.5", "r_out": "1.8"},
   "domain": {"r_min": "0.25", "r_max": "10", "theta_min": "0.05", "radial_samples": 81, "angular_samples": 25},
-  "reference": {"decimal_digits": 70, "finite_difference_step": "1e-9"},
+  "reference": {"implementation": "independent C++20 fixed decimal", "decimal_places": 90, "refinement_decimal_places": 110, "finite_difference_step": "1e-9"},
+  "threshold_provenance": "Frozen after first C++20 pilot: metric 2.4e-15, derivatives 1.3e-14/7.4e-14/1.9e-12, curvature 3.5e-13; margins cover observed cancellation and host/compiler variability only",
   "thresholds": {
-    "metric": 2e-12,
-    "inverse": 2e-11,
-    "dg": 2e-10,
-    "ddg": 2e-9,
-    "drrr": 2e-8,
-    "curvature": 2e-8,
-    "analytic_curvature": 2e-9,
+    "metric": 1e-12,
+    "inverse": 1e-12,
+    "dg": 5e-12,
+    "ddg": 2e-11,
+    "drrr": 1e-9,
+    "curvature": 2e-10,
+    "analytic_curvature": 2e-10,
     "identity": 2e-11,
-    "matching": 1e-22,
-    "reference_refinement": 1e-24,
-    "convergence_ratio_min": 3.0
+    "matching": 1e-26,
+    "reference_refinement": 1e-26,
+    "convergence_ratio_min": 12.0,
+    "minimum_eigenvalue_magnitude": 1e-4,
+    "maximum_coordinate_condition": 1e5
   }
 }

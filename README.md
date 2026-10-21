@@ -1,79 +1,55 @@
 # Gravastar-Lab
 
-> *VIbeCoded btw so dont actually try to copy this use anything else*  
+> *VIbeCoded btw so dont actually try to copy this use anything else*
 > *This project contains general relativity, Vulkan compute shaders, numerical integration, and several thousand lines of C++. I barely understand half of it. Proceed at your own risk.*
 
----
 
-Rotating gravastar research, geometric benchmarking, and scientific evaluation framework.
+The original project warning is preserved above. Current implemented scope is
+the headless stationary geometry benchmark; Vulkan rendering and integration
+remain future work.
 
-GravastarLab provides an independent C++20 and Python research environment for analyzing rotating gravastars based on the [de Sitter-core / Kerr-exterior metric family](https://arxiv.org/abs/2309.00551). The framework emphasizes rigorous scientific validation, exact polynomial diagnostics, Taylor jet arithmetic, and cross-language consistency checks.
+GravastarLab implements the transition construction of
+[Ilijić and DeBenedictis, arXiv:2309.00551v2](https://arxiv.org/html/2309.00551v2).
+Production geometry, independent high-precision references, tests, benchmarks
+and development tools are **C++20 only**. CMake is used only for build/dependency
+configuration and CTest registration.
 
----
+P1 uses `M=1`, `a=0.875`, `Lambda=0.5` with **project-selected** shell radii
+`1.5` and `1.8`. Numerical results cover a bounded chart. Exact reproduction of
+the paper's figures and complete central/axis ray continuation remain unresolved.
+Stationary metric consistency does not establish matter stability.
 
-## Architecture Overview
+## Build and validate
 
-| Directory / Layer | Purpose | Dependencies |
-| :--- | :--- | :--- |
-| [`include/gravastar/`](file:///home/abrsdxd/Projects/GravastarLab/include/gravastar) | Public C++ headers for bivariate Taylor jets and metric evaluation | C++20 standard library |
-| [`src/geometry/`](file:///home/abrsdxd/Projects/GravastarLab/src/geometry) | Metric tensor, derivatives, Christoffel symbols, and Riemann/Ricci/Einstein curvature tensors | C++20 standard library |
-| [`src/experiments/`](file:///home/abrsdxd/Projects/GravastarLab/src/experiments) | Headless benchmark executable (`gravastar_benchmark`) with JSON/JSONL output | Geometry library |
-| [`python/`](file:///home/abrsdxd/Projects/GravastarLab/python) | Independent multi-precision reference formulas, polynomial bounds, and finite-difference validation | Python standard library |
-| [`benchmarks/`](file:///home/abrsdxd/Projects/GravastarLab/benchmarks) | Versioned parameter domains, sampling configs, and precision tolerances | JSON specifications |
-| [`docs/`](file:///home/abrsdxd/Projects/GravastarLab/docs) | Detailed scientific specifications, architecture, and provenance records | Markdown |
-| [`tests/`](file:///home/abrsdxd/Projects/GravastarLab/tests) | C++ unit tests for Taylor jets, metric limits, and curvature | CTest |
-| [`tools/`](file:///home/abrsdxd/Projects/GravastarLab/tools) | Orchestration scripts for build, test, and validation workflows | Python 3 |
+Requires a C++20 compiler, CMake 3.25+, Ninja, and installed header-only C++
+library `nlohmann_json 3.12.0`. No packages are downloaded during the build.
+Tested versions and notices are in [THIRD_PARTY.md](THIRD_PARTY.md).
 
-For deep-dive documentation on design contracts and scientific specifications:
-- [Architecture & Boundaries](file:///home/abrsdxd/Projects/GravastarLab/docs/ARCHITECTURE.md)
-- [Scientific Model & Contract](file:///home/abrsdxd/Projects/GravastarLab/docs/MODEL.md)
-- [Implementation Plan](file:///home/abrsdxd/Projects/GravastarLab/PLAN.md)
-- [Environment & Toolchains](file:///home/abrsdxd/Projects/GravastarLab/docs/ENVIRONMENT.md)
-
----
-
-## Prerequisites
-
-- **C++ Compiler**: GCC 13+ or Clang 16+ supporting C++20
-- **Build System**: CMake (>= 3.25) and Ninja
-- **Python**: Python 3.10+ (Standard library only; no extra pip packages required for headless validation)
-
----
-
-## Quick Start
-
-### 1. Configure and Build (C++)
-
-Using CMake presets:
-
-```bash
-# Configure with Ninja (headless release)
+```text
 cmake --preset headless-release
-
-# Build benchmark and geometry libraries
-cmake --build --preset headless-release
-```
-
-Other available presets:
-- `headless-debug`: Debug symbols enabled
-- `sanitizers`: Address and Undefined Behavior sanitizers (ASan/UBSan)
-
-### 2. Run Tests
-
-```bash
+cmake --build --preset headless-release --parallel 4
 ctest --preset headless-release
+build/headless-release/gravastar_validate --output results/rotating_v1.json
 ```
 
-### 3. Run Benchmark Validation
+Individual metric/derivative/curvature evaluation:
 
-Execute the end-to-end benchmark and cross-language validation pipeline:
-
-```bash
-python3 tools/validate.py --preset headless-release
+```text
+build/headless-release/gravastar_benchmark evaluate toy 1 .875 .5 1.5 1.8 1.65 1.2
 ```
 
----
+`gravastar_benchmark batch` accepts whitespace-separated evaluation records on
+standard input and returns JSONL. `--help` documents its interface. Other build
+presets are `headless-debug` and `sanitizers`.
 
-## License
+The compiled `gravastar_tools workflow` repeats configuration, build, CTest and
+scientific validation; `gravastar_tools manifest` generates a SHA-256 inventory.
+Generated files stay under `results/`. Failed runs preserve accepted reports.
 
-See [`LICENSE`](file:///home/abrsdxd/Projects/GravastarLab/LICENSE), [`NOTICE`](file:///home/abrsdxd/Projects/GravastarLab/NOTICE), and [`THIRD_PARTY.md`](file:///home/abrsdxd/Projects/GravastarLab/THIRD_PARTY.md) for licensing terms and upstream citations.
+Read [status and handoff](docs/STATUS.md), [model contract](docs/MODEL.md),
+[architecture](docs/ARCHITECTURE.md), [migration evidence](docs/MIGRATION.md),
+[source audit](docs/SOURCE_AUDIT.md), and [the plan](PLAN.md).
+
+Original code is GPL-3.0-or-later. See [LICENSE](LICENSE), [NOTICE](NOTICE), and
+[THIRD_PARTY.md](THIRD_PARTY.md). No KerrLab renderer or uncertain-license code
+was copied into this project.
