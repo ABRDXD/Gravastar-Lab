@@ -163,7 +163,7 @@ inline fs::path result_path(const fs::path &root, const fs::path &input) {
   return p;
 }
 // Linux durability: exclusive temporary file, fsync, close, atomic rename.
-inline void atomic_json(const fs::path &path, const Json &value) {
+inline void atomic_bytes(const fs::path &path, const std::string &bytes) {
   fs::create_directories(path.parent_path());
   std::string pattern =
       (path.parent_path() / ("." + path.filename().string() + ".XXXXXX"))
@@ -174,7 +174,6 @@ inline void atomic_json(const fs::path &path, const Json &value) {
   if (fd < 0)
     throw std::runtime_error("cannot create atomic temporary file");
   try {
-    auto bytes = value.dump(2) + "\n";
     std::size_t offset = 0;
     while (offset < bytes.size()) {
       auto n = write(fd, bytes.data() + offset, bytes.size() - offset);
@@ -202,5 +201,8 @@ inline void atomic_json(const fs::path &path, const Json &value) {
     fs::remove(name.data());
     throw;
   }
+}
+inline void atomic_json(const fs::path &path, const Json &value) {
+  atomic_bytes(path, value.dump(2) + "\n");
 }
 } // namespace gravastar::tools
