@@ -5,13 +5,16 @@ commit `609debe`. This checkpoint implements a C++20 observer frame, adaptive
 Hamiltonian null tracer, refined surface events, prescribed disk emission,
 and a headless ray/image command. The contract is in `OPTICS.md`.
 
-The completed GCC release run passed all 12 CTest targets, including 49
-analytic/reference optics checks and 27 CLI/image checks. The 16x12 toy image
+The GCC release and independent Clang release runs each passed all 12 CTest
+targets. The suite includes 49 analytic/reference optics checks and additional
+CLI/image checks, including deterministic runtime failure preservation. The 16x12 toy image
 has 87 emitted, 101 escaped and 4 explicitly unresolved chart-boundary pixels.
 The comparable Kerr image has 76 emitted, 8 escaped and 108 capture-surface
 pixels. All pixel classifications agree when integration tolerances and the
-maximum step are tightened. Generated acceptance reports and independent
-compiler/sanitizer runs are pending at this checkpoint.
+maximum step are tightened. GCC's complete run took 37.93 seconds; Clang's took
+29.56 seconds with other verification overlapping. These are test wall times,
+not rendering performance claims. Generated acceptance reports and sanitizer
+verification are being completed at this checkpoint.
 
 A failed event-refinement substep now rejects and shortens the entire trial
 step; a regression ray covers the pixel that exposed this issue. Additional

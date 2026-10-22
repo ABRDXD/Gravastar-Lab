@@ -1,4 +1,4 @@
-# P0/P1 architecture
+# Headless geometry and reference optics architecture
 
 All authored implementation and tooling is C++20. CMake configures builds,
 integrates dependencies, and registers CTest checks. JSON stores data;
@@ -10,6 +10,8 @@ script, network fetch, GPU or sibling checkout is needed for P1.
 | `gravastar_geometry` | Double metric/inverse, third-order Taylor jets, Christoffel curvature, domain errors |
 | `include/gravastar/reference/` | Independent expanded metric, 90/110-place differences, covariant curvature, exact polynomials |
 | `gravastar_benchmark` | Individual evaluation and JSONL batch interface |
+| `gravastar_optics` | Circular observer frames, adaptive past-directed Hamiltonian tracing, refined events and prescribed emission |
+| `gravastar_trace` | Versioned camera/scene input, individual trajectories, linear image JSON and diagnostic PPM |
 | `gravastar_validate` | Configuration, reference comparisons, scientific acceptance, JSON reports |
 | `gravastar_tools` | Native build/test workflow, source manifest generation and verification |
 | `tests/` | Numerical identities, input failures, tooling behavior, migration verification |
@@ -68,5 +70,21 @@ accepted preset. See `MIGRATION.md` for the pre-removal verification record.
 CTest also enforces an allow list of C++/CMake source and data/document formats;
 this format check supplements review of the C++20 architectural constraint.
 
-P2 optics, GYOTO, chart transitions, central continuation, GPU/desktop work,
-recording and stability research remain outside this implementation.
+The optics library calls the canonical geometry evaluator; no duplicate metric
+implementation was added. It currently computes curvature along with metric
+derivatives on each evaluation, favoring a single validated path over speed.
+Its Dopri5 pair is original C++20. Independent expanded high-precision geometry
+checks its RHS; exact analytic rays and a separately stepped RK4 integrator
+check trajectories. RK4 shares production geometry, a limitation recorded in
+the report. No GYOTO dependency or adapter is present.
+
+The tracer uses future covariant momentum while advancing a past-directed
+affine parameter. It preserves unresolved domain/budget outcomes in scientific
+data. Event substep failure rejects the complete trial before any events are
+recorded. JSON and PPM are individually atomic files, not one transaction;
+an interrupted multi-file write requires checking the associated source digest.
+Failed numerical runs use `.failed.json` and preserve accepted images/reports.
+
+Chart transitions, central continuation, GYOTO integration, GPU/desktop work,
+recording and stability research remain outside this checkpoint. See
+`OPTICS.md` for the bounded chart, capture proxy and emission conventions.

@@ -1,0 +1,367 @@
+{
+  "checks": [
+    {
+      "name": "unsupported scene schema rejected",
+      "passed": true
+    },
+    {
+      "name": "invalid input preserves prior report",
+      "passed": true
+    },
+    {
+      "name": "invalid image size rejected",
+      "passed": true
+    },
+    {
+      "name": "fractional image size rejected",
+      "passed": true
+    },
+    {
+      "name": "negative attempt budget rejected",
+      "passed": true
+    },
+    {
+      "name": "invalid solver settings rejected",
+      "passed": true
+    },
+    {
+      "name": "output traversal rejected",
+      "passed": true
+    },
+    {
+      "name": "negative pixel index rejected",
+      "passed": true
+    },
+    {
+      "name": "toy baseline image executes",
+      "passed": true
+    },
+    {
+      "name": "toy refined image executes",
+      "passed": true
+    },
+    {
+      "name": "toy pixel count",
+      "passed": true
+    },
+    {
+      "name": "toy event classifications agree under refinement",
+      "passed": true
+    },
+    {
+      "name": "toy event states converge",
+      "passed": true
+    },
+    {
+      "name": "toy intensities converge",
+      "passed": true
+    },
+    {
+      "name": "toy frequency shifts converge",
+      "passed": true
+    },
+    {
+      "name": "toy null residual bounded",
+      "passed": true
+    },
+    {
+      "name": "toy unresolved pixels remain explicit",
+      "passed": true
+    },
+    {
+      "name": "toy display artifact generated",
+      "passed": true
+    },
+    {
+      "name": "kerr baseline image executes",
+      "passed": true
+    },
+    {
+      "name": "kerr refined image executes",
+      "passed": true
+    },
+    {
+      "name": "kerr pixel count",
+      "passed": true
+    },
+    {
+      "name": "kerr event classifications agree under refinement",
+      "passed": true
+    },
+    {
+      "name": "kerr event states converge",
+      "passed": true
+    },
+    {
+      "name": "kerr intensities converge",
+      "passed": true
+    },
+    {
+      "name": "kerr frequency shifts converge",
+      "passed": true
+    },
+    {
+      "name": "kerr null residual bounded",
+      "passed": true
+    },
+    {
+      "name": "kerr unresolved pixels remain explicit",
+      "passed": true
+    },
+    {
+      "name": "kerr display artifact generated",
+      "passed": true
+    },
+    {
+      "name": "runtime failure preserves accepted data and display",
+      "passed": true
+    },
+    {
+      "name": "runtime failure emits explicit failed artifact",
+      "passed": true
+    },
+    {
+      "name": "test source unchanged",
+      "passed": true
+    }
+  ],
+  "comparisons": [
+    {
+      "baseline_configuration": {
+        "camera": {
+          "omega": null,
+          "position": [
+            0.0,
+            8.0,
+            1.0471975511965976,
+            0.0
+          ],
+          "vertical_field_of_view_degrees": 50.0
+        },
+        "disk": {
+          "emissivity": "bolometric_r_inverse_cubed",
+          "enabled": true,
+          "inner_radius": 3.0,
+          "motion": "ZAMO",
+          "outer_radius": 6.0
+        },
+        "domain": {
+          "capture_radius": null,
+          "inner_radius": 0.25,
+          "outer_radius": 10.0,
+          "polar_margin": 0.05
+        },
+        "geometry": {
+          "Lambda": 0.5,
+          "M": 1.0,
+          "a": 0.875,
+          "family": "toy",
+          "r_in": 1.5,
+          "r_out": 1.8
+        },
+        "image": {
+          "height": 12,
+          "width": 16
+        },
+        "integrator": {
+          "absolute_tolerance": 1e-10,
+          "event_tolerance": 1e-09,
+          "initial_step": 0.01,
+          "maximum_affine": 40.0,
+          "maximum_attempts": 100000,
+          "maximum_step": 0.1,
+          "minimum_step": 1e-10,
+          "null_tolerance": 1e-06,
+          "relative_tolerance": 1e-10
+        },
+        "preset_id": "p2_bounded_native_v1",
+        "schema_version": 1,
+        "scope": "bounded chart diagnostic; central/axis continuation and GYOTO acceptance incomplete"
+      },
+      "classifications": {
+        "domain_limit": 4,
+        "emitted": 87,
+        "escaped": 101
+      },
+      "family": "toy",
+      "maximum_intensity_error": 3.3540544976049203e-09,
+      "maximum_null_residual": 1.106421314332368e-07,
+      "maximum_redshift_error": 1.1149963750169587e-08,
+      "maximum_state_error": 1.4173151290188446e-07,
+      "pixel_classification_mismatches": 0,
+      "refined_configuration": {
+        "camera": {
+          "omega": null,
+          "position": [
+            0.0,
+            8.0,
+            1.0471975511965976,
+            0.0
+          ],
+          "vertical_field_of_view_degrees": 50.0
+        },
+        "disk": {
+          "emissivity": "bolometric_r_inverse_cubed",
+          "enabled": true,
+          "inner_radius": 3.0,
+          "motion": "ZAMO",
+          "outer_radius": 6.0
+        },
+        "domain": {
+          "capture_radius": null,
+          "inner_radius": 0.25,
+          "outer_radius": 10.0,
+          "polar_margin": 0.05
+        },
+        "geometry": {
+          "Lambda": 0.5,
+          "M": 1.0,
+          "a": 0.875,
+          "family": "toy",
+          "r_in": 1.5,
+          "r_out": 1.8
+        },
+        "image": {
+          "height": 12,
+          "width": 16
+        },
+        "integrator": {
+          "absolute_tolerance": 1e-11,
+          "event_tolerance": 1e-10,
+          "initial_step": 0.01,
+          "maximum_affine": 40.0,
+          "maximum_attempts": 100000,
+          "maximum_step": 0.05,
+          "minimum_step": 1e-10,
+          "null_tolerance": 1e-06,
+          "relative_tolerance": 1e-11
+        },
+        "preset_id": "p2_bounded_native_v1",
+        "schema_version": 1,
+        "scope": "bounded chart diagnostic; central/axis continuation and GYOTO acceptance incomplete"
+      },
+      "unresolved_pixels": 4
+    },
+    {
+      "baseline_configuration": {
+        "camera": {
+          "omega": null,
+          "position": [
+            0.0,
+            8.0,
+            1.0471975511965976,
+            0.0
+          ],
+          "vertical_field_of_view_degrees": 50.0
+        },
+        "disk": {
+          "emissivity": "bolometric_r_inverse_cubed",
+          "enabled": true,
+          "inner_radius": 3.0,
+          "motion": "ZAMO",
+          "outer_radius": 6.0
+        },
+        "domain": {
+          "capture_radius": 1.55,
+          "inner_radius": 0.25,
+          "outer_radius": 10.0,
+          "polar_margin": 0.05
+        },
+        "geometry": {
+          "Lambda": 0.5,
+          "M": 1.0,
+          "a": 0.875,
+          "family": "kerr",
+          "r_in": 1.5,
+          "r_out": 1.8
+        },
+        "image": {
+          "height": 12,
+          "width": 16
+        },
+        "integrator": {
+          "absolute_tolerance": 1e-10,
+          "event_tolerance": 1e-09,
+          "initial_step": 0.01,
+          "maximum_affine": 40.0,
+          "maximum_attempts": 100000,
+          "maximum_step": 0.1,
+          "minimum_step": 1e-10,
+          "null_tolerance": 1e-06,
+          "relative_tolerance": 1e-10
+        },
+        "preset_id": "p2_bounded_native_v1",
+        "schema_version": 1,
+        "scope": "bounded chart diagnostic; central/axis continuation and GYOTO acceptance incomplete"
+      },
+      "classifications": {
+        "capture_surface": 108,
+        "emitted": 76,
+        "escaped": 8
+      },
+      "family": "kerr",
+      "maximum_intensity_error": 4.6754612528149095e-11,
+      "maximum_null_residual": 9.99683257249166e-11,
+      "maximum_redshift_error": 6.216704154110616e-11,
+      "maximum_state_error": 2.8669211427588166e-08,
+      "pixel_classification_mismatches": 0,
+      "refined_configuration": {
+        "camera": {
+          "omega": null,
+          "position": [
+            0.0,
+            8.0,
+            1.0471975511965976,
+            0.0
+          ],
+          "vertical_field_of_view_degrees": 50.0
+        },
+        "disk": {
+          "emissivity": "bolometric_r_inverse_cubed",
+          "enabled": true,
+          "inner_radius": 3.0,
+          "motion": "ZAMO",
+          "outer_radius": 6.0
+        },
+        "domain": {
+          "capture_radius": 1.55,
+          "inner_radius": 0.25,
+          "outer_radius": 10.0,
+          "polar_margin": 0.05
+        },
+        "geometry": {
+          "Lambda": 0.5,
+          "M": 1.0,
+          "a": 0.875,
+          "family": "kerr",
+          "r_in": 1.5,
+          "r_out": 1.8
+        },
+        "image": {
+          "height": 12,
+          "width": 16
+        },
+        "integrator": {
+          "absolute_tolerance": 1e-11,
+          "event_tolerance": 1e-10,
+          "initial_step": 0.01,
+          "maximum_affine": 40.0,
+          "maximum_attempts": 100000,
+          "maximum_step": 0.05,
+          "minimum_step": 1e-10,
+          "null_tolerance": 1e-06,
+          "relative_tolerance": 1e-11
+        },
+        "preset_id": "p2_bounded_native_v1",
+        "schema_version": 1,
+        "scope": "bounded chart diagnostic; central/axis continuation and GYOTO acceptance incomplete"
+      },
+      "unresolved_pixels": 0
+    }
+  ],
+  "compiler": "16.2.1 20260810",
+  "computational_source_sha256": "2474d9d258e3d4fb5f0fde8dfa1764842cfd05211d5945d57e65b323bee162f9",
+  "passed": true,
+  "schema_version": 1,
+  "scope": "integration convergence at fixed 16x12 pixel centers; not spatial/sample convergence or full interior acceptance"
+}

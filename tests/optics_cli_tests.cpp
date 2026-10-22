@@ -54,12 +54,22 @@ int main(int argc, char **argv) {
     bad["image"]["width"] = 0;
     u::atomic_json(input, bad);
     check("invalid image size rejected", invoke() == 2);
+    bad["image"]["width"] = 16.5;
+    u::atomic_json(input, bad);
+    check("fractional image size rejected", invoke() == 2);
+    bad = cfg;
+    bad["integrator"]["maximum_attempts"] = -1;
+    u::atomic_json(input, bad);
+    check("negative attempt budget rejected", invoke() == 2);
     bad = cfg;
     bad["integrator"]["relative_tolerance"] = 0;
     u::atomic_json(input, bad);
     check("invalid solver settings rejected", invoke() == 2);
     u::atomic_json(input, cfg);
     check("output traversal rejected", invoke("../escape.json") == 2);
+    check("negative pixel index rejected",
+          u::run({argv[1], "ray", "--root", root.string(), "--config",
+                  "benchmarks/scene.json", "--x", "-1"}) == 2);
     for (const std::string family : {"toy", "kerr"}) {
       auto baseline_config = cfg;
       baseline_config["geometry"]["family"] = family;
@@ -135,14 +145,26 @@ int main(int argc, char **argv) {
            {"refined_configuration", fine_config},
            {"pixel_classification_mismatches", mismatch}});
     }
-    // A loose, long step must fail without overwriting an accepted result.
+    // A fixed, long step cannot satisfy the local error tolerance. This tests
+    // a runtime failure without depending on initial null-roundoff magnitude.
     auto previous = u::read_file(output);
+    auto previous_ppm = u::read_file(root / "results/image.ppm");
     bad = cfg;
     bad["image"] = {{"width", 1}, {"height", 1}};
-    bad["integrator"]["null_tolerance"] = 1e-20;
+    bad["integrator"]["initial_step"] = 0.5;
+    bad["integrator"]["minimum_step"] = 0.5;
+    bad["integrator"]["maximum_step"] = 0.5;
+    bad["integrator"]["absolute_tolerance"] = 1e-16;
+    bad["integrator"]["relative_tolerance"] = 1e-16;
     u::atomic_json(input, bad);
-    check("invalid initial null tolerance does not overwrite report",
-          invoke() == 2 && u::read_file(output) == previous);
+    check("runtime failure preserves accepted data and display",
+          invoke() == 1 && u::read_file(output) == previous &&
+              u::read_file(root / "results/image.ppm") == previous_ppm);
+    auto failure = J::parse(u::read_file(root / "results/image.failed.json"));
+    check("runtime failure emits explicit failed artifact",
+          failure["execution_passed"] == false &&
+              failure["classifications"]["numerical_failure"] == 1 &&
+              failure["pixels"][0]["linear_intensity"].is_null());
     auto after = u::manifest(actual_root);
     check("test source unchanged",
           before["computational_sha256"] == after["computational_sha256"]);

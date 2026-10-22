@@ -1,7 +1,12 @@
 # P0/P1 status and audit handoff
 
+This is the historical P1 acceptance record, frozen at `609debe`. Publication
+to remote `main` was verified on 2026-10-21. Current P2 work and its separate
+artifacts are documented in [P2 status](P2_STATUS.md); the original P1 reports
+and manifests remain preserved rather than being regenerated for P2 sources.
+
 2026-10-21. P0 specification and P1 implementation cover the bounded,
-positive-radius, off-axis `toy-c3-v1` geometry benchmark. P2 is not started.
+positive-radius, off-axis `toy-c3-v1` geometry benchmark.
 This is a stationary geometry consistency result, not a stability result or
 a reproduction of the paper's plotted figures.
 
@@ -95,7 +100,8 @@ env ASAN_OPTIONS=detect_leaks=0 ctest --test-dir build/sanitizers-optimized --ou
 
 ## Remaining gates and Argon review
 
-Argon should audit P1 before beginning P2. Review the forced shell selection,
+Argon should independently audit frozen P1 while the authorized bounded P2
+work proceeds separately. Review the forced shell selection,
 inner de Sitter/outer Kerr pairing, all C0–C3 tensor entries and K_AB convention;
 then reproduce the reference step/precision convergence and exact rational
 certificate from a clean build. Review the original arbitrary-precision code
@@ -118,13 +124,13 @@ The following remain unresolved:
    Earlier shader-tool proposals do not authorize another source language.
 
 The original checkout has concurrent uncommitted work and is preserved.
-This implementation is developed in `GravastarLab-Cpp20` on `codex/p1-cpp20`.
+P1 was developed in `GravastarLab-Cpp20` on `codex/p1-cpp20`; P2 uses the
+isolated `codex/p2-reference-optics` branch in that same worktree.
 `README.txt` is preserved from the backup merge; its historical build commands
 are superseded by `README.md`. Audit the published migration tree and its
 manifest, rather than mixing files from the unfinished checkout.
 
-Publication is authorized but currently blocked: shell Git cannot resolve
-`github.com`, and the connected GitHub application rejects tree creation with
-HTTP 403 (`Resource not accessible by integration`). No remote branch was
-modified. Local commits and a verified Git bundle preserve the deliverable;
-push `codex/p1-cpp20:main` from an environment with GitHub write access.
+The initial P1 publication was blocked by DNS and GitHub integration permissions.
+It was subsequently published; remote `main` was verified at `609debe`. The
+verified Git bundle remains a recovery artifact. P2 checkpoints are pushed to
+their feature branch for independent review.

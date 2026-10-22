@@ -5,8 +5,8 @@
 
 
 The original project warning is preserved above. Current implemented scope is
-the headless stationary geometry benchmark; Vulkan rendering and integration
-remain future work.
+the headless stationary geometry benchmark and bounded native CPU reference
+optics. Vulkan rendering and desktop integration remain future work.
 
 GravastarLab implements the transition construction of
 [Ilijić and DeBenedictis, arXiv:2309.00551v2](https://arxiv.org/html/2309.00551v2).
@@ -49,6 +49,25 @@ Generated files stay under `results/`. Failed runs preserve accepted reports.
 Read [status and handoff](docs/STATUS.md), [model contract](docs/MODEL.md),
 [architecture](docs/ARCHITECTURE.md), [migration evidence](docs/MIGRATION.md),
 [source audit](docs/SOURCE_AUDIT.md), and [the plan](PLAN.md).
+
+## Native P2 optics checkpoint
+
+The C++20 tracer produces linear image data and diagnostic PPM images for the
+fixed gravastar and Kerr presets. It integrates backward from a circular
+observer, refines shell/disk/boundary crossings, and records numerical errors.
+The prescribed disk follows ZAMO motion; it is not a self-consistent matter model.
+
+```text
+build/headless-release/gravastar_trace image --output results/p2_toy_image.json
+build/headless-release/gravastar_trace image --config benchmarks/optics_kerr_v1.json --output results/p2_kerr_image.json
+build/headless-release/gravastar_trace ray --x 9 --y 5 --output results/p2_selected_ray.json
+```
+
+These 16x12 images are numerical diagnostics. Magenta marks unresolved chart
+boundaries; the JSON stores null intensity for those pixels. Complete central
+and axial continuation, GYOTO comparisons and spatial image convergence remain
+open P2 gates. See [P2 results and handoff](docs/P2_STATUS.md) and the
+[optics contract](docs/OPTICS.md) for conventions and the exact accepted scope.
 
 Original code is GPL-3.0-or-later. See [LICENSE](LICENSE), [NOTICE](NOTICE), and
 [THIRD_PARTY.md](THIRD_PARTY.md). No KerrLab renderer or uncertain-license code

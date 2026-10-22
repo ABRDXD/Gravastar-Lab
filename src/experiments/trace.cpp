@@ -45,6 +45,10 @@ Scene scene(const J &j) {
   c.event_tolerance = i.at("event_tolerance");
   c.null_tolerance = i.at("null_tolerance");
   c.maximum_affine = i.at("maximum_affine");
+  if (!i.at("maximum_attempts").is_number_integer() ||
+      i.at("maximum_attempts") < 1 || i.at("maximum_attempts") > 10000000)
+    throw std::invalid_argument(
+        "maximum_attempts must be an integer in [1,10000000]");
   c.maximum_attempts = i.at("maximum_attempts");
   const auto &disk = j.at("disk");
   if (disk.at("motion") != "ZAMO" ||
@@ -59,6 +63,11 @@ Scene scene(const J &j) {
     s.omega = camera.at("omega").get<double>();
   s.fov = camera.at("vertical_field_of_view_degrees").get<double>() *
           std::numbers::pi / 180;
+  for (const auto *axis : {"width", "height"})
+    if (!j.at("image").at(axis).is_number_integer() ||
+        j.at("image").at(axis) < 1 || j.at("image").at(axis) > 128)
+      throw std::invalid_argument(
+          "image dimensions must be integers in [1,128]");
   s.width = j.at("image").at("width");
   s.height = j.at("image").at("height");
   if (!std::isfinite(s.fov) || s.fov <= 0 ||
@@ -151,7 +160,8 @@ int main(int argc, char **argv) {
     if (command != "ray" && command != "image")
       throw std::invalid_argument("expected ray or image");
     fs::path root = GRAVASTAR_SOURCE_ROOT, config = "benchmarks/optics_v1.json",
-             output = "results/p2_native_image.json";
+             output = command == "ray" ? "results/p2_native_ray.json"
+                                       : "results/p2_native_image.json";
     int x = -1, y = -1;
     for (int i = 2; i < argc; ++i) {
       std::string flag = argv[i];
@@ -167,7 +177,7 @@ int main(int argc, char **argv) {
       else if (flag == "--x" || flag == "--y") {
         std::size_t used;
         int n = std::stoi(value, &used);
-        if (used != value.size())
+        if (used != value.size() || n < 0)
           throw std::invalid_argument("invalid pixel index");
         (flag == "--x" ? x : y) = n;
       } else

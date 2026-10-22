@@ -148,8 +148,10 @@ Frame circular_frame(const geometry::Evaluation &g,
   f.omega = omega.value_or(-m[0][3] / m[3][3]);
   double norm = m[0][0] + 2 * f.omega * m[0][3] + f.omega * f.omega * m[3][3];
   double determinant = m[0][3] * m[0][3] - m[0][0] * m[3][3];
-  if (!std::isfinite(norm) || norm >= 0 || determinant <= 0 || m[1][1] <= 0 ||
-      m[2][2] <= 0)
+  if (!std::isfinite(norm) || norm >= 0 || !std::isfinite(determinant) ||
+      determinant <= 0 || !std::isfinite(m[1][1]) || m[1][1] <= 0 ||
+      !std::isfinite(m[2][2]) || m[2][2] <= 0 || !std::isfinite(m[3][3]) ||
+      m[3][3] <= 0)
     throw std::invalid_argument(
         "circular observer is not timelike in this chart");
   f.basis[0] = {1 / std::sqrt(-norm), 0, 0, f.omega / std::sqrt(-norm)};
