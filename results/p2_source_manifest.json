@@ -1,0 +1,263 @@
+{
+  "algorithm": "sha256",
+  "computational_sha256": "2474d9d258e3d4fb5f0fde8dfa1764842cfd05211d5945d57e65b323bee162f9",
+  "digest_encoding": "UTF-8 compact JSON of sorted records and object keys",
+  "documentation_sha256": "f150f3b83e32c83f637bbb6cd6a3834724fd068944fa30e6b6e98ac418968ecc",
+  "file_count": 42,
+  "files": [
+    {
+      "bytes": 1180,
+      "path": "AGENTS.md",
+      "scope": "documentation",
+      "sha256": "83b66684b76ca389b1e462cab9c9592807cd196f0ab2bb3bc9137ae0016702de"
+    },
+    {
+      "bytes": 4707,
+      "path": "CMakeLists.txt",
+      "scope": "computational",
+      "sha256": "a32908fe438f2fd6f8e772c0d0f47b9650beb9a30bd832e8a704dcc4777da9b6"
+    },
+    {
+      "bytes": 1430,
+      "path": "CMakePresets.json",
+      "scope": "computational",
+      "sha256": "ef922b9a446a167e0d2a78ccbc4bd6809e6abdd9c084548f91505e91bb5ea1df"
+    },
+    {
+      "bytes": 34674,
+      "path": "LICENSE",
+      "scope": "documentation",
+      "sha256": "fb981668c18a279e285fc4d83fba1e836cc84dd4daa73c9697d3cfd2d8aca6e0"
+    },
+    {
+      "bytes": 939,
+      "path": "NOTICE",
+      "scope": "documentation",
+      "sha256": "c5a9dcf68b4b2a5d22879d69900f66a9fbb4e54f94fa24f5e2bfc6ad283fcc0a"
+    },
+    {
+      "bytes": 37284,
+      "path": "PLAN.md",
+      "scope": "documentation",
+      "sha256": "fb2357d4afc91f9626a23712007cd104856737a5a711884dba4960a8c886660a"
+    },
+    {
+      "bytes": 3642,
+      "path": "README.md",
+      "scope": "documentation",
+      "sha256": "a9e479297fb47e84b69548b7d5b18710a2b68d8b279356565ad6b09d284a040f"
+    },
+    {
+      "bytes": 15892,
+      "path": "README.txt",
+      "scope": "documentation",
+      "sha256": "ca59aa5ce7065eba82b0c233a158a540f4c6cef491f4a37b1b2a827a2b952521"
+    },
+    {
+      "bytes": 6738,
+      "path": "THIRD_PARTY.md",
+      "scope": "documentation",
+      "sha256": "e34dc579b4c0c9c50f15be4712012c4e6f76d959dcb6de8b3be384e4e889df95"
+    },
+    {
+      "bytes": 899,
+      "path": "benchmarks/optics_kerr_v1.json",
+      "scope": "computational",
+      "sha256": "ffda8cebbfb575cf1b1315dda8f97e8edf108bc22efe1990ac6df91b8c765a00"
+    },
+    {
+      "bytes": 898,
+      "path": "benchmarks/optics_v1.json",
+      "scope": "computational",
+      "sha256": "79853ee6055e465ba12c61d7dda4bad1dfffcea2253538247a29c1cae2b10cea"
+    },
+    {
+      "bytes": 1164,
+      "path": "benchmarks/rotating_v1.json",
+      "scope": "computational",
+      "sha256": "8066bf0b85cf53f97141a55a64827b0274fbe4bec397c81fe8b63904e323bb33"
+    },
+    {
+      "bytes": 5474,
+      "path": "docs/ARCHITECTURE.md",
+      "scope": "documentation",
+      "sha256": "2d2f4f8dc2541b6d5074eee5cc9fddd0abf59e9c399b33f70dff9c4f11656862"
+    },
+    {
+      "bytes": 4976,
+      "path": "docs/ENVIRONMENT.md",
+      "scope": "documentation",
+      "sha256": "d85c2d3a3823c34d6fca1fd74fcc06bbcacb7832a149e5bc9f9a3ecbe589e10b"
+    },
+    {
+      "bytes": 4350,
+      "path": "docs/MIGRATION.md",
+      "scope": "documentation",
+      "sha256": "9f9c392aef79924ab94772f82857f89e8aaa13eb036a0ec8dbfad2950d5fc68b"
+    },
+    {
+      "bytes": 7677,
+      "path": "docs/MODEL.md",
+      "scope": "documentation",
+      "sha256": "7b8964c1871e8bcf9b8a644af20c46e26dcac314416bc70ed334126e240c6022"
+    },
+    {
+      "bytes": 5247,
+      "path": "docs/OPTICS.md",
+      "scope": "documentation",
+      "sha256": "942131ccee8c207337613c54049fda0dae83715a51d1d80d0440fe39a8e56682"
+    },
+    {
+      "bytes": 7309,
+      "path": "docs/P2_STATUS.md",
+      "scope": "documentation",
+      "sha256": "e20a469c8a0304cfca4cc6571d378dfd71875d60ca42d4f0b8c2d4e820ca239d"
+    },
+    {
+      "bytes": 4335,
+      "path": "docs/PROVENANCE.md",
+      "scope": "documentation",
+      "sha256": "0aae1241a8f872a1b5c27f10ecb97cbc7a820eb8cadfc9cf547fd6e64f350328"
+    },
+    {
+      "bytes": 7344,
+      "path": "docs/SOURCE_AUDIT.md",
+      "scope": "documentation",
+      "sha256": "614e1febbbe3a4c9a1a53b9ce7e4e2274d896720d4186873cf7ffdfa3b90ed75"
+    },
+    {
+      "bytes": 7247,
+      "path": "docs/STATUS.md",
+      "scope": "documentation",
+      "sha256": "56c0806ab6c06264514981b03b7f4f11b595db8d91b8ee7ae26e037435306ae0"
+    },
+    {
+      "bytes": 1839,
+      "path": "include/gravastar/geometry/geometry.hpp",
+      "scope": "computational",
+      "sha256": "be767235a639b3494b4043937278d6cd32b920d8d2e86c89728ae7fcf0eb8524"
+    },
+    {
+      "bytes": 2596,
+      "path": "include/gravastar/math/jet.hpp",
+      "scope": "computational",
+      "sha256": "381047885cfa8135e52eb0f2c37bc21303aacc24494e981ea80ce61ab9463261"
+    },
+    {
+      "bytes": 2340,
+      "path": "include/gravastar/optics/ray.hpp",
+      "scope": "computational",
+      "sha256": "8accf3a42f2f616841c4dbd63dcef71c54fe99b131646762e62f775340972bb3"
+    },
+    {
+      "bytes": 8368,
+      "path": "include/gravastar/reference/geometry.hpp",
+      "scope": "computational",
+      "sha256": "12c5f2abcfdeeba267df55872356278f35f0216c21e12a6725cc8ea5aa6efe3b"
+    },
+    {
+      "bytes": 12868,
+      "path": "include/gravastar/reference/number.hpp",
+      "scope": "computational",
+      "sha256": "2ebab15a252804e6765d24916a143dd12803a65adef28aae142be50effb4a2be"
+    },
+    {
+      "bytes": 6655,
+      "path": "include/gravastar/reference/polynomial.hpp",
+      "scope": "computational",
+      "sha256": "ed20ec12cb09100984a55c7abba2405b04c15060f55c0e2dc421bbdf9b18ea6e"
+    },
+    {
+      "bytes": 7875,
+      "path": "include/gravastar/tools/artifacts.hpp",
+      "scope": "computational",
+      "sha256": "d7b09e853895c04b45bca50630a91a9bbac45d764095e75e476871af96067497"
+    },
+    {
+      "bytes": 984,
+      "path": "include/gravastar/tools/process.hpp",
+      "scope": "computational",
+      "sha256": "26591a8c5c9cde9a5707946afb9c4f982f89a6091a8fe3a4e1b1dbfaf11aba83"
+    },
+    {
+      "bytes": 5420,
+      "path": "src/experiments/benchmark.cpp",
+      "scope": "computational",
+      "sha256": "e2327ce021cc42db304bc61d835260cb682ebc13666dbf71ce3c0beb46db7272"
+    },
+    {
+      "bytes": 11891,
+      "path": "src/experiments/trace.cpp",
+      "scope": "computational",
+      "sha256": "f735417eff1f92ee46574534181ec3a6b640829f58fe9642b5efdbff42970a3e"
+    },
+    {
+      "bytes": 26719,
+      "path": "src/experiments/validate.cpp",
+      "scope": "computational",
+      "sha256": "b90057b4804ec3f8aa8922169786062820b0daeb4210adbbcc88109d51a74671"
+    },
+    {
+      "bytes": 10030,
+      "path": "src/geometry/geometry.cpp",
+      "scope": "computational",
+      "sha256": "e5146c0bf9a75556acfe6dcccc55fd46958cb030a21ad2bcd718dcf9582c5c1b"
+    },
+    {
+      "bytes": 14526,
+      "path": "src/optics/ray.cpp",
+      "scope": "computational",
+      "sha256": "72d9ac697d068630ccdad82f619aff22ba52d24ba87031d160a122715fde89be"
+    },
+    {
+      "bytes": 12557,
+      "path": "tests/cpp_geometry.cpp",
+      "scope": "computational",
+      "sha256": "ac92f908fedf0b27ce69a71c4c613ec2399bb59906f20fe242735f9d17f3c885"
+    },
+    {
+      "bytes": 8776,
+      "path": "tests/optics_cli_tests.cpp",
+      "scope": "computational",
+      "sha256": "5f4a96df4d4177c558ce1315bb89541acc402e0b3892cc1489a24b1c849549e1"
+    },
+    {
+      "bytes": 15671,
+      "path": "tests/optics_tests.cpp",
+      "scope": "computational",
+      "sha256": "3eaa083ae1bd92b05a4ac926619cf7fed370b6c9d8aa31af38381d5b699cf854"
+    },
+    {
+      "bytes": 6377,
+      "path": "tests/reference_tests.cpp",
+      "scope": "computational",
+      "sha256": "17808b349ef55b51dccc4388c392216bbcf786c42ef9071969dca17b5dd2709e"
+    },
+    {
+      "bytes": 2389,
+      "path": "tests/validation_failures.cpp",
+      "scope": "computational",
+      "sha256": "51dcaae09c4af9d696455d35c2793ce837c0aa290ebca977b624c79d2b0c9f10"
+    },
+    {
+      "bytes": 0,
+      "path": "third_party/licenses/.gitkeep",
+      "scope": "computational",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 1076,
+      "path": "third_party/licenses/nlohmann-json-3.12.0.txt",
+      "scope": "computational",
+      "sha256": "46a65cffd1ea955132d95a8dd921640714a8d6b537d2e4e482d31145ae95b603"
+    },
+    {
+      "bytes": 8707,
+      "path": "tools/project.cpp",
+      "scope": "computational",
+      "sha256": "6a90a901868ff835e35b0277bc1e7b684e7b5d21f61381bafd8c4ec4ee90b7d4"
+    }
+  ],
+  "schema_version": 1,
+  "source_sha256": "ad325d1ffc9432649f30d998503c7ba0c2a758a9e5d42b2fa170b334173b6113"
+}

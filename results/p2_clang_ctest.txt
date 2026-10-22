@@ -1,0 +1,290 @@
+Start testing: Oct 22 22:17 IST
+----------------------------------------------------------
+1/12 Testing: optics_reference
+1/12 Test: optics_reference
+Command: "/home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release/gravastar_optics_tests"
+Directory: /home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release
+"optics_reference" start time: Oct 22 22:17 IST
+Output:
+----------------------------------------------------------
+toy outcome escaped joins 5 detail escape
+toy refinement 7.33725e-06 -> 1.43394e-07
+PASS 49 optics checks
+<end of output>
+Test time =   0.46 sec
+----------------------------------------------------------
+Test Passed.
+"optics_reference" end time: Oct 22 22:17 IST
+"optics_reference" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/12 Testing: optics_help
+2/12 Test: optics_help
+Command: "/home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release/gravastar_trace" "--help"
+Directory: /home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release
+"optics_help" start time: Oct 22 22:17 IST
+Output:
+----------------------------------------------------------
+gravastar_trace image|ray [--root PATH] [--config benchmarks/optics_v1.json] [--output results/FILE.json] [--x N --y N]
+Future covariant photon momentum; past-directed integration. Bounded chart only.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"optics_help" end time: Oct 22 22:17 IST
+"optics_help" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/12 Testing: optics_cli
+3/12 Test: optics_cli
+Command: "/home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release/gravastar_optics_cli_tests" "/home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release/gravastar_trace"
+Directory: /home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release
+"optics_cli" start time: Oct 22 22:17 IST
+Output:
+----------------------------------------------------------
+optics error: unsupported optics schema
+optics error: image dimensions must be integers in [1,128]
+optics error: image dimensions must be integers in [1,128]
+optics error: maximum_attempts must be an integer in [1,10000000]
+optics error: settings must be finite and positive
+optics error: output must be within project results/
+optics error: invalid pixel index
+row 1/12
+row 2/12
+row 3/12
+row 4/12
+row 5/12
+row 6/12
+row 7/12
+row 8/12
+row 9/12
+row 10/12
+row 11/12
+row 12/12
+{"domain_limit":4,"emitted":87,"escaped":101}; unresolved=4; "/tmp/gravastar-optics-0JD1MM/results/image.json"
+row 1/12
+row 2/12
+row 3/12
+row 4/12
+row 5/12
+row 6/12
+row 7/12
+row 8/12
+row 9/12
+row 10/12
+row 11/12
+row 12/12
+{"domain_limit":4,"emitted":87,"escaped":101}; unresolved=4; "/tmp/gravastar-optics-0JD1MM/results/fine.json"
+row 1/12
+row 2/12
+row 3/12
+row 4/12
+row 5/12
+row 6/12
+row 7/12
+row 8/12
+row 9/12
+row 10/12
+row 11/12
+row 12/12
+{"capture_surface":108,"emitted":76,"escaped":8}; unresolved=0; "/tmp/gravastar-optics-0JD1MM/results/image.json"
+row 1/12
+row 2/12
+row 3/12
+row 4/12
+row 5/12
+row 6/12
+row 7/12
+row 8/12
+row 9/12
+row 10/12
+row 11/12
+row 12/12
+{"capture_surface":108,"emitted":76,"escaped":8}; unresolved=0; "/tmp/gravastar-optics-0JD1MM/results/fine.json"
+row 1/1
+{"numerical_failure":1}; unresolved=1; "/tmp/gravastar-optics-0JD1MM/results/image.failed.json"
+toy image refinement: state=1.41732e-07 intensity=3.35405e-09 shift=1.115e-08 mismatches=0
+kerr image refinement: state=2.86692e-08 intensity=4.67546e-11 shift=6.2167e-11 mismatches=0
+PASS 31 optics CLI and image checks
+<end of output>
+Test time =  18.97 sec
+----------------------------------------------------------
+Test Passed.
+"optics_cli" end time: Oct 22 22:18 IST
+"optics_cli" time elapsed: 00:00:18
+----------------------------------------------------------
+
+4/12 Testing: validation_failure_isolation
+4/12 Test: validation_failure_isolation
+Command: "/home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release/gravastar_validation_failures" "/home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release/gravastar_validate" "/home/abrsdxd/Projects/GravastarLab-Cpp20"
+Directory: /home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release
+"validation_failure_isolation" start time: Oct 22 22:18 IST
+Output:
+----------------------------------------------------------
+validation error: unsupported schema
+validation error: invalid preset
+validation error: this reference build supports 90/110 decimal places
+Exact radial certificate...
+Domain grid...
+Independent reference vectors...
+Matching and convergence...
+Energy diagnostic...
+{"comparison":"<=","measured":2.3811330552895928e-15,"name":"independent metric","passed":false,"threshold":0.0}
+FAIL 30 checks; "/tmp/gravastar failure test 231230/results/accepted.json"
+Validation failure isolation and input rejection passed
+<end of output>
+Test time =   3.75 sec
+----------------------------------------------------------
+Test Passed.
+"validation_failure_isolation" end time: Oct 22 22:18 IST
+"validation_failure_isolation" time elapsed: 00:00:03
+----------------------------------------------------------
+
+5/12 Testing: tools_migration
+5/12 Test: tools_migration
+Command: "/home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release/gravastar_tools" "self-test"
+Directory: /home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release
+"tools_migration" start time: Oct 22 22:18 IST
+Output:
+----------------------------------------------------------
+C++ tool migration checks passed
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"tools_migration" end time: Oct 22 22:18 IST
+"tools_migration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/12 Testing: cpp20_language_policy
+6/12 Test: cpp20_language_policy
+Command: "/home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release/gravastar_tools" "language-policy"
+Directory: /home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release
+"cpp20_language_policy" start time: Oct 22 22:18 IST
+Output:
+----------------------------------------------------------
+C++20 source-format policy passed
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"cpp20_language_policy" end time: Oct 22 22:18 IST
+"cpp20_language_policy" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/12 Testing: rotating_geometry
+7/12 Test: rotating_geometry
+Command: "/home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release/gravastar_validate" "--output" "results/local/ctest_rotating.json"
+Directory: /home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release
+"rotating_geometry" start time: Oct 22 22:18 IST
+Output:
+----------------------------------------------------------
+Exact radial certificate...
+Domain grid...
+Independent reference vectors...
+Matching and convergence...
+Energy diagnostic...
+PASS 30 checks; "/home/abrsdxd/Projects/GravastarLab-Cpp20/results/local/ctest_rotating.json"
+<end of output>
+Test time =   6.22 sec
+----------------------------------------------------------
+Test Passed.
+"rotating_geometry" end time: Oct 22 22:18 IST
+"rotating_geometry" time elapsed: 00:00:06
+----------------------------------------------------------
+
+8/12 Testing: reference_migration
+8/12 Test: reference_migration
+Command: "/home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release/gravastar_reference_tests"
+Directory: /home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release
+"reference_migration" start time: Oct 22 22:18 IST
+Output:
+----------------------------------------------------------
+C++ migration arithmetic, polynomial, high precision reference checks passed
+<end of output>
+Test time =   0.14 sec
+----------------------------------------------------------
+Test Passed.
+"reference_migration" end time: Oct 22 22:18 IST
+"reference_migration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/12 Testing: geometry_unit
+9/12 Test: geometry_unit
+Command: "/home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release/gravastar_geometry_tests"
+Directory: /home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release
+"geometry_unit" start time: Oct 22 22:18 IST
+Output:
+----------------------------------------------------------
+Geometry checks passed: jets, flat, Schwarzschild, Kerr, de Sitter, matching, derivative convergence, inverse, structured errors.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"geometry_unit" end time: Oct 22 22:18 IST
+"geometry_unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/12 Testing: benchmark_help
+10/12 Test: benchmark_help
+Command: "/home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release/gravastar_benchmark" "--help"
+Directory: /home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release
+"benchmark_help" start time: Oct 22 22:18 IST
+Output:
+----------------------------------------------------------
+GravastarLab headless rotating geometry evaluator, schema 1
+Usage:
+  gravastar_benchmark evaluate FAMILY M a Lambda r_in r_out r theta [REGION]
+  gravastar_benchmark batch
+Families: toy, kerr, de_sitter, flat
+Regions (toy only): automatic, core, shell, exterior; closed intervals, no extrapolation.
+Batch: one whitespace-separated evaluation record per input line; JSONL output.
+Indices: t,r,theta,phi. dg[k][i][j], ddg[k][l][i][j], drrr[i][j].
+Units: G=c=1; signature (-,+,+,+). No axis or central continuation.
+Status: 0 all records succeeded; 1 any record failed; 2 invalid invocation.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"benchmark_help" end time: Oct 22 22:18 IST
+"benchmark_help" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/12 Testing: benchmark_shell_endpoint
+11/12 Test: benchmark_shell_endpoint
+Command: "/home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release/gravastar_benchmark" "evaluate" "toy" "1" "0.875" "0.5" "1.5" "1.8" "1.5" "1.2" "shell"
+Directory: /home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release
+"benchmark_shell_endpoint" start time: Oct 22 22:18 IST
+Output:
+----------------------------------------------------------
+{"schema_version":1,"region":"shell","family":"toy","parameters":{"M":1,"a":0.875,"Lambda":0.5,"r_in":1.5,"r_out":1.8},"coordinates":{"r":1.5,"theta":1.2},"mu":0,"lambda":1,"Sigma":2.3505289682693671,"Delta":1.884765625,"Delta_theta":1.0167548280448946,"Xi":1.1276041666666667,"metric":[[-0.4043682558666799,0,0,-0.30046164752443794],[0,1.2471200329056122,0,0],[0,0,2.3117952366050432,0],[-0.30046164752443794,0,0,2.3232123817514574]],"inverse":[[-2.2561800530240284,0,0,-0.29179233942112154],[0,0.80184743538289749,0,0],[0,0,0.4325642618195446,0],[-0.29179233942112154,0,0,0.39270089989565271]],"dg":[[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],[[0.39323907002544134,0,0,-0.29890485142327505],[0,1.3487475998069893,0,0],[0,0,2.9505638107159649,0],[-0.29890485142327505,0,0,2.3111750118978232]],[[0.067788057994071449,0,0,-0.23362669987242476],[0,-0.27438504329124475,0,0],[0,0,-0.31265495611951699,0],[-0.23362669987242476,0,0,1.8064350186564266]],[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]],"ddg":[[[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]],[[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],[[0.26215938001696137,0,0,-0.19926990094884989],[0,2.3586959194038917,0,0],[0,0,1.96704254047731,0],[-0.19926990094884989,0,0,1.5407833412652145]],[[-1.0408340855860843e-16,0,0,-0.23241619883681641],[0,0.053455324496118152,0,0],[0,0,0.2501239648956135,0],[-0.23241619883681641,0,0,1.7970752517203841]],[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]],[[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],[[-1.0408340855860843e-16,0,0,-0.23241619883681641],[0,0.053455324496118152,0,0],[0,0,0.2501239648956135,0],[-0.23241619883681641,0,0,1.7970752517203841]],[[-0.14800655133500179,0,0,0.51009400727955967],[0,0.59908463521692878,0,0],[0,0,0.6296335822388015,0],[0.51009400727955967,0,0,-3.9441197348580239]],[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]],[[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]]],"drrr":[[-6.6613381477509392e-16,0,0,6.6613381477509392e-16],[0,8.5064746994045848,0,0],[0,0,0,0],[6.6613381477509392e-16,0,0,2.6645352591003757e-15]],"determinant":-2.9687441992717165,"ricci":[[-0.20218412793334009,0,0,-0.15023082376221908],[0,0.62356001645280679,-3.0878077872387166e-16,0],[0,-3.8820406476365469e-16,1.1558976183025211,0],[-0.15023082376221908,0,0,1.1616061908757294]],"ricci_scalar":2.0000000000000009,"kretschmann":0.66666666666666696}
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"benchmark_shell_endpoint" end time: Oct 22 22:18 IST
+"benchmark_shell_endpoint" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/12 Testing: benchmark_reject_axis
+12/12 Test: benchmark_reject_axis
+Command: "/home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release/gravastar_benchmark" "evaluate" "toy" "1" "0.875" "0.5" "1" "2" "1.5" "0"
+Directory: /home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release
+"benchmark_reject_axis" start time: Oct 22 22:18 IST
+Output:
+----------------------------------------------------------
+{"schema_version":1,"error":{"code":"coordinate_domain","message":"require finite r > 0 and 0 < theta < pi"}}
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"benchmark_reject_axis" end time: Oct 22 22:18 IST
+"benchmark_reject_axis" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 22 22:18 IST
+
+optics =  19.43 sec*proc
+
+scientific =   6.22 sec*proc
+
