@@ -38,7 +38,11 @@
     {
       "build": "GCC 16.2.1 Debug",
       "command": ["ctest", "--preset", "headless-debug", "-R", "optics", "--output-on-failure"],
-      "status": "running at checkpoint; reference and help passed, image check pending"
+      "tests_passed": 3,
+      "tests_total": 3,
+      "exit_status": 0,
+      "elapsed_seconds": 571.37,
+      "log": "results/p2_debug_ctest.txt"
     }
   ],
   "scope_notes": [

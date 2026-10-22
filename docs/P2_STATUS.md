@@ -12,7 +12,8 @@ GCC's complete run took 37.93 seconds; Clang's took 29.56 seconds with other
 verification overlapping. These are test wall times, not rendering performance
 claims. Optimized ASan/UBSan passed all three optics CTest targets in 244.62
 seconds with leak detection enabled, no suppressions, and no sanitizer/runtime
-error diagnostics. The debug image check is still running at this checkpoint.
+error diagnostics. Debug passed the same three optics targets in 571.37 seconds.
+The bounded native milestone is verified; complete P2 acceptance remains open.
 
 A failed event-refinement substep now rejects and shortens the entire trial
 step; a regression ray covers the pixel that exposed this issue. Invalid input
@@ -112,7 +113,9 @@ the documentation present at execution time; documentation-only updates do
 not change their computational digest.
 
 CTest transcripts are retained as `results/p2_gcc_ctest.txt`,
-`results/p2_clang_ctest.txt` and `results/p2_sanitizers_ctest.txt`. The sanitizer
+`results/p2_clang_ctest.txt`, `results/p2_debug_ctest.txt` and
+`results/p2_sanitizers_ctest.txt`. The transcribed test matrix is
+`results/p2_verification.json`. The sanitizer
 run uses the following direct build-tool invocations with no ASAN/LSAN/UBSAN
 environment overrides:
 
@@ -125,6 +128,10 @@ ctest --test-dir build/sanitizers-optimized -R optics --output-on-failure
 The earlier P1 sandbox's ptrace limitation did not recur in this unrestricted
 session. This establishes leak-check execution for the P2 optics subset only;
 the complete P1 sanitizer suite was not rerun with leak detection enabled.
+The debug run uses `ctest --preset headless-debug -R optics --output-on-failure`.
+Its image test took 557.47 seconds against a 600-second CTest timeout; a slower
+host may need a larger test budget. No numerical tolerance was relaxed for
+debug or instrumented builds.
 
 ## Remaining gates and review tasks
 
