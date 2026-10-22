@@ -152,7 +152,7 @@ int main(int argc, char **argv) {
     if (command == "help" || command == "--help") {
       std::cout << "gravastar_trace image|ray [--root PATH] [--config "
                    "benchmarks/optics_v1.json] [--output results/FILE.json] "
-                   "[--x N --y N]\n"
+                   "[--x N --y N] [--resolution-scale N]\n"
                    "Future covariant photon momentum; past-directed "
                    "integration. Bounded chart only.\n";
       return 0;
@@ -162,7 +162,7 @@ int main(int argc, char **argv) {
     fs::path root = GRAVASTAR_SOURCE_ROOT, config = "benchmarks/optics_v1.json",
              output = command == "ray" ? "results/p2_native_ray.json"
                                        : "results/p2_native_image.json";
-    int x = -1, y = -1;
+    int x = -1, y = -1, scale = 1;
     for (int i = 2; i < argc; ++i) {
       std::string flag = argv[i];
       if (i + 1 >= argc)
@@ -174,6 +174,12 @@ int main(int argc, char **argv) {
         config = value;
       else if (flag == "--output")
         output = value;
+      else if (flag == "--resolution-scale") {
+        std::size_t used;
+        scale = std::stoi(value, &used);
+        if (used != value.size() || scale < 1 || scale > 8)
+          throw std::invalid_argument("resolution scale must be an integer in [1,8]");
+      }
       else if (flag == "--x" || flag == "--y") {
         std::size_t used;
         int n = std::stoi(value, &used);
@@ -192,6 +198,14 @@ int main(int argc, char **argv) {
     auto input = u::read_file(config);
     auto configuration = J::parse(input);
     auto s = scene(configuration);
+    if (command == "ray" && scale != 1)
+      throw std::invalid_argument("resolution scaling is only supported for images");
+    if (s.width * scale > 128 || s.height * scale > 128)
+      throw std::invalid_argument("scaled image exceeds 128x128");
+    s.width *= scale;
+    s.height *= scale;
+    configuration["image"]["width"] = s.width;
+    configuration["image"]["height"] = s.height;
     s.settings.save_trajectory = command == "ray";
     if (x == -1)
       x = s.width / 2;
@@ -203,6 +217,8 @@ int main(int argc, char **argv) {
     auto start = std::chrono::steady_clock::now();
     J report{{"schema_version", 1},
              {"configuration", configuration},
+             {"resolution_scale", scale},
+             {"sampling", "uniform image-plane midpoint grid"},
              {"input_sha256", u::sha256(input)},
              {"compiler", __VERSION__},
              {"cplusplus", __cplusplus},

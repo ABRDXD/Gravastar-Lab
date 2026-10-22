@@ -77,6 +77,14 @@ null error and event coordinates. Unresolved pixels have null intensity;
 escaped rays have transparent background. A diagnostic PPM may color outcomes
 but does not replace the linear data or establish full interior rendering.
 
+`gravastar_trace image --resolution-scale N` multiplies both image dimensions
+by an integer from 1 to 8, subject to the 128x128 diagnostic limit. Camera,
+field of view, aspect ratio, emission and integration settings stay fixed.
+Each original pixel is thereby subdivided into an N-by-N midpoint grid. The
+report records the effective dimensions and scale; the input hash describes
+the original preset bytes. This is uniform image-plane area sampling, not
+solid-angle integration or a measured flux at the observer.
+
 ## Independent checks and remaining acceptance
 
 Check tetrad orthonormality, launch nullness and frequency, exact flat Cartesian

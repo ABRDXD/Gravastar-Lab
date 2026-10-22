@@ -70,6 +70,19 @@ int main(int argc, char **argv) {
     check("negative pixel index rejected",
           u::run({argv[1], "ray", "--root", root.string(), "--config",
                   "benchmarks/scene.json", "--x", "-1"}) == 2);
+    for (const std::string value : {"0", "-1", "2.5", "9"})
+      check("invalid resolution scale rejected: " + value,
+            u::run({argv[1], "image", "--root", root.string(), "--config",
+                    "benchmarks/scene.json", "--resolution-scale", value}) == 2);
+    check("ray resolution scaling rejected",
+          u::run({argv[1], "ray", "--root", root.string(), "--config",
+                  "benchmarks/scene.json", "--resolution-scale", "2"}) == 2);
+    bad = cfg;
+    bad["image"]["width"] = 128;
+    u::atomic_json(input, bad);
+    check("scaled image dimension limit enforced",
+          u::run({argv[1], "image", "--root", root.string(), "--config",
+                  "benchmarks/scene.json", "--resolution-scale", "2"}) == 2);
     for (const std::string family : {"toy", "kerr"}) {
       auto baseline_config = cfg;
       baseline_config["geometry"]["family"] = family;
