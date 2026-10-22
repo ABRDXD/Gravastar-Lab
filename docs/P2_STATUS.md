@@ -10,7 +10,9 @@ targets. The suite includes **49 analytic/reference optics checks** and **31
 CLI/image checks**, including deterministic runtime failure preservation.
 GCC's complete run took 37.93 seconds; Clang's took 29.56 seconds with other
 verification overlapping. These are test wall times, not rendering performance
-claims. Debug and sanitizer verification are being completed at this checkpoint.
+claims. Optimized ASan/UBSan passed all three optics CTest targets in 244.62
+seconds with leak detection enabled, no suppressions, and no sanitizer/runtime
+error diagnostics. The debug image check is still running at this checkpoint.
 
 A failed event-refinement substep now rejects and shortens the entire trial
 step; a regression ray covers the pixel that exposed this issue. Invalid input
@@ -108,6 +110,21 @@ The P1 reports and source manifest describe the frozen P1 tree. The P2 source
 manifest identifies this milestone separately. Per-trace inventories record
 the documentation present at execution time; documentation-only updates do
 not change their computational digest.
+
+CTest transcripts are retained as `results/p2_gcc_ctest.txt`,
+`results/p2_clang_ctest.txt` and `results/p2_sanitizers_ctest.txt`. The sanitizer
+run uses the following direct build-tool invocations with no ASAN/LSAN/UBSAN
+environment overrides:
+
+```text
+cmake --preset sanitizers -B build/sanitizers-optimized -DCMAKE_BUILD_TYPE=RelWithDebInfo
+cmake --build build/sanitizers-optimized --parallel 2
+ctest --test-dir build/sanitizers-optimized -R optics --output-on-failure
+```
+
+The earlier P1 sandbox's ptrace limitation did not recur in this unrestricted
+session. This establishes leak-check execution for the P2 optics subset only;
+the complete P1 sanitizer suite was not rerun with leak detection enabled.
 
 ## Remaining gates and review tasks
 

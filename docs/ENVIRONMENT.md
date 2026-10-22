@@ -5,6 +5,12 @@ the implementation session, not guarantees about another shell or machine.
 Updated 2026-10-21: P0/P1 uses C++20 throughout, including the independent
 reference and development tools. No global packages were installed.
 
+P2 update, 2026-10-22: Clang 23.1.3 is also available. GCC and Clang release
+builds passed all 12 CTest targets. The three optics targets passed optimized
+ASan/UBSan with default leak detection in the unrestricted session; the older
+ptrace-related leak limitation did not recur. No dependency was added for
+native optics. See `P2_STATUS.md` for the exact coverage and retained logs.
+
 ## Host and toolchain
 
 | Item | Observed value |
