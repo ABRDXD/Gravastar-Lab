@@ -27,6 +27,11 @@ add_library(gravastar_optics src/optics/ray.cpp)
 target_link_libraries(gravastar_optics PUBLIC gravastar_geometry)
 
 find_package(nlohmann_json 3.12.0 EXACT REQUIRED)
+add_executable(gravastar_angular_benchmark src/experiments/angular_benchmark.cpp)
+target_link_libraries(gravastar_angular_benchmark PRIVATE gravastar_geometry nlohmann_json::nlohmann_json)
+target_compile_definitions(gravastar_angular_benchmark PRIVATE
+    GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}"
+    GRAVASTAR_BUILD_TYPE="${CMAKE_BUILD_TYPE}")
 add_executable(gravastar_trace src/experiments/trace.cpp)
 target_link_libraries(gravastar_trace PRIVATE gravastar_optics nlohmann_json::nlohmann_json)
 target_compile_definitions(gravastar_trace PRIVATE GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}")

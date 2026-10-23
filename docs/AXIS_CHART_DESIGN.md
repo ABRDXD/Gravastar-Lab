@@ -153,3 +153,29 @@ draft formed O(q^2) numerators and lost unnecessary fixed-decimal digits. The
 90-to-110-place check detected a 3.78e-43 derivative discrepancy against the
 preselected 1e-55 ceiling; regrouping addresses that arithmetic loss without
 relaxing the ceiling. Reference refinement is tested before accepting results.
+
+## Performance experiment
+
+`gravastar_angular_benchmark` retains both the full angular evaluator and the
+original full Boyer-Lindquist evaluator as executable baselines. It times the
+same 256 physical sample points across all four families, including both shell
+joins, with one warmup sweep, seven measured rounds and 64 repeats per round.
+Kernel order rotates each round. Metric, inverse and all spatial first
+derivatives are consumed; outputs are compared before timing. The report stores
+every timing, checksum, dataset, source/executable hashes, compiler and CPU.
+
+The first-order angular API avoids computing Hessians, third radial derivatives
+and curvature that the Hamiltonian RHS never uses. Comparing it with the full
+angular API isolates this omitted work within the same chart. Comparing it with
+the original BL API measures the current tracer's geometry cost baseline, but
+the coordinate representation and additional outputs differ. The benchmark does
+not isolate a speedup from the rank-one inverse alone. It has no noisy timing
+pass/fail threshold, CPU affinity or frequency control; measured kernel ratios
+are not end-to-end ray/render speedups. The tracer still uses the original API.
+
+The initial GCC Release measurement in `results/p2_angular_benchmark_gcc.json`
+has median costs of 265 ns (first derivatives), 5645 ns (full angular geometry),
+and 8139 ns (original BL geometry), with zero measured first/full output
+disagreement. The same-chart ratio is 21.3; the old-API baseline ratio is 30.7.
+Record separate compiler measurements rather than treating these as universal
+performance claims.
