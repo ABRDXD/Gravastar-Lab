@@ -60,6 +60,26 @@ p'=J^(-T)*p = q*p - 2*u*(u dot p). The t and r coordinates and momenta
 are unchanged. Transform contravariant frame vectors with J. Never just copy
 the angular momentum components between patches.
 
+## Inverse without an axial cancellation
+
+The angular block can also be written H*I+K*v*v^T, with H=C*E,
+K=C*C*a*a*B and D=C*a*(Delta-T*A)/(sigma*X*X). Let alpha=g_tt. The
+two-dimensional time/azimuth determinant simplifies analytically to
+
+```text
+Z = alpha*(H+K*q) - D*D*q = -C*Delta*T/X^4
+g^tt = (H+K*q)/Z
+g^ti = -D*v_i/Z
+g^ij = delta_ij/H + (D*D-alpha*K)*v_i*v_j/(H*Z)
+g^rr = Delta/sigma
+```
+
+Use the simplified Z instead of subtracting large terms near an ergosurface.
+These formulas contain no division by q and require only a rank-one angular
+update. They offer a compact candidate implementation with a directly checkable
+inverse identity. Their runtime advantage must still be benchmarked; no speedup
+or numerical acceptance is claimed by this derivation.
+
 The axial Killing momentum becomes p_phi=-y*p_x+x*p_y; unlike the original
 chart's stored p_phi, it would no longer be conserved by an identically zero
 RHS. Its measured drift would therefore provide an additional integration

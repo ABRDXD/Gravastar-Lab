@@ -10,7 +10,7 @@ failed-child preservation. GCC Release passes all 14 CTest targets in 45.33 s.
 Clang Release also passes 14/14 (37.34 s); the new sampling subset passes
 Debug 2/2 (47.31 s) and optimized ASan/UBSan 2/2 (23.34 s), with leak detection
 enabled and no overrides. These overlapping test times are not performance
-benchmarks. The toy spatial pilot is still running.
+benchmarks. Both spatial pilots are complete.
 
 Kerr's 128x96 pilot is complete: 108 unresolved chart-boundary rays, 184/192
 original pixels in the common resolved mask, final relative intensity L1
@@ -19,6 +19,15 @@ the common-mask pilot criteria and fails whole-image acceptance because of the
 unresolved rays. `results/p2_kerr_sampling.json` retains the full aggregate
 evidence. A proposed regular angular chart is derived in `AXIS_CHART_DESIGN.md`;
 it remains unimplemented and unvalidated.
+
+The toy 128x96 run has 5,407 emitted rays, 6,456 escaped, 424 chart-boundary
+stops and one affine-budget stop. Its common mask covers 167/192 original
+pixels (86.98%), below the frozen 90% criterion. Its last relative intensity
+L1 is 0.02541480113 and mean classification total variation is 0.01806640625;
+both differences decrease, but the coverage failure keeps the overall pilot
+and whole-image acceptance false. `results/p2_toy_sampling.json` records these
+results without filling missing intensities. No numerical-failure rays occurred
+in either four-level pilot. The matrix is in `results/p2_sampling_verification.json`.
 
 See `SAMPLING.md` for the fixed common-mask comparison, explicit missing data,
 frozen pilot criteria and reproduction commands. The 32x24 pilot has already

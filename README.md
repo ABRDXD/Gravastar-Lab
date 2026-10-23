@@ -69,6 +69,17 @@ and axial continuation, GYOTO comparisons and spatial image convergence remain
 open P2 gates. See [P2 results and handoff](docs/P2_STATUS.md) and the
 [optics contract](docs/OPTICS.md) for conventions and the exact accepted scope.
 
+Spatial sampling can be measured with the native experiment driver:
+
+```text
+build/headless-release/gravastar_sampling --scene benchmarks/optics_v1.json --output results/p2_toy_sampling.json
+build/headless-release/gravastar_sampling --scene benchmarks/optics_kerr_v1.json --output results/p2_kerr_sampling.json
+```
+
+It aggregates successively denser ray grids onto the original pixels and keeps
+unresolved coverage explicit. See the [sampling contract](docs/SAMPLING.md).
+Passing common-mask pilot criteria does not imply whole-image acceptance.
+
 Original code is GPL-3.0-or-later. See [LICENSE](LICENSE), [NOTICE](NOTICE), and
 [THIRD_PARTY.md](THIRD_PARTY.md). No KerrLab renderer or uncertain-license code
 was copied into this project.
