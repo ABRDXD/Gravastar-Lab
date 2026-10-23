@@ -1,0 +1,8861 @@
+{
+  "all_samples_resolved": false,
+  "at_least_three_levels": true,
+  "class_order": [
+    "emitted",
+    "escaped",
+    "capture_surface",
+    "unresolved"
+  ],
+  "common_resolved_fraction": 0.9583333333333334,
+  "common_resolved_mask": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    false,
+    false,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    false,
+    false,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    false,
+    false,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    false,
+    false,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "comparisons": [
+    {
+      "coarse_scale": 1,
+      "common_resolved_pixels": 184,
+      "fine_scale": 2,
+      "maximum_absolute_intensity": 0.303457725165898,
+      "maximum_classification_tv": 0.75,
+      "mean_absolute_intensity": 0.012986827628519371,
+      "mean_classification_tv": 0.06249999999999999,
+      "mean_unresolved_fraction_change": 0.010416666666666666,
+      "relative_l1_intensity": 0.1324717633404698
+    },
+    {
+      "coarse_scale": 2,
+      "common_resolved_pixels": 184,
+      "fine_scale": 4,
+      "maximum_absolute_intensity": 0.08149239399365525,
+      "maximum_classification_tv": 0.375,
+      "mean_absolute_intensity": 0.004837362903355096,
+      "mean_classification_tv": 0.028320312500000003,
+      "mean_unresolved_fraction_change": 0.008463541666666666,
+      "relative_l1_intensity": 0.049656191457761706
+    },
+    {
+      "coarse_scale": 4,
+      "common_resolved_pixels": 184,
+      "fine_scale": 8,
+      "maximum_absolute_intensity": 0.05349614486498447,
+      "maximum_classification_tv": 0.15625,
+      "mean_absolute_intensity": 0.0018106854735249621,
+      "mean_classification_tv": 0.007324218750000001,
+      "mean_unresolved_fraction_change": 0.0013020833333333335,
+      "relative_l1_intensity": 0.01846384697645635
+    }
+  ],
+  "compiler": "16.2.1 20260810",
+  "complete_P2_acceptance": false,
+  "computational_source_sha256": "dae307807b8356874d724aa83f766abdb5f0046271005534137fb58f8b91b6be",
+  "configuration": {
+    "camera": {
+      "omega": null,
+      "position": [
+        0.0,
+        8.0,
+        1.0471975511965976,
+        0.0
+      ],
+      "vertical_field_of_view_degrees": 50.0
+    },
+    "disk": {
+      "emissivity": "bolometric_r_inverse_cubed",
+      "enabled": true,
+      "inner_radius": 3.0,
+      "motion": "ZAMO",
+      "outer_radius": 6.0
+    },
+    "domain": {
+      "capture_radius": 1.55,
+      "inner_radius": 0.25,
+      "outer_radius": 10.0,
+      "polar_margin": 0.05
+    },
+    "geometry": {
+      "Lambda": 0.5,
+      "M": 1.0,
+      "a": 0.875,
+      "family": "kerr",
+      "r_in": 1.5,
+      "r_out": 1.8
+    },
+    "image": {
+      "height": 12,
+      "width": 16
+    },
+    "integrator": {
+      "absolute_tolerance": 1e-10,
+      "event_tolerance": 1e-09,
+      "initial_step": 0.01,
+      "maximum_affine": 40.0,
+      "maximum_attempts": 100000,
+      "maximum_step": 0.1,
+      "minimum_step": 1e-10,
+      "null_tolerance": 1e-06,
+      "relative_tolerance": 1e-10
+    },
+    "preset_id": "p2_bounded_kerr_v1",
+    "schema_version": 1,
+    "scope": "bounded Kerr comparison with an exterior capture proxy at r=1.55; no horizon crossing"
+  },
+  "cplusplus": 202002,
+  "elapsed_seconds": 270.724795324,
+  "executable_sha256": "b845b15d2c7ea7ea706f3340aebbe868f196213e25a860694a5a7bd96be87f76",
+  "execution_passed": true,
+  "full_image_refinement_criteria_passed": false,
+  "last_differences_nonincreasing": true,
+  "levels": [
+    {
+      "class_fractions": [
+        0.395833333333333,
+        0.041666666666666664,
+        0.5624999999999997,
+        0.0
+      ],
+      "classifications": {
+        "capture_surface": 108,
+        "emitted": 76,
+        "escaped": 8
+      },
+      "known_image_plane_mean_contribution": 0.09804064705710311,
+      "pixels": [
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.15258117882864902,
+          "known_contribution": 0.15258117882864902
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.20887234973393495,
+          "known_contribution": 0.20887234973393495
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.28734348555717504,
+          "known_contribution": 0.28734348555717504
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3821970006366227,
+          "known_contribution": 0.3821970006366227
+        },
+        {
+          "alpha": 0.0,
+          "class_fractions": [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.20092337781662084,
+          "known_contribution": 0.20092337781662084
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.27891429433669457,
+          "known_contribution": 0.27891429433669457
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3906198859008475,
+          "known_contribution": 0.3906198859008475
+        },
+        {
+          "alpha": 0.0,
+          "class_fractions": [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.25798799661927263,
+          "known_contribution": 0.25798799661927263
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3632391281158868,
+          "known_contribution": 0.3632391281158868
+        },
+        {
+          "alpha": 0.0,
+          "class_fractions": [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 0.0,
+          "class_fractions": [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.31981804895734506,
+          "known_contribution": 0.31981804895734506
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.455224343198739,
+          "known_contribution": 0.455224343198739
+        },
+        {
+          "alpha": 0.0,
+          "class_fractions": [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 0.0,
+          "class_fractions": [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.37524021907006827,
+          "known_contribution": 0.37524021907006827
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.533370791865421,
+          "known_contribution": 0.533370791865421
+        },
+        {
+          "alpha": 0.0,
+          "class_fractions": [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.40488297598708045,
+          "known_contribution": 0.40488297598708045
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.5597918954052945,
+          "known_contribution": 0.5597918954052945
+        },
+        {
+          "alpha": 0.0,
+          "class_fractions": [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3942818204646381,
+          "known_contribution": 0.3942818204646381
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.5139440935980526,
+          "known_contribution": 0.5139440935980526
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.11578612009981196,
+          "known_contribution": 0.11578612009981196
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.35220670556734107,
+          "known_contribution": 0.35220670556734107
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.42777692619491825,
+          "known_contribution": 0.42777692619491825
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.1680211909463168,
+          "known_contribution": 0.1680211909463168
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.10985505293134502,
+          "known_contribution": 0.10985505293134502
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3009282774565771,
+          "known_contribution": 0.3009282774565771
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.34454828535295096,
+          "known_contribution": 0.34454828535295096
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3851446253177052,
+          "known_contribution": 0.3851446253177052
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.411919737441087,
+          "known_contribution": 0.411919737441087
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.12946465902757687,
+          "known_contribution": 0.12946465902757687
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.13192850801232225,
+          "known_contribution": 0.13192850801232225
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2549455902420344,
+          "known_contribution": 0.2549455902420344
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.28014401931825145,
+          "known_contribution": 0.28014401931825145
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3016245222568338,
+          "known_contribution": 0.3016245222568338
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3153943911798158,
+          "known_contribution": 0.3153943911798158
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3175210034646176,
+          "known_contribution": 0.3175210034646176
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.30605091297240417,
+          "known_contribution": 0.30605091297240417
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.28277650783079,
+          "known_contribution": 0.28277650783079
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2530602227816613,
+          "known_contribution": 0.2530602227816613
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2232857702784522,
+          "known_contribution": 0.2232857702784522
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.19798614960771865,
+          "known_contribution": 0.19798614960771865
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.178811231723214,
+          "known_contribution": 0.178811231723214
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.16527489390713826,
+          "known_contribution": 0.16527489390713826
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.15596192648439663,
+          "known_contribution": 0.15596192648439663
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.14936349010761565,
+          "known_contribution": 0.14936349010761565
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.1442526506096159,
+          "known_contribution": 0.1442526506096159
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.13977640744922576,
+          "known_contribution": 0.13977640744922576
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.21818668549572315,
+          "known_contribution": 0.21818668549572315
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.23336148861462078,
+          "known_contribution": 0.23336148861462078
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.24562601118823726,
+          "known_contribution": 0.24562601118823726
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2533930891453992,
+          "known_contribution": 0.2533930891453992
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.25538778761117226,
+          "known_contribution": 0.25538778761117226
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2511415531075595,
+          "known_contribution": 0.2511415531075595
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2413103170443988,
+          "known_contribution": 0.2413103170443988
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.22756174813212768,
+          "known_contribution": 0.22756174813212768
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.21202892903980552,
+          "known_contribution": 0.21202892903980552
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.19663705342992843,
+          "known_contribution": 0.19663705342992843
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.1826631944173254,
+          "known_contribution": 0.1826631944173254
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.17065977582051378,
+          "known_contribution": 0.17065977582051378
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.16062903524788064,
+          "known_contribution": 0.16062903524788064
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.1522682737913316,
+          "known_contribution": 0.1522682737913316
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.14517079090618248,
+          "known_contribution": 0.14517079090618248
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.1389491640295138,
+          "known_contribution": 0.1389491640295138
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.18983241195837178,
+          "known_contribution": 0.18983241195837178
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.19945739320283745,
+          "known_contribution": 0.19945739320283745
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2069853883706768,
+          "known_contribution": 0.2069853883706768
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2117271305194953,
+          "known_contribution": 0.2117271305194953
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2132039661843567,
+          "known_contribution": 0.2132039661843567
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.21129435999357862,
+          "known_contribution": 0.21129435999357862
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.20630336769275293,
+          "known_contribution": 0.20630336769275293
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.19890875105315997,
+          "known_contribution": 0.19890875105315997
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.18999536603817385,
+          "known_contribution": 0.18999536603817385
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.18044715995050326,
+          "known_contribution": 0.18044715995050326
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.17097986891309142,
+          "known_contribution": 0.17097986891309142
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.16206186379418946,
+          "known_contribution": 0.16206186379418946
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.15391987020803294,
+          "known_contribution": 0.15391987020803294
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.14659557792532554,
+          "known_contribution": 0.14659557792532554
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.14001653064473119,
+          "known_contribution": 0.14001653064473119
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.13405766683872722,
+          "known_contribution": 0.13405766683872722
+        }
+      ],
+      "raw_report": "results/local/sampling/run-edSamk/scale-1.json",
+      "raw_report_sha256": "cd9f93f0cb628a5290ca9a58af9f8f3e6eb9c1eb0d38cd13ce158536421a08ae",
+      "ray_count": 192,
+      "scale": 1,
+      "trace_elapsed_seconds": 3.505266867,
+      "unresolved_base_pixels": 0
+    },
+    {
+      "class_fractions": [
+        0.380208333333333,
+        0.05078125,
+        0.5585937499999994,
+        0.010416666666666666
+      ],
+      "classifications": {
+        "capture_surface": 429,
+        "domain_limit": 8,
+        "emitted": 292,
+        "escaped": 39
+      },
+      "known_image_plane_mean_contribution": 0.09394990673353758,
+      "pixels": [
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.15341430732067265,
+          "known_contribution": 0.15341430732067265
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.21004459773788084,
+          "known_contribution": 0.21004459773788084
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2886956016996197,
+          "known_contribution": 0.2886956016996197
+        },
+        {
+          "alpha": 0.75,
+          "class_fractions": [
+            0.75,
+            0.25,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2731780556592658,
+          "known_contribution": 0.2731780556592658
+        },
+        {
+          "alpha": 0.0,
+          "class_fractions": [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": null,
+          "class_fractions": [
+            0.0,
+            0.0,
+            0.5,
+            0.5
+          ],
+          "intensity": null,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": null,
+          "class_fractions": [
+            0.0,
+            0.0,
+            0.5,
+            0.5
+          ],
+          "intensity": null,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.20199766726562177,
+          "known_contribution": 0.20199766726562177
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2804716587065567,
+          "known_contribution": 0.2804716587065567
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.392245200595456,
+          "known_contribution": 0.392245200595456
+        },
+        {
+          "alpha": 0.0,
+          "class_fractions": [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.25,
+            0.0,
+            0.75,
+            0.0
+          ],
+          "intensity": 0.06315704452112852,
+          "known_contribution": 0.06315704452112852
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": null,
+          "class_fractions": [
+            0.0,
+            0.0,
+            0.5,
+            0.5
+          ],
+          "intensity": null,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": null,
+          "class_fractions": [
+            0.0,
+            0.0,
+            0.5,
+            0.5
+          ],
+          "intensity": null,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2592832317016136,
+          "known_contribution": 0.2592832317016136
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.36517992396212073,
+          "known_contribution": 0.36517992396212073
+        },
+        {
+          "alpha": 0.25,
+          "class_fractions": [
+            0.25,
+            0.75,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.11115988968024604,
+          "known_contribution": 0.11115988968024604
+        },
+        {
+          "alpha": 0.5,
+          "class_fractions": [
+            0.5,
+            0.5,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.10805983826126761,
+          "known_contribution": 0.10805983826126761
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3211495240388833,
+          "known_contribution": 0.3211495240388833
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.4572188247768373,
+          "known_contribution": 0.4572188247768373
+        },
+        {
+          "alpha": 0.0,
+          "class_fractions": [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 0.75,
+          "class_fractions": [
+            0.25,
+            0.25,
+            0.5,
+            0.0
+          ],
+          "intensity": 0.08466629194802934,
+          "known_contribution": 0.08466629194802934
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3761909322164338,
+          "known_contribution": 0.3761909322164338
+        },
+        {
+          "alpha": 0.5,
+          "class_fractions": [
+            0.5,
+            0.5,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.242631488062725,
+          "known_contribution": 0.242631488062725
+        },
+        {
+          "alpha": 0.0,
+          "class_fractions": [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 0.5,
+          "class_fractions": [
+            0.0,
+            0.5,
+            0.5,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.4051720485354723,
+          "known_contribution": 0.4051720485354723
+        },
+        {
+          "alpha": 0.5,
+          "class_fractions": [
+            0.5,
+            0.5,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.25633417023939653,
+          "known_contribution": 0.25633417023939653
+        },
+        {
+          "alpha": 0.5,
+          "class_fractions": [
+            0.5,
+            0.5,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.08378557256430724,
+          "known_contribution": 0.08378557256430724
+        },
+        {
+          "alpha": 0.75,
+          "class_fractions": [
+            0.0,
+            0.25,
+            0.75,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.39429240073414135,
+          "known_contribution": 0.39429240073414135
+        },
+        {
+          "alpha": 0.75,
+          "class_fractions": [
+            0.75,
+            0.25,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.37107510582544756,
+          "known_contribution": 0.37107510582544756
+        },
+        {
+          "alpha": 0.5,
+          "class_fractions": [
+            0.5,
+            0.5,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.15870487840341574,
+          "known_contribution": 0.15870487840341574
+        },
+        {
+          "alpha": 0.75,
+          "class_fractions": [
+            0.0,
+            0.25,
+            0.75,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3523747504987235,
+          "known_contribution": 0.3523747504987235
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.4281854272735767,
+          "known_contribution": 0.4281854272735767
+        },
+        {
+          "alpha": 0.75,
+          "class_fractions": [
+            0.75,
+            0.25,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.28846089301015576,
+          "known_contribution": 0.28846089301015576
+        },
+        {
+          "alpha": 0.5,
+          "class_fractions": [
+            0.0,
+            0.5,
+            0.5,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.5,
+            0.0,
+            0.5,
+            0.0
+          ],
+          "intensity": 0.058363575068942894,
+          "known_contribution": 0.058363575068942894
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.30122100002766766,
+          "known_contribution": 0.30122100002766766
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3451013407684115,
+          "known_contribution": 0.3451013407684115
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3859925644445962,
+          "known_contribution": 0.3859925644445962
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.75,
+            0.0,
+            0.25,
+            0.0
+          ],
+          "intensity": 0.30099747456951614,
+          "known_contribution": 0.30099747456951614
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.25,
+            0.0,
+            0.75,
+            0.0
+          ],
+          "intensity": 0.09654626693864153,
+          "known_contribution": 0.09654626693864153
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.5,
+            0.0,
+            0.5,
+            0.0
+          ],
+          "intensity": 0.06712645686108823,
+          "known_contribution": 0.06712645686108823
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.1286545635247978,
+          "known_contribution": 0.1286545635247978
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.13140481723458508,
+          "known_contribution": 0.13140481723458508
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.25522795394785824,
+          "known_contribution": 0.25522795394785824
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.28058784171825824,
+          "known_contribution": 0.28058784171825824
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.30223164757840143,
+          "known_contribution": 0.30223164757840143
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.31607182316829674,
+          "known_contribution": 0.31607182316829674
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3180347413770843,
+          "known_contribution": 0.3180347413770843
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.30607707265951484,
+          "known_contribution": 0.30607707265951484
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.5,
+            0.0,
+            0.5,
+            0.0
+          ],
+          "intensity": 0.13613043132859415,
+          "known_contribution": 0.13613043132859415
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.5,
+            0.0,
+            0.5,
+            0.0
+          ],
+          "intensity": 0.1241545759512632,
+          "known_contribution": 0.1241545759512632
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.5,
+            0.0,
+            0.5,
+            0.0
+          ],
+          "intensity": 0.11166262845384396,
+          "known_contribution": 0.11166262845384396
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.5,
+            0.0,
+            0.5,
+            0.0
+          ],
+          "intensity": 0.10047236655435568,
+          "known_contribution": 0.10047236655435568
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.5,
+            0.0,
+            0.5,
+            0.0
+          ],
+          "intensity": 0.09144054435872319,
+          "known_contribution": 0.09144054435872319
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.16413069663060195,
+          "known_contribution": 0.16413069663060195
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.15511123255516662,
+          "known_contribution": 0.15511123255516662
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.14876149809067854,
+          "known_contribution": 0.14876149809067854
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.14384474873310735,
+          "known_contribution": 0.14384474873310735
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.13951098629477368,
+          "known_contribution": 0.13951098629477368
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.21840821582533054,
+          "known_contribution": 0.21840821582533054
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2336705093891138,
+          "known_contribution": 0.2336705093891138
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2460160678385197,
+          "known_contribution": 0.2460160678385197
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.253828206751767,
+          "known_contribution": 0.253828206751767
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2557991401390645,
+          "known_contribution": 0.2557991401390645
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2514432007085187,
+          "known_contribution": 0.2514432007085187
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.24143315740805524,
+          "known_contribution": 0.24143315740805524
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.22748581147396504,
+          "known_contribution": 0.22748581147396504
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2117898810931176,
+          "known_contribution": 0.2117898810931176
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.19630376768756813,
+          "known_contribution": 0.19630376768756813
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.18230617137543603,
+          "known_contribution": 0.18230617137543603
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.17033041646936808,
+          "known_contribution": 0.17033041646936808
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.16035460699369936,
+          "known_contribution": 0.16035460699369936
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.15205657950655133,
+          "known_contribution": 0.15205657950655133
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.1450175498028271,
+          "known_contribution": 0.1450175498028271
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.13884434066693138,
+          "known_contribution": 0.13884434066693138
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.18999399291437097,
+          "known_contribution": 0.18999399291437097
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.19966585121331515,
+          "known_contribution": 0.19966585121331515
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2072349500482007,
+          "known_contribution": 0.2072349500482007
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2120018631473827,
+          "known_contribution": 0.2120018631473827
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.21347855032984522,
+          "known_contribution": 0.21347855032984522
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.21153924290496579,
+          "known_contribution": 0.21153924290496579
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.20649310839994936,
+          "known_contribution": 0.20649310839994936
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.19902972945392533,
+          "known_contribution": 0.19902972945392533
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.19004881152422481,
+          "known_contribution": 0.19004881152422481
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.1804463436442447,
+          "known_contribution": 0.1804463436442447
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.17094381000196568,
+          "known_contribution": 0.17094381000196568
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.16200913031842706,
+          "known_contribution": 0.16200913031842706
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.15386475490044854,
+          "known_contribution": 0.15386475490044854
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.14654694213933037,
+          "known_contribution": 0.14654694213933037
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.13997844005808213,
+          "known_contribution": 0.13997844005808213
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.13403077463293261,
+          "known_contribution": 0.13403077463293261
+        }
+      ],
+      "raw_report": "results/local/sampling/run-edSamk/scale-2.json",
+      "raw_report_sha256": "215583a6a1afdb82f56f7f13a1a1fc2b25156e3f2018d85c6fd63ace71791b4c",
+      "ray_count": 768,
+      "scale": 2,
+      "trace_elapsed_seconds": 12.553809435,
+      "unresolved_base_pixels": 4
+    },
+    {
+      "class_fractions": [
+        0.37695312499999967,
+        0.05110677083333333,
+        0.5634765624999996,
+        0.008463541666666666
+      ],
+      "classifications": {
+        "capture_surface": 1731,
+        "domain_limit": 26,
+        "emitted": 1158,
+        "escaped": 157
+      },
+      "known_image_plane_mean_contribution": 0.09335806834196266,
+      "pixels": [
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.15362319343088862,
+          "known_contribution": 0.15362319343088862
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.21033709318975632,
+          "known_contribution": 0.21033709318975632
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.28902524812417724,
+          "known_contribution": 0.28902524812417724
+        },
+        {
+          "alpha": 0.75,
+          "class_fractions": [
+            0.75,
+            0.25,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2738980543991976,
+          "known_contribution": 0.2738980543991976
+        },
+        {
+          "alpha": 0.25,
+          "class_fractions": [
+            0.125,
+            0.75,
+            0.125,
+            0.0
+          ],
+          "intensity": 0.029811280929531794,
+          "known_contribution": 0.029811280929531794
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0625,
+            0.0,
+            0.9375,
+            0.0
+          ],
+          "intensity": 0.02095387271281097,
+          "known_contribution": 0.02095387271281097
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": null,
+          "class_fractions": [
+            0.0,
+            0.0,
+            0.75,
+            0.25
+          ],
+          "intensity": null,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": null,
+          "class_fractions": [
+            0.0,
+            0.0,
+            0.75,
+            0.25
+          ],
+          "intensity": null,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.20226683061166648,
+          "known_contribution": 0.20226683061166648
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2808587874190806,
+          "known_contribution": 0.2808587874190806
+        },
+        {
+          "alpha": 0.9375,
+          "class_fractions": [
+            0.9375,
+            0.0625,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.36185793853581827,
+          "known_contribution": 0.36185793853581827
+        },
+        {
+          "alpha": 0.125,
+          "class_fractions": [
+            0.125,
+            0.875,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.0385949198212546,
+          "known_contribution": 0.0385949198212546
+        },
+        {
+          "alpha": 0.8125,
+          "class_fractions": [
+            0.1875,
+            0.1875,
+            0.625,
+            0.0
+          ],
+          "intensity": 0.05282919421245062,
+          "known_contribution": 0.05282919421245062
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": null,
+          "class_fractions": [
+            0.0,
+            0.0,
+            0.75,
+            0.25
+          ],
+          "intensity": null,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": null,
+          "class_fractions": [
+            0.0,
+            0.0,
+            0.75,
+            0.25
+          ],
+          "intensity": null,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2596071463618408,
+          "known_contribution": 0.2596071463618408
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.36565890484205316,
+          "known_contribution": 0.36565890484205316
+        },
+        {
+          "alpha": 0.375,
+          "class_fractions": [
+            0.375,
+            0.625,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.17188754072803944,
+          "known_contribution": 0.17188754072803944
+        },
+        {
+          "alpha": 0.25,
+          "class_fractions": [
+            0.125,
+            0.75,
+            0.125,
+            0.0
+          ],
+          "intensity": 0.03218459241621172,
+          "known_contribution": 0.03218459241621172
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": null,
+          "class_fractions": [
+            0.0,
+            0.0,
+            0.75,
+            0.25
+          ],
+          "intensity": null,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": null,
+          "class_fractions": [
+            0.0,
+            0.0,
+            0.75,
+            0.25
+          ],
+          "intensity": null,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.32148135672408973,
+          "known_contribution": 0.32148135672408973
+        },
+        {
+          "alpha": 0.875,
+          "class_fractions": [
+            0.875,
+            0.125,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.38896988948712424,
+          "known_contribution": 0.38896988948712424
+        },
+        {
+          "alpha": 0.0,
+          "class_fractions": [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 0.625,
+          "class_fractions": [
+            0.1875,
+            0.375,
+            0.4375,
+            0.0
+          ],
+          "intensity": 0.04810775563553768,
+          "known_contribution": 0.04810775563553768
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": null,
+          "class_fractions": [
+            0.0,
+            0.0,
+            0.9375,
+            0.0625
+          ],
+          "intensity": null,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": null,
+          "class_fractions": [
+            0.0,
+            0.0,
+            0.9375,
+            0.0625
+          ],
+          "intensity": null,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.37642798374986725,
+          "known_contribution": 0.37642798374986725
+        },
+        {
+          "alpha": 0.625,
+          "class_fractions": [
+            0.625,
+            0.375,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3104778829974697,
+          "known_contribution": 0.3104778829974697
+        },
+        {
+          "alpha": 0.125,
+          "class_fractions": [
+            0.125,
+            0.875,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.016968000021263047,
+          "known_contribution": 0.016968000021263047
+        },
+        {
+          "alpha": 0.8125,
+          "class_fractions": [
+            0.125,
+            0.1875,
+            0.6875,
+            0.0
+          ],
+          "intensity": 0.04239895742015346,
+          "known_contribution": 0.04239895742015346
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.40524768241132825,
+          "known_contribution": 0.40524768241132825
+        },
+        {
+          "alpha": 0.5,
+          "class_fractions": [
+            0.5,
+            0.5,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2563562669489494,
+          "known_contribution": 0.2563562669489494
+        },
+        {
+          "alpha": 0.3125,
+          "class_fractions": [
+            0.3125,
+            0.6875,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.08691414530986773,
+          "known_contribution": 0.08691414530986773
+        },
+        {
+          "alpha": 0.75,
+          "class_fractions": [
+            0.0,
+            0.25,
+            0.75,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.39429767793679144,
+          "known_contribution": 0.39429767793679144
+        },
+        {
+          "alpha": 0.75,
+          "class_fractions": [
+            0.75,
+            0.25,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.37020589336285564,
+          "known_contribution": 0.37020589336285564
+        },
+        {
+          "alpha": 0.3125,
+          "class_fractions": [
+            0.3125,
+            0.6875,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.07721248440976049,
+          "known_contribution": 0.07721248440976049
+        },
+        {
+          "alpha": 0.75,
+          "class_fractions": [
+            0.0,
+            0.25,
+            0.75,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.35241576973900923,
+          "known_contribution": 0.35241576973900923
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.4282815469535062,
+          "known_contribution": 0.4282815469535062
+        },
+        {
+          "alpha": 0.625,
+          "class_fractions": [
+            0.625,
+            0.375,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2482325479974509,
+          "known_contribution": 0.2482325479974509
+        },
+        {
+          "alpha": 0.6875,
+          "class_fractions": [
+            0.0,
+            0.3125,
+            0.6875,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.5,
+            0.0,
+            0.5,
+            0.0
+          ],
+          "intensity": 0.0584894344837207,
+          "known_contribution": 0.0584894344837207
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.30129305805398343,
+          "known_contribution": 0.30129305805398343
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3452374271634276,
+          "known_contribution": 0.3452374271634276
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.386200497587678,
+          "known_contribution": 0.386200497587678
+        },
+        {
+          "alpha": 0.9375,
+          "class_fractions": [
+            0.6875,
+            0.0625,
+            0.25,
+            0.0
+          ],
+          "intensity": 0.2724867662946168,
+          "known_contribution": 0.2724867662946168
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.1875,
+            0.0,
+            0.8125,
+            0.0
+          ],
+          "intensity": 0.06973695811447768,
+          "known_contribution": 0.06973695811447768
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0625,
+            0.0,
+            0.9375,
+            0.0
+          ],
+          "intensity": 0.008656962288862605,
+          "known_contribution": 0.008656962288862605
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.375,
+            0.0,
+            0.625,
+            0.0
+          ],
+          "intensity": 0.0508189527574122,
+          "known_contribution": 0.0508189527574122
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.875,
+            0.0,
+            0.125,
+            0.0
+          ],
+          "intensity": 0.11397147649853702,
+          "known_contribution": 0.11397147649853702
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.13127399575545898,
+          "known_contribution": 0.13127399575545898
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2552982054916252,
+          "known_contribution": 0.2552982054916252
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2806986017308816,
+          "known_contribution": 0.2806986017308816
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.30238349548780236,
+          "known_contribution": 0.30238349548780236
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.31624064345937436,
+          "known_contribution": 0.31624064345937436
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.31815869545702363,
+          "known_contribution": 0.31815869545702363
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.875,
+            0.0,
+            0.125,
+            0.0
+          ],
+          "intensity": 0.2656994991434654,
+          "known_contribution": 0.2656994991434654
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.75,
+            0.0,
+            0.25,
+            0.0
+          ],
+          "intensity": 0.20793578820546277,
+          "known_contribution": 0.20793578820546277
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.5,
+            0.0,
+            0.5,
+            0.0
+          ],
+          "intensity": 0.12405684787287269,
+          "known_contribution": 0.12405684787287269
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.5,
+            0.0,
+            0.5,
+            0.0
+          ],
+          "intensity": 0.11152745653021716,
+          "known_contribution": 0.11152745653021716
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.5,
+            0.0,
+            0.5,
+            0.0
+          ],
+          "intensity": 0.10032842572423811,
+          "known_contribution": 0.10032842572423811
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.625,
+            0.0,
+            0.375,
+            0.0
+          ],
+          "intensity": 0.11279634522315961,
+          "known_contribution": 0.11279634522315961
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.8125,
+            0.0,
+            0.1875,
+            0.0
+          ],
+          "intensity": 0.13462268556825996,
+          "known_contribution": 0.13462268556825996
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.15489516810821158,
+          "known_contribution": 0.15489516810821158
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.14860882996282979,
+          "known_contribution": 0.14860882996282979
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.14374138586954216,
+          "known_contribution": 0.14374138586954216
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.13944377325829213,
+          "known_contribution": 0.13944377325829213
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.21846361833758107,
+          "known_contribution": 0.21846361833758107
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.23374799171376068,
+          "known_contribution": 0.23374799171376068
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.24611405741985826,
+          "known_contribution": 0.24611405741985826
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.25393749023183915,
+          "known_contribution": 0.25393749023183915
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.25590186158419037,
+          "known_contribution": 0.25590186158419037
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.25151694650032286,
+          "known_contribution": 0.25151694650032286
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.24146004322715212,
+          "known_contribution": 0.24146004322715212
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.22746114012649374,
+          "known_contribution": 0.22746114012649374
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2117236701004709,
+          "known_contribution": 0.2117236701004709
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.19621443694365187,
+          "known_contribution": 0.19621443694365187
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.18221206103275567,
+          "known_contribution": 0.18221206103275567
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.17024452947913238,
+          "known_contribution": 0.17024452947913238
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.16028358145371369,
+          "known_contribution": 0.16028358145371369
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.15200208648503277,
+          "known_contribution": 0.15200208648503277
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.14497825960107005,
+          "known_contribution": 0.14497825960107005
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.1388175427825145,
+          "known_contribution": 0.1388175427825145
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.1900344879415625,
+          "known_contribution": 0.1900344879415625
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.19971818746946354,
+          "known_contribution": 0.19971818746946354
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2072976870801258,
+          "known_contribution": 0.2072976870801258
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.21207094497122392,
+          "known_contribution": 0.21207094497122392
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.21354748117875366,
+          "known_contribution": 0.21354748117875366
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.21160041846501484,
+          "known_contribution": 0.21160041846501484
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2065400044251271,
+          "known_contribution": 0.2065400044251271
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.19905892650303283,
+          "known_contribution": 0.19905892650303283
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.19006076673351868,
+          "known_contribution": 0.19006076673351868
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.1804446108173185,
+          "known_contribution": 0.1804446108173185
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.17093336127816913,
+          "known_contribution": 0.17093336127816913
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.16199474247973097,
+          "known_contribution": 0.16199474247973097
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.15385004683938402,
+          "known_contribution": 0.15385004683938402
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.14653411268074062,
+          "known_contribution": 0.14653411268074062
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.13996845900508312,
+          "known_contribution": 0.13996845900508312
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.13402375183780732,
+          "known_contribution": 0.13402375183780732
+        }
+      ],
+      "raw_report": "results/local/sampling/run-edSamk/scale-4.json",
+      "raw_report_sha256": "4fc921dd3dc52007fed83a7d81a3c4d55e1cafcc41a1a54d03af9dfe21d11edf",
+      "ray_count": 3072,
+      "scale": 4,
+      "trace_elapsed_seconds": 58.32883541,
+      "unresolved_base_pixels": 8
+    },
+    {
+      "class_fractions": [
+        0.37963867187499967,
+        0.0498046875,
+        0.5617675781249994,
+        0.008789062499999998
+      ],
+      "classifications": {
+        "capture_surface": 6903,
+        "domain_limit": 108,
+        "emitted": 4665,
+        "escaped": 612
+      },
+      "known_image_plane_mean_contribution": 0.0939804282213812,
+      "pixels": [
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.15367545075642855,
+          "known_contribution": 0.15367545075642855
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.21041017173559357,
+          "known_contribution": 0.21041017173559357
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.28910709164239434,
+          "known_contribution": 0.28910709164239434
+        },
+        {
+          "alpha": 0.75,
+          "class_fractions": [
+            0.75,
+            0.25,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2728755828092792,
+          "known_contribution": 0.2728755828092792
+        },
+        {
+          "alpha": 0.28125,
+          "class_fractions": [
+            0.171875,
+            0.71875,
+            0.109375,
+            0.0
+          ],
+          "intensity": 0.041213515906451455,
+          "known_contribution": 0.041213515906451455
+        },
+        {
+          "alpha": 0.953125,
+          "class_fractions": [
+            0.03125,
+            0.046875,
+            0.921875,
+            0.0
+          ],
+          "intensity": 0.008000719745873614,
+          "known_contribution": 0.008000719745873614
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": null,
+          "class_fractions": [
+            0.0,
+            0.0,
+            0.671875,
+            0.328125
+          ],
+          "intensity": null,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": null,
+          "class_fractions": [
+            0.0,
+            0.0,
+            0.671875,
+            0.328125
+          ],
+          "intensity": null,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2023341540912399,
+          "known_contribution": 0.2023341540912399
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2809554047299547,
+          "known_contribution": 0.2809554047299547
+        },
+        {
+          "alpha": 0.890625,
+          "class_fractions": [
+            0.890625,
+            0.109375,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.34001049163377384,
+          "known_contribution": 0.34001049163377384
+        },
+        {
+          "alpha": 0.140625,
+          "class_fractions": [
+            0.140625,
+            0.859375,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.04754752155541608,
+          "known_contribution": 0.04754752155541608
+        },
+        {
+          "alpha": 0.8125,
+          "class_fractions": [
+            0.140625,
+            0.1875,
+            0.671875,
+            0.0
+          ],
+          "intensity": 0.03491322372404767,
+          "known_contribution": 0.03491322372404767
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": null,
+          "class_fractions": [
+            0.0,
+            0.0,
+            0.75,
+            0.25
+          ],
+          "intensity": null,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": null,
+          "class_fractions": [
+            0.0,
+            0.0,
+            0.75,
+            0.25
+          ],
+          "intensity": null,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2596881240917168,
+          "known_contribution": 0.2596881240917168
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3657781986457854,
+          "known_contribution": 0.3657781986457854
+        },
+        {
+          "alpha": 0.375,
+          "class_fractions": [
+            0.375,
+            0.625,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.17107531364411677,
+          "known_contribution": 0.17107531364411677
+        },
+        {
+          "alpha": 0.328125,
+          "class_fractions": [
+            0.1875,
+            0.671875,
+            0.140625,
+            0.0
+          ],
+          "intensity": 0.0427429568181007,
+          "known_contribution": 0.0427429568181007
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": null,
+          "class_fractions": [
+            0.0,
+            0.0,
+            0.765625,
+            0.234375
+          ],
+          "intensity": null,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": null,
+          "class_fractions": [
+            0.0,
+            0.0,
+            0.765625,
+            0.234375
+          ],
+          "intensity": null,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.321564242769436,
+          "known_contribution": 0.321564242769436
+        },
+        {
+          "alpha": 0.890625,
+          "class_fractions": [
+            0.890625,
+            0.109375,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3971905269408788,
+          "known_contribution": 0.3971905269408788
+        },
+        {
+          "alpha": 0.015625,
+          "class_fractions": [
+            0.015625,
+            0.984375,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.007984925120229238,
+          "known_contribution": 0.007984925120229238
+        },
+        {
+          "alpha": 0.625,
+          "class_fractions": [
+            0.171875,
+            0.375,
+            0.453125,
+            0.0
+          ],
+          "intensity": 0.042187531083412354,
+          "known_contribution": 0.042187531083412354
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": null,
+          "class_fractions": [
+            0.0,
+            0.0,
+            0.96875,
+            0.03125
+          ],
+          "intensity": null,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": null,
+          "class_fractions": [
+            0.0,
+            0.0,
+            0.96875,
+            0.03125
+          ],
+          "intensity": null,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.376487203597925,
+          "known_contribution": 0.376487203597925
+        },
+        {
+          "alpha": 0.609375,
+          "class_fractions": [
+            0.609375,
+            0.390625,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.30158794720231885,
+          "known_contribution": 0.30158794720231885
+        },
+        {
+          "alpha": 0.09375,
+          "class_fractions": [
+            0.09375,
+            0.90625,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.016772012229863693,
+          "known_contribution": 0.016772012229863693
+        },
+        {
+          "alpha": 0.8125,
+          "class_fractions": [
+            0.15625,
+            0.1875,
+            0.65625,
+            0.0
+          ],
+          "intensity": 0.04818419690938435,
+          "known_contribution": 0.04818419690938435
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.40526677907895803,
+          "known_contribution": 0.40526677907895803
+        },
+        {
+          "alpha": 0.515625,
+          "class_fractions": [
+            0.515625,
+            0.484375,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2650904360534088,
+          "known_contribution": 0.2650904360534088
+        },
+        {
+          "alpha": 0.28125,
+          "class_fractions": [
+            0.28125,
+            0.71875,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.06950094212525977,
+          "known_contribution": 0.06950094212525977
+        },
+        {
+          "alpha": 0.75,
+          "class_fractions": [
+            0.0,
+            0.25,
+            0.75,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3942991492725198,
+          "known_contribution": 0.3942991492725198
+        },
+        {
+          "alpha": 0.765625,
+          "class_fractions": [
+            0.765625,
+            0.234375,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3786154963940603,
+          "known_contribution": 0.3786154963940603
+        },
+        {
+          "alpha": 0.40625,
+          "class_fractions": [
+            0.40625,
+            0.59375,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.10295887261836006,
+          "known_contribution": 0.10295887261836006
+        },
+        {
+          "alpha": 0.75,
+          "class_fractions": [
+            0.0,
+            0.25,
+            0.75,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3524259673512165,
+          "known_contribution": 0.3524259673512165
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.42830520333728944,
+          "known_contribution": 0.42830520333728944
+        },
+        {
+          "alpha": 0.78125,
+          "class_fractions": [
+            0.78125,
+            0.21875,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.30172869286243537,
+          "known_contribution": 0.30172869286243537
+        },
+        {
+          "alpha": 0.6875,
+          "class_fractions": [
+            0.03125,
+            0.3125,
+            0.65625,
+            0.0
+          ],
+          "intensity": 0.006909129589390391,
+          "known_contribution": 0.006909129589390391
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.03125,
+            0.0,
+            0.96875,
+            0.0
+          ],
+          "intensity": 0.003614826658019584,
+          "known_contribution": 0.003614826658019584
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.53125,
+            0.0,
+            0.46875,
+            0.0
+          ],
+          "intensity": 0.06188026274084502,
+          "known_contribution": 0.06188026274084502
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.30131100289159696,
+          "known_contribution": 0.30131100289159696
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.34527130717264737,
+          "known_contribution": 0.34527130717264737
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.38625220150009215,
+          "known_contribution": 0.38625220150009215
+        },
+        {
+          "alpha": 0.921875,
+          "class_fractions": [
+            0.703125,
+            0.078125,
+            0.21875,
+            0.0
+          ],
+          "intensity": 0.27846078142128033,
+          "known_contribution": 0.27846078142128033
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.21875,
+            0.0,
+            0.78125,
+            0.0
+          ],
+          "intensity": 0.08182475240342788,
+          "known_contribution": 0.08182475240342788
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "intensity": 0.0,
+          "known_contribution": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.078125,
+            0.0,
+            0.921875,
+            0.0
+          ],
+          "intensity": 0.010935913322665938,
+          "known_contribution": 0.010935913322665938
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.421875,
+            0.0,
+            0.578125,
+            0.0
+          ],
+          "intensity": 0.05687633719425492,
+          "known_contribution": 0.05687633719425492
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.859375,
+            0.0,
+            0.140625,
+            0.0
+          ],
+          "intensity": 0.1120819494453516,
+          "known_contribution": 0.1120819494453516
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.13124130435561482,
+          "known_contribution": 0.13124130435561482
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2553157462903117,
+          "known_contribution": 0.2553157462903117
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2807262770057334,
+          "known_contribution": 0.2807262770057334
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3024214565714445,
+          "known_contribution": 0.3024214565714445
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.31628280274292603,
+          "known_contribution": 0.31628280274292603
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.3181893652418561,
+          "known_contribution": 0.3181893652418561
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.90625,
+            0.0,
+            0.09375,
+            0.0
+          ],
+          "intensity": 0.27550157172808154,
+          "known_contribution": 0.27550157172808154
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.6875,
+            0.0,
+            0.3125,
+            0.0
+          ],
+          "intensity": 0.19032000062718216,
+          "known_contribution": 0.19032000062718216
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.5625,
+            0.0,
+            0.4375,
+            0.0
+          ],
+          "intensity": 0.14040258648843604,
+          "known_contribution": 0.14040258648843604
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.5,
+            0.0,
+            0.5,
+            0.0
+          ],
+          "intensity": 0.11149307147322689,
+          "known_contribution": 0.11149307147322689
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.53125,
+            0.0,
+            0.46875,
+            0.0
+          ],
+          "intensity": 0.10618924408031176,
+          "known_contribution": 0.10618924408031176
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.640625,
+            0.0,
+            0.359375,
+            0.0
+          ],
+          "intensity": 0.11609242487437714,
+          "known_contribution": 0.11609242487437714
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            0.8125,
+            0.0,
+            0.1875,
+            0.0
+          ],
+          "intensity": 0.13477075344116093,
+          "known_contribution": 0.13477075344116093
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.15484096986185933,
+          "known_contribution": 0.15484096986185933
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.14857053990016186,
+          "known_contribution": 0.14857053990016186
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.14371546316401687,
+          "known_contribution": 0.14371546316401687
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.13942691797964069,
+          "known_contribution": 0.13942691797964069
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.21847746978581947,
+          "known_contribution": 0.21847746978581947
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.23376737590837673,
+          "known_contribution": 0.23376737590837673
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.24613858386665866,
+          "known_contribution": 0.24613858386665866
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.25396484122002994,
+          "known_contribution": 0.25396484122002994
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2559275299533506,
+          "known_contribution": 0.2559275299533506
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.25153526665171594,
+          "known_contribution": 0.25153526665171594
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.24146650430674707,
+          "known_contribution": 0.24146650430674707
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.22745459071954366,
+          "known_contribution": 0.22745459071954366
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.21170669125030914,
+          "known_contribution": 0.21170669125030914
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.1961917134922582,
+          "known_contribution": 0.1961917134922582
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.18218822226890716,
+          "known_contribution": 0.18218822226890716
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.17022283280581743,
+          "known_contribution": 0.17022283280581743
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.16026567273690798,
+          "known_contribution": 0.16026567273690798
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.1519883647074687,
+          "known_contribution": 0.1519883647074687
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.14496837561552223,
+          "known_contribution": 0.14496837561552223
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.13881080620383496,
+          "known_contribution": 0.13881080620383496
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.19004461781417725,
+          "known_contribution": 0.19004461781417725
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.19973128532007484,
+          "known_contribution": 0.19973128532007484
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.20731339301070664,
+          "known_contribution": 0.20731339301070664
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.2120882403062752,
+          "known_contribution": 0.2120882403062752
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.21356473112870275,
+          "known_contribution": 0.21356473112870275
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.21161570775751734,
+          "known_contribution": 0.21161570775751734
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.20655169133538148,
+          "known_contribution": 0.20655169133538148
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.19906615553011497,
+          "known_contribution": 0.19906615553011497
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.1900636624275393,
+          "known_contribution": 0.1900636624275393
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.18044407737719043,
+          "known_contribution": 0.18044407737719043
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.1709306558873774,
+          "known_contribution": 0.1709306558873774
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.16199106783088585,
+          "known_contribution": 0.16199106783088585
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.15384631027050666,
+          "known_contribution": 0.15384631027050666
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.14653086256712763,
+          "known_contribution": 0.14653086256712763
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.13996593463535,
+          "known_contribution": 0.13996593463535
+        },
+        {
+          "alpha": 1.0,
+          "class_fractions": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intensity": 0.13402197716994968,
+          "known_contribution": 0.13402197716994968
+        }
+      ],
+      "raw_report": "results/local/sampling/run-edSamk/scale-8.json",
+      "raw_report_sha256": "c81f8493caec55fab6f295c7b504f72e04693e1f930a949b9d0b3c8b148928c2",
+      "ray_count": 12288,
+      "scale": 8,
+      "trace_elapsed_seconds": 195.674640005,
+      "unresolved_base_pixels": 8
+    }
+  ],
+  "pilot_refinement_criteria_passed_on_common_mask": true,
+  "policy_sha256": "79415424821b326d32ed8fcf63cfab1f6314f3ec8a1ed166208d51ec7025d543",
+  "sampling_policy": {
+    "mean_classification_tv_ceiling": 0.02,
+    "minimum_common_resolved_fraction": 0.9,
+    "relative_l1_intensity_ceiling": 0.05,
+    "scales": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "schema_version": 1,
+    "scope": "Pilot image-plane refinement criteria selected before running the experiment; no global error bound or complete P2 acceptance."
+  },
+  "scene_sha256": "ffda8cebbfb575cf1b1315dda8f97e8edf108bc22efe1990ac6df91b8c765a00",
+  "schema_version": 1,
+  "scope": "Uniform image-plane midpoint averages; not solid-angle flux. Fixed common resolved mask for intensity, full image for class fractions. Pilot differences are not global error bounds. Integration tolerances are fixed.",
+  "source_unchanged": true,
+  "tracer_executable_sha256": "e52b07cdc5a414600d08898f305e1709b24542834cedcd99fbdd9c3f6884fc76"
+}

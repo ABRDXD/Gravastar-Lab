@@ -7,7 +7,18 @@ resolution scaling and the sampling experiment are implemented. The arithmetic
 passes 64 analytic/manufactured checks, and the end-to-end suite covers positive
 scaled renders, independent flat-camera formulas, aggregation, provenance and
 failed-child preservation. GCC Release passes all 14 CTest targets in 45.33 s.
-The full toy/Kerr spatial pilot is running; final results are not yet accepted.
+Clang Release also passes 14/14 (37.34 s); the new sampling subset passes
+Debug 2/2 (47.31 s) and optimized ASan/UBSan 2/2 (23.34 s), with leak detection
+enabled and no overrides. These overlapping test times are not performance
+benchmarks. The toy spatial pilot is still running.
+
+Kerr's 128x96 pilot is complete: 108 unresolved chart-boundary rays, 184/192
+original pixels in the common resolved mask, final relative intensity L1
+0.01846384698 and mean classification total variation 0.00732421875. It passes
+the common-mask pilot criteria and fails whole-image acceptance because of the
+unresolved rays. `results/p2_kerr_sampling.json` retains the full aggregate
+evidence. A proposed regular angular chart is derived in `AXIS_CHART_DESIGN.md`;
+it remains unimplemented and unvalidated.
 
 See `SAMPLING.md` for the fixed common-mask comparison, explicit missing data,
 frozen pilot criteria and reproduction commands. The 32x24 pilot has already
