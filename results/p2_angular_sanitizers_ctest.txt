@@ -1,0 +1,14 @@
+Test project /home/abrsdxd/Projects/GravastarLab-Cpp20/build/sanitizers-optimized
+    Start  1: angular_reference
+1/3 Test  #1: angular_reference ................   Passed  132.29 sec
+    Start  2: angular_geometry
+2/3 Test  #2: angular_geometry .................   Passed    0.18 sec
+    Start 14: geometry_unit
+3/3 Test #14: geometry_unit ....................   Passed    0.03 sec
+
+100% tests passed out of 3
+
+Label Time Summary:
+scientific    = 132.47 sec*proc (2 tests)
+
+Total Test time (real) = 132.50 sec

@@ -82,6 +82,16 @@ ratios are 21.3/36.0 with matching shared outputs. These are microbenchmarks;
 there is no end-to-end speedup yet. Reports include timings, dataset, hashes,
 checksums and limitations. All original image/sampling artifacts remain intact.
 
+The final GCC/Clang Release suites each pass 17/17. Debug passes the new angular
+reference, angular geometry and existing geometry-unit subset 3/3 (67.56 s).
+Optimized ASan/UBSan passes the same subset 3/3 (132.50 s), with leak detection
+enabled by default, no environment overrides/suppressions, and no diagnostics.
+This does not claim a complete 17-test Debug/sanitizer run. The transcribed matrix
+is `results/p2_angular_verification.json`, with four CTest logs. The inventory is
+`results/p2_angular_source_manifest.json`; all new scientific/performance reports
+share computational digest
+`c52e5a6026bb3cf1bba12763b082aa93c5828475944c47000a625f1fbbd36de9`.
+
 1. Implement position, momentum and frame chart transitions in the tracer.
    Validate pole-crossing flat/Schwarzschild/Kerr rays, patch-threshold refinement
    and Killing momentum drift before rerendering the paired scenes.

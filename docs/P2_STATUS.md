@@ -45,8 +45,14 @@ hashes. First/full angular shared outputs agree exactly on that dataset.
 Reports: `results/p2_angular_geometry.json`, `p2_angular_reference.json`, and
 `p2_angular_benchmark_{gcc,clang}.json`. The complete GCC Release suite passes
 17/17 in 36.76 s; Clang Release passes 17/17 in 39.87 s. Test times include
-overlapping verification work and are not benchmark timings. Debug and
-sanitizer results are recorded in the final verification matrix.
+overlapping verification work and are not benchmark timings. Debug passes the
+two new angular tests and existing geometry unit test, 3/3 in 67.56 s. Optimized
+ASan/UBSan passes that same subset 3/3 in 132.50 s with default leak detection,
+no environment overrides/suppressions and no diagnostic errors. No complete
+17-test Debug/sanitizer run is claimed. The four logs, transcribed matrix
+`results/p2_angular_verification.json`, and inventory
+`results/p2_angular_source_manifest.json` identify this checkpoint separately
+from earlier sampling evidence.
 
 ## Spatial sampling continuation on 2026-10-23
 
