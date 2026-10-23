@@ -85,6 +85,10 @@ report records the effective dimensions and scale; the input hash describes
 the original preset bytes. This is uniform image-plane area sampling, not
 solid-angle integration or a measured flux at the observer.
 
+`gravastar_sampling` aggregates these grids and compares their image-plane
+averages and outcome fractions. Its missing-data policy, analytic tests,
+provenance and frozen pilot criteria are specified in `SAMPLING.md`.
+
 ## Independent checks and remaining acceptance
 
 Check tetrad orthonormality, launch nullness and frequency, exact flat Cartesian

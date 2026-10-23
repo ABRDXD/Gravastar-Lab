@@ -12,6 +12,7 @@ script, network fetch, GPU or sibling checkout is needed for P1.
 | `gravastar_benchmark` | Individual evaluation and JSONL batch interface |
 | `gravastar_optics` | Circular observer frames, adaptive past-directed Hamiltonian tracing, refined events and prescribed emission |
 | `gravastar_trace` | Versioned camera/scene input, individual trajectories, linear image JSON and diagnostic PPM |
+| `gravastar_sampling` | Native spatial-refinement orchestration, common resolved masks, image-plane averages, provenance and pilot criteria |
 | `gravastar_validate` | Configuration, reference comparisons, scientific acceptance, JSON reports |
 | `gravastar_tools` | Native build/test workflow, source manifest generation and verification |
 | `tests/` | Numerical identities, input failures, tooling behavior, migration verification |

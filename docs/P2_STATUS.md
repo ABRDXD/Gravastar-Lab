@@ -1,22 +1,19 @@
 # P2 checkpoint: bounded native reference optics
 
-## Paused continuation on 2026-10-22
+## Spatial sampling continuation on 2026-10-23
 
-The user requested a stop after commit `ed2a9e8`. Image resolution scaling
-(`--resolution-scale 1..8`, bounded by 128x128) is implemented and its expanded
-CLI suite passed: 37 checks, CTest `optics_cli` passed in 22.02 seconds. The
-transcript is `results/p2_resolution_cli_ctest.txt`. The original paired-image
-checks still pass. A positive dense-grid render and spatial convergence
-experiment have not yet been run.
+The user resumed work after the saved stop checkpoint `fb348c4`. Native image
+resolution scaling and the sampling experiment are implemented. The arithmetic
+passes 64 analytic/manufactured checks, and the end-to-end suite covers positive
+scaled renders, independent flat-camera formulas, aggregation, provenance and
+failed-child preservation. GCC Release passes all 14 CTest targets in 45.33 s.
+The full toy/Kerr spatial pilot is running; final results are not yet accepted.
 
-`include/gravastar/optics/sampling.hpp` is an unfinished draft committed to
-preserve work. It sketches image-plane midpoint aggregation, explicit missing
-radiance, and comparisons on a mask resolved at every sampling level. It is
-not included by any target and has no numerical test coverage yet; a standalone
-C++20 syntax check is the only verification. Do not treat this draft as an
-accepted spatial convergence implementation. See `handoff.md` for next steps.
-The new inventory is `results/p2_sampling_checkpoint_manifest.json`; earlier
-P2 reports and inventories remain historical evidence for their source trees.
+See `SAMPLING.md` for the fixed common-mask comparison, explicit missing data,
+frozen pilot criteria and reproduction commands. The 32x24 pilot has already
+exposed eight Kerr chart-boundary rays missed by the 16x12 grid; lack of holes
+on one coarse grid does not establish complete chart coverage. Earlier reports
+and inventories remain historical evidence for their respective source trees.
 
 ## Verified milestone before this continuation
 
