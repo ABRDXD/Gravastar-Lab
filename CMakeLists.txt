@@ -42,6 +42,11 @@ target_compile_definitions(gravastar_tools PRIVATE GRAVASTAR_SOURCE_ROOT="${CMAK
 
 include(CTest)
 if(BUILD_TESTING)
+    add_executable(gravastar_axis_chart_tests tests/axis_chart_tests.cpp)
+    target_link_libraries(gravastar_axis_chart_tests PRIVATE gravastar_geometry nlohmann_json::nlohmann_json)
+    target_compile_definitions(gravastar_axis_chart_tests PRIVATE GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}")
+    add_test(NAME axis_chart_preflight COMMAND gravastar_axis_chart_tests)
+    set_tests_properties(axis_chart_preflight PROPERTIES TIMEOUT 180 LABELS scientific)
     add_executable(gravastar_sampling_tests tests/sampling_tests.cpp)
     target_link_libraries(gravastar_sampling_tests PRIVATE gravastar_optics)
     add_test(NAME optics_sampling COMMAND gravastar_sampling_tests)

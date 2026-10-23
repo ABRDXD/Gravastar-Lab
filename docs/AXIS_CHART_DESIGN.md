@@ -2,9 +2,11 @@
 
 This is a proposed next P2 implementation, not an accepted chart or a change to
 current ray behavior. It derives a regular angular metric for the actual toy
-family, retaining its radial transition functions. Independent C++20 checks and
-an executable chart-switching tracer are required before using it in results.
-The central r=0 extension is a separate decision.
+family, retaining its radial transition functions. C++20 algebraic preflight
+checks now pass against the canonical geometry and independent 90/110-place
+expanded reference. A production derivative evaluator, curvature checks and an
+executable chart-switching tracer are still required before using it in ray
+results. The central r=0 extension is a separate decision.
 
 ## Coordinates and metric
 
@@ -76,9 +78,9 @@ g^rr = Delta/sigma
 
 Use the simplified Z instead of subtracting large terms near an ergosurface.
 These formulas contain no division by q and require only a rank-one angular
-update. They offer a compact candidate implementation with a directly checkable
-inverse identity. Their runtime advantage must still be benchmarked; no speedup
-or numerical acceptance is claimed by this derivation.
+update. The inverse identity and agreement with independent pivoted elimination
+are covered by `gravastar_axis_chart_tests`. Their runtime advantage must still
+be benchmarked; no speedup or accepted axis-crossing ray is claimed.
 
 The axial Killing momentum becomes p_phi=-y*p_x+x*p_y; unlike the original
 chart's stored p_phi, it would no longer be conserved by an identically zero
