@@ -1,0 +1,65 @@
+{
+  "checks": [
+    {
+      "ceiling": 2e-11,
+      "measured": 1.4140890956627071e-14,
+      "name": "metric vs transformed Boyer-Lindquist",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-11,
+      "measured": 6.039613253960852e-14,
+      "name": "inverse identity",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-08,
+      "measured": 6.0822458181040374e-12,
+      "name": "Ricci tensor coordinate transform",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 1.8280381050876875e-11,
+      "name": "Ricci scalar coordinate invariance",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-08,
+      "measured": 7.039002153773465e-12,
+      "name": "Kretschmann coordinate invariance",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-14,
+      "measured": 0.0,
+      "name": "first-order and curvature API agreement",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-10,
+      "measured": 1.9984014443252818e-15,
+      "name": "exact pole flat Kerr de Sitter invariants",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-12,
+      "measured": 0.0,
+      "name": "unclamped shell C0-C2 endpoint jets including poles",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "invalid inputs and Schwarzschild horizon rejected",
+      "passed": true
+    }
+  ],
+  "compiler": "16.2.1 20260810",
+  "complete_P2_acceptance": false,
+  "computational_source_sha256": "c52e5a6026bb3cf1bba12763b082aa93c5828475944c47000a625f1fbbd36de9",
+  "coordinate_points": 576,
+  "passed": true,
+  "schema_version": 1,
+  "scope": "Regular angular geometry; production rays unchanged."
+}

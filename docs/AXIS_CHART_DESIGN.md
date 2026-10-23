@@ -1,4 +1,4 @@
-# Candidate regular angular chart: derivation for review
+# Regular angular geometry: derivation and validation
 
 The geometry library now implements this chart through `evaluate_angular`
 (metric, inverse and first derivatives) and `evaluate_angular_curvature`
@@ -179,3 +179,9 @@ and 8139 ns (original BL geometry), with zero measured first/full output
 disagreement. The same-chart ratio is 21.3; the old-API baseline ratio is 30.7.
 Record separate compiler measurements rather than treating these as universal
 performance claims.
+
+The separate Clang Release run in `results/p2_angular_benchmark_clang.json`
+measures 185 ns, 6684 ns and 6914 ns respectively: same-chart ratio 36.0 and
+old-API baseline ratio 37.3. Both compiler runs consume identical checksums and
+share the dataset/source digest. They ran sequentially without concurrent
+project builds/tests, but background operating-system activity was not controlled.

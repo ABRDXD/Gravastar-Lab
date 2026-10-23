@@ -1,4 +1,4 @@
-# Handoff: P2 sampling and angular-chart preflight
+# Handoff: P2 regular angular geometry
 
 Updated 2026-10-23. The user resumed implementation after `fb348c4`; its stop
 instruction is superseded. Active isolated worktree:
@@ -49,32 +49,51 @@ executable hashes. Raw rays remain in unique ignored directories under
 Results from before and after the axis-test addition have distinct computational
 digests. Do not relabel historical reports as products of newer source trees.
 
-## Angular-chart preflight and next implementation
+## Regular angular geometry and next implementation
 
 `AXIS_CHART_DESIGN.md` derives north/south stereographic angular patches for the
 actual metric, including a finite pole limit, analytic inverse, covariant
 momentum transformations and axial Killing momentum. `tests/axis_chart_tests.cpp`
-is an executable preflight, not a production geometry backend. Its 14 aggregate
+remains an independent algebra preflight. Its 14 aggregate
 checks cover 480 double points and 120 points at each of 90 and 110 decimal
 places, plus pole limits and patch transitions. Candidate/reference calculations
 share the previously tested radial profile helper; coordinate expressions and
 inverse algorithms are independently compared. No speedup is claimed.
 
-1. Implement a canonical angular metric/first-derivative API with shared radial
-   profiles. Independently verify derivatives and curvature near poles and joins.
-2. Implement position, momentum and frame chart transitions in the tracer.
+The production geometry backend is now implemented in `geometry/angular.hpp`
+and `src/geometry/angular.cpp`. `AngularMetric` evaluates metric/inverse/first
+derivatives; `AngularCurvature` adds Hessian and curvature without presenting
+absent quantities as zero. The first-order scalar instantiation omits Hessian
+work. Both charts share radial profiles and curvature contraction. Parameters,
+r>0, q<=4 and the Delta singularity margin are validated; r=0 and radial chart
+surfaces are still excluded. Existing rays do not call this API yet.
+
+New tests cover 576 double coordinate comparisons, 27 analytic pole limits,
+unclamped shell C0-C2 endpoint jets, and 112 independent finite-difference points
+at each of 90/110 decimal places. Production first/Hessian errors are below
+5.24e-14. Independent shell Ricci/Kretschmann checks include the exact pole.
+Reference precision refinement is 2.88e-58 and coarse step refinement gives
+the expected approximately 1/16 error ratio. No numerical threshold was loosened.
+P1 still covers third radial derivatives and outward-normal extrinsic curvature.
+
+The C++20 `gravastar_angular_benchmark` preserves full angular and original BL
+evaluators as baselines. On the same host, GCC/Clang first/full angular kernel
+ratios are 21.3/36.0 with matching shared outputs. These are microbenchmarks;
+there is no end-to-end speedup yet. Reports include timings, dataset, hashes,
+checksums and limitations. All original image/sampling artifacts remain intact.
+
+1. Implement position, momentum and frame chart transitions in the tracer.
    Validate pole-crossing flat/Schwarzschild/Kerr rays, patch-threshold refinement
    and Killing momentum drift before rerendering the paired scenes.
-3. Derive a separate regular central continuation of the de Sitter core. The
+2. Derive a separate regular central continuation of the de Sitter core. The
    angular chart alone does not cover r=0 or decide the interior extension.
-4. Add real pinned GYOTO integration and executable comparisons, then revisit
+3. Add real pinned GYOTO integration and executable comparisons, then revisit
    whole-image convergence and difficult grazing/near-critical events.
 
 Production rays still stop at the original chart boundaries. Preserve the saved
-scientific failures. GPU/desktop and stability claims remain gated. A possible
-later optimization is avoiding curvature on every ray RHS evaluation while
-retaining one canonical geometry and benchmarking against the original evaluator;
-it has not been implemented.
+scientific failures. GPU/desktop and stability claims remain gated. The new
+requested-order geometry API is implemented and benchmarked; adopting it in
+ray integration remains part of the next chart-transition work.
 
 ## Reproduction
 
@@ -84,7 +103,10 @@ ctest --preset headless-release --output-on-failure
 build/headless-release/gravastar_sampling --scene benchmarks/optics_v1.json --output results/p2_toy_sampling.json
 build/headless-release/gravastar_sampling --scene benchmarks/optics_kerr_v1.json --output results/p2_kerr_sampling.json
 build/headless-release/gravastar_axis_chart_tests --report results/p2_axis_chart_preflight.json
-build/headless-release/gravastar_tools manifest --verify results/p2_continuation_source_manifest.json
+build/headless-release/gravastar_angular_geometry_tests --report results/p2_angular_geometry.json
+build/headless-release/gravastar_angular_reference_tests --report results/p2_angular_reference.json
+build/headless-release/gravastar_angular_benchmark --output results/p2_angular_benchmark_gcc.json
+build/headless-release/gravastar_tools manifest --verify results/p2_angular_source_manifest.json
 ```
 
 SSH pushes work with the direct command option

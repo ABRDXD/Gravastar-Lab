@@ -7,9 +7,10 @@ script, network fetch, GPU or sibling checkout is needed for P1.
 
 | Component | Responsibility |
 | --- | --- |
-| `gravastar_geometry` | Double metric/inverse, third-order Taylor jets, Christoffel curvature, domain errors |
+| `gravastar_geometry` | BL and pole-regular angular charts, requested-order derivatives, shared radial profiles and curvature, domain errors |
 | `include/gravastar/reference/` | Independent expanded metric, 90/110-place differences, covariant curvature, exact polynomials |
 | `gravastar_benchmark` | Individual evaluation and JSONL batch interface |
+| `gravastar_angular_benchmark` | Angular first-derivative/full-curvature and original BL cost comparison, accuracy checks and provenance |
 | `gravastar_optics` | Circular observer frames, adaptive past-directed Hamiltonian tracing, refined events and prescribed emission |
 | `gravastar_trace` | Versioned camera/scene input, individual trajectories, linear image JSON and diagnostic PPM |
 | `gravastar_sampling` | Native spatial-refinement orchestration, common resolved masks, image-plane averages, provenance and pilot criteria |
@@ -74,6 +75,12 @@ this format check supplements review of the C++20 architectural constraint.
 The optics library calls the canonical geometry evaluator; no duplicate metric
 implementation was added. It currently computes curvature along with metric
 derivatives on each evaluation, favoring a single validated path over speed.
+The geometry library additionally provides a regular angular API with only
+first derivatives, plus a separate curvature API for validation. Its scalar
+arithmetic omits Hessians at compile time for first-order requests. Both charts
+share radial profiles and curvature contraction. The angular kernel is measured
+against retained full evaluators; its adoption by rays still requires chart,
+frame and momentum transition tests. See `AXIS_CHART_DESIGN.md` for evidence.
 Its Dopri5 pair is original C++20. Independent expanded high-precision geometry
 checks its RHS; exact analytic rays and a separately stepped RK4 integrator
 check trajectories. RK4 shares production geometry, a limitation recorded in

@@ -1,5 +1,53 @@
 # P2 checkpoint: bounded native reference optics
 
+## Regular angular geometry on 2026-10-23
+
+The geometry layer now evaluates the north/south stereographic metric at the
+exact poles, with a first-derivative API for future Hamiltonian integration and
+a separate Hessian/curvature API. Both charts share the canonical radial
+profiles; their curvature uses the same contraction implementation. The old P1
+API is preserved, and its frozen reports have not been overwritten. Production
+rays still use the original BL chart, so the unresolved sampling outcomes below
+remain valid and complete P2 acceptance is still false.
+
+`angular_geometry` passes nine aggregate checks over 576 coordinate comparisons,
+27 exact-pole analytic limits, six shell endpoint comparisons and input failures.
+`angular_reference` adds eleven checks over 112 points at each of 90/110 decimal
+places, including exact poles, angular coordinates of order 1e-8, both joins,
+core, shell and exterior. Its expanded BL expressions, finite differences and
+covariant curvature construction are independent of production jets/contraction.
+
+| Observed scaled residual | Maximum |
+| --- | ---: |
+| Metric vs independent expanded reference | 1.01e-14 |
+| First derivatives vs high-precision differences | 2.05e-14 |
+| Hessian vs high-precision differences | 5.24e-14 |
+| Independent shell Ricci tensor, including pole | 4.18e-14 |
+| Independent shell Kretschmann, including pole | 1.84e-14 |
+| Exact-pole flat/Kerr/de Sitter invariant identities | 2.00e-15 |
+| 90-to-110-place derivative change | 2.88e-58 |
+| Shell derivative change, h=1e-8 to 5e-9 | 6.93e-28 |
+
+Halving the coarse reference step gives error ratios 0.06246 (first derivative)
+and 0.06251 (Hessian), consistent with fourth-order finite differences. Nonzero
+precision/step changes are required. An initial reference arithmetic failure
+and its correction are recorded in `AXIS_CHART_DESIGN.md`; no tolerance was
+loosened. These are sampled residuals, not rigorous global bounds.
+
+The new first-order kernel avoids unnecessary Hessian and curvature work. On
+this machine, median full-angular/first-order cost ratios are 21.3 with GCC and
+36.0 with Clang. The original full BL evaluator costs 30.7/37.3 times as much as
+the new first-order kernel, respectively, but its outputs and coordinates differ.
+There is no end-to-end ray speedup claim. Each report retains seven timing
+rounds, all 256 physical samples, checksums, CPU/compiler and source/executable
+hashes. First/full angular shared outputs agree exactly on that dataset.
+
+Reports: `results/p2_angular_geometry.json`, `p2_angular_reference.json`, and
+`p2_angular_benchmark_{gcc,clang}.json`. The complete GCC Release suite passes
+17/17 in 36.76 s; Clang Release passes 17/17 in 39.87 s. Test times include
+overlapping verification work and are not benchmark timings. Debug and
+sanitizer results are recorded in the final verification matrix.
+
 ## Spatial sampling continuation on 2026-10-23
 
 The user resumed work after the saved stop checkpoint `fb348c4`. Native image
@@ -51,7 +99,9 @@ The candidate and high-precision reference share the previously tested radial
 profile helper. Coordinate expressions and inverse algorithms are compared
 independently; this is not a new independent radial-profile validation. No
 production angular derivative evaluator, curvature calculation, axis-crossing
-ray or performance advantage is accepted yet. The production tracer is unchanged.
+ray or performance advantage was accepted at that historical checkpoint. The
+geometry-layer continuation above supersedes those geometry limitations; the
+production tracer remains unchanged.
 
 The complete final GCC Release suite passes 15/15 in 32.65 s; Clang passes
 15/15 in 31.01 s. The axis preflight also passes Debug (12.34 s test time)
@@ -207,8 +257,9 @@ replace an unresolved boundary with artificial absorption or reflection.
 Argon can independently reproduce frozen P1, then audit the Hamiltonian sign,
 observer-frame orientation, emission convention, event ordering and refinement,
 and unresolved-pixel encoding on this branch. A separate branch should contain
-any proposed corrections. The next implementation needs the proposed angular
-chart's production derivatives and tracer transitions, plus a separately derived
+any proposed corrections. The next implementation needs angular-chart tracer
+transitions for position, covariant momentum and observer frames, actual
+pole-crossing rays and patch-threshold convergence, plus a separately derived
 central continuation model, followed by a real pinned GYOTO build and comparisons compatible
 with the C++20-only build constraint. No untested plugin stub counts as progress
 through that gate. GPU/desktop and stability work remain later stages.
