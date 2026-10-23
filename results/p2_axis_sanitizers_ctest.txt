@@ -1,0 +1,10 @@
+Test project /home/abrsdxd/Projects/GravastarLab-Cpp20/build/sanitizers-optimized
+    Start 1: axis_chart_preflight
+1/1 Test #1: axis_chart_preflight .............   Passed   24.85 sec
+
+100% tests passed out of 1
+
+Label Time Summary:
+scientific    =  24.85 sec*proc (1 test)
+
+Total Test time (real) =  24.85 sec

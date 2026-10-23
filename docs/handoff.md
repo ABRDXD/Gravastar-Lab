@@ -1,73 +1,91 @@
-# Handoff: P2 sampling continuation
+# Handoff: P2 sampling and angular-chart preflight
 
-Resumed by the user on 2026-10-23. The sampling arithmetic is now integrated
-into CTest and passes exact smooth-image, discontinuity, missing-data and
-malformed-input checks. Empty comparison masks report unavailable errors,
-not zero. The experiment driver and its end-to-end tests now pass, including
-positive scaled renders, independent flat-space camera checks and child-failure
-preservation. Actual toy/Kerr spatial refinement runs are next.
-`benchmarks/sampling_v1.json` freezes pilot
-criteria before measurement: relative intensity L1 <= 0.05, mean classification
-total variation <= 0.02, common resolved coverage >= 0.9, at least three levels,
-and nonincreasing last absolute-intensity/classification differences. Whole-image
-acceptance additionally requires all samples resolved.
-The earlier stop notes below describe the starting checkpoint only.
-
-Date: 2026-10-22. Active isolated worktree:
+Updated 2026-10-23. The user resumed implementation after `fb348c4`; its stop
+instruction is superseded. Active isolated worktree:
 `/home/abrsdxd/Projects/GravastarLab-Cpp20`, branch
-`codex/p2-reference-optics`. The user requested stopping and committing all
-work. Do not continue implementation until asked. No background task remains.
+`codex/p2-reference-optics`. Keep the original checkout and Argon's concurrent
+work untouched. Commit and push checkpoints roughly every three minutes.
+This branch has not been merged to main.
 
-All authored code and tools must be C++20; CMake is for build/dependency/CTest
-configuration only. Preserve the original GravastarLab checkout and concurrent
-Argon work. Commit and push checkpoints approximately every three minutes when
-work resumes. Main remains at the preserved P1 commit `609debe`.
+All authored code and tools remain C++20; CMake is only for build/dependency/
+CTest configuration. No dependency was added. The optimization philosophy is
+recorded in `AGENTS.md`: creative algorithms, controlled complexity, measured
+baselines, verified numerical accuracy and documented trade-offs.
 
-## Completed this continuation
+## Completed work
 
-- Added `gravastar_trace image --resolution-scale N`, integer 1..8 with a
-  maximum effective image size of 128x128. It retains the original camera and
-  physical scene, records effective dimensions, and rejects scaling in ray mode.
-- Added six CLI rejection checks for malformed scales and unsupported sizes.
-  Rebuilt Release successfully; `optics_cli` passed all 37 checks in 22.02 s.
-  This includes the existing toy/Kerr integration-refinement image checks.
-- Pushed the tested change as `ed2a9e8`. The final stop checkpoint also preserves
-  the unfinished draft described below. All commits stay on the P2 branch.
+The sampling draft is now integrated and tested. `gravastar_sampling` launches
+fixed-scene grids at scales 1,2,4,8, aggregates onto the original 16x12 pixels,
+preserves unresolved intensity/alpha as null, and compares every level on one
+common resolved mask. Classification statistics cover the whole image.
+`SAMPLING.md` specifies formulas, provenance and preselected criteria.
 
-## Draft and next implementation
+There are 64 analytic/manufactured sampling checks and 31 CLI checks, including
+positive scaled renders, independent flat-space camera formulas, raw-report
+reconstruction/digests and preservation of accepted results on child failure.
+The sampling checkpoint passed GCC/Clang Release 14/14 each, Debug sampling 2/2,
+and optimized ASan/UBSan sampling 2/2 with leak detection enabled. The subsequent
+axis preflight adds one CTest target; the final matrix is in `P2_STATUS.md`.
 
-`include/gravastar/optics/sampling.hpp` is not integrated into CMake or any
-consumer. It has only been syntax-checked, not numerically tested. It defines
-sample aggregation over uniform image-plane area, keeps intensity/alpha absent
-when any sub-sample is unresolved, and compares levels using a common resolved
-mask. No spatial convergence result exists yet.
+Both four-level spatial pilots completed without numerical-failure rays:
 
-Next, validate this arithmetic with independent manufactured smooth and
-discontinuous images, unresolved masks, zero radiance and malformed inputs.
-Build a native C++20 experiment that invokes the existing tracer on increasing
-grids (for example 16x12, 32x24, 64x48) with fixed camera and integrator, aggregates
-each grid onto the original pixels, and reports intensity differences,
-classification fractions and unresolved coverage. Test a positive scaled render;
-current new CLI tests cover rejection paths only. Avoid claiming convergence
-from shrinking masks or replacing unresolved rays with zero radiance. Preserve
-raw report hashes and computational source provenance. Select acceptance
-criteria before interpreting the experiment, and report failures honestly.
+| Finest grid: 128x96 | Toy | Kerr |
+| --- | ---: | ---: |
+| Emitted | 5407 | 4665 |
+| Escaped | 6456 | 612 |
+| Capture proxy | 0 | 6903 |
+| Chart-boundary stops | 424 | 108 |
+| Affine-budget stops | 1 | 0 |
+| Common resolved base pixels | 167/192 | 184/192 |
+| Final relative intensity L1 | 0.02541480113 | 0.01846384698 |
+| Final mean classification TV | 0.01806640625 | 0.00732421875 |
+| Common-mask pilot criteria | fail: coverage < 90% | pass |
+| Whole-image criteria | fail | fail |
 
-The earlier milestone at `d5480e5` passed GCC/Clang 12/12 tests and Debug plus
-ASan/UBSan optics 3/3 each. Those complete matrices were not rerun for this small
-continuation. See `P2_STATUS.md` and retained transcripts for their exact scope.
-Full P2 still needs central/axial continuation, genuine GYOTO comparisons,
-spatial/sample convergence, and broader difficult event checks.
+The thresholds were committed before measurement in `benchmarks/sampling_v1.json`.
+Summary JSON files retain every aggregate pixel, masks, settings and source/
+executable hashes. Raw rays remain in unique ignored directories under
+`results/local/sampling/`, with paths and hashes recorded in the summaries.
+Results from before and after the axis-test addition have distinct computational
+digests. Do not relabel historical reports as products of newer source trees.
 
-## Reproduction and publication
+## Angular-chart preflight and next implementation
+
+`AXIS_CHART_DESIGN.md` derives north/south stereographic angular patches for the
+actual metric, including a finite pole limit, analytic inverse, covariant
+momentum transformations and axial Killing momentum. `tests/axis_chart_tests.cpp`
+is an executable preflight, not a production geometry backend. Its 14 aggregate
+checks cover 480 double points and 120 points at each of 90 and 110 decimal
+places, plus pole limits and patch transitions. Candidate/reference calculations
+share the previously tested radial profile helper; coordinate expressions and
+inverse algorithms are independently compared. No speedup is claimed.
+
+1. Implement a canonical angular metric/first-derivative API with shared radial
+   profiles. Independently verify derivatives and curvature near poles and joins.
+2. Implement position, momentum and frame chart transitions in the tracer.
+   Validate pole-crossing flat/Schwarzschild/Kerr rays, patch-threshold refinement
+   and Killing momentum drift before rerendering the paired scenes.
+3. Derive a separate regular central continuation of the de Sitter core. The
+   angular chart alone does not cover r=0 or decide the interior extension.
+4. Add real pinned GYOTO integration and executable comparisons, then revisit
+   whole-image convergence and difficult grazing/near-critical events.
+
+Production rays still stop at the original chart boundaries. Preserve the saved
+scientific failures. GPU/desktop and stability claims remain gated. A possible
+later optimization is avoiding curvature on every ray RHS evaluation while
+retaining one canonical geometry and benchmarking against the original evaluator;
+it has not been implemented.
+
+## Reproduction
 
 ```text
 cmake --build --preset headless-release --parallel 3
-ctest --preset headless-release -R optics_cli --output-on-failure
-build/headless-release/gravastar_tools manifest --verify results/p2_sampling_checkpoint_manifest.json
+ctest --preset headless-release --output-on-failure
+build/headless-release/gravastar_sampling --scene benchmarks/optics_v1.json --output results/p2_toy_sampling.json
+build/headless-release/gravastar_sampling --scene benchmarks/optics_kerr_v1.json --output results/p2_kerr_sampling.json
+build/headless-release/gravastar_axis_chart_tests --report results/p2_axis_chart_preflight.json
+build/headless-release/gravastar_tools manifest --verify results/p2_continuation_source_manifest.json
 ```
 
-The checkpoint manifest describes the stopped tree, including the draft.
-Earlier scientific reports and source manifests were intentionally preserved.
 SSH pushes work with the direct command option
 `-c core.sshCommand='ssh -F /dev/null -o BatchMode=yes -o ConnectTimeout=10'`.

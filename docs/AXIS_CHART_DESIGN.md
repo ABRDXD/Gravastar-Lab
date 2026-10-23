@@ -106,3 +106,17 @@ Implement scalar algebra and derivatives in C++20, share the radial transition
 construction, and avoid duplicating an independently drifting geometry model.
 Benchmark against the original chart where both are valid. A coordinate
 extension is a scientific correctness change, not merely an optimization.
+
+## Measured preflight
+
+`results/p2_axis_chart_preflight.json` records 14 aggregate checks, 480 double
+sample points and 120 points at each of 90/110 decimal places. Double metric
+agreement with the transformed canonical evaluator is 1.86e-14 and inverse
+identity residual is 1.14e-13. Independent high-precision metric-transform
+residuals are 6.52e-74 and 7.56e-94, respectively. Momentum/one-form/Hamiltonian
+patch checks are below 7.42e-16. The radial profile helper is shared with the
+previously tested reference and is not independently revalidated by this test.
+
+These are observed algebraic residuals on the sampled preset, not a complete
+chart acceptance. The code currently lives only in a C++20 test executable.
+It neither supplies production derivatives nor changes existing ray outcomes.

@@ -18,7 +18,7 @@ original pixels in the common resolved mask, final relative intensity L1
 the common-mask pilot criteria and fails whole-image acceptance because of the
 unresolved rays. `results/p2_kerr_sampling.json` retains the full aggregate
 evidence. A proposed regular angular chart is derived in `AXIS_CHART_DESIGN.md`;
-it remains unimplemented and unvalidated.
+its algebra now has executable preflight checks, described below.
 
 The toy 128x96 run has 5,407 emitted rays, 6,456 escaped, 424 chart-boundary
 stops and one affine-budget stop. Its common mask covers 167/192 original
@@ -34,6 +34,33 @@ frozen pilot criteria and reproduction commands. The 32x24 pilot has already
 exposed eight Kerr chart-boundary rays missed by the 16x12 grid; lack of holes
 on one coarse grid does not establish complete chart coverage. Earlier reports
 and inventories remain historical evidence for their respective source trees.
+
+## Angular-chart algebra preflight
+
+The proposed regular angular metric and inverse pass 14 aggregate checks over
+480 double points and 120 points at each of 90 and 110 decimal places. The
+samples include both patches, both shell joins and their nearby shell points.
+The independent expanded metric transform agrees to 6.52e-74 at 90 places and
+7.56e-94 at 110 places. Double metric agreement is 1.86e-14, inverse identity
+1.14e-13, and momentum/one-form/Hamiltonian patch invariance below 7.42e-16.
+Pole continuity is measured separately at finite angular radius 1e-9, not
+mistaken for roundoff error. `results/p2_axis_chart_preflight.json` contains
+thresholds, measured values and the exact scope.
+
+The candidate and high-precision reference share the previously tested radial
+profile helper. Coordinate expressions and inverse algorithms are compared
+independently; this is not a new independent radial-profile validation. No
+production angular derivative evaluator, curvature calculation, axis-crossing
+ray or performance advantage is accepted yet. The production tracer is unchanged.
+
+The complete final GCC Release suite passes 15/15 in 32.65 s; Clang passes
+15/15 in 31.01 s. The axis preflight also passes Debug (12.34 s test time)
+and optimized ASan/UBSan with leak detection enabled (24.85 s). Final logs are
+`results/p2_continuation_{gcc,clang}_ctest.txt` and
+`results/p2_axis_{gcc,debug,sanitizers}_ctest.txt`; the transcribed matrix is
+`results/p2_continuation_verification.json`. The final source inventory is
+`results/p2_continuation_source_manifest.json`. This does not retroactively
+change the computational digests of the earlier sampling runs.
 
 ## Verified milestone before this continuation
 
@@ -173,16 +200,16 @@ debug or instrumented builds.
 ## Remaining gates and review tasks
 
 Complete P2 acceptance remains open: central and axial chart continuation,
-real GYOTO integration/comparison, spatial image convergence, and broader
+real GYOTO integration/comparison, whole-image spatial acceptance, and broader
 near-critical/grazing-ray checks are not established. The tracer does not
 replace an unresolved boundary with artificial absorption or reflection.
 
 Argon can independently reproduce frozen P1, then audit the Hamiltonian sign,
 observer-frame orientation, emission convention, event ordering and refinement,
 and unresolved-pixel encoding on this branch. A separate branch should contain
-any proposed corrections. The next implementation needs a derived regular
-core/axis chart with momentum transformations and a documented continuation
-model, followed by a real pinned GYOTO build and ray comparisons compatible
+any proposed corrections. The next implementation needs the proposed angular
+chart's production derivatives and tracer transitions, plus a separately derived
+central continuation model, followed by a real pinned GYOTO build and comparisons compatible
 with the C++20-only build constraint. No untested plugin stub counts as progress
 through that gate. GPU/desktop and stability work remain later stages.
 
