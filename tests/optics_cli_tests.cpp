@@ -66,6 +66,15 @@ int main(int argc, char **argv) {
     u::atomic_json(input, bad);
     check("invalid solver settings rejected", invoke() == 2);
     u::atomic_json(input, cfg);
+    u::atomic_bytes(root / "results/collision.ppm", "previous display");
+    auto collision = cfg;
+    collision["image"] = {{"width", 1}, {"height", 1}};
+    u::atomic_json(input, collision);
+    check("report cannot alias its PPM preview",
+          invoke("results/collision.ppm") == 2 &&
+              u::read_file(root / "results/collision.ppm") == "previous display" &&
+              !fs::exists(root / "results/collision_manifest.json"));
+    u::atomic_json(input, cfg);
     check("output traversal rejected", invoke("../escape.json") == 2);
     check("negative pixel index rejected",
           u::run({argv[1], "ray", "--root", root.string(), "--config",

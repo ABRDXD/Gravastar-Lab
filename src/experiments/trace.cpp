@@ -195,6 +195,8 @@ int main(int argc, char **argv) {
     if (rel.empty() || *rel.begin() == "..")
       throw std::invalid_argument("configuration must be inside benchmarks/");
     output = u::result_path(root, output);
+    if (output.extension() != ".json")
+      throw std::invalid_argument("trace report output must have .json extension");
     auto input = u::read_file(config);
     auto configuration = J::parse(input);
     auto s = scene(configuration);
