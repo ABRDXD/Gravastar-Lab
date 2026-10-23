@@ -1,0 +1,10 @@
+Test project /home/abrsdxd/Projects/GravastarLab-Cpp20/build/headless-release
+    Start 1: optics_sampling
+1/1 Test #1: optics_sampling ..................   Passed    0.00 sec
+
+100% tests passed out of 1
+
+Label Time Summary:
+optics    =   0.00 sec*proc (1 test)
+
+Total Test time (real) =   0.00 sec

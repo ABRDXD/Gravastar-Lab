@@ -39,6 +39,10 @@ target_compile_definitions(gravastar_tools PRIVATE GRAVASTAR_SOURCE_ROOT="${CMAK
 
 include(CTest)
 if(BUILD_TESTING)
+    add_executable(gravastar_sampling_tests tests/sampling_tests.cpp)
+    target_link_libraries(gravastar_sampling_tests PRIVATE gravastar_optics)
+    add_test(NAME optics_sampling COMMAND gravastar_sampling_tests)
+    set_tests_properties(optics_sampling PROPERTIES TIMEOUT 30 LABELS optics)
     add_executable(gravastar_optics_tests tests/optics_tests.cpp)
     target_link_libraries(gravastar_optics_tests PRIVATE gravastar_optics nlohmann_json::nlohmann_json)
     target_compile_definitions(gravastar_optics_tests PRIVATE GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}")

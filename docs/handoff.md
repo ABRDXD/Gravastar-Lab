@@ -1,4 +1,10 @@
-# Handoff: P2 paused at user request
+# Handoff: P2 sampling continuation
+
+Resumed by the user on 2026-10-23. The sampling arithmetic is now integrated
+into CTest and passes exact smooth-image, discontinuity, missing-data and
+malformed-input checks. Empty comparison masks report unavailable errors,
+not zero. The experiment driver and actual spatial refinement runs are next.
+The earlier stop notes below describe the starting checkpoint only.
 
 Date: 2026-10-22. Active isolated worktree:
 `/home/abrsdxd/Projects/GravastarLab-Cpp20`, branch

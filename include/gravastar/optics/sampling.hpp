@@ -8,7 +8,6 @@
 #include <vector>
 
 namespace gravastar::optics::sampling {
-// Draft checkpoint: not yet integrated into a target or numerically validated.
 // Values are averages over uniform image-plane area, not solid-angle flux.
 enum class Class { emitted, escaped, captured, unresolved };
 struct Sample {
@@ -56,6 +55,12 @@ inline Grid aggregate(int width, int height, int scale,
                 *s.intensity < 0 || !std::isfinite(*s.alpha) ||
                 *s.alpha < 0 || *s.alpha > 1)
               throw std::invalid_argument("invalid resolved sample");
+            if ((s.classification == Class::escaped &&
+                 (*s.intensity != 0 || *s.alpha != 0)) ||
+                (s.classification == Class::captured &&
+                 (*s.intensity != 0 || *s.alpha != 1)) ||
+                (s.classification == Class::emitted && *s.alpha != 1))
+              throw std::invalid_argument("sample contradicts emission convention");
             pixel.known_contribution += weight * *s.intensity;
             alpha += weight * *s.alpha;
           }
@@ -69,7 +74,7 @@ inline Grid aggregate(int width, int height, int scale,
 }
 struct Difference {
   std::size_t common_pixels{};
-  double mean_absolute_intensity{}, maximum_absolute_intensity{};
+  std::optional<double> mean_absolute_intensity, maximum_absolute_intensity;
   std::optional<double> relative_l1_intensity;
   double mean_classification_tv{}, maximum_classification_tv{};
   double mean_unresolved_fraction_change{};
@@ -80,22 +85,40 @@ inline std::vector<Difference> compare(const std::vector<Grid> &levels) {
   if (levels.size() < 2)
     throw std::invalid_argument("at least two sampling levels are required");
   const auto n = levels.front().pixels.size();
-  if (n == 0)
+  if (n == 0 || levels.front().width < 1 || levels.front().height < 1)
     throw std::invalid_argument("empty sampling image");
   std::vector<bool> common(n, true);
   int previous_scale = 0;
   for (const auto &g : levels) {
     if (g.width != levels.front().width || g.height != levels.front().height ||
-        g.pixels.size() != n || g.scale <= previous_scale)
+        g.pixels.size() != n || g.scale <= previous_scale || g.scale > 8 ||
+        g.width > 128 / g.scale || g.height > 128 / g.scale ||
+        n != static_cast<std::size_t>(g.width * g.height))
       throw std::invalid_argument("incompatible or unordered sampling levels");
     previous_scale = g.scale;
-    for (std::size_t i = 0; i < n; ++i)
+    for (std::size_t i = 0; i < n; ++i) {
+      const auto &p = g.pixels[i];
+      double total = 0;
+      for (double f : p.fractions) {
+        if (!std::isfinite(f) || f < 0 || f > 1)
+          throw std::invalid_argument("invalid classification fraction");
+        total += f;
+      }
+      if (std::abs(total - 1) > 1e-12 || !std::isfinite(p.known_contribution) ||
+          p.known_contribution < 0 || p.intensity.has_value() != p.alpha.has_value() ||
+          p.intensity.has_value() != (p.fractions[3] == 0) ||
+          (p.intensity && (!std::isfinite(*p.intensity) || *p.intensity < 0 ||
+                           *p.intensity != p.known_contribution ||
+                           !std::isfinite(*p.alpha) || *p.alpha < 0 || *p.alpha > 1)))
+        throw std::invalid_argument("inconsistent aggregate pixel");
       common[i] = common[i] && g.pixels[i].intensity.has_value();
+    }
   }
   std::vector<Difference> out;
   for (std::size_t level = 1; level < levels.size(); ++level) {
     Difference d;
-    double reference_sum = 0, absolute_sum = 0;
+    long double reference_sum = 0, absolute_sum = 0;
+    double maximum = 0;
     for (std::size_t i = 0; i < n; ++i) {
       const auto &a = levels[level - 1].pixels[i], &b = levels[level].pixels[i];
       double tv = 0;
@@ -110,11 +133,13 @@ inline std::vector<Difference> compare(const std::vector<Grid> &levels) {
         const double delta = std::abs(*a.intensity - *b.intensity);
         absolute_sum += delta;
         reference_sum += std::abs(*b.intensity);
-        d.maximum_absolute_intensity = std::max(d.maximum_absolute_intensity, delta);
+        maximum = std::max(maximum, delta);
       }
     }
-    if (d.common_pixels)
+    if (d.common_pixels) {
       d.mean_absolute_intensity = absolute_sum / d.common_pixels;
+      d.maximum_absolute_intensity = maximum;
+    }
     if (d.common_pixels && reference_sum > 0)
       d.relative_l1_intensity = absolute_sum / reference_sum;
     out.push_back(d);
