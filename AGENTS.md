@@ -18,3 +18,9 @@ must distinguish implementation consistency, energy conditions, and stability.
 Never describe project-selected radii as recovered paper parameters. Do not
 start P2 optics until blocking P1 findings are resolved and its chart coverage
 is specified.
+
+Explore performance improvements creatively, with controlled complexity. Every
+optimization must remain explainable, maintainable and scientifically correct;
+benchmark against a preserved baseline, verify numerical accuracy, and document
+significant trade-offs. Familiarity alone is not a reason to reject an algorithm,
+and novelty alone is not a reason to adopt it.

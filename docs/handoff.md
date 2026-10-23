@@ -3,7 +3,12 @@
 Resumed by the user on 2026-10-23. The sampling arithmetic is now integrated
 into CTest and passes exact smooth-image, discontinuity, missing-data and
 malformed-input checks. Empty comparison masks report unavailable errors,
-not zero. The experiment driver and actual spatial refinement runs are next.
+not zero. The experiment driver now builds; its end-to-end tests and actual
+spatial refinement runs are next. `benchmarks/sampling_v1.json` freezes pilot
+criteria before measurement: relative intensity L1 <= 0.05, mean classification
+total variation <= 0.02, common resolved coverage >= 0.9, at least three levels,
+and nonincreasing last absolute-intensity/classification differences. Whole-image
+acceptance additionally requires all samples resolved.
 The earlier stop notes below describe the starting checkpoint only.
 
 Date: 2026-10-22. Active isolated worktree:
