@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "gravastar/geometry/geometry.hpp"
 #include "gravastar/math/jet.hpp"
+#include "profile.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -13,35 +14,6 @@ namespace gravastar::geometry {
 namespace {
 using math::Jet;
 using JetMatrix = std::array<std::array<Jet, 4>, 4>;
-
-Jet smoothstep(const Jet &u) {
-  const Jet u2 = u * u;
-  return u2 * u2 * (Jet(35) + u * (Jet(-84) + u * (Jet(70) - Jet(20) * u)));
-}
-
-std::pair<Jet, Jet> transition(const Parameters &p, const Jet &r,
-                               Region region) {
-  if (p.family == Family::kerr)
-    return {Jet(1), Jet(0)};
-  if (p.family == Family::de_sitter)
-    return {Jet(0), Jet(1)};
-  if (p.family == Family::flat)
-    return {Jet(0), Jet(0)};
-  if (region == Region::core ||
-      (region == Region::automatic && r.value() <= p.r_in))
-    return {Jet(0), Jet(1)};
-  if (region == Region::exterior ||
-      (region == Region::automatic && r.value() >= p.r_out))
-    return {Jet(1), Jet(0)};
-  const double width = p.r_out - p.r_in;
-  // Evaluate the small tail directly: avoid cancellation in lambda near r_out.
-  if (r.value() - p.r_in <= width * 0.5) {
-    const Jet mu = smoothstep((r - Jet(p.r_in)) / Jet(width));
-    return {mu, Jet(1) - mu};
-  }
-  const Jet lambda = smoothstep((Jet(p.r_out) - r) / Jet(width));
-  return {Jet(1) - lambda, lambda};
-}
 
 template <typename Array> bool finite_array(const Array &array) {
   for (const auto &entry : array) {
@@ -190,7 +162,7 @@ Result evaluate(const Parameters &p, double radius, double polar_angle,
 
   const Jet r = Jet::variable(radius, 0);
   const Jet theta = Jet::variable(polar_angle, 1);
-  const auto [mu, lambda] = transition(p, r, region);
+  const auto [mu, lambda] = detail::transition(p, r, region);
   const Jet effective_lambda = Jet(p.cosmological_constant) * lambda;
   const Jet r2 = r * r;
   const Jet a2(p.spin * p.spin);
