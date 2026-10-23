@@ -42,6 +42,11 @@ target_compile_definitions(gravastar_tools PRIVATE GRAVASTAR_SOURCE_ROOT="${CMAK
 
 include(CTest)
 if(BUILD_TESTING)
+    add_executable(gravastar_angular_reference_tests tests/angular_reference_tests.cpp)
+    target_link_libraries(gravastar_angular_reference_tests PRIVATE gravastar_geometry nlohmann_json::nlohmann_json)
+    target_compile_definitions(gravastar_angular_reference_tests PRIVATE GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}")
+    add_test(NAME angular_reference COMMAND gravastar_angular_reference_tests)
+    set_tests_properties(angular_reference PROPERTIES TIMEOUT 300 LABELS scientific)
     add_executable(gravastar_angular_geometry_tests tests/angular_geometry_tests.cpp)
     target_link_libraries(gravastar_angular_geometry_tests PRIVATE gravastar_geometry nlohmann_json::nlohmann_json)
     target_compile_definitions(gravastar_angular_geometry_tests PRIVATE GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}")

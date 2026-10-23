@@ -1,11 +1,11 @@
 # Candidate regular angular chart: derivation for review
 
-This is a proposed next P2 implementation, not an accepted chart or a change to
-current ray behavior. It derives a regular angular metric for the actual toy
-family, retaining its radial transition functions. C++20 algebraic preflight
-checks now pass against the canonical geometry and independent 90/110-place
-expanded reference. A production derivative evaluator, curvature checks and an
-executable chart-switching tracer are still required before using it in ray
+The geometry library now implements this chart through `evaluate_angular`
+(metric, inverse and first derivatives) and `evaluate_angular_curvature`
+(additionally Hessian, Ricci tensor and invariants). It has not yet been adopted
+by the tracer. Both charts share the canonical radial profile and curvature
+contraction; independent references use separate expansions and contractions.
+An executable chart-switching tracer is still required before using it in ray
 results. The central r=0 extension is a separate decision.
 
 ## Coordinates and metric
@@ -117,6 +117,39 @@ residuals are 6.52e-74 and 7.56e-94, respectively. Momentum/one-form/Hamiltonian
 patch checks are below 7.42e-16. The radial profile helper is shared with the
 previously tested reference and is not independently revalidated by this test.
 
-These are observed algebraic residuals on the sampled preset, not a complete
-chart acceptance. The code currently lives only in a C++20 test executable.
-It neither supplies production derivatives nor changes existing ray outcomes.
+These are historical algebraic residuals on the sampled preset, not a complete
+chart acceptance. The preflight remains a separate test. New geometry and
+derivative results are recorded separately; existing ray outcomes are unchanged.
+
+## Native geometry implementation
+
+`AngularMetric` contains only data needed for Hamiltonian integration; it does
+not expose zero-filled curvature fields. The optional `AngularCurvature` adds
+second derivatives and curvature. First/second-order forward derivative
+arithmetic in three spatial variables instantiates only the requested order.
+The old Boyer-Lindquist evaluator remains the full P1 API, including its third
+radial derivatives. Both call the same radial profile implementation.
+
+The regular evaluator admits either exact pole and bounds each stereographic
+patch to q<=4. Callers must switch patches within the overlap; this bound avoids
+representing the opposite pole with unbounded coordinates. It retains r>0 and
+the original relative Delta singularity margin. Neither radial horizon crossing
+nor r=0 continuation is added. Negative Delta is permitted for geometry checks;
+optical integration must still enforce its supported signature/domain.
+
+`angular_geometry` checks coordinate-transformed metric/Ricci tensors and scalar
+invariants, exact-pole flat/Kerr/de Sitter limits (both spin signs and zero),
+first-order/curvature API agreement, and unclamped shell endpoint C0-C2 jets.
+P1 continues to test C0-C3 and extrinsic curvature in its original chart.
+
+`angular_reference` differentiates independently expanded BL components after
+their coordinate transform, using five-point stencils at 90 and 110 fixed
+decimal places. It includes exact poles, angular coordinates of order 1e-8,
+joins and shell interiors. Explicit shell stencils extend the shell polynomial
+locally beyond an endpoint solely to extract that branch's endpoint jet.
+The independent reference has no dependency on production derivative algebra.
+Its near-pole Jacobian products are normalized before multiplication: the first
+draft formed O(q^2) numerators and lost unnecessary fixed-decimal digits. The
+90-to-110-place check detected a 3.78e-43 derivative discrepancy against the
+preselected 1e-55 ceiling; regrouping addresses that arithmetic loss without
+relaxing the ceiling. Reference refinement is tested before accepting results.

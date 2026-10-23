@@ -1,0 +1,89 @@
+{
+  "checks": [
+    {
+      "ceiling": 2e-11,
+      "measured": 1.0108758659392552e-14,
+      "name": "metric vs independent expanded reference",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-10,
+      "measured": 2.049188900596605e-14,
+      "name": "first derivatives vs 90-place finite differences",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 5.238996578615688e-14,
+      "name": "Hessian vs 90-place finite differences",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-55,
+      "measured": 2.8812967171158695e-58,
+      "name": "90 to 110 decimal-place derivative refinement",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-25,
+      "measured": 6.923177496289817e-28,
+      "name": "1e-8 to 5e-9 step refinement in shell",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 4.182986648854045e-14,
+      "name": "independent shell Ricci tensor including exact pole",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 1.0630436010514994e-14,
+      "name": "independent shell Ricci scalar including exact pole",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 1.840012416571466e-14,
+      "name": "independent shell Kretschmann including exact pole",
+      "passed": true
+    },
+    {
+      "ceiling": 0.08,
+      "measured": 0.06246041826606674,
+      "name": "fourth-order first derivative refinement ratio",
+      "passed": true
+    },
+    {
+      "ceiling": 0.08,
+      "measured": 0.06250822162484447,
+      "name": "fourth-order Hessian refinement ratio",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "nonzero reference truncation and refinement observed",
+      "passed": true
+    }
+  ],
+  "coarse_refinement": {
+    "first_coarse_error": 1.2084370992180323e-08,
+    "first_middle_error": 7.547948666539069e-10,
+    "hessian_coarse_error": 7.383427625910429e-08,
+    "hessian_middle_error": 4.615249303914083e-09,
+    "steps": [
+      0.001,
+      0.0005,
+      1e-08
+    ]
+  },
+  "compiler": "16.2.1 20260810",
+  "complete_P2_acceptance": false,
+  "computational_source_sha256": "ab23c0a6297e779852e587dfd32f6f1583186d276ad69b20cd2c9d2b08616613",
+  "independent_curvature_points": 4,
+  "passed": true,
+  "points_per_precision": 112,
+  "schema_version": 1,
+  "scope": "Independent expanded BL metric transformed to angular coordinates, 5-point finite differences at 90/110 decimal places. Explicit shell branch extended locally at endpoints for one-sided jets. No production jets or curvature assembly reused. Production rays unchanged."
+}
