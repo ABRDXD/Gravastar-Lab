@@ -2,6 +2,7 @@
 #include "gravastar/geometry/geometry.hpp"
 #include "gravastar/math/jet.hpp"
 #include "profile.hpp"
+#include "curvature.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -28,11 +29,11 @@ template <typename Array> bool finite_array(const Array &array) {
   return true;
 }
 
-void curvature(Evaluation &result) {
-  const auto &g = result.metric;
-  const auto &inv = result.inverse;
-  const auto &dg = result.dg;
-  const auto &ddg = result.ddg;
+} // namespace
+namespace detail {
+Curvature curvature(const Matrix &g, const Matrix &inv,
+                    const Tensor3 &dg, const Tensor4 &ddg) {
+  Curvature result;
   Tensor3 dinv{};
   Tensor3 gamma{};
   Tensor4 dgamma{};
@@ -103,8 +104,9 @@ void curvature(Evaluation &result) {
       for (int c = 0; c < 4; ++c)
         for (int d = 0; d < 4; ++d)
           result.kretschmann += lower[a][b][c][d] * raised[a][b][c][d];
+  return result;
 }
-} // namespace
+} // namespace detail
 
 std::string_view family_name(Family family) {
   switch (family) {
@@ -229,7 +231,10 @@ Result evaluate(const Parameters &p, double radius, double polar_angle,
       out.determinant == 0)
     return Error{"numerical_failure",
                  "nonfinite or underflowed metric/derivatives"};
-  curvature(out);
+  const auto curve = detail::curvature(out.metric, out.inverse, out.dg, out.ddg);
+  out.ricci = curve.ricci;
+  out.ricci_scalar = curve.ricci_scalar;
+  out.kretschmann = curve.kretschmann;
   if (!finite_array(out.ricci) || !std::isfinite(out.ricci_scalar) ||
       !std::isfinite(out.kretschmann))
     return Error{"numerical_failure", "nonfinite curvature"};

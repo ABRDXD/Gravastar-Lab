@@ -8,7 +8,8 @@ namespace gravastar::geometry::detail {
 // arithmetic; derivatives propagate through its algebra without differencing.
 template <class Scalar> Scalar smoothstep(const Scalar &u) {
   const Scalar u2 = u * u;
-  return u2 * u2 * (Scalar(35) + u * (Scalar(-84) + u * (Scalar(70) - Scalar(20) * u)));
+  return u2 * u2 *
+         (Scalar(35) + u * (Scalar(-84) + u * (Scalar(70) - Scalar(20) * u)));
 }
 template <class Scalar>
 std::pair<Scalar, Scalar> transition(const Parameters &p, const Scalar &r,
