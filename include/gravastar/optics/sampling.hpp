@@ -30,7 +30,8 @@ inline Grid aggregate(int width, int height, int scale,
                       const std::vector<Sample> &samples) {
   if (width < 1 || height < 1 || scale < 1 || scale > 8 ||
       width > 128 / scale || height > 128 / scale ||
-      samples.size() != static_cast<std::size_t>(width * height * scale * scale))
+      samples.size() !=
+          static_cast<std::size_t>(width * height * scale * scale))
     throw std::invalid_argument("invalid image sample grid");
   Grid out{width, height, scale, std::vector<Pixel>(width * height)};
   const double weight = 1.0 / (scale * scale);
@@ -41,26 +42,29 @@ inline Grid aggregate(int width, int height, int scale,
       bool resolved = true;
       for (int sy = 0; sy < scale; ++sy)
         for (int sx = 0; sx < scale; ++sx) {
-          const auto &s = samples[(y * scale + sy) * width * scale + x * scale + sx];
+          const auto &s =
+              samples[(y * scale + sy) * width * scale + x * scale + sx];
           const auto c = static_cast<std::size_t>(s.classification);
           if (c >= pixel.fractions.size())
             throw std::invalid_argument("unknown sample classification");
           pixel.fractions[c] += weight;
           if (s.classification == Class::unresolved) {
             if (s.intensity || s.alpha)
-              throw std::invalid_argument("unresolved sample has invented radiance");
+              throw std::invalid_argument(
+                  "unresolved sample has invented radiance");
             resolved = false;
           } else {
             if (!s.intensity || !s.alpha || !std::isfinite(*s.intensity) ||
-                *s.intensity < 0 || !std::isfinite(*s.alpha) ||
-                *s.alpha < 0 || *s.alpha > 1)
+                *s.intensity < 0 || !std::isfinite(*s.alpha) || *s.alpha < 0 ||
+                *s.alpha > 1)
               throw std::invalid_argument("invalid resolved sample");
             if ((s.classification == Class::escaped &&
                  (*s.intensity != 0 || *s.alpha != 0)) ||
                 (s.classification == Class::captured &&
                  (*s.intensity != 0 || *s.alpha != 1)) ||
                 (s.classification == Class::emitted && *s.alpha != 1))
-              throw std::invalid_argument("sample contradicts emission convention");
+              throw std::invalid_argument(
+                  "sample contradicts emission convention");
             pixel.known_contribution += weight * *s.intensity;
             alpha += weight * *s.alpha;
           }
@@ -105,11 +109,13 @@ inline std::vector<Difference> compare(const std::vector<Grid> &levels) {
         total += f;
       }
       if (std::abs(total - 1) > 1e-12 || !std::isfinite(p.known_contribution) ||
-          p.known_contribution < 0 || p.intensity.has_value() != p.alpha.has_value() ||
+          p.known_contribution < 0 ||
+          p.intensity.has_value() != p.alpha.has_value() ||
           p.intensity.has_value() != (p.fractions[3] == 0) ||
-          (p.intensity && (!std::isfinite(*p.intensity) || *p.intensity < 0 ||
-                           *p.intensity != p.known_contribution ||
-                           !std::isfinite(*p.alpha) || *p.alpha < 0 || *p.alpha > 1)))
+          (p.intensity &&
+           (!std::isfinite(*p.intensity) || *p.intensity < 0 ||
+            *p.intensity != p.known_contribution || !std::isfinite(*p.alpha) ||
+            *p.alpha < 0 || *p.alpha > 1)))
         throw std::invalid_argument("inconsistent aggregate pixel");
       common[i] = common[i] && g.pixels[i].intensity.has_value();
     }
