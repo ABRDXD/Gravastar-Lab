@@ -33,6 +33,9 @@ struct Settings {
   std::optional<double> capture_radius;
   bool disk{false}, save_trajectory{true};
   double disk_inner{3}, disk_outer{6};
+  // Used only by trace_angular: switch accepted endpoints at q>=this value.
+  // Hysteresis (q -> 1/q) requires >1; <=2 leaves room for RK trial stages.
+  double angular_switch_q{1.5};
 };
 enum class Outcome {
   escaped,
@@ -49,6 +52,7 @@ struct Point {
   double affine{};
   State state{};
   double null_error{};
+  Chart chart{Chart::boyer_lindquist};
 };
 struct Crossing {
   std::string surface;
@@ -59,11 +63,17 @@ struct Trace {
   std::string detail;
   Point final;
   std::size_t accepted{}, rejected{}, rhs_calls{};
+  std::size_t chart_switches{};
   double maximum_null_error{}, energy_error{}, angular_momentum_error{};
   std::vector<Point> trajectory;
   std::vector<Crossing> crossings;
 };
 Trace trace(const Parameters &, const State &, const Settings & = {});
+// Opt-in regular angular integration. Initial state is in the named north or
+// south patch. Every output point retains its chart; BL trace remains
+// available.
+Trace trace_angular(const Parameters &, const State &, Chart,
+                    const Settings & = {});
 struct Emission {
   double redshift{}, emitted_frequency{}, linear_intensity{};
 };

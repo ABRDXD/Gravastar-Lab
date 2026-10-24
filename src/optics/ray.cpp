@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "gravastar/optics/ray.hpp"
+#include "gravastar/optics/chart.hpp"
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -22,7 +23,13 @@ Vector velocity(const geometry::Evaluation &g, const State &y) {
 struct Step {
   State next{}, error{};
 };
-Step step(const Parameters &p, const State &y, double h, std::size_t &calls) {
+double residual(const Parameters &p, const State &y, Chart chart) {
+  return chart == Chart::boyer_lindquist
+             ? null_residual(metric(p, y), y)
+             : angular_null_residual(angular_metric(p, y), y);
+}
+Step step(const Parameters &p, const State &y, double h, std::size_t &calls,
+          Chart chart) {
   // Dormand-Prince 5(4) tableau; autonomous Hamiltonian system.
   constexpr double a[7][7]{
       {},
@@ -42,7 +49,7 @@ Step step(const Parameters &p, const State &y, double h, std::size_t &calls) {
       for (int j = 0; j < s; ++j)
         v[i] += h * a[s][j] * k[j][i];
     ++calls;
-    k[s] = rhs(p, v);
+    k[s] = chart == Chart::boyer_lindquist ? rhs(p, v) : angular_rhs(p, v);
   }
   Step out;
   out.next = y;
@@ -65,25 +72,29 @@ double error_norm(const Step &s, const State &y, const Settings &c) {
   return e;
 }
 struct Surface {
-  int axis;
+  int axis; // -1 denotes q=x*x+y*y in an angular patch.
   double value;
   std::string name;
   std::optional<Outcome> terminal;
 };
+double surface_value(const State &y, const Surface &surface) {
+  return (surface.axis == -1 ? y[2] * y[2] + y[3] * y[3] : y[surface.axis]) -
+         surface.value;
+}
 bool brackets(double a, double b) {
   return (a < 0 && b >= 0) || (a > 0 && b <= 0);
 }
 Point refine(const Parameters &p, const State &y, const State &end, double s,
              double h, const Surface &surface, const Settings &c,
-             std::size_t &calls) {
-  double lo = 0, hi = h, start = y[surface.axis] - surface.value;
+             std::size_t &calls, Chart chart) {
+  double lo = 0, hi = h, start = surface_value(y, surface);
   State best = end;
   for (int i = 0; i < 80 && hi - lo > c.event_tolerance; ++i) {
     double mid = (lo + hi) / 2;
-    auto trial = step(p, y, mid, calls);
+    auto trial = step(p, y, mid, calls, chart);
     if (error_norm(trial, y, c) > 1)
       throw std::runtime_error("event substep fails integration tolerance");
-    double value = trial.next[surface.axis] - surface.value;
+    double value = surface_value(trial.next, surface);
     if (brackets(start, value)) {
       hi = mid;
       best = trial.next;
@@ -92,12 +103,16 @@ Point refine(const Parameters &p, const State &y, const State &end, double s,
   }
   if (hi - lo > c.event_tolerance)
     throw std::runtime_error("event refinement failed");
-  Point point{s + hi, best, null_residual(metric(p, best), best)};
+  Point point{s + hi, best, residual(p, best, chart), chart};
   if (!std::isfinite(point.null_error) || point.null_error > c.null_tolerance)
     throw std::runtime_error("refined event exceeds null constraint tolerance");
   return point;
 }
-void validate(const Parameters &p, const State &y, const Settings &c) {
+void validate(const Parameters &p, const State &y, const Settings &c,
+              Chart chart) {
+  if (chart != Chart::boyer_lindquist && chart != Chart::north &&
+      chart != Chart::south)
+    throw std::invalid_argument("unknown tracing chart");
   for (double x :
        {c.absolute_tolerance, c.relative_tolerance, c.initial_step,
         c.minimum_step, c.maximum_step, c.event_tolerance, c.null_tolerance,
@@ -109,8 +124,13 @@ void validate(const Parameters &p, const State &y, const Settings &c) {
       c.polar_margin >= std::numbers::pi / 2 || c.maximum_attempts == 0 ||
       c.maximum_attempts > 10000000)
     throw std::invalid_argument("invalid integration limits");
+  if (chart != Chart::boyer_lindquist &&
+      (!std::isfinite(c.angular_switch_q) || c.angular_switch_q <= 1 ||
+       c.angular_switch_q > 2))
+    throw std::invalid_argument("angular switch threshold must satisfy 1<q<=2");
   if (!finite(y) || y[1] <= c.inner_radius || y[1] >= c.outer_radius ||
-      y[2] <= c.polar_margin || y[2] >= std::numbers::pi - c.polar_margin)
+      (chart == Chart::boyer_lindquist &&
+       (y[2] <= c.polar_margin || y[2] >= std::numbers::pi - c.polar_margin)))
     throw std::invalid_argument(
         "initial state outside the open tracing domain");
   if (c.disk && (!std::isfinite(c.disk_inner) || !std::isfinite(c.disk_outer) ||
@@ -126,9 +146,17 @@ void validate(const Parameters &p, const State &y, const Settings &c) {
       throw std::invalid_argument("capture surface requires subextremal Kerr "
                                   "exterior and exterior launch");
   }
-  const auto g = metric(p, y);
-  if (null_residual(g, y) > c.null_tolerance ||
-      frequency(y, circular_frame(g).basis[0]) <= 0)
+  double null, nu;
+  if (chart == Chart::boyer_lindquist) {
+    const auto g = metric(p, y);
+    null = null_residual(g, y);
+    nu = frequency(y, circular_frame(g).basis[0]);
+  } else {
+    const auto g = angular_metric(p, y);
+    null = angular_null_residual(g, y);
+    nu = angular_normal_frequency(g, y);
+  }
+  if (!std::isfinite(null) || null > c.null_tolerance || nu <= 0)
     throw std::invalid_argument(
         "initial momentum must be future-directed and null");
 }
@@ -243,26 +271,34 @@ std::string_view outcome_name(Outcome x) {
   }
   return "invalid_outcome";
 }
-Trace trace(const Parameters &p, const State &initial, const Settings &c) {
+static Trace trace_impl(const Parameters &p, const State &initial,
+                        const Settings &c, Chart initial_chart) {
   Trace out;
   out.final.state = initial;
+  out.final.chart = initial_chart;
   try {
-    validate(p, initial, c);
+    validate(p, initial, c, initial_chart);
   } catch (const std::exception &e) {
     out.detail = e.what();
     return out;
   }
   std::vector<Surface> surfaces{
       {1, c.inner_radius, "inner_chart_limit", Outcome::domain_limit},
-      {1, c.outer_radius, "escape", Outcome::escaped},
-      {2, c.polar_margin, "north_chart_limit", Outcome::domain_limit},
-      {2, std::numbers::pi - c.polar_margin, "south_chart_limit",
-       Outcome::domain_limit}};
+      {1, c.outer_radius, "escape", Outcome::escaped}};
+  if (initial_chart == Chart::boyer_lindquist) {
+    surfaces.push_back(
+        {2, c.polar_margin, "north_chart_limit", Outcome::domain_limit});
+    surfaces.push_back({2, std::numbers::pi - c.polar_margin,
+                        "south_chart_limit", Outcome::domain_limit});
+  }
   if (c.capture_radius)
     surfaces.push_back(
         {1, *c.capture_radius, "Kerr_capture_proxy", Outcome::capture_surface});
   if (c.disk)
-    surfaces.push_back({2, std::numbers::pi / 2, "disk", Outcome::emitted});
+    surfaces.push_back(
+        initial_chart == Chart::boyer_lindquist
+            ? Surface{2, std::numbers::pi / 2, "disk", Outcome::emitted}
+            : Surface{-1, 1, "disk", Outcome::emitted});
   if (p.family == geometry::Family::toy) {
     surfaces.push_back({1, p.r_in, "inner_shell_join", {}});
     surfaces.push_back({1, p.r_out, "outer_shell_join", {}});
@@ -272,9 +308,11 @@ Trace trace(const Parameters &p, const State &initial, const Settings &c) {
     out.energy_error =
         std::max(out.energy_error, std::abs(q.state[4] - initial[4]) /
                                        (1 + std::abs(initial[4])));
+    const double initial_lz = axial_momentum(initial, initial_chart);
     out.angular_momentum_error =
-        std::max(out.angular_momentum_error, std::abs(q.state[7] - initial[7]) /
-                                                 (1 + std::abs(initial[7])));
+        std::max(out.angular_momentum_error,
+                 std::abs(axial_momentum(q.state, q.chart) - initial_lz) /
+                     (1 + std::abs(initial_lz)));
   };
   auto record = [&](const Point &q) {
     out.final = q;
@@ -282,11 +320,30 @@ Trace trace(const Parameters &p, const State &initial, const Settings &c) {
     if (c.save_trajectory)
       out.trajectory.push_back(q);
   };
-  record({0, initial, null_residual(metric(p, initial), initial)});
+  auto switch_patch = [&](Point &q) {
+    if (q.chart == Chart::boyer_lindquist ||
+        q.state[2] * q.state[2] + q.state[3] * q.state[3] < c.angular_switch_q)
+      return;
+    if (!std::isfinite(q.null_error) || q.null_error > c.null_tolerance)
+      throw std::runtime_error("pre-transition state exceeds null constraint tolerance");
+    monitor(q);
+    const Chart next = q.chart == Chart::north ? Chart::south : Chart::north;
+    q.state = transform_state(q.state, q.chart, next);
+    q.chart = next;
+    q.null_error = residual(p, q.state, q.chart);
+    if (!std::isfinite(q.null_error) || q.null_error > c.null_tolerance)
+      throw std::runtime_error(
+          "chart transition exceeds null constraint tolerance");
+    ++out.chart_switches;
+  };
   double h = c.initial_step;
   try {
+    Point start{0, initial, residual(p, initial, initial_chart), initial_chart};
+    switch_patch(start);
+    record(start);
     for (std::size_t attempt = 0; attempt < c.maximum_attempts; ++attempt) {
       const State y = out.final.state;
+      const Chart chart = out.final.chart;
       const double s = out.final.affine;
       const double remaining = c.maximum_affine - s;
       if (remaining <= 8 * std::numeric_limits<double>::epsilon() *
@@ -298,7 +355,7 @@ Trace trace(const Parameters &p, const State &initial, const Settings &c) {
       h = std::min(h, remaining);
       Step trial;
       try {
-        trial = step(p, y, h, out.rhs_calls);
+        trial = step(p, y, h, out.rhs_calls, chart);
       } catch (const std::exception &) {
         ++out.rejected;
         if (h <= c.minimum_step)
@@ -316,15 +373,14 @@ Trace trace(const Parameters &p, const State &initial, const Settings &c) {
         h = std::max(c.minimum_step, h * std::min(.9, factor));
         continue;
       }
-      Point next{s + h, trial.next,
-                 null_residual(metric(p, trial.next), trial.next)};
+      Point next{s + h, trial.next, residual(p, trial.next, chart), chart};
       std::vector<std::pair<Surface, Point>> hits;
       try {
         for (const auto &surface : surfaces)
-          if (brackets(y[surface.axis] - surface.value,
-                       trial.next[surface.axis] - surface.value)) {
-            auto hit =
-                refine(p, y, trial.next, s, h, surface, c, out.rhs_calls);
+          if (brackets(surface_value(y, surface),
+                       surface_value(trial.next, surface))) {
+            auto hit = refine(p, y, trial.next, s, h, surface, c, out.rhs_calls,
+                              chart);
             if (surface.terminal == Outcome::emitted &&
                 (hit.state[1] < c.disk_inner || hit.state[1] > c.disk_outer))
               continue;
@@ -356,8 +412,10 @@ Trace trace(const Parameters &p, const State &initial, const Settings &c) {
         }
       }
       ++out.accepted;
+      if (!terminal)
+        switch_patch(next);
       record(next);
-      if (next.null_error > c.null_tolerance)
+      if (!std::isfinite(next.null_error) || next.null_error > c.null_tolerance)
         throw std::runtime_error(
             "null constraint exceeds configured tolerance");
       if (terminal) {
@@ -373,6 +431,19 @@ Trace trace(const Parameters &p, const State &initial, const Settings &c) {
     out.detail = e.what();
   }
   return out;
+}
+Trace trace(const Parameters &p, const State &initial, const Settings &c) {
+  return trace_impl(p, initial, c, Chart::boyer_lindquist);
+}
+Trace trace_angular(const Parameters &p, const State &initial, Chart chart,
+                    const Settings &c) {
+  if (chart == Chart::boyer_lindquist) {
+    Trace out;
+    out.final.state = initial;
+    out.detail = "trace_angular requires a north or south patch";
+    return out;
+  }
+  return trace_impl(p, initial, c, chart);
 }
 Emission disk_emission(const Parameters &p, const State &hit,
                        double nu_observer, double inner) {

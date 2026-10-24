@@ -14,13 +14,17 @@ baselines, verified numerical accuracy and documented trade-offs.
 
 ## Latest audit fixes
 
-Implementation resumed after the completed audit. The first tracer-adoption
-checkpoint adds production state/covector/vector/frame transformations and a
-first-derivative angular Hamiltonian RHS in `optics/chart.hpp`. Seven aggregate
-checks cover both patches and all four families, including canonical pairings,
-frame orthonormality and conserved axial momentum. Angular and existing optical
-reference CTests pass. The integrator is not connected to this API in this
-checkpoint; the next edit will share its existing stepping/event machinery.
+Implementation resumed after the completed audit. Production state/covector/
+vector/frame transformations and a first-derivative angular Hamiltonian RHS
+are in `optics/chart.hpp`. Opt-in `trace_angular` now shares the existing
+Dormand-Prince stepping, event refinement and rejection machinery. Output points
+carry chart identity; accepted endpoints switch patches at configurable q>1,
+and diagnostics measure the physical axial Killing momentum. Flat lines cross
+both poles (including exact-pole starts), and a Schwarzschild polar photon orbit
+crosses multiple patches under three switch thresholds. Rotating overlap rays
+agree with the original BL tracer. Angular and existing optical reference CTests
+pass. The CLI remains on its existing BL path; event/image adoption and further
+Kerr pole-crossing validation are the next checkpoint.
 
 The user requested an audit before further feature work. The resumed audit found
 and reproduced three faults: a `.ppm` output name overwrote its own JSON report;

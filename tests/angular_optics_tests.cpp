@@ -96,9 +96,115 @@ void transformations() {
   }
   require("singular opposite-pole transition rejected", rejected);
 }
+std::array<double, 3> cartesian(const o::Point &p) {
+  const auto &s = p.state;
+  const double q = s[2] * s[2] + s[3] * s[3];
+  const double sign = p.chart == o::Chart::north ? 1 : -1;
+  return {s[1] * 2 * s[2] / (1 + q), s[1] * 2 * s[3] / (1 + q),
+          sign * s[1] * (1 - q) / (1 + q)};
+}
+void pole_crossings() {
+  g::Parameters p;
+  p.family = g::Family::flat;
+  p.spin = 0;
+  o::Settings c;
+  c.maximum_affine = 3;
+  c.absolute_tolerance = c.relative_tolerance = 1e-12;
+  double line_error = 0;
+  for (auto patch : {o::Chart::north, o::Chart::south}) {
+    const double sign = patch == o::Chart::north ? 1 : -1;
+    const double theta = patch == o::Chart::north ? .1 : std::numbers::pi - .1;
+    const double phi = .3;
+    auto bl = o::launch(p, {0, 8, theta, phi}, {0, -sign, 0});
+    auto initial = o::transform_state(bl, o::Chart::boyer_lindquist, patch);
+    auto ray = o::trace_angular(p, initial, patch, c);
+    require("flat ray crosses pole and reaches budget",
+            ray.outcome == o::Outcome::affine_limit && ray.final.state[2] < 0);
+    const std::array<double, 3> start{8 * std::sin(theta) * std::cos(phi),
+                                      8 * std::sin(theta) * std::sin(phi),
+                                      8 * std::cos(theta)};
+    const std::array<double, 3> v{-sign * std::cos(theta) * std::cos(phi),
+                                  -sign * std::cos(theta) * std::sin(phi),
+                                  sign * std::sin(theta)};
+    for (const auto &point : ray.trajectory) {
+      const auto x = cartesian(point);
+      for (int i = 0; i < 3; ++i)
+        line_error = std::max(line_error,
+                              std::abs(x[i] - start[i] - point.affine * v[i]));
+    }
+    // Exact-pole initial data, future p_t=-1 and purely angular unit velocity.
+    o::State pole{0, 8, 0, 0, -1, 0, -16, 0};
+    auto from_pole = o::trace_angular(p, pole, patch, c);
+    require("exact pole can launch a ray",
+            from_pole.outcome == o::Outcome::affine_limit);
+    auto end = cartesian(from_pole.final);
+    line_error = std::max({line_error, std::abs(end[0] - 3), std::abs(end[1]),
+                           std::abs(end[2] - sign * 8)});
+  }
+  check("flat pole-crossing Cartesian line", line_error, 3e-10);
+
+  p.family = g::Family::kerr;
+  auto bl = o::launch(p, {0, 3, .4, .2}, {0, 1, 0});
+  auto initial =
+      o::transform_state(bl, o::Chart::boyer_lindquist, o::Chart::north);
+  c.maximum_affine = 24;
+  c.maximum_step = .2;
+  double orbit_error = 0, lz_error = 0, constraint = 0;
+  for (double threshold : {1.2, 1.5, 1.9}) {
+    c.angular_switch_q = threshold;
+    auto ray = o::trace_angular(p, initial, o::Chart::north, c);
+    require("Schwarzschild polar photon orbit crosses multiple patches",
+            ray.outcome == o::Outcome::affine_limit && ray.chart_switches >= 2);
+    for (const auto &point : ray.trajectory) {
+      auto x = cartesian(point);
+      const double theta = .4 + point.affine / 3;
+      const std::array<double, 3> exact{3 * std::sin(theta) * std::cos(.2),
+                                        3 * std::sin(theta) * std::sin(.2),
+                                        3 * std::cos(theta)};
+      for (int i = 0; i < 3; ++i)
+        orbit_error = std::max(orbit_error, std::abs(x[i] - exact[i]));
+      orbit_error = std::max(
+          orbit_error, std::abs(point.state[0] + std::sqrt(3.) * point.affine));
+    }
+    lz_error = std::max(lz_error, ray.angular_momentum_error);
+    constraint = std::max(constraint, ray.maximum_null_error);
+  }
+  check("analytic polar photon orbit under three switch thresholds",
+        orbit_error, 2e-7);
+  check("polar photon orbit axial Killing drift", lz_error, 2e-11);
+  check("polar photon orbit null residual", constraint, 2e-10);
+}
+void overlap_rays() {
+  double state_error = 0, lz = 0;
+  for (auto family : {g::Family::kerr, g::Family::toy}) {
+    g::Parameters p;
+    p.family = family;
+    o::Settings c;
+    c.absolute_tolerance = c.relative_tolerance = 1e-12;
+    c.maximum_affine = 2;
+    auto bl = o::launch(p, {0, 4, 1.1, .1}, {-1, .1, -.5});
+    auto baseline = o::trace(p, bl, c);
+    auto angular = o::trace_angular(
+        p, o::transform_state(bl, o::Chart::boyer_lindquist, o::Chart::north),
+        o::Chart::north, c);
+    require("angular and BL rays reach same affine budget",
+            baseline.outcome == o::Outcome::affine_limit &&
+                angular.outcome == o::Outcome::affine_limit);
+    state_error = std::max(
+        state_error,
+        difference(o::transform_state(angular.final.state, angular.final.chart,
+                                      o::Chart::boyer_lindquist),
+                   baseline.final.state));
+    lz = std::max(lz, angular.angular_momentum_error);
+  }
+  check("angular and BL ray endpoint agreement", state_error, 2e-9);
+  check("rotating ray axial Killing drift", lz, 2e-10);
+}
 int main(int argc, char **argv) {
   try {
     transformations();
+    pole_crossings();
+    overlap_rays();
   } catch (const std::exception &e) {
     std::cerr << e.what() << '\n';
     require("uncaught exception", false);
