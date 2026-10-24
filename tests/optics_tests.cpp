@@ -338,6 +338,31 @@ void toy_convergence() {
               event_retry.outcome == o::Outcome::emitted ||
               event_retry.outcome == o::Outcome::domain_limit);
   check("event retry null constraint", event_retry.maximum_null_error, 1e-6);
+  // Audit regression: a refined nonterminal join can have a larger null
+  // residual than the surrounding accepted step endpoints.
+  o::Settings join_settings;
+  join_settings.absolute_tolerance = join_settings.relative_tolerance = 1e-6;
+  join_settings.maximum_step = .4;
+  join_settings.maximum_affine = 1.1575548858002598;
+  join_settings.null_tolerance = .01;
+  auto join_initial =
+      o::launch(p, {0, 2, std::numbers::pi / 2, 0}, {-1, 0, -.2});
+  auto joins = o::trace(p, join_initial, join_settings);
+  double crossing_max = 0;
+  for (const auto &hit : joins.crossings)
+    crossing_max = std::max(crossing_max, hit.point.null_error);
+  require("refined crossings included in maximum null residual",
+          joins.outcome == o::Outcome::affine_limit &&
+              !joins.crossings.empty() &&
+              crossing_max <= joins.maximum_null_error);
+  join_settings.null_tolerance = 7e-6;
+  auto guarded = o::trace(p, join_initial, join_settings);
+  bool valid_crossings = !guarded.crossings.empty();
+  for (const auto &hit : guarded.crossings)
+    valid_crossings =
+        valid_crossings && hit.point.null_error <= join_settings.null_tolerance;
+  require("refined crossings enforce the null ceiling before publication",
+          guarded.outcome != o::Outcome::invalid_input && valid_crossings);
 }
 int main(int argc, char **argv) {
   try {

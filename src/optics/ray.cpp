@@ -92,7 +92,10 @@ Point refine(const Parameters &p, const State &y, const State &end, double s,
   }
   if (hi - lo > c.event_tolerance)
     throw std::runtime_error("event refinement failed");
-  return {s + hi, best, null_residual(metric(p, best), best)};
+  Point point{s + hi, best, null_residual(metric(p, best), best)};
+  if (!std::isfinite(point.null_error) || point.null_error > c.null_tolerance)
+    throw std::runtime_error("refined event exceeds null constraint tolerance");
+  return point;
 }
 void validate(const Parameters &p, const State &y, const Settings &c) {
   for (double x :
@@ -264,8 +267,7 @@ Trace trace(const Parameters &p, const State &initial, const Settings &c) {
     surfaces.push_back({1, p.r_in, "inner_shell_join", {}});
     surfaces.push_back({1, p.r_out, "outer_shell_join", {}});
   }
-  auto record = [&](const Point &q) {
-    out.final = q;
+  auto monitor = [&](const Point &q) {
     out.maximum_null_error = std::max(out.maximum_null_error, q.null_error);
     out.energy_error =
         std::max(out.energy_error, std::abs(q.state[4] - initial[4]) /
@@ -273,6 +275,10 @@ Trace trace(const Parameters &p, const State &initial, const Settings &c) {
     out.angular_momentum_error =
         std::max(out.angular_momentum_error, std::abs(q.state[7] - initial[7]) /
                                                  (1 + std::abs(initial[7])));
+  };
+  auto record = [&](const Point &q) {
+    out.final = q;
+    monitor(q);
     if (c.save_trajectory)
       out.trajectory.push_back(q);
   };
@@ -341,6 +347,7 @@ Trace trace(const Parameters &p, const State &initial, const Settings &c) {
       for (const auto &[surface, hit] : hits) {
         if (terminal)
           break;
+        monitor(hit);
         out.crossings.push_back({surface.name, hit});
         if (surface.terminal) {
           terminal = surface.terminal;
