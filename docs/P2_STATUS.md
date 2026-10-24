@@ -25,7 +25,13 @@ final intensity L1 0.01846385 and mean classification TV 0.00602214 pass the
 fixed-scene full-image refinement criteria. This is not global error certification
 or complete P2 acceptance; the capture proxy and missing GYOTO comparison remain.
 
-GCC and Clang Release pass 18/18 each. Targeted sanitizer evidence is pending.
+GCC and Clang Release pass 18/18 each. Targeted optimized ASan/UBSan passes 3/3
+in 247.43 s (angular optics, original optics reference and full CLI/image suite),
+with default leak detection, no overrides/suppressions and no diagnostics.
+The matrix and current inventory are `p2_angular_tracing_verification.json` and
+`p2_angular_tracing_source_manifest.json`. All new tracing/performance/sampling
+reports use computational digest
+`6efaffd9fdafd50e88fabc9bc9bede4c2c87aef7f2b00b69d465cfc7acd89489`.
 The separate 48-ray integration benchmark measures GCC/Clang median BL/angular
 ratios 28.65/35.85 with maximum scaled endpoint difference 6.27e-10. It includes
 conversion, adaptive stepping and events; it is not a whole-render timing or an

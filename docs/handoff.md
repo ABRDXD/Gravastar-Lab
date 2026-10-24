@@ -36,9 +36,11 @@ cross r=0, radial horizons or the configured radial limits.
 ## Verification and measured results
 
 GCC and Clang Release pass 18/18 (40.14 s and 43.27 s). These are test durations
-with other validation work running, not performance measurements. The targeted
-optimized ASan/UBSan run is pending: `angular_optics`, `optics_reference`, and
-the full `optics_cli` suite. Do not claim sanitizer completion before its log ends.
+with other validation work running, not performance measurements. Targeted
+optimized ASan/UBSan passes 3/3 in 247.43 s: `angular_optics`, `optics_reference`,
+and the full `optics_cli` suite. No diagnostics, environment overrides or
+suppressions were used; Linux default leak detection remained enabled. This is
+a targeted subset, not a complete 18-test sanitizer run.
 
 There are 50 new angular optical checks and 58 CLI/image checks. Flat Cartesian
 pole-crossing error is 5.88e-13. A multi-patch Schwarzschild polar photon orbit
@@ -86,8 +88,10 @@ Current reports use `p2_angular_optics_validation`, `p2_angular_image_validation
 `p2_angular_ray_benchmark_{gcc,clang}`, `p2_angular_{toy,kerr}_sampling` and
 `p2_angular_tracing_*` prefixes. Raw sampling rays are in ignored unique
 `results/local/sampling/` directories; tracked summaries preserve their hashes
-and all aggregate pixels. Final verification JSON/source inventory is pending
-the sanitizer result and final documentation update.
+and all aggregate pixels. The completed matrix is
+`results/p2_angular_tracing_verification.json`; the current inventory is
+`results/p2_angular_tracing_source_manifest.json`. All required work for this
+angular-tracing milestone is complete; central/GYOTO work remains separate.
 
 ## Preserved foundations
 
@@ -109,11 +113,9 @@ the sanitizer result and final documentation update.
 
 ## Next work
 
-1. Finish and save the pending sanitizer matrix/source inventory for this
-   milestone. Commit/push all completed evidence and check remote synchronization.
-2. Derive and independently verify a regular central de Sitter continuation.
+1. Derive and independently verify a regular central de Sitter continuation.
    The remaining radial stops are not solved by angular patches.
-3. Add real pinned GYOTO integration/executable comparisons; improve grazing and
+2. Add real pinned GYOTO integration/executable comparisons; improve grazing and
    near-critical event coverage, then revisit complete advertised ray-domain
    acceptance. GPU, desktop and stability claims remain gated.
 
@@ -127,6 +129,7 @@ build/headless-release/gravastar_optics_cli_tests build/headless-release/gravast
 build/headless-release/gravastar_ray_benchmark --output results/local/reproduced_ray_benchmark.json
 build/headless-release/gravastar_sampling --scene benchmarks/optics_angular_v1.json --output results/local/reproduced_angular_toy_sampling.json
 build/headless-release/gravastar_sampling --scene benchmarks/optics_angular_kerr_v1.json --output results/local/reproduced_angular_kerr_sampling.json
+build/headless-release/gravastar_tools manifest --verify results/p2_angular_tracing_source_manifest.json
 ```
 
 SSH pushes work with

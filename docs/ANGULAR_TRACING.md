@@ -97,6 +97,19 @@ threshold, CPU affinity or frequency control is used.
 
 ## Remaining boundaries
 
+The saved verification matrix is `results/p2_angular_tracing_verification.json`:
+GCC/Clang Release 18/18 each and optimized ASan/UBSan targeted optics subset 3/3.
+The current inventory is `results/p2_angular_tracing_source_manifest.json`.
+Paired ray ratios are 28.65 (GCC) and 35.85 (Clang), with maximum scaled endpoint
+difference 6.27e-10; these retain the benchmark limitations above.
+
+Four-level spatial pilots improve the toy common mask to 183/192 and Kerr to
+192/192. Both pass the unchanged common-mask policy. Kerr also passes the
+fixed-scene full-image refinement criteria with no unresolved rays through
+128x96; toy retains 235 radial-domain and one affine-budget stop at that grid.
+See `results/p2_angular_{toy,kerr}_sampling.json` for aggregate pixels, per-level
+differences, raw-ray paths/hashes and the explicit incomplete P2 acceptance flag.
+
 The central de Sitter continuation, actual pinned GYOTO executable comparison,
 grazing/near-critical event coverage, and whole-image scientific acceptance are
 still separate work. No stability, horizon continuation or GPU claim follows
