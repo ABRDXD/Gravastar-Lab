@@ -27,6 +27,13 @@ audit evidence uses `results/p2_audit_*`; the full 128x96 pilots have not been
 rerun. The exact geometry and kernel-performance reports below describe the
 earlier geometry checkpoint, not this audit's source tree.
 
+The corrected GCC/Clang Release suites each pass 17/17; native reports pass 51
+optical checks and 38 CLI/image checks. Current 16x12 classifications match the
+historical coarse images and agree under integration refinement. The audit
+source digest is
+`d0e73493552790f529738e9dee5029b82937ee53d950f14ed4eae85b69909f76`.
+Use `results/p2_audit_source_manifest.json` for the current inventory.
+
 ## Completed work
 
 The sampling draft is now integrated and tested. `gravastar_sampling` launches
