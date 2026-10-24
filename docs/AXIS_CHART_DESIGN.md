@@ -2,11 +2,11 @@
 
 The geometry library now implements this chart through `evaluate_angular`
 (metric, inverse and first derivatives) and `evaluate_angular_curvature`
-(additionally Hessian, Ricci tensor and invariants). It has not yet been adopted
-by the tracer. Both charts share the canonical radial profile and curvature
-contraction; independent references use separate expansions and contractions.
-An executable chart-switching tracer is still required before using it in ray
-results. The central r=0 extension is a separate decision.
+(additionally Hessian, Ricci tensor and invariants). The opt-in `trace_angular`
+tracer now adopts its first-derivative API; `ANGULAR_TRACING.md` describes chart
+transitions and independent ray checks. Both charts share the canonical radial
+profile and curvature contraction; independent references use separate
+expansions and contractions. The central r=0 extension is a separate decision.
 
 ## Coordinates and metric
 
@@ -171,7 +171,8 @@ the original BL API measures the current tracer's geometry cost baseline, but
 the coordinate representation and additional outputs differ. The benchmark does
 not isolate a speedup from the rank-one inverse alone. It has no noisy timing
 pass/fail threshold, CPU affinity or frequency control; measured kernel ratios
-are not end-to-end ray/render speedups. The tracer still uses the original API.
+are not end-to-end ray/render speedups. The original BL tracer remains available;
+the newer opt-in angular tracer has a separate paired ray benchmark.
 
 The initial GCC Release measurement in `results/p2_angular_benchmark_gcc.json`
 has median costs of 265 ns (first derivatives), 5645 ns (full angular geometry),

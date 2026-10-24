@@ -2,9 +2,11 @@
 
 The user authorized starting P2 on 2026-10-21 while the independent P1 audit
 remains open. P1 is frozen at `609debe`; this work uses a separate branch.
-This first milestone advertises only the existing positive-radius, off-axis
-chart. Full central and axial continuation and GYOTO agreement remain gates
-for complete P2 acceptance. No new language or numerical dependency is used.
+The original BL mode retains the positive-radius, off-axis chart described below.
+Opt-in regular angular tracing is now available; see `ANGULAR_TRACING.md` for
+coordinate tags, patch switching, pole-crossing tests and new image presets.
+Central continuation and GYOTO agreement remain gates for complete P2 acceptance.
+No new language or numerical dependency is used.
 
 ## State, time orientation and observer convention
 

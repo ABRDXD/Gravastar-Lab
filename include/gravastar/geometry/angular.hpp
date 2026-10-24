@@ -23,7 +23,7 @@ using AngularCurvatureResult = std::variant<AngularCurvature, Error>;
 // Includes x=y=0. Bounded to x*x+y*y<=4; switch patches in the overlap
 // before exceeding this bound. Retains r>0 and the existing Delta margin.
 // Explicit shell regions evaluate the polynomial at both joins, unclamped.
-// This is a geometry API, not yet a change to the production ray tracer.
+// Used by the opt-in regular-angular tracer; the full BL API remains available.
 AngularResult evaluate_angular(const Parameters &p, double r, double x,
                                double y, Region region = Region::automatic);
 AngularCurvatureResult

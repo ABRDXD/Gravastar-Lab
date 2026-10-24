@@ -31,8 +31,12 @@ invalid-switch handling pass. The CLI accepts opt-in `integrator.coordinates:
 and 58 CLI checks pass, including paired 16x12 images with tighter integration
 and a changed patch threshold. Previously resolved pixel classifications and
 intensities agree with BL. Coarse toy still has four radial-domain stops; the
-coarse Kerr image has none. A final source-stable verification matrix and a
-paired ray performance experiment remain before closing this milestone.
+coarse Kerr image has none. The paired 48-ray experiment measures a GCC median
+BL/angular ratio 28.65 with scaled endpoint disagreement 6.27e-10; configuration,
+counts and limitations are in `p2_angular_ray_benchmark_gcc.json`. This is bounded
+integration performance, not whole-render timing. Final compiler/sanitizer
+verification and refreshed angular sampling pilots remain before closing this
+milestone. `ANGULAR_TRACING.md` documents the implementation and references.
 
 The user requested an audit before further feature work. The resumed audit found
 and reproduced three faults: a `.ppm` output name overwrote its own JSON report;

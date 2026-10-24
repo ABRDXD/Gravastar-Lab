@@ -3,6 +3,7 @@
 #include "gravastar/tools/artifacts.hpp"
 #include <cmath>
 #include <iostream>
+#include <limits>
 #include <numbers>
 
 namespace o = gravastar::optics;
