@@ -9,6 +9,9 @@ regression evidence. These are correctness fixes; no new optics capability was
 added. Historical maximum-null-residual fields excluded nonterminal refined
 crossings and must not be treated as current acceptance evidence. The audit
 reports use the separate `results/p2_audit_*` prefix. Complete P2 remains open.
+The corrected suites pass GCC/Clang Release 17/17 each and targeted ASan/UBSan
+3/3. Native reports pass 51 optical and 38 CLI/image checks. The coarse 16x12
+classifications remain unchanged; the 128x96 pilots were not rerun in this audit.
 
 ## Regular angular geometry on 2026-10-23
 

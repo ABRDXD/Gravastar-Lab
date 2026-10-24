@@ -33,6 +33,12 @@ historical coarse images and agree under integration refinement. The audit
 source digest is
 `d0e73493552790f529738e9dee5029b82937ee53d950f14ed4eae85b69909f76`.
 Use `results/p2_audit_source_manifest.json` for the current inventory.
+The targeted ASan/UBSan suite also passes 3/3 in 264.40 s: optical reference,
+full optics CLI/image test and reference arithmetic/polynomials, including all
+new regressions. No sanitizer diagnostics, overrides or suppressions were used.
+`results/p2_audit_verification.json` records the complete audit matrix. The audit
+is complete for this checkpoint; the next implementation remains tracer chart
+transitions, not new geometry formulas or a repeat of already-passing tests.
 
 ## Completed work
 
