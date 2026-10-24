@@ -120,6 +120,13 @@ int main() {
             "alternate radial_bounds.py configuration retained");
     require(!positive_bounds(tangent),
             "nonpositive Bernstein bound cannot pass");
+    rejected = false;
+    try {
+      (void)positive_bounds({});
+    } catch (const std::invalid_argument &) {
+      rejected = true;
+    }
+    require(rejected, "empty Bernstein polynomial rejected before dereference");
     Parameters<T> p;
     auto d = derivatives(T(1), T(".4"), p, Family::de_sitter);
     auto c = curvature(d);
