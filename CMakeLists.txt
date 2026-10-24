@@ -23,7 +23,7 @@ endif()
 add_executable(gravastar_benchmark src/experiments/benchmark.cpp)
 target_link_libraries(gravastar_benchmark PRIVATE gravastar_geometry)
 
-add_library(gravastar_optics src/optics/ray.cpp)
+add_library(gravastar_optics src/optics/ray.cpp src/optics/chart.cpp)
 target_link_libraries(gravastar_optics PUBLIC gravastar_geometry)
 
 find_package(nlohmann_json 3.12.0 EXACT REQUIRED)
@@ -47,6 +47,11 @@ target_compile_definitions(gravastar_tools PRIVATE GRAVASTAR_SOURCE_ROOT="${CMAK
 
 include(CTest)
 if(BUILD_TESTING)
+    add_executable(gravastar_angular_optics_tests tests/angular_optics_tests.cpp)
+    target_link_libraries(gravastar_angular_optics_tests PRIVATE gravastar_optics nlohmann_json::nlohmann_json)
+    target_compile_definitions(gravastar_angular_optics_tests PRIVATE GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}")
+    add_test(NAME angular_optics COMMAND gravastar_angular_optics_tests)
+    set_tests_properties(angular_optics PROPERTIES TIMEOUT 300 LABELS optics)
     add_executable(gravastar_angular_reference_tests tests/angular_reference_tests.cpp)
     target_link_libraries(gravastar_angular_reference_tests PRIVATE gravastar_geometry nlohmann_json::nlohmann_json)
     target_compile_definitions(gravastar_angular_reference_tests PRIVATE GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}")

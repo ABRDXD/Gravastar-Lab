@@ -8,6 +8,7 @@ namespace gravastar::optics {
 using Vector = std::array<double, 4>;
 using State = std::array<double, 8>; // x^mu, future-directed p_mu
 using Parameters = geometry::Parameters;
+enum class Chart { boyer_lindquist, north, south };
 struct Frame {
   std::array<Vector, 4> basis{}; // u, e_r, e_theta, e_phi
   double omega{};
