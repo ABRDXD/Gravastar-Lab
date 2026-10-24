@@ -1,5 +1,15 @@
 # P2 checkpoint: bounded native reference optics
 
+## Audit fixes on 2026-10-24
+
+The audit reproduced and fixed a JSON/PPM output collision, null-constraint
+underreporting and bypass at refined shell events, and an empty-polynomial
+segfault in the Bernstein checker. See `AUDIT_2026-10-24.md` for exact cases and
+regression evidence. These are correctness fixes; no new optics capability was
+added. Historical maximum-null-residual fields excluded nonterminal refined
+crossings and must not be treated as current acceptance evidence. The audit
+reports use the separate `results/p2_audit_*` prefix. Complete P2 remains open.
+
 ## Regular angular geometry on 2026-10-23
 
 The geometry layer now evaluates the north/south stereographic metric at the

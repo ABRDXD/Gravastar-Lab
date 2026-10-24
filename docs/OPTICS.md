@@ -51,9 +51,12 @@ refined states. Grazing contacts and multiple crossings hidden inside one step
 are not certified; step/tolerance convergence is required for accepted examples.
 The disk convention is a **transverse crossing** of an infinitesimally thin
 surface; a ray lying in its plane is not silently treated as an intersection.
-If a refinement substep fails the local error test, reject and shorten the
-whole trial before recording any event. Full-step acceptance alone does not
-bound every shorter step, especially near a transition.
+If a refinement substep fails the local error test or its refined event exceeds
+the null ceiling, reject and shorten the whole trial before recording any event.
+Full-step acceptance alone does not bound every shorter step, especially near a
+transition. Maximum null, energy and angular-momentum diagnostics include all
+published crossings as well as ordinary recorded step endpoints. Numerical
+failure may retain a failed endpoint for diagnosis; it is not an accepted ray.
 
 Outcomes distinguish escape, disk emission, a reference Kerr capture surface,
 chart-domain limit, affine-budget exhaustion, step-budget exhaustion, invalid
@@ -76,6 +79,7 @@ of view and aspect ratio. JSON stores linear intensity, redshift, classification
 null error and event coordinates. Unresolved pixels have null intensity;
 escaped rays have transparent background. A diagnostic PPM may color outcomes
 but does not replace the linear data or establish full interior rendering.
+The report path must end in `.json`; its `.ppm` preview is a distinct file.
 
 `gravastar_trace image --resolution-scale N` multiplies both image dimensions
 by an integer from 1 to 8, subject to the 128x128 diagnostic limit. Camera,

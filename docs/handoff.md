@@ -1,6 +1,6 @@
 # Handoff: P2 regular angular geometry
 
-Updated 2026-10-23. The user resumed implementation after `fb348c4`; its stop
+Updated 2026-10-24. The user resumed implementation after `fb348c4`; its stop
 instruction is superseded. Active isolated worktree:
 `/home/abrsdxd/Projects/GravastarLab-Cpp20`, branch
 `codex/p2-reference-optics`. Keep the original checkout and Argon's concurrent
@@ -11,6 +11,21 @@ All authored code and tools remain C++20; CMake is only for build/dependency/
 CTest configuration. No dependency was added. The optimization philosophy is
 recorded in `AGENTS.md`: creative algorithms, controlled complexity, measured
 baselines, verified numerical accuracy and documented trade-offs.
+
+## Latest audit fixes
+
+The user requested an audit before further feature work. The resumed audit found
+and reproduced three faults: a `.ppm` output name overwrote its own JSON report;
+refined nonterminal crossings bypassed null-ceiling enforcement and maximum-error
+reporting; and empty Bernstein input segfaulted. Fixes are committed as `9740933`,
+`d16fdf7` and `2e213e5`, with failing-before/passing-after regression checks.
+`AUDIT_2026-10-24.md` records reproduction details, scope and remaining limitations.
+
+Historical ray reports can understate maximum null residual because they excluded
+refined nonterminal crossings. Preserve their original source digests. Current
+audit evidence uses `results/p2_audit_*`; the full 128x96 pilots have not been
+rerun. The exact geometry and kernel-performance reports below describe the
+earlier geometry checkpoint, not this audit's source tree.
 
 ## Completed work
 
@@ -116,7 +131,8 @@ build/headless-release/gravastar_axis_chart_tests --report results/p2_axis_chart
 build/headless-release/gravastar_angular_geometry_tests --report results/p2_angular_geometry.json
 build/headless-release/gravastar_angular_reference_tests --report results/p2_angular_reference.json
 build/headless-release/gravastar_angular_benchmark --output results/p2_angular_benchmark_gcc.json
-build/headless-release/gravastar_tools manifest --verify results/p2_angular_source_manifest.json
+build/headless-release/gravastar_optics_tests --report results/local/reproduced_optics_audit.json
+build/headless-release/gravastar_tools manifest --verify results/p2_audit_source_manifest.json
 ```
 
 SSH pushes work with the direct command option
