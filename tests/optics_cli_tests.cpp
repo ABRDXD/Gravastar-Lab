@@ -1,11 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
+#include "gravastar/optics/chart.hpp"
 #include "gravastar/tools/artifacts.hpp"
 #include "gravastar/tools/process.hpp"
 #include <cmath>
 #include <iostream>
+#include <numbers>
 
 namespace u = gravastar::tools;
 namespace fs = std::filesystem;
+namespace o = gravastar::optics;
 using J = u::Json;
 int main(int argc, char **argv) {
   try {
@@ -65,6 +68,14 @@ int main(int argc, char **argv) {
     bad["integrator"]["relative_tolerance"] = 0;
     u::atomic_json(input, bad);
     check("invalid solver settings rejected", invoke() == 2);
+    bad = cfg;
+    bad["integrator"]["coordinates"] = "unknown";
+    u::atomic_json(input, bad);
+    check("unknown coordinate mode rejected", invoke() == 2);
+    bad["integrator"]["coordinates"] = "angular";
+    bad["integrator"]["angular_switch_q"] = 1;
+    u::atomic_json(input, bad);
+    check("invalid angular switch threshold rejected", invoke() == 2);
     u::atomic_json(input, cfg);
     u::atomic_bytes(root / "results/collision.ppm", "previous display");
     auto collision = cfg;
@@ -72,7 +83,8 @@ int main(int argc, char **argv) {
     u::atomic_json(input, collision);
     check("report cannot alias its PPM preview",
           invoke("results/collision.ppm") == 2 &&
-              u::read_file(root / "results/collision.ppm") == "previous display" &&
+              u::read_file(root / "results/collision.ppm") ==
+                  "previous display" &&
               !fs::exists(root / "results/collision_manifest.json"));
     u::atomic_json(input, cfg);
     check("output traversal rejected", invoke("../escape.json") == 2);
@@ -82,7 +94,8 @@ int main(int argc, char **argv) {
     for (const std::string value : {"0", "-1", "2.5", "9"})
       check("invalid resolution scale rejected: " + value,
             u::run({argv[1], "image", "--root", root.string(), "--config",
-                    "benchmarks/scene.json", "--resolution-scale", value}) == 2);
+                    "benchmarks/scene.json", "--resolution-scale", value}) ==
+                2);
     check("ray resolution scaling rejected",
           u::run({argv[1], "ray", "--root", root.string(), "--config",
                   "benchmarks/scene.json", "--resolution-scale", "2"}) == 2);
@@ -166,6 +179,95 @@ int main(int argc, char **argv) {
            {"baseline_configuration", baseline_config},
            {"refined_configuration", fine_config},
            {"pixel_classification_mismatches", mismatch}});
+      auto angular_config = baseline_config;
+      angular_config["integrator"]["coordinates"] = "angular";
+      angular_config["integrator"]["angular_switch_q"] = 1.5;
+      u::atomic_json(input, angular_config);
+      check(family + " angular image executes",
+            invoke("results/angular.json") == 0);
+      auto angular = J::parse(u::read_file(root / "results/angular.json"));
+      auto angular_fine_config = fine_config;
+      angular_fine_config["integrator"]["coordinates"] = "angular";
+      angular_fine_config["integrator"]["angular_switch_q"] = 1.2;
+      u::atomic_json(input, angular_fine_config);
+      check(family + " refined angular image executes",
+            invoke("results/angular_fine.json") == 0);
+      auto angular_fine =
+          J::parse(u::read_file(root / "results/angular_fine.json"));
+      double angular_state = 0, angular_intensity = 0, baseline_intensity = 0,
+             angular_null = 0, angular_lz = 0;
+      int angular_mismatch = 0, baseline_mismatch = 0, newly_resolved = 0;
+      bool chart_tags = angular["integration_coordinates"] == "angular";
+      auto to_bl = [](const J &pixel) {
+        const auto chart = pixel["final"]["chart"].get<std::string>();
+        return o::transform_state(pixel["final"]["state"].get<o::State>(),
+                                  chart == "north" ? o::Chart::north
+                                                   : o::Chart::south,
+                                  o::Chart::boyer_lindquist);
+      };
+      for (std::size_t i = 0; i < angular["pixels"].size(); ++i) {
+        const auto &a = angular["pixels"][i], &b = angular_fine["pixels"][i],
+                   &old = baseline["pixels"][i];
+        chart_tags =
+            chart_tags && a["initial_chart"] == "boyer_lindquist" &&
+            (a["final"]["chart"] == "north" || a["final"]["chart"] == "south");
+        angular_mismatch += a["outcome"] != b["outcome"];
+        const auto sa = to_bl(a), sb = to_bl(b);
+        for (int k = 0; k < 8; ++k) {
+          const double delta =
+              k == 3 ? std::remainder(sa[k] - sb[k], 2 * std::numbers::pi)
+                     : sa[k] - sb[k];
+          angular_state =
+              std::max(angular_state, std::abs(delta) / (1 + std::abs(sb[k])));
+        }
+        const bool old_resolved = !old["linear_intensity"].is_null();
+        if (old_resolved)
+          baseline_mismatch += old["outcome"] != a["outcome"];
+        else
+          newly_resolved += !a["linear_intensity"].is_null();
+        if (a["outcome"] == "emitted" && b["outcome"] == "emitted") {
+          const double ia = a["linear_intensity"], ib = b["linear_intensity"];
+          angular_intensity = std::max(angular_intensity,
+                                       std::abs(ia - ib) / (1 + std::abs(ib)));
+          if (old["outcome"] == "emitted") {
+            const double io = old["linear_intensity"];
+            baseline_intensity = std::max(
+                baseline_intensity, std::abs(ia - io) / (1 + std::abs(io)));
+          }
+        }
+        angular_null =
+            std::max(angular_null, a["maximum_null_residual"].get<double>());
+        angular_lz =
+            std::max(angular_lz, a["angular_momentum_error"].get<double>());
+      }
+      check(family + " angular report retains coordinate tags", chart_tags);
+      check(
+          family +
+              " angular classifications stable under step and patch refinement",
+          angular_mismatch == 0);
+      check(family + " angular states converge", angular_state < 2e-5);
+      check(family + " angular intensities converge", angular_intensity < 2e-5);
+      check(family + " resolved BL classifications preserved",
+            baseline_mismatch == 0);
+      check(family + " resolved BL intensities agree",
+            baseline_intensity < 2e-5);
+      check(family + " angular null and Killing drift bounded",
+            angular_null < 1e-6 && angular_lz < 1e-6);
+      comparisons.push_back(
+          {{"family", family},
+           {"coordinates", "angular"},
+           {"classifications", angular["classifications"]},
+           {"unresolved_pixels", angular["unresolved_pixels"]},
+           {"newly_resolved_pixels", newly_resolved},
+           {"maximum_state_error", angular_state},
+           {"maximum_intensity_error", angular_intensity},
+           {"maximum_BL_intensity_error", baseline_intensity},
+           {"maximum_null_residual", angular_null},
+           {"maximum_axial_momentum_error", angular_lz},
+           {"pixel_classification_mismatches", angular_mismatch},
+           {"resolved_BL_classification_mismatches", baseline_mismatch},
+           {"baseline_configuration", angular_config},
+           {"refined_configuration", angular_fine_config}});
     }
     // A fixed, long step cannot satisfy the local error tolerance. This tests
     // a runtime failure without depending on initial null-roundoff magnitude.

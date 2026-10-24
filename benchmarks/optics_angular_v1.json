@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "preset_id": "p2_angular_native_v1",
+  "geometry": {"family": "toy", "M": 1.0, "a": 0.875, "Lambda": 0.5, "r_in": 1.5, "r_out": 1.8},
+  "domain": {"inner_radius": 0.25, "outer_radius": 10.0, "polar_margin": 0.05, "capture_radius": null},
+  "integrator": {"coordinates": "angular", "angular_switch_q": 1.5, "absolute_tolerance": 1e-10, "relative_tolerance": 1e-10, "initial_step": 0.01, "minimum_step": 1e-10, "maximum_step": 0.1, "event_tolerance": 1e-9, "null_tolerance": 1e-6, "maximum_affine": 40.0, "maximum_attempts": 100000},
+  "camera": {"position": [0.0, 8.0, 1.0471975511965976, 0.0], "omega": null, "vertical_field_of_view_degrees": 50.0},
+  "disk": {"enabled": true, "inner_radius": 3.0, "outer_radius": 6.0, "motion": "ZAMO", "emissivity": "bolometric_r_inverse_cubed"},
+  "image": {"width": 16, "height": 12},
+  "scope": "regular angular patches; radial/central continuation and GYOTO acceptance incomplete"
+}

@@ -26,8 +26,13 @@ agree with the original BL tracer. Angular and existing optical reference CTests
 pass. The 50-check angular suite now also compares both spin signs across a
 Kerr pole against independent separated geodesic equations, RK4 step refinement,
 and the regular Carter invariant. Shell joins, equatorial disk hits, capture and
-invalid-switch handling pass. The CLI remains on its existing BL path;
-event/image adoption is the next checkpoint.
+invalid-switch handling pass. The CLI accepts opt-in `integrator.coordinates:
+"angular"`; original presets retain BL integration. New angular toy/Kerr presets
+and 58 CLI checks pass, including paired 16x12 images with tighter integration
+and a changed patch threshold. Previously resolved pixel classifications and
+intensities agree with BL. Coarse toy still has four radial-domain stops; the
+coarse Kerr image has none. A final source-stable verification matrix and a
+paired ray performance experiment remain before closing this milestone.
 
 The user requested an audit before further feature work. The resumed audit found
 and reproduced three faults: a `.ppm` output name overwrote its own JSON report;

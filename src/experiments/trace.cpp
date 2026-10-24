@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
+#include "gravastar/optics/chart.hpp"
 #include "gravastar/optics/ray.hpp"
 #include "gravastar/tools/artifacts.hpp"
 #include <chrono>
@@ -18,6 +19,7 @@ struct Scene {
   std::optional<double> omega;
   double fov;
   int width, height;
+  bool angular{};
 };
 Scene scene(const J &j) {
   if (j.at("schema_version") != 1)
@@ -37,6 +39,12 @@ Scene scene(const J &j) {
   if (!d.at("capture_radius").is_null())
     c.capture_radius = d.at("capture_radius").get<double>();
   const auto &i = j.at("integrator");
+  const auto coordinates =
+      i.value("coordinates", std::string("boyer_lindquist"));
+  if (coordinates != "boyer_lindquist" && coordinates != "angular")
+    throw std::invalid_argument("unknown integration coordinates");
+  s.angular = coordinates == "angular";
+  c.angular_switch_q = i.value("angular_switch_q", 1.5);
   c.absolute_tolerance = i.at("absolute_tolerance");
   c.relative_tolerance = i.at("relative_tolerance");
   c.initial_step = i.at("initial_step");
@@ -86,16 +94,21 @@ o::State pixel(const Scene &s, int x, int y) {
 J point(const o::Point &p) {
   return {{"affine", p.affine},
           {"state", p.state},
+          {"chart", p.chart == o::Chart::boyer_lindquist ? "boyer_lindquist"
+                    : p.chart == o::Chart::north         ? "north"
+                                                         : "south"},
           {"null_residual", p.null_error}};
 }
 J ray(const Scene &s, const o::State &initial, const o::Trace &trace) {
   J result{{"outcome", o::outcome_name(trace.outcome)},
            {"reason", trace.detail},
            {"initial_state", initial},
+           {"initial_chart", "boyer_lindquist"},
            {"final", point(trace.final)},
            {"accepted_steps", trace.accepted},
            {"rejected_steps", trace.rejected},
            {"rhs_calls", trace.rhs_calls},
+           {"chart_switches", trace.chart_switches},
            {"maximum_null_residual", trace.maximum_null_error},
            {"energy_error", trace.energy_error},
            {"angular_momentum_error", trace.angular_momentum_error},
@@ -104,9 +117,16 @@ J ray(const Scene &s, const o::State &initial, const o::Trace &trace) {
            {"alpha", nullptr}};
   if (trace.outcome == o::Outcome::emitted) {
     auto frame = o::circular_frame(o::metric(s.geometry, initial), s.omega);
-    auto emission = o::disk_emission(s.geometry, trace.final.state,
-                                     o::frequency(initial, frame.basis[0]),
-                                     s.settings.disk_inner);
+    // Disk hits are at q=1, where conversion to the original emission chart
+    // is regular. The camera and physical ZAMO emission prescription are
+    // shared.
+    auto hit = trace.final.chart == o::Chart::boyer_lindquist
+                   ? trace.final.state
+                   : o::transform_state(trace.final.state, trace.final.chart,
+                                        o::Chart::boyer_lindquist);
+    auto emission =
+        o::disk_emission(s.geometry, hit, o::frequency(initial, frame.basis[0]),
+                         s.settings.disk_inner);
     result["linear_intensity"] = emission.linear_intensity;
     result["redshift"] = emission.redshift;
     result["alpha"] = 1;
@@ -150,11 +170,12 @@ int main(int argc, char **argv) {
   try {
     std::string command = argc > 1 ? argv[1] : "help";
     if (command == "help" || command == "--help") {
-      std::cout << "gravastar_trace image|ray [--root PATH] [--config "
-                   "benchmarks/optics_v1.json] [--output results/FILE.json] "
-                   "[--x N --y N] [--resolution-scale N]\n"
-                   "Future covariant photon momentum; past-directed "
-                   "integration. Bounded chart only.\n";
+      std::cout
+          << "gravastar_trace image|ray [--root PATH] [--config "
+             "benchmarks/optics_v1.json] [--output results/FILE.json] "
+             "[--x N --y N] [--resolution-scale N]\n"
+             "Future covariant photon momentum; past-directed "
+             "integration. Optional angular patches; radial limits remain.\n";
       return 0;
     }
     if (command != "ray" && command != "image")
@@ -178,9 +199,9 @@ int main(int argc, char **argv) {
         std::size_t used;
         scale = std::stoi(value, &used);
         if (used != value.size() || scale < 1 || scale > 8)
-          throw std::invalid_argument("resolution scale must be an integer in [1,8]");
-      }
-      else if (flag == "--x" || flag == "--y") {
+          throw std::invalid_argument(
+              "resolution scale must be an integer in [1,8]");
+      } else if (flag == "--x" || flag == "--y") {
         std::size_t used;
         int n = std::stoi(value, &used);
         if (used != value.size() || n < 0)
@@ -196,12 +217,14 @@ int main(int argc, char **argv) {
       throw std::invalid_argument("configuration must be inside benchmarks/");
     output = u::result_path(root, output);
     if (output.extension() != ".json")
-      throw std::invalid_argument("trace report output must have .json extension");
+      throw std::invalid_argument(
+          "trace report output must have .json extension");
     auto input = u::read_file(config);
     auto configuration = J::parse(input);
     auto s = scene(configuration);
     if (command == "ray" && scale != 1)
-      throw std::invalid_argument("resolution scaling is only supported for images");
+      throw std::invalid_argument(
+          "resolution scaling is only supported for images");
     if (s.width * scale > 128 || s.height * scale > 128)
       throw std::invalid_argument("scaled image exceeds 128x128");
     s.width *= scale;
@@ -217,21 +240,25 @@ int main(int argc, char **argv) {
       throw std::invalid_argument("pixel outside image");
     auto before = u::manifest(root);
     auto start = std::chrono::steady_clock::now();
-    J report{{"schema_version", 1},
-             {"configuration", configuration},
-             {"resolution_scale", scale},
-             {"sampling", "uniform image-plane midpoint grid"},
-             {"input_sha256", u::sha256(input)},
-             {"compiler", __VERSION__},
-             {"cplusplus", __cplusplus},
-             {"executable_sha256",
-              u::sha256(u::read_file(fs::canonical("/proc/self/exe")))},
-             {"complete_P2_acceptance", false},
-             {"GYOTO_comparison", "not implemented"},
-             {"full_interior_continuation", "not implemented"},
-             {"momentum_convention",
-              "future-directed p_mu, increasing affine parameter into past"},
-             {"pixels", J::array()}};
+    J report{
+        {"schema_version", 1},
+        {"configuration", configuration},
+        {"resolution_scale", scale},
+        {"sampling", "uniform image-plane midpoint grid"},
+        {"input_sha256", u::sha256(input)},
+        {"compiler", __VERSION__},
+        {"cplusplus", __cplusplus},
+        {"executable_sha256",
+         u::sha256(u::read_file(fs::canonical("/proc/self/exe")))},
+        {"complete_P2_acceptance", false},
+        {"GYOTO_comparison", "not implemented"},
+        {"full_interior_continuation", "not implemented"},
+        {"integration_coordinates", s.angular ? "angular" : "boyer_lindquist"},
+        {"angular_switch_q",
+         s.angular ? J(s.settings.angular_switch_q) : J(nullptr)},
+        {"momentum_convention",
+         "future-directed p_mu, increasing affine parameter into past"},
+        {"pixels", J::array()}};
     J counts = J::object();
     bool execution = true;
     std::size_t unresolved = 0;
@@ -239,7 +266,16 @@ int main(int argc, char **argv) {
                       std::to_string(s.height) + "\n255\n";
     auto append = [&](int col, int row) {
       auto initial = pixel(s, col, row);
-      auto traced = o::trace(s.geometry, initial, s.settings);
+      const auto patch = s.position[2] <= std::numbers::pi / 2
+                             ? o::Chart::north
+                             : o::Chart::south;
+      auto traced =
+          s.angular
+              ? o::trace_angular(s.geometry,
+                                 o::transform_state(
+                                     initial, o::Chart::boyer_lindquist, patch),
+                                 patch, s.settings)
+              : o::trace(s.geometry, initial, s.settings);
       if (traced.outcome == o::Outcome::invalid_input)
         throw std::invalid_argument(traced.detail);
       auto value = ray(s, initial, traced);
