@@ -325,7 +325,8 @@ static Trace trace_impl(const Parameters &p, const State &initial,
         q.state[2] * q.state[2] + q.state[3] * q.state[3] < c.angular_switch_q)
       return;
     if (!std::isfinite(q.null_error) || q.null_error > c.null_tolerance)
-      throw std::runtime_error("pre-transition state exceeds null constraint tolerance");
+      throw std::runtime_error(
+          "pre-transition state exceeds null constraint tolerance");
     monitor(q);
     const Chart next = q.chart == Chart::north ? Chart::south : Chart::north;
     q.state = transform_state(q.state, q.chart, next);

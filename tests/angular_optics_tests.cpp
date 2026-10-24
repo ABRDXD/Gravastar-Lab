@@ -200,11 +200,166 @@ void overlap_rays() {
   check("angular and BL ray endpoint agreement", state_error, 2e-9);
   check("rotating ray axial Killing drift", lz, 2e-10);
 }
+double carter(const g::Parameters &p, const o::State &s) {
+  const double q = s[2] * s[2] + s[3] * s[3];
+  const double lz = -s[3] * s[6] + s[2] * s[7];
+  return (1 + q) * (1 + q) * (s[6] * s[6] + s[7] * s[7]) / 4 - lz * lz -
+         p.spin * p.spin * s[4] * s[4] * std::pow((1 - q) / (1 + q), 2);
+}
+o::Vector separated_kerr(const g::Parameters &p, const o::State &initial,
+                         double duration, int steps) {
+  // Independent separated Kerr equations for Lz=0, inward r and decreasing
+  // signed theta. This branch crosses the north pole without a theta
+  // reflection. No production metric, derivative algebra or DP tableau is used
+  // in the RHS.
+  const double E = -initial[4], a = p.spin,
+               Q = initial[6] * initial[6] -
+                   a * a * E * E * std::pow(std::cos(initial[2]), 2);
+  auto derivative = [&](const o::Vector &x) {
+    const double r = x[1], theta = x[2], A = r * r + a * a;
+    const double delta = A - 2 * p.mass * r;
+    const double sigma = r * r + a * a * std::pow(std::cos(theta), 2);
+    const double P = E * A;
+    const double R = P * P - delta * (a * a * E * E + Q);
+    const double T = Q + a * a * E * E * std::pow(std::cos(theta), 2);
+    if (!(R > 0 && T > 0))
+      throw std::runtime_error("separated fixture reached a turning point");
+    return o::Vector{
+        -(A * P / delta - a * a * E * std::pow(std::sin(theta), 2)) / sigma,
+        -std::sqrt(R) / sigma, -std::sqrt(T) / sigma,
+        -(a * P / delta - a * E) / sigma};
+  };
+  o::Vector x{initial[0], initial[1], initial[2], initial[3]};
+  const double h = duration / steps;
+  for (int n = 0; n < steps; ++n) {
+    auto a1 = derivative(x);
+    o::Vector v{};
+    for (int k = 0; k < 4; ++k)
+      v[k] = x[k] + h * a1[k] / 2;
+    auto a2 = derivative(v);
+    for (int k = 0; k < 4; ++k)
+      v[k] = x[k] + h * a2[k] / 2;
+    auto a3 = derivative(v);
+    for (int k = 0; k < 4; ++k)
+      v[k] = x[k] + h * a3[k];
+    auto a4 = derivative(v);
+    for (int k = 0; k < 4; ++k)
+      x[k] += h * (a1[k] + 2 * a2[k] + 2 * a3[k] + a4[k]) / 6;
+  }
+  return x;
+}
+void kerr_pole() {
+  double reference_refinement = 0, error = 0, conserved = 0;
+  for (double spin : {-.875, .875}) {
+    g::Parameters p;
+    p.family = g::Family::kerr;
+    p.spin = spin;
+    auto bl = o::launch(p, {0, 6, .1, .2}, {-.7, -1, 0});
+    check("Kerr polar fixture has zero axial momentum", std::abs(bl[7]), 1e-15);
+    auto initial =
+        o::transform_state(bl, o::Chart::boyer_lindquist, o::Chart::north);
+    auto coarse = separated_kerr(p, bl, 2, 500),
+         fine = separated_kerr(p, bl, 2, 1000);
+    for (int k = 0; k < 4; ++k)
+      reference_refinement =
+          std::max(reference_refinement, std::abs(coarse[k] - fine[k]));
+    o::Settings c;
+    c.maximum_affine = 2;
+    c.absolute_tolerance = c.relative_tolerance = 1e-12;
+    auto ray = o::trace_angular(p, initial, o::Chart::north, c);
+    require("Kerr ray traverses north pole",
+            ray.outcome == o::Outcome::affine_limit && fine[2] < 0 &&
+                ray.final.state[2] < 0);
+    auto x = cartesian(ray.final);
+    const std::array<double, 3> expected{
+        fine[1] * std::sin(fine[2]) * std::cos(fine[3]),
+        fine[1] * std::sin(fine[2]) * std::sin(fine[3]),
+        fine[1] * std::cos(fine[2])};
+    for (int k = 0; k < 3; ++k)
+      error = std::max(error, std::abs(x[k] - expected[k]));
+    error = std::max(error, std::abs(ray.final.state[0] - fine[0]));
+    for (const auto &point : ray.trajectory)
+      conserved = std::max(
+          conserved, std::abs(carter(p, point.state) - carter(p, initial)) /
+                         (1 + std::abs(carter(p, initial))));
+    check("Kerr polar axial Killing drift", ray.angular_momentum_error, 2e-11);
+  }
+  check("independent separated Kerr RK4 refinement", reference_refinement,
+        2e-11);
+  check("Kerr pole-crossing vs separated reference", error, 3e-10);
+  check("Kerr pole-crossing regular Carter invariant", conserved, 2e-10);
+}
+void angular_events() {
+  g::Parameters p;
+  o::Settings c;
+  c.absolute_tolerance = c.relative_tolerance = 1e-11;
+  c.maximum_affine = 30;
+  auto bl = o::launch(p, {0, 4, std::numbers::pi / 2, 0}, {-1, 0, -.35});
+  auto y = o::transform_state(bl, o::Chart::boyer_lindquist, o::Chart::north);
+  auto ray = o::trace_angular(p, y, o::Chart::north, c);
+  std::size_t inner = 0, outer = 0;
+  double join_error = 0;
+  for (const auto &hit : ray.crossings) {
+    if (hit.surface == "inner_shell_join") {
+      ++inner;
+      join_error = std::max(join_error, std::abs(hit.point.state[1] - p.r_in));
+    }
+    if (hit.surface == "outer_shell_join") {
+      ++outer;
+      join_error = std::max(join_error, std::abs(hit.point.state[1] - p.r_out));
+    }
+    require("angular event carries chart and enforced null residual",
+            hit.point.chart != o::Chart::boyer_lindquist &&
+                hit.point.null_error <= c.null_tolerance &&
+                hit.point.null_error <= ray.maximum_null_error);
+  }
+  require("angular toy ray crosses shell twice and escapes",
+          ray.outcome == o::Outcome::escaped && inner == 2 && outer == 2);
+  check("angular one-sided join event location", join_error, 3e-9);
+  p.family = g::Family::flat;
+  p.spin = 0;
+  c.disk = true;
+  const double theta = std::numbers::pi / 3, dx = 4 - 8 * std::sin(theta),
+               dz = -8 * std::cos(theta);
+  bl = o::launch(p, {0, 8, theta, 0},
+                 {dx * std::sin(theta) + dz * std::cos(theta),
+                  dx * std::cos(theta) - dz * std::sin(theta), 0});
+  for (auto patch : {o::Chart::north, o::Chart::south}) {
+    ray = o::trace_angular(
+        p, o::transform_state(bl, o::Chart::boyer_lindquist, patch), patch, c);
+    require("angular equatorial disk event",
+            ray.outcome == o::Outcome::emitted);
+    check("angular disk analytic radius", std::abs(ray.final.state[1] - 4),
+          3e-9);
+    check("angular disk analytic affine time",
+          std::abs(ray.final.affine - std::hypot(dx, dz)), 3e-9);
+  }
+  c.disk = false;
+  p.family = g::Family::kerr;
+  c.capture_radius = 2.1;
+  bl = o::launch(p, {0, 8, 1.1, 0}, {-1, 0, 0});
+  y = o::transform_state(bl, o::Chart::boyer_lindquist, o::Chart::north);
+  ray = o::trace_angular(p, y, o::Chart::north, c);
+  require("angular Schwarzschild capture event",
+          ray.outcome == o::Outcome::capture_surface);
+  check("angular Schwarzschild radial analytic time",
+        std::abs(ray.final.state[0] + 8 - ray.final.state[1] +
+                 2 * std::log(6 / (ray.final.state[1] - 2))),
+        2e-8);
+  for (double bad : {1., 0., 2.1, std::numeric_limits<double>::quiet_NaN()}) {
+    c.angular_switch_q = bad;
+    require("invalid angular switch threshold rejected",
+            o::trace_angular(p, y, o::Chart::north, c).outcome ==
+                o::Outcome::invalid_input);
+  }
+}
 int main(int argc, char **argv) {
   try {
     transformations();
     pole_crossings();
     overlap_rays();
+    kerr_pole();
+    angular_events();
   } catch (const std::exception &e) {
     std::cerr << e.what() << '\n';
     require("uncaught exception", false);

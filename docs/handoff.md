@@ -23,8 +23,11 @@ and diagnostics measure the physical axial Killing momentum. Flat lines cross
 both poles (including exact-pole starts), and a Schwarzschild polar photon orbit
 crosses multiple patches under three switch thresholds. Rotating overlap rays
 agree with the original BL tracer. Angular and existing optical reference CTests
-pass. The CLI remains on its existing BL path; event/image adoption and further
-Kerr pole-crossing validation are the next checkpoint.
+pass. The 50-check angular suite now also compares both spin signs across a
+Kerr pole against independent separated geodesic equations, RK4 step refinement,
+and the regular Carter invariant. Shell joins, equatorial disk hits, capture and
+invalid-switch handling pass. The CLI remains on its existing BL path;
+event/image adoption is the next checkpoint.
 
 The user requested an audit before further feature work. The resumed audit found
 and reproduced three faults: a `.ppm` output name overwrote its own JSON report;
