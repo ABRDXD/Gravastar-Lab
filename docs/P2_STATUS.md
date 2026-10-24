@@ -1,5 +1,37 @@
 # P2 checkpoint: bounded native reference optics
 
+## Regular angular tracing on 2026-10-24
+
+The optional angular mode now crosses both poles with shared adaptive stepping
+and event handling. `ANGULAR_TRACING.md` documents coordinate tags, canonical
+state/frame conversions, chart-switch hysteresis and the bounded domain.
+Fifty angular optical checks cover flat lines, exact-pole starts, a multi-patch
+Schwarzschild orbit, independent separated Kerr reference rays for both spin
+signs, Carter/Killing drift, shell joins, disk and capture events. Fifty-eight
+CLI/image checks preserve previously resolved BL classifications and intensities
+and validate integration plus patch-threshold refinement.
+
+The new 128x96 toy pilot reduces domain stops from the historical BL count 424
+to 235, with one affine-budget stop. Its common resolved mask grows from 167/192
+to 183/192, satisfying the preselected coverage criterion. Final relative
+intensity L1 is 0.0263991 and mean classification TV is 0.0118001; the common-mask
+pilot passes. Whole-image criteria still fail because radial/affine limits
+remain unresolved. This comparison spans the earlier diagnostic audit fix;
+historical reports retain their source digests and are not relabeled.
+
+Kerr now has zero unresolved rays at every sampling level, with 4665 emitted,
+612 escaped and 7011 capture-proxy outcomes at 128x96. Its 192/192 common mask,
+final intensity L1 0.01846385 and mean classification TV 0.00602214 pass the
+fixed-scene full-image refinement criteria. This is not global error certification
+or complete P2 acceptance; the capture proxy and missing GYOTO comparison remain.
+
+GCC and Clang Release pass 18/18 each. Targeted sanitizer evidence is pending.
+The separate 48-ray integration benchmark measures GCC/Clang median BL/angular
+ratios 28.65/35.85 with maximum scaled endpoint difference 6.27e-10. It includes
+conversion, adaptive stepping and events; it is not a whole-render timing or an
+equal-coordinate kernel comparison.
+All earlier sections below describe their original historical checkpoints.
+
 ## Audit fixes on 2026-10-24
 
 The audit reproduced and fixed a JSON/PPM output collision, null-constraint

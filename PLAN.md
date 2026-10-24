@@ -631,8 +631,10 @@ questions whose answers can be found in the references or local environment.
 - [ ] Implement and validate P2 reference optics and GYOTO integration.
       Native observers, adaptive tracing, emission and bounded images are
       implemented. Regular angular geometry, independent derivative/curvature
-      verification and kernel benchmarks are complete; ray chart transitions,
-      central continuation and GYOTO comparisons remain incomplete.
+      verification and kernel benchmarks are complete. Opt-in angular ray
+      transitions now pass analytic pole-crossing and independent separated-Kerr
+      checks, paired images and integration benchmarks. Central continuation,
+      complete-image acceptance and GYOTO comparisons remain incomplete.
 - [ ] Implement and compare P3 Vulkan optics.
 - [ ] Implement and verify P4 desktop studio.
 - [ ] Implement and verify P5 deterministic recording and encoding.

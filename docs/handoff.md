@@ -1,176 +1,133 @@
-# Handoff: P2 regular angular geometry
+# Handoff: P2 regular angular tracing
 
-Updated 2026-10-24. The user resumed implementation after `fb348c4`; its stop
-instruction is superseded. Active isolated worktree:
+Updated 2026-10-24. Implementation is authorized. Active isolated worktree:
 `/home/abrsdxd/Projects/GravastarLab-Cpp20`, branch
-`codex/p2-reference-optics`. Keep the original checkout and Argon's concurrent
-work untouched. Commit and push checkpoints roughly every three minutes.
+`codex/p2-reference-optics`. Preserve the original checkout and Gemini Argon's
+concurrent work. Commit and push tested checkpoints roughly every three minutes.
 This branch has not been merged to main.
 
-All authored code and tools remain C++20; CMake is only for build/dependency/
-CTest configuration. No dependency was added. The optimization philosophy is
-recorded in `AGENTS.md`: creative algorithms, controlled complexity, measured
-baselines, verified numerical accuracy and documented trade-offs.
+All authored calculations, references, tools, tests and benchmarks remain C++20.
+CMake only configures builds, dependencies and CTest. No dependency was added.
+The optimization policy in `AGENTS.md` requires explainable algorithms,
+controlled complexity, numerical verification and measured baselines.
 
-## Latest audit fixes
+## Current implementation
 
-Implementation resumed after the completed audit. Production state/covector/
-vector/frame transformations and a first-derivative angular Hamiltonian RHS
-are in `optics/chart.hpp`. Opt-in `trace_angular` now shares the existing
-Dormand-Prince stepping, event refinement and rejection machinery. Output points
-carry chart identity; accepted endpoints switch patches at configurable q>1,
-and diagnostics measure the physical axial Killing momentum. Flat lines cross
-both poles (including exact-pole starts), and a Schwarzschild polar photon orbit
-crosses multiple patches under three switch thresholds. Rotating overlap rays
-agree with the original BL tracer. Angular and existing optical reference CTests
-pass. The 50-check angular suite now also compares both spin signs across a
-Kerr pole against independent separated geodesic equations, RK4 step refinement,
-and the regular Carter invariant. Shell joins, equatorial disk hits, capture and
-invalid-switch handling pass. The CLI accepts opt-in `integrator.coordinates:
-"angular"`; original presets retain BL integration. New angular toy/Kerr presets
-and 58 CLI checks pass, including paired 16x12 images with tighter integration
-and a changed patch threshold. Previously resolved pixel classifications and
-intensities agree with BL. Coarse toy still has four radial-domain stops; the
-coarse Kerr image has none. The paired 48-ray experiment measures a GCC median
-BL/angular ratio 28.65 with scaled endpoint disagreement 6.27e-10; configuration,
-counts and limitations are in `p2_angular_ray_benchmark_gcc.json`. This is bounded
-integration performance, not whole-render timing. Final compiler/sanitizer
-verification and refreshed angular sampling pilots remain before closing this
-milestone. `ANGULAR_TRACING.md` documents the implementation and references.
+The opt-in `trace_angular` integrates through both angular poles using the regular
+geometry backend. It shares the original Dormand-Prince stepping, event refinement
+and rejection machinery with the preserved BL tracer. Canonical state, covector,
+vector and frame transformations live in `optics/chart.hpp`. Each output point
+retains its chart. Accepted endpoints switch at configurable q>1 (default 1.5),
+with q->1/q hysteresis and null checks on both sides. Physical axial momentum
+-y*p_x+x*p_y is monitored rather than treating p_y as conserved.
 
-The user requested an audit before further feature work. The resumed audit found
-and reproduced three faults: a `.ppm` output name overwrote its own JSON report;
-refined nonterminal crossings bypassed null-ceiling enforcement and maximum-error
-reporting; and empty Bernstein input segfaulted. Fixes are committed as `9740933`,
-`d16fdf7` and `2e213e5`, with failing-before/passing-after regression checks.
-`AUDIT_2026-10-24.md` records reproduction details, scope and remaining limitations.
+The CLI selects this path with `integrator.coordinates: "angular"`; original
+presets still use BL. New presets are `benchmarks/optics_angular_v1.json` and
+`benchmarks/optics_angular_kerr_v1.json`. Reports label every point's chart and
+the initial BL camera state. Disk hits convert at the regular equator to the
+same physical ZAMO emission prescription. The camera itself still requires a
+nonsingular BL position. Parallel transport of polarization is not implemented.
 
-Historical ray reports can understate maximum null residual because they excluded
-refined nonterminal crossings. Preserve their original source digests. Current
-audit evidence uses `results/p2_audit_*`; the full 128x96 pilots have not been
-rerun. The exact geometry and kernel-performance reports below describe the
-earlier geometry checkpoint, not this audit's source tree.
+`ANGULAR_TRACING.md` documents transitions, independent references, results
+interpretation and reproduction. `AXIS_CHART_DESIGN.md` retains the metric
+derivation and historical geometry evidence. Angular continuation does not
+cross r=0, radial horizons or the configured radial limits.
 
-The corrected GCC/Clang Release suites each pass 17/17; native reports pass 51
-optical checks and 38 CLI/image checks. Current 16x12 classifications match the
-historical coarse images and agree under integration refinement. The audit
-source digest is
-`d0e73493552790f529738e9dee5029b82937ee53d950f14ed4eae85b69909f76`.
-Use `results/p2_audit_source_manifest.json` for the current inventory.
-The targeted ASan/UBSan suite also passes 3/3 in 264.40 s: optical reference,
-full optics CLI/image test and reference arithmetic/polynomials, including all
-new regressions. No sanitizer diagnostics, overrides or suppressions were used.
-`results/p2_audit_verification.json` records the complete audit matrix. The audit
-is complete for this checkpoint; the next implementation remains tracer chart
-transitions, not new geometry formulas or a repeat of already-passing tests.
+## Verification and measured results
 
-## Completed work
+GCC and Clang Release pass 18/18 (40.14 s and 43.27 s). These are test durations
+with other validation work running, not performance measurements. The targeted
+optimized ASan/UBSan run is pending: `angular_optics`, `optics_reference`, and
+the full `optics_cli` suite. Do not claim sanitizer completion before its log ends.
 
-The sampling draft is now integrated and tested. `gravastar_sampling` launches
-fixed-scene grids at scales 1,2,4,8, aggregates onto the original 16x12 pixels,
-preserves unresolved intensity/alpha as null, and compares every level on one
-common resolved mask. Classification statistics cover the whole image.
-`SAMPLING.md` specifies formulas, provenance and preselected criteria.
+There are 50 new angular optical checks and 58 CLI/image checks. Flat Cartesian
+pole-crossing error is 5.88e-13. A multi-patch Schwarzschild polar photon orbit
+agrees with its analytic solution within 5.81e-10 under switch thresholds 1.2,
+1.5 and 1.9. Both Kerr spin signs cross the north pole and agree with independent
+separated-equation RK4 references within 1.78e-13; reference step refinement is
+8.00e-15 and regular Carter drift is 2.97e-15. Shell joins, disk timing, capture,
+invalid switches and existing audit regressions pass. Coarse paired images retain
+all previously resolved BL classifications and intensities under integration and
+patch-threshold refinement.
 
-There are 64 analytic/manufactured sampling checks and 31 CLI checks, including
-positive scaled renders, independent flat-space camera formulas, raw-report
-reconstruction/digests and preservation of accepted results on child failure.
-The sampling checkpoint passed GCC/Clang Release 14/14 each, Debug sampling 2/2,
-and optimized ASan/UBSan sampling 2/2 with leak detection enabled. The subsequent
-axis preflight adds one CTest target; the final matrix is in `P2_STATUS.md`.
+The native 48-ray performance experiment measures median BL/angular integration
+ratios 28.65 (GCC) and 35.85 (Clang), with maximum scaled endpoint difference
+6.27e-10. It includes conversions, stepping, error control and events; camera,
+emission, image I/O and trajectory storage are excluded. The two compilers ran
+sequentially without concurrent project builds/tests. No affinity/frequency
+control or universal performance claim is made. Reports retain individual
+timings, checksums, RHS/step counts, dataset and executable/source hashes.
 
-Both four-level spatial pilots completed without numerical-failure rays:
+Both new four-level spatial pilots ran through 128x96 without numerical failures:
 
-| Finest grid: 128x96 | Toy | Kerr |
+| Finest grid / common mask | Toy | Kerr |
 | --- | ---: | ---: |
-| Emitted | 5407 | 4665 |
-| Escaped | 6456 | 612 |
-| Capture proxy | 0 | 6903 |
-| Chart-boundary stops | 424 | 108 |
+| Emitted | 5453 | 4665 |
+| Escaped | 6599 | 612 |
+| Capture proxy | 0 | 7011 |
+| Radial-domain stops | 235 | 0 |
 | Affine-budget stops | 1 | 0 |
-| Common resolved base pixels | 167/192 | 184/192 |
-| Final relative intensity L1 | 0.02541480113 | 0.01846384698 |
-| Final mean classification TV | 0.01806640625 | 0.00732421875 |
-| Common-mask pilot criteria | fail: coverage < 90% | pass |
-| Whole-image criteria | fail | fail |
+| Common resolved base pixels | 183/192 | 192/192 |
+| Final relative intensity L1 | 0.02639910359 | 0.01846384698 |
+| Final mean classification TV | 0.01180013021 | 0.006022135417 |
+| Common-mask pilot criteria | pass | pass |
+| Full-image refinement criteria | fail | pass |
 
-The thresholds were committed before measurement in `benchmarks/sampling_v1.json`.
-Summary JSON files retain every aggregate pixel, masks, settings and source/
-executable hashes. Raw rays remain in unique ignored directories under
-`results/local/sampling/`, with paths and hashes recorded in the summaries.
-Results from before and after the axis-test addition have distinct computational
-digests. Do not relabel historical reports as products of newer source trees.
+Kerr's full-image refinement flag applies only to this fixed-scene four-level
+pilot; full P2 acceptance remains false. The toy's remaining central/affine
+stops are scientific failures, not transparent or renormalized pixels.
+Compared with historical BL pilots, toy domain stops fall from 424 to 235 and
+Kerr from 108 to zero. The earlier audit changed null monitoring too; historical
+reports retain their original digests, rather than being relabeled as current.
 
-## Regular angular geometry and next implementation
+Current computational digest:
+`6efaffd9fdafd50e88fabc9bc9bede4c2c87aef7f2b00b69d465cfc7acd89489`.
+Current reports use `p2_angular_optics_validation`, `p2_angular_image_validation`,
+`p2_angular_ray_benchmark_{gcc,clang}`, `p2_angular_{toy,kerr}_sampling` and
+`p2_angular_tracing_*` prefixes. Raw sampling rays are in ignored unique
+`results/local/sampling/` directories; tracked summaries preserve their hashes
+and all aggregate pixels. Final verification JSON/source inventory is pending
+the sanitizer result and final documentation update.
 
-`AXIS_CHART_DESIGN.md` derives north/south stereographic angular patches for the
-actual metric, including a finite pole limit, analytic inverse, covariant
-momentum transformations and axial Killing momentum. `tests/axis_chart_tests.cpp`
-remains an independent algebra preflight. Its 14 aggregate
-checks cover 480 double points and 120 points at each of 90 and 110 decimal
-places, plus pole limits and patch transitions. Candidate/reference calculations
-share the previously tested radial profile helper; coordinate expressions and
-inverse algorithms are independently compared. No speedup is claimed.
+## Preserved foundations
 
-The production geometry backend is now implemented in `geometry/angular.hpp`
-and `src/geometry/angular.cpp`. `AngularMetric` evaluates metric/inverse/first
-derivatives; `AngularCurvature` adds Hessian and curvature without presenting
-absent quantities as zero. The first-order scalar instantiation omits Hessian
-work. Both charts share radial profiles and curvature contraction. Parameters,
-r>0, q<=4 and the Delta singularity margin are validated; r=0 and radial chart
-surfaces are still excluded. Existing rays do not call this API yet.
+- P1 is frozen at `609debe`. Its one-sided C0-C3 shell and outward K_AB tests,
+  independent 90/110-decimal references and arbitrary-integer exact Delta
+  certificates remain intact. `results/rotating_v1.json`,
+  `results/source_manifest.json` and `README.txt` are unchanged from that baseline.
+- The earlier audit reproduced and fixed report/PPM path collision (`9740933`),
+  refined-event null ceiling/diagnostic bypass (`d16fdf7`) and empty Bernstein
+  input segfault (`2e213e5`). See `AUDIT_2026-10-24.md`; its 17-test reports use
+  `p2_audit_*` and digest `d0e73493552790f529738e9dee5029b82937ee53d950f14ed4eae85b69909f76`.
+- The regular geometry milestone had GCC/Clang 17/17 and targeted Debug and
+  ASan/UBSan 3/3. First derivatives and Hessians have independent 90/110-place
+  checks, including poles and shell joins. Its `p2_angular_*` geometry reports
+  use digest `c52e5a6026bb3cf1bba12763b082aa93c5828475944c47000a625f1fbbd36de9`.
+  Do not confuse those geometry/kernel reports with the new tracing evidence.
+- Sampling preserves unresolved intensity/alpha as null and uses a common mask
+  at all levels. Preselected policy in `benchmarks/sampling_v1.json` is unchanged.
 
-New tests cover 576 double coordinate comparisons, 27 analytic pole limits,
-unclamped shell C0-C2 endpoint jets, and 112 independent finite-difference points
-at each of 90/110 decimal places. Production first/Hessian errors are below
-5.24e-14. Independent shell Ricci/Kretschmann checks include the exact pole.
-Reference precision refinement is 2.88e-58 and coarse step refinement gives
-the expected approximately 1/16 error ratio. No numerical threshold was loosened.
-P1 still covers third radial derivatives and outward-normal extrinsic curvature.
+## Next work
 
-The C++20 `gravastar_angular_benchmark` preserves full angular and original BL
-evaluators as baselines. On the same host, GCC/Clang first/full angular kernel
-ratios are 21.3/36.0 with matching shared outputs. These are microbenchmarks;
-there is no end-to-end speedup yet. Reports include timings, dataset, hashes,
-checksums and limitations. All original image/sampling artifacts remain intact.
-
-The final GCC/Clang Release suites each pass 17/17. Debug passes the new angular
-reference, angular geometry and existing geometry-unit subset 3/3 (67.56 s).
-Optimized ASan/UBSan passes the same subset 3/3 (132.50 s), with leak detection
-enabled by default, no environment overrides/suppressions, and no diagnostics.
-This does not claim a complete 17-test Debug/sanitizer run. The transcribed matrix
-is `results/p2_angular_verification.json`, with four CTest logs. The inventory is
-`results/p2_angular_source_manifest.json`; all new scientific/performance reports
-share computational digest
-`c52e5a6026bb3cf1bba12763b082aa93c5828475944c47000a625f1fbbd36de9`.
-
-1. Implement position, momentum and frame chart transitions in the tracer.
-   Validate pole-crossing flat/Schwarzschild/Kerr rays, patch-threshold refinement
-   and Killing momentum drift before rerendering the paired scenes.
-2. Derive a separate regular central continuation of the de Sitter core. The
-   angular chart alone does not cover r=0 or decide the interior extension.
-3. Add real pinned GYOTO integration and executable comparisons, then revisit
-   whole-image convergence and difficult grazing/near-critical events.
-
-Production rays still stop at the original chart boundaries. Preserve the saved
-scientific failures. GPU/desktop and stability claims remain gated. The new
-requested-order geometry API is implemented and benchmarked; adopting it in
-ray integration remains part of the next chart-transition work.
+1. Finish and save the pending sanitizer matrix/source inventory for this
+   milestone. Commit/push all completed evidence and check remote synchronization.
+2. Derive and independently verify a regular central de Sitter continuation.
+   The remaining radial stops are not solved by angular patches.
+3. Add real pinned GYOTO integration/executable comparisons; improve grazing and
+   near-critical event coverage, then revisit complete advertised ray-domain
+   acceptance. GPU, desktop and stability claims remain gated.
 
 ## Reproduction
 
 ```text
 cmake --build --preset headless-release --parallel 3
 ctest --preset headless-release --output-on-failure
-build/headless-release/gravastar_sampling --scene benchmarks/optics_v1.json --output results/p2_toy_sampling.json
-build/headless-release/gravastar_sampling --scene benchmarks/optics_kerr_v1.json --output results/p2_kerr_sampling.json
-build/headless-release/gravastar_axis_chart_tests --report results/p2_axis_chart_preflight.json
-build/headless-release/gravastar_angular_geometry_tests --report results/p2_angular_geometry.json
-build/headless-release/gravastar_angular_reference_tests --report results/p2_angular_reference.json
-build/headless-release/gravastar_angular_benchmark --output results/p2_angular_benchmark_gcc.json
-build/headless-release/gravastar_optics_tests --report results/local/reproduced_optics_audit.json
-build/headless-release/gravastar_tools manifest --verify results/p2_audit_source_manifest.json
+build/headless-release/gravastar_angular_optics_tests --report results/local/reproduced_angular_optics.json
+build/headless-release/gravastar_optics_cli_tests build/headless-release/gravastar_trace --report results/local/reproduced_angular_images.json
+build/headless-release/gravastar_ray_benchmark --output results/local/reproduced_ray_benchmark.json
+build/headless-release/gravastar_sampling --scene benchmarks/optics_angular_v1.json --output results/local/reproduced_angular_toy_sampling.json
+build/headless-release/gravastar_sampling --scene benchmarks/optics_angular_kerr_v1.json --output results/local/reproduced_angular_kerr_sampling.json
 ```
 
-SSH pushes work with the direct command option
+SSH pushes work with
 `-c core.sshCommand='ssh -F /dev/null -o BatchMode=yes -o ConnectTimeout=10'`.
