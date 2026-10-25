@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-License-Identifier: MIT
 #include "gravastar/optics/ray.hpp"
 #include "gravastar/reference/geometry.hpp"
 #include "gravastar/tools/artifacts.hpp"

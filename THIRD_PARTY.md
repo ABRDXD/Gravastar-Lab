@@ -1,7 +1,8 @@
 # Third-party inventory
 
-Audit date: **2026-10-20**. Original GravastarLab code is
-**GPL-3.0-or-later**; see [LICENSE](LICENSE). The P1 geometry implementation
+Environment audit date: **2026-10-20**. License choice updated **2026-10-25**:
+original GravastarLab code is **MIT licensed**; see [LICENSE](LICENSE) and
+[license decision](docs/LICENSING.md). The P1 geometry implementation
 and independent C++20 reference contain no vendored third-party implementation.
 The validation/tool JSON adapter uses the installed header-only C++ dependency
 `nlohmann_json 3.12.0`, required exactly by CMake. Its MIT notice is preserved in
@@ -22,8 +23,8 @@ The scientific equation source and excluded KerrLab code are documented in
 The C++ runtime's installed grant explicitly includes the GCC exception.
 Its upstream text permits eligible compiled combinations subject to its stated
 terms. [GCC Runtime Library Exception 3.1](https://raw.githubusercontent.com/gcc-mirror/gcc/master/COPYING.RUNTIME).
-These choices permit the planned GPL project without relicensing external
-tools as GravastarLab code.
+External tools and runtimes keep their own terms; their licenses are not
+replaced by GravastarLab's MIT license.
 
 No interpreter or non-C++ language dependency is used by P1. The reference's
 integer, rational, fixed-decimal and trigonometric arithmetic are original
@@ -64,10 +65,13 @@ pins. No code, notice, or binary was copied from these packages into P1.
 | GYOTO | Executable/package absent | Official project states GPL-3.0-or-later; exact revision, dependency notices, API, ABI, and build remain P2 work |
 
 The [GYOTO project](https://gyoto.obspm.fr/) describes custom metric plugins and
-its GPL-3.0-or-later terms. This matches the intended whole-project license.
-The website also requests scientific citation and publication of research
-extensions; an eventual adapter must document both source obligations and
-scientific attribution. No GYOTO adapter or reference result exists in P1.
+its GPL-3.0-or-later terms. These are GYOTO's terms, not the license selected for
+original GravastarLab code. Before implementation, review the actual revision,
+linking/distribution arrangement and any separately licensed adapter. Prefer an
+optional independent reference workflow that leaves the MIT project usable
+without GYOTO; process separation alone is not a license-compatibility verdict.
+Scientific attribution must also be retained. No GYOTO code, adapter or binary
+is currently integrated.
 
 For a later distribution, review each actually linked/bundled component and its
 transitive notices at the selected immutable revision. The presence of a system

@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-License-Identifier: MIT
 // Preflight of the proposed angular chart. This does not change production
 // rays.
 #include "gravastar/geometry/geometry.hpp"

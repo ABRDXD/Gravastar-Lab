@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-License-Identifier: MIT
 #include "gravastar/geometry/angular.hpp"
 #include "gravastar/reference/angular.hpp"
 #include "gravastar/tools/artifacts.hpp"

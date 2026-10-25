@@ -80,6 +80,6 @@ It aggregates successively denser ray grids onto the original pixels and keeps
 unresolved coverage explicit. See the [sampling contract](docs/SAMPLING.md).
 Passing common-mask pilot criteria does not imply whole-image acceptance.
 
-Original code is GPL-3.0-or-later. See [LICENSE](LICENSE), [NOTICE](NOTICE), and
+Original code is MIT licensed. See [LICENSE](LICENSE), [NOTICE](NOTICE), and
 [THIRD_PARTY.md](THIRD_PARTY.md). No KerrLab renderer or uncertain-license code
 was copied into this project.

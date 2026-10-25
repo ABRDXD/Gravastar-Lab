@@ -1,5 +1,11 @@
 # P2 checkpoint: bounded native reference optics
 
+License update, 2026-10-26: the owner selected MIT for original code and
+documentation. Source changes are SPDX comments only. All numerical reports
+below preserve their pre-migration source digests; the current inventory is
+`results/mit_source_manifest.json`. See `LICENSING.md` for the scope and
+preserved third-party notices.
+
 ## Single-sheet central continuation on 2026-10-25
 
 Opt-in Cartesian core tracing now crosses the origin and oblate focal disk,

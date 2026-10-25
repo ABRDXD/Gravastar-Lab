@@ -412,7 +412,7 @@ See docs/MODEL.md, docs/SOURCE_AUDIT.md, NOTICE, and THIRD_PARTY.md for model
 assumptions, provenance information, dependency licensing, and scientific
 limitations.
 
-Original project code is licensed under GPL-3.0-or-later.
+Original project code is licensed under the MIT License.
 Third-party components retain their applicable licenses and attribution
 requirements.
 

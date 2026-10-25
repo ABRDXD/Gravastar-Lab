@@ -1,5 +1,10 @@
 # GravastarLab constraints
 
+Original project source and documentation use the MIT License, as explicitly
+chosen by the project owner on 2026-10-25. Preserve third-party notices. Review
+future dependencies against this choice; a planned integration does not
+authorize changing the project license.
+
 All application code, scientific calculations, independent references, tests,
 benchmarks, validation utilities, and development tools must be C++20.
 CMake is permitted only for build configuration, dependency integration and

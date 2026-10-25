@@ -62,7 +62,9 @@ The Raw tree's `THIRD_PARTY.md` had the same hash as the Restored copy.
 
 ## Dependency boundary
 
-Original GravastarLab code uses GPL-3.0-or-later as specified in the plan.
+Original GravastarLab code uses MIT, explicitly chosen by the project owner on
+2026-10-25; this supersedes the earlier GPL entry in the plan. See
+[LICENSING.md](LICENSING.md) for the scope and preserved third-party notices.
 P1 has no vendored third-party implementation and no linked scientific,
 graphics, or GUI library. C++ standard runtimes and local build tools
 are recorded in [ENVIRONMENT.md](ENVIRONMENT.md) and
