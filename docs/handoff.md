@@ -16,15 +16,19 @@ controlled complexity, numerical verification and measured baselines.
 Central continuation now has a working opt-in solver path. The static core
 geometry passes 15 checks over 72 points. Ten independent chart checks verify
 metric pullback, arbitrary covector Hamiltonians, frame/frequency and Killing
-invariance, poles, spin signs and domain restrictions. Fifty-four core optics
+invariance, poles, spin signs and domain restrictions. Fifty-five core optics
 checks cover analytic flat/de Sitter lines through the center and focal disk,
 transactional entry/exit and a toy ray that previously stopped at the radial
 cutoff and now escapes. Five focused CTests (including prior optics suites)
 pass. The CLI now exposes the extension through `benchmarks/optics_core_v1.json`.
 The core CLI regression test passes paired-image integration/overlap refinement,
 checks previously resolved classifications/intensities, labels Cartesian states,
-and rejects unsupported model/domain combinations. The complete compiler/
-sanitizer matrix and spatial pilot still remain.
+and rejects unsupported model/domain combinations. The first new 128x96 pilot
+has 5453 emitted, 6834 escaped, zero radial-domain stops and one affine-budget
+stop. Its common mask improves to 191/192; the common-mask policy passes but
+full-image criteria still fail. An analytic oblique de Sitter ray now checks
+both entry and exit transformations against its entire Cartesian path/time.
+Final compiler/sanitizer evidence and source-stable report refresh remain.
 `CORE_CONTINUATION.md` makes the single-sheet extension choice explicit;
 it is not claimed as the source paper's unspecified deep-interior topology.
 

@@ -1,0 +1,340 @@
+{
+  "checks": [
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "flat Cartesian ray crosses the center",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-11,
+      "measured": 2.220446049250313e-16,
+      "name": "flat center-crossing exact affine line",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-11,
+      "measured": 0.0,
+      "name": "flat center physical stationary momentum",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-11,
+      "measured": 0.0,
+      "name": "flat center physical axial momentum",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-11,
+      "measured": 0.0,
+      "name": "flat center reported null constraint",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "flat center every published point included in null diagnostics",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "flat center invariant diagnostics include published points",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "flat oblate focal disk is traversed",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-11,
+      "measured": 4.440892098500626e-16,
+      "name": "flat oblate focal-disk exact affine line",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-11,
+      "measured": 0.0,
+      "name": "flat focal disk physical stationary momentum",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-11,
+      "measured": 0.0,
+      "name": "flat focal disk physical axial momentum",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-11,
+      "measured": 0.0,
+      "name": "flat focal disk reported null constraint",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "flat focal disk every published point included in null diagnostics",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "flat focal disk invariant diagnostics include published points",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "flat ray enters core once and exits once",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "flat core traversal exits in southern patch",
+      "passed": true
+    },
+    {
+      "ceiling": 3e-09,
+      "measured": 6.661338147750939e-16,
+      "name": "flat entry-center-exit analytic ray",
+      "passed": true
+    },
+    {
+      "ceiling": 3e-10,
+      "measured": 0.0,
+      "name": "flat chart transitions physical stationary momentum",
+      "passed": true
+    },
+    {
+      "ceiling": 3e-10,
+      "measured": 0.0,
+      "name": "flat chart transitions physical axial momentum",
+      "passed": true
+    },
+    {
+      "ceiling": 3e-10,
+      "measured": 0.0,
+      "name": "flat chart transitions reported null constraint",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "flat chart transitions every published point included in null diagnostics",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "flat chart transitions invariant diagnostics include published points",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "de Sitter origin launch reaches budget",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-10,
+      "measured": 2.4646951146678475e-14,
+      "name": "de Sitter origin analytic time position and momentum",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-10,
+      "measured": 0.0,
+      "name": "de Sitter origin physical stationary momentum",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-10,
+      "measured": 0.0,
+      "name": "de Sitter origin physical axial momentum",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-10,
+      "measured": 1.0195548109474395e-14,
+      "name": "de Sitter origin reported null constraint",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "de Sitter origin every published point included in null diagnostics",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "de Sitter origin invariant diagnostics include published points",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "nonradial de Sitter null ray reaches budget",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "oblique de Sitter reference crosses both core transitions",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-10,
+      "measured": 7.438494264988549e-14,
+      "name": "nonradial de Sitter independent Cartesian line and time integral",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-10,
+      "measured": 1.238455533209585e-16,
+      "name": "nonradial de Sitter physical stationary momentum",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-10,
+      "measured": 9.017304378410897e-15,
+      "name": "nonradial de Sitter physical axial momentum",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-10,
+      "measured": 6.275925347278007e-14,
+      "name": "nonradial de Sitter reported null constraint",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "nonradial de Sitter every published point included in null diagnostics",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "nonradial de Sitter invariant diagnostics include published points",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy fixture previously reached the inner radial boundary",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy central continuation now escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy ray enters and leaves core",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-06,
+      "measured": 6.47377065891943e-17,
+      "name": "toy core traversal physical stationary momentum",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-06,
+      "measured": 3.1601514728975456e-13,
+      "name": "toy core traversal physical axial momentum",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-06,
+      "measured": 8.572573982964191e-10,
+      "name": "toy core traversal reported null constraint",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy core traversal every published point included in null diagnostics",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy core traversal invariant diagnostics include published points",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy outcome stable under core threshold and tolerance refinement",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-06,
+      "measured": 9.283592850248928e-11,
+      "name": "toy continued endpoint convergence",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-06,
+      "measured": 1.0995364618793246e-09,
+      "name": "toy continued affine convergence",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "invalid core overlap settings rejected",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "invalid core overlap settings rejected",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "invalid core overlap settings rejected",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "invalid core overlap settings rejected",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "Kerr cannot silently acquire a de Sitter continuation",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "core initial data requires explicit continuation mode",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "computational sources unchanged during validation",
+      "passed": true
+    }
+  ],
+  "compiler": "16.2.1 20260810",
+  "complete_P2_acceptance": false,
+  "computational_source_sha256": "88217f1f57e4e96452938d143eda5720e807e6fe0109b076bbead98d45cf1b30",
+  "passed": true,
+  "schema_version": 1,
+  "scope": "Native static-core continuation and analytic ray checks; no GYOTO comparison or full P2 acceptance."
+}

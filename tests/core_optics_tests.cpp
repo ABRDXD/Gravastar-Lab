@@ -177,7 +177,7 @@ void de_sitter_lines() {
   // Null de Sitter geodesics have Cartesian embedding coordinates affine in s.
   // Choose an oblique line with nonzero Lz and derive its covector
   // independently.
-  const std::array x{.2, -.1, .3}, v{.8, .5, -.2};
+  const std::array x{.3, -.2, 1.2}, v{.1, .15, -.9};
   double a = 0, b = 0, d = 0;
   for (int i = 0; i < 3; ++i) {
     a += x[i] * x[i];
@@ -188,10 +188,15 @@ void de_sitter_lines() {
   o::State initial{0, x[0], x[1], x[2], -E, 0, 0, 0};
   for (int i = 0; i < 3; ++i)
     initial[i + 5] = -(v[i] + k * x[i] * b / f);
-  c.maximum_affine = .4;
-  ray = o::trace_angular(p, initial, o::Chart::core_cartesian, c);
+  c.maximum_affine = 2.9;
+  const auto angular_initial = o::from_core(p, initial, o::Chart::north);
+  ray = o::trace_angular(p, angular_initial, o::Chart::north, c);
   require("nonradial de Sitter null ray reaches budget",
           ray.outcome == o::Outcome::affine_limit);
+  const auto transitions = core_transitions(ray, o::Chart::north);
+  require("oblique de Sitter reference crosses both core transitions",
+          transitions[0] == 1 && transitions[1] == 1 &&
+              ray.final.chart == o::Chart::south);
   const double beta = k * b, gamma = k * d,
                root = std::sqrt(beta * beta + f * gamma);
   double error = 0;
@@ -208,7 +213,7 @@ void de_sitter_lines() {
   check("nonradial de Sitter independent Cartesian line and time integral",
         error, 2e-10);
   conserved("nonradial de Sitter", p, ray,
-            {0, initial, 0, o::Chart::core_cartesian}, 2e-10);
+            {0, angular_initial, 0, o::Chart::north}, 2e-10);
 }
 double endpoint_difference(const o::Trace &a, const o::Trace &b) {
   auto canonical = [](const o::Point &point) {
