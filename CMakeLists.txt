@@ -4,7 +4,7 @@ project(GravastarLab VERSION 0.1.0 LANGUAGES CXX)
 option(GRAVASTAR_SANITIZERS "Enable address and undefined-behavior sanitizers" OFF)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_library(gravastar_geometry src/geometry/geometry.cpp src/geometry/angular.cpp)
+add_library(gravastar_geometry src/geometry/geometry.cpp src/geometry/angular.cpp src/geometry/core.cpp)
 target_include_directories(gravastar_geometry PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 target_compile_features(gravastar_geometry PUBLIC cxx_std_20)
@@ -23,7 +23,7 @@ endif()
 add_executable(gravastar_benchmark src/experiments/benchmark.cpp)
 target_link_libraries(gravastar_benchmark PRIVATE gravastar_geometry)
 
-add_library(gravastar_optics src/optics/ray.cpp src/optics/chart.cpp)
+add_library(gravastar_optics src/optics/ray.cpp src/optics/chart.cpp src/optics/core_chart.cpp)
 target_link_libraries(gravastar_optics PUBLIC gravastar_geometry)
 
 find_package(nlohmann_json 3.12.0 EXACT REQUIRED)
@@ -52,6 +52,11 @@ target_compile_definitions(gravastar_tools PRIVATE GRAVASTAR_SOURCE_ROOT="${CMAK
 
 include(CTest)
 if(BUILD_TESTING)
+    add_executable(gravastar_core_geometry_tests tests/core_geometry_tests.cpp)
+    target_link_libraries(gravastar_core_geometry_tests PRIVATE gravastar_geometry nlohmann_json::nlohmann_json)
+    target_compile_definitions(gravastar_core_geometry_tests PRIVATE GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}")
+    add_test(NAME core_geometry COMMAND gravastar_core_geometry_tests)
+    set_tests_properties(core_geometry PROPERTIES TIMEOUT 300 LABELS scientific)
     add_executable(gravastar_angular_optics_tests tests/angular_optics_tests.cpp)
     target_link_libraries(gravastar_angular_optics_tests PRIVATE gravastar_optics nlohmann_json::nlohmann_json)
     target_compile_definitions(gravastar_angular_optics_tests PRIVATE GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}")

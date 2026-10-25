@@ -1,6 +1,6 @@
 # Handoff: P2 regular angular tracing
 
-Updated 2026-10-24. Implementation is authorized. Active isolated worktree:
+Updated 2026-10-25. Implementation is authorized. Active isolated worktree:
 `/home/abrsdxd/Projects/GravastarLab-Cpp20`, branch
 `codex/p2-reference-optics`. Preserve the original checkout and Gemini Argon's
 concurrent work. Commit and push tested checkpoints roughly every three minutes.
@@ -12,6 +12,14 @@ The optimization policy in `AGENTS.md` requires explainable algorithms,
 controlled complexity, numerical verification and measured baselines.
 
 ## Current implementation
+
+Central continuation work has started. The static Cartesian core geometry
+builds and passes 15 checks over 72 points: center/focal-disk regularity,
+analytic derivatives and curvature, finite-difference refinement, inverse and
+domain guards. Candidate angular/core canonical transformations are compiled
+in `optics/core_chart.hpp`; their independent tests and tracer entry/exit
+integration are still pending. Do not treat this first checkpoint as completed
+central ray continuation. The complete angular milestone below remains intact.
 
 The opt-in `trace_angular` integrates through both angular poles using the regular
 geometry backend. It shares the original Dormand-Prince stepping, event refinement
