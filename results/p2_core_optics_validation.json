@@ -333,7 +333,7 @@
   ],
   "compiler": "16.2.1 20260810",
   "complete_P2_acceptance": false,
-  "computational_source_sha256": "88217f1f57e4e96452938d143eda5720e807e6fe0109b076bbead98d45cf1b30",
+  "computational_source_sha256": "58be5d8157e4bc8afe6070cbd850cd7f660d9a25be5aac83013cf52b29d5fdb7",
   "passed": true,
   "schema_version": 1,
   "scope": "Native static-core continuation and analytic ray checks; no GYOTO comparison or full P2 acceptance."

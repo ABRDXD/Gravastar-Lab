@@ -1,0 +1,67 @@
+{
+  "checks": [
+    {
+      "measured": 3.2653618371328146e-16,
+      "name": "angular-core state and covector round trips",
+      "passed": true,
+      "threshold": 3e-13
+    },
+    {
+      "measured": 5.551115123125783e-16,
+      "name": "Cartesian metric pullback against angular metric",
+      "passed": true,
+      "threshold": 3e-13
+    },
+    {
+      "measured": 4.440892098500626e-16,
+      "name": "canonical covector/vector pairing",
+      "passed": true,
+      "threshold": 3e-13
+    },
+    {
+      "measured": 8.881784197001252e-16,
+      "name": "contravariant vector round trips",
+      "passed": true,
+      "threshold": 3e-13
+    },
+    {
+      "measured": 3.3306690738754696e-16,
+      "name": "global stationary and axial Killing momenta",
+      "passed": true,
+      "threshold": 3e-13
+    },
+    {
+      "measured": 9.392215605085153e-16,
+      "name": "Hamiltonian invariance for arbitrary covectors",
+      "passed": true,
+      "threshold": 3e-13
+    },
+    {
+      "measured": 4.440892098500626e-16,
+      "name": "positions against independent BL trigonometric map",
+      "passed": true,
+      "threshold": 3e-13
+    },
+    {
+      "measured": 2.220446049250313e-15,
+      "name": "transformed observer frames and round trips",
+      "passed": true,
+      "threshold": 3e-13
+    },
+    {
+      "measured": 4.440892098500626e-16,
+      "name": "observer frequency under core transformation",
+      "passed": true,
+      "threshold": 3e-13
+    },
+    {
+      "measured": 0.0,
+      "name": "inverse focal disk and wrong regions rejected",
+      "passed": true,
+      "threshold": 0.0
+    }
+  ],
+  "compiler": "16.2.1 20260810",
+  "computational_source_sha256": "58be5d8157e4bc8afe6070cbd850cd7f660d9a25be5aac83013cf52b29d5fdb7",
+  "passed": true
+}

@@ -1,9 +1,9 @@
 {
   "algorithm": "sha256",
-  "computational_sha256": "c8849c0367238339f2e6a774632785b14d554c957ca4b170b55cb612b7a2b997",
+  "computational_sha256": "58be5d8157e4bc8afe6070cbd850cd7f660d9a25be5aac83013cf52b29d5fdb7",
   "digest_encoding": "UTF-8 compact JSON of sorted records and object keys",
-  "documentation_sha256": "29c0132ee3020b487ca1af9540e3d8388e6f1b524dec97e107db4ba15cd285cf",
-  "file_count": 78,
+  "documentation_sha256": "8fcf504b99c006d9b6fabef2c2aa6cc1f8d24509eec59a4de4aa3f3dbda8078d",
+  "file_count": 79,
   "files": [
     {
       "bytes": 1548,
@@ -70,6 +70,12 @@
       "path": "benchmarks/optics_angular_v1.json",
       "scope": "computational",
       "sha256": "e2c72ae9a0c8c87cff01de8affaa94fcfc76840b9901e18194f1a7164975e58c"
+    },
+    {
+      "bytes": 1233,
+      "path": "benchmarks/optics_core_long_v1.json",
+      "scope": "computational",
+      "sha256": "070becd4cb6c70455849ceffbf6b59ce87fd1841969a44501d16592af0491985"
     },
     {
       "bytes": 1103,
@@ -186,10 +192,10 @@
       "sha256": "56c0806ab6c06264514981b03b7f4f11b595db8d91b8ee7ae26e037435306ae0"
     },
     {
-      "bytes": 9065,
+      "bytes": 9404,
       "path": "docs/handoff.md",
       "scope": "documentation",
-      "sha256": "378dc5b87b993714a27b1ecc51618eea82dc958238bae3a7df246c5c06a8d287"
+      "sha256": "76f8d01e462ccab654a184d252a61843d6e81bd47fb1cae7cb7c744260fab17a"
     },
     {
       "bytes": 1420,
@@ -396,10 +402,10 @@
       "sha256": "3aa749e52601af7292c6e38362eaac4fe645fc8e6fe6686b3a0fa7424a11cb55"
     },
     {
-      "bytes": 7953,
+      "bytes": 11784,
       "path": "tests/core_cli_tests.cpp",
       "scope": "computational",
-      "sha256": "c59691a7e1bc42984cd45e2c6b161d1250363a8c0f83ac648eacef8cd131eadb"
+      "sha256": "c97a754eef6272e31e77f70534b538dd762ac02f5c8381aa7be6106eb8cebe98"
     },
     {
       "bytes": 10536,
@@ -408,10 +414,10 @@
       "sha256": "f35cee1c057d48e1a8fa4bfa34022016aeb7f7f3b051815e8aab12826f248810"
     },
     {
-      "bytes": 14304,
+      "bytes": 14624,
       "path": "tests/core_optics_tests.cpp",
       "scope": "computational",
-      "sha256": "694535f5c154ae55de28ff7bca7772f8f9eaac68b98c83b69651e906fd3ec85f"
+      "sha256": "5c0080f88a28c26f038abcb921d7a608fca480d911ddf1c4b7774fa4ca7f4b23"
     },
     {
       "bytes": 12557,
@@ -475,5 +481,5 @@
     }
   ],
   "schema_version": 1,
-  "source_sha256": "bc5308b2243252393a018015ffbc0d9d200d3f44b81883dbdf2f861452fe739e"
+  "source_sha256": "d3f78fecb22c0f174465b36f823985673601c1b7682e0b520f702ac193c34cee"
 }
