@@ -1,5 +1,64 @@
 # P2 checkpoint: bounded native reference optics
 
+## Single-sheet central continuation on 2026-10-25
+
+Opt-in Cartesian core tracing now crosses the origin and oblate focal disk,
+then returns to the angular atlas. `CORE_CONTINUATION.md` derives the exact
+coordinate map, metric, canonical transformations and conserved quantities.
+This supplies an explicitly chosen smooth single-sheet interior; the paper
+leaves the deeper topology unspecified. The shell/exterior model and frozen
+P1 artifacts are preserved. All implementation and verification code is C++20,
+with no new dependency or performance claim.
+
+The four new suites contain 15 geometry checks over 72 points, 10 chart checks,
+55 optical checks and 28 CLI checks. Independent references include direct
+metric pullback, closed derivatives/curvature, convergent finite differences,
+flat lines and the analytic oblique de Sitter path/time through both chart
+transitions. The latter agrees within 7.44e-14. The toy traversal agrees under
+tighter integration and changed overlap radii within 9.29e-11 in scaled state.
+The CLI preserves previously resolved image outcomes and intensities, tags
+Cartesian output and rejects unsupported model/overlap/disk combinations.
+
+Both GCC and Clang Release pass **22/22** CTests. Targeted optimized ASan/UBSan
+passes **5/5**: core geometry, chart, optics, CLI, and the existing optics
+reference. No diagnostics or environment overrides/suppressions were used;
+default Linux leak detection remained enabled. Test durations (48.18, 38.20,
+25.50 seconds) include concurrent validation and are not performance results.
+
+| Finest toy grid: 128x96 | Core, budget 40 | Core, budget 80 |
+| --- | ---: | ---: |
+| Emitted | 5453 | 5453 |
+| Escaped across r=10 | 6834 | 6835 |
+| Radial-domain stops | 0 | 0 |
+| Affine-budget stops | 1 | 0 |
+| Common resolved base pixels | 191/192 | 192/192 |
+| Final relative intensity L1 | 0.02639910359 | 0.02670175532 |
+| Final mean classification TV | 0.01041666667 | 0.01033528646 |
+| Common-mask pilot criteria | pass | pass |
+| Full-image refinement criteria | fail | pass |
+
+Central continuation removes all 235 radial stops in the historical angular
+pilot. The remaining budget-40 ray is pixel (42,0): it is outward-moving at
+r=9.84038 when the affine limit expires. A separately recorded follow-up preset
+changes only the affine budget to 80. That ray escapes at s=40.1973976;
+tightening tolerances/step/event limits and changing patch thresholds changes
+the escape affine value by 6.14e-7 and its scaled state by 4.37e-7. The full
+budget-80 pilot resolves every ray at all four grids. Its selection occurred
+after observing the budget-40 censoring; the original preset/report and frozen
+sampling thresholds are preserved. Different common masks explain the small
+change in aggregate refinement measures. These are fixed-scene pilot criteria,
+not a global error certificate or full P2 acceptance.
+
+Native reports use `results/p2_core_*`, with separate
+`p2_core_long_toy_sampling.json` for budget 80. The matrix is
+`results/p2_core_verification.json`; the inventory is
+`results/p2_core_source_manifest.json`. Computational digest:
+`58be5d8157e4bc8afe6070cbd850cd7f660d9a25be5aac83013cf52b29d5fdb7`.
+Raw sampling rays stay in ignored unique local directories, with their hashes
+and aggregate data in tracked reports. All sections below retain historical
+checkpoint evidence; their old domain limitations are superseded only by the
+explicit new modes described above.
+
 ## Regular angular tracing on 2026-10-24
 
 The optional angular mode now crosses both poles with shared adaptive stepping
@@ -306,20 +365,21 @@ debug or instrumented builds.
 
 ## Remaining gates and review tasks
 
-Complete P2 acceptance remains open: central and axial chart continuation,
-real GYOTO integration/comparison, whole-image spatial acceptance, and broader
-near-critical/grazing-ray checks are not established. The tracer does not
-replace an unresolved boundary with artificial absorption or reflection.
+Complete P2 acceptance remains open: actual pinned GYOTO integration/comparison,
+broader near-critical/grazing-ray checks, and general advertised-domain
+acceptance remain. Angular and central continuation are now implemented for
+their stated domains, and the fixed toy budget-80 pilot passes full-image
+refinement criteria. Neither those criteria nor the chosen single-sheet
+interior certify all parameters, source models or global topologies.
 
 Argon can independently reproduce frozen P1, then audit the Hamiltonian sign,
 observer-frame orientation, emission convention, event ordering and refinement,
 and unresolved-pixel encoding on this branch. A separate branch should contain
-any proposed corrections. The next implementation needs angular-chart tracer
-transitions for position, covariant momentum and observer frames, actual
-pole-crossing rays and patch-threshold convergence, plus a separately derived
-central continuation model, followed by a real pinned GYOTO build and comparisons compatible
-with the C++20-only build constraint. No untested plugin stub counts as progress
-through that gate. GPU/desktop and stability work remain later stages.
+any proposed corrections. Review the core energy transformation, step clipping
+at chart transitions, analytic oblique references and the budget-40/80 results.
+The next dependency work needs a real pinned GYOTO build and comparisons
+compatible with the C++20-only constraint. No untested plugin stub counts as
+progress through that gate. GPU/desktop and stability work remain later stages.
 
 Preserve this branch separately from concurrent work on `main`; checkpoints
 are reviewable progress, not a claim that the complete P2 gate has passed.

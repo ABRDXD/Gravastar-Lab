@@ -5,7 +5,11 @@ remains open. P1 is frozen at `609debe`; this work uses a separate branch.
 The original BL mode retains the positive-radius, off-axis chart described below.
 Opt-in regular angular tracing is now available; see `ANGULAR_TRACING.md` for
 coordinate tags, patch switching, pole-crossing tests and new image presets.
-Central continuation and GYOTO agreement remain gates for complete P2 acceptance.
+Opt-in single-sheet Cartesian core continuation is specified and verified in
+`CORE_CONTINUATION.md`; its interior topology is a project extension. The
+budget-40 and separate budget-80 presets retain explicit stopping semantics.
+GYOTO agreement and broader event/domain coverage remain gates for complete P2
+acceptance; passing one image pilot does not close those gates.
 No new language or numerical dependency is used.
 
 ## State, time orientation and observer convention

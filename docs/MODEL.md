@@ -80,6 +80,11 @@ metric Hessians; C++ differentiates Christoffel symbols.
 
 ## Chart and interior decision
 
+This section records the frozen P1 scope. Subsequent opt-in P2 angular charts
+and single-sheet Cartesian core continuation are specified separately in
+`ANGULAR_TRACING.md` and `CORE_CONTINUATION.md`. They do not reinterpret the
+frozen P1 benchmark or claim to recover the paper's unspecified deep topology.
+
 P1 uses exactly the paper's BL-type chart: `r>0`, `0<theta<pi`.
 The validation box stays away from axes and `r=0`. There is **no** central
 extension, axis-crossing chart, horizon-crossing chart, or ray continuation

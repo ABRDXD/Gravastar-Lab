@@ -1,0 +1,485 @@
+{
+  "algorithm": "sha256",
+  "computational_sha256": "58be5d8157e4bc8afe6070cbd850cd7f660d9a25be5aac83013cf52b29d5fdb7",
+  "digest_encoding": "UTF-8 compact JSON of sorted records and object keys",
+  "documentation_sha256": "3fb8a4ce0db0887c20d4dbba9c62185783092b8ba0af5012c4f439436bc916bf",
+  "file_count": 79,
+  "files": [
+    {
+      "bytes": 1548,
+      "path": "AGENTS.md",
+      "scope": "documentation",
+      "sha256": "31a34143f620e9ff33466de466a7f8be37f44395232a71f463e3d02eaa19cfa8"
+    },
+    {
+      "bytes": 10324,
+      "path": "CMakeLists.txt",
+      "scope": "computational",
+      "sha256": "ed1bc0303e41c8bc2b3125727cf1151db12034d6fd06be908656b87633e1070e"
+    },
+    {
+      "bytes": 1430,
+      "path": "CMakePresets.json",
+      "scope": "computational",
+      "sha256": "ef922b9a446a167e0d2a78ccbc4bd6809e6abdd9c084548f91505e91bb5ea1df"
+    },
+    {
+      "bytes": 34674,
+      "path": "LICENSE",
+      "scope": "documentation",
+      "sha256": "fb981668c18a279e285fc4d83fba1e836cc84dd4daa73c9697d3cfd2d8aca6e0"
+    },
+    {
+      "bytes": 939,
+      "path": "NOTICE",
+      "scope": "documentation",
+      "sha256": "c5a9dcf68b4b2a5d22879d69900f66a9fbb4e54f94fa24f5e2bfc6ad283fcc0a"
+    },
+    {
+      "bytes": 37988,
+      "path": "PLAN.md",
+      "scope": "documentation",
+      "sha256": "849e0cfc2d7a2237a2ad6506229a72e5dd1773183e5680fcb17a949c05eef073"
+    },
+    {
+      "bytes": 4189,
+      "path": "README.md",
+      "scope": "documentation",
+      "sha256": "0f904dbb354cd27a0b30c3d4cdb708aebb3a34c79d109ea3426f7035ee5a96d8"
+    },
+    {
+      "bytes": 15892,
+      "path": "README.txt",
+      "scope": "documentation",
+      "sha256": "ca59aa5ce7065eba82b0c233a158a540f4c6cef491f4a37b1b2a827a2b952521"
+    },
+    {
+      "bytes": 6738,
+      "path": "THIRD_PARTY.md",
+      "scope": "documentation",
+      "sha256": "e34dc579b4c0c9c50f15be4712012c4e6f76d959dcb6de8b3be384e4e889df95"
+    },
+    {
+      "bytes": 976,
+      "path": "benchmarks/optics_angular_kerr_v1.json",
+      "scope": "computational",
+      "sha256": "5711f100a3a6e5752421de7a77b1064bd7f84afb0f27276cb899d225a144be73"
+    },
+    {
+      "bytes": 950,
+      "path": "benchmarks/optics_angular_v1.json",
+      "scope": "computational",
+      "sha256": "e2c72ae9a0c8c87cff01de8affaa94fcfc76840b9901e18194f1a7164975e58c"
+    },
+    {
+      "bytes": 1233,
+      "path": "benchmarks/optics_core_long_v1.json",
+      "scope": "computational",
+      "sha256": "070becd4cb6c70455849ceffbf6b59ce87fd1841969a44501d16592af0491985"
+    },
+    {
+      "bytes": 1103,
+      "path": "benchmarks/optics_core_v1.json",
+      "scope": "computational",
+      "sha256": "ea8da312bd880a922667ee15161dc201a1c8f411017edbb1e72f36d7670debcf"
+    },
+    {
+      "bytes": 899,
+      "path": "benchmarks/optics_kerr_v1.json",
+      "scope": "computational",
+      "sha256": "ffda8cebbfb575cf1b1315dda8f97e8edf108bc22efe1990ac6df91b8c765a00"
+    },
+    {
+      "bytes": 898,
+      "path": "benchmarks/optics_v1.json",
+      "scope": "computational",
+      "sha256": "79853ee6055e465ba12c61d7dda4bad1dfffcea2253538247a29c1cae2b10cea"
+    },
+    {
+      "bytes": 1164,
+      "path": "benchmarks/rotating_v1.json",
+      "scope": "computational",
+      "sha256": "8066bf0b85cf53f97141a55a64827b0274fbe4bec397c81fe8b63904e323bb33"
+    },
+    {
+      "bytes": 319,
+      "path": "benchmarks/sampling_v1.json",
+      "scope": "computational",
+      "sha256": "79415424821b326d32ed8fcf63cfab1f6314f3ec8a1ed166208d51ec7025d543"
+    },
+    {
+      "bytes": 6794,
+      "path": "docs/ANGULAR_TRACING.md",
+      "scope": "documentation",
+      "sha256": "025aaafb75e394c8ee2e6e6aada02af6528d61347a0b2de697bdd14fcdb74463"
+    },
+    {
+      "bytes": 6255,
+      "path": "docs/ARCHITECTURE.md",
+      "scope": "documentation",
+      "sha256": "4d2f238f02fa9777e44c32b24254576b9b229f07f44e6b488fdac2c970187bf6"
+    },
+    {
+      "bytes": 5890,
+      "path": "docs/AUDIT_2026-10-24.md",
+      "scope": "documentation",
+      "sha256": "6dedb64dbd44ac481037349ecbcc9dd9e326f2f4e9563ca2c03b4fc3d787c9b6"
+    },
+    {
+      "bytes": 9683,
+      "path": "docs/AXIS_CHART_DESIGN.md",
+      "scope": "documentation",
+      "sha256": "709d5fb540dceb8914ad85a0316b92a38d1955a177959c3c0730f0fca5560319"
+    },
+    {
+      "bytes": 11926,
+      "path": "docs/CORE_CONTINUATION.md",
+      "scope": "documentation",
+      "sha256": "fce5199a89744d113e1f18f65051ffc960cd5a1cb247e3a60698a864743f0c6a"
+    },
+    {
+      "bytes": 5360,
+      "path": "docs/ENVIRONMENT.md",
+      "scope": "documentation",
+      "sha256": "5a5fada68c4350ab3efcfdecea5358de2fed12e1b773de4a4d091332879fcfaf"
+    },
+    {
+      "bytes": 4350,
+      "path": "docs/MIGRATION.md",
+      "scope": "documentation",
+      "sha256": "9f9c392aef79924ab94772f82857f89e8aaa13eb036a0ec8dbfad2950d5fc68b"
+    },
+    {
+      "bytes": 7985,
+      "path": "docs/MODEL.md",
+      "scope": "documentation",
+      "sha256": "b9b602efffa1e39ee12fed4fcc18569eebc6a05f614d12d5b8b857826d697610"
+    },
+    {
+      "bytes": 6751,
+      "path": "docs/OPTICS.md",
+      "scope": "documentation",
+      "sha256": "e3d84c1e7c783b6335d4da627ae9d785ee421860ebb96c70deb8771d73f6591c"
+    },
+    {
+      "bytes": 22843,
+      "path": "docs/P2_STATUS.md",
+      "scope": "documentation",
+      "sha256": "4360d78a604985f07204aa019c6dff1b33dbfea0ec0db9685aa1f62a12f052f2"
+    },
+    {
+      "bytes": 4335,
+      "path": "docs/PROVENANCE.md",
+      "scope": "documentation",
+      "sha256": "0aae1241a8f872a1b5c27f10ecb97cbc7a820eb8cadfc9cf547fd6e64f350328"
+    },
+    {
+      "bytes": 4700,
+      "path": "docs/SAMPLING.md",
+      "scope": "documentation",
+      "sha256": "e9fc61e96c32664d07ca9378cda942e4bc8db636b2974d836e75bb53f4a764eb"
+    },
+    {
+      "bytes": 7344,
+      "path": "docs/SOURCE_AUDIT.md",
+      "scope": "documentation",
+      "sha256": "614e1febbbe3a4c9a1a53b9ce7e4e2274d896720d4186873cf7ffdfa3b90ed75"
+    },
+    {
+      "bytes": 7247,
+      "path": "docs/STATUS.md",
+      "scope": "documentation",
+      "sha256": "56c0806ab6c06264514981b03b7f4f11b595db8d91b8ee7ae26e037435306ae0"
+    },
+    {
+      "bytes": 8399,
+      "path": "docs/handoff.md",
+      "scope": "documentation",
+      "sha256": "33cff945f6b6dc7d5ad972330455408d2f0c464eec5a6016258933407a77d2a5"
+    },
+    {
+      "bytes": 1420,
+      "path": "include/gravastar/geometry/angular.hpp",
+      "scope": "computational",
+      "sha256": "2473a4e11e95fb93e9e81d052eeb3f5ab57dd30c208331579a4f0657d214aef1"
+    },
+    {
+      "bytes": 1226,
+      "path": "include/gravastar/geometry/core.hpp",
+      "scope": "computational",
+      "sha256": "a8c4c5fe7cf443328f4a0e87797634aeac2b034c0aeab0e9eddfac288b455246"
+    },
+    {
+      "bytes": 1839,
+      "path": "include/gravastar/geometry/geometry.hpp",
+      "scope": "computational",
+      "sha256": "be767235a639b3494b4043937278d6cd32b920d8d2e86c89728ae7fcf0eb8524"
+    },
+    {
+      "bytes": 2596,
+      "path": "include/gravastar/math/jet.hpp",
+      "scope": "computational",
+      "sha256": "381047885cfa8135e52eb0f2c37bc21303aacc24494e981ea80ce61ab9463261"
+    },
+    {
+      "bytes": 2376,
+      "path": "include/gravastar/math/spatial_jet.hpp",
+      "scope": "computational",
+      "sha256": "0b2b74b4d57062037aec1d8e4a587623f417222a50cb1d761ec501db2f3dc620"
+    },
+    {
+      "bytes": 1032,
+      "path": "include/gravastar/optics/chart.hpp",
+      "scope": "computational",
+      "sha256": "8235002ed0f0072ccc80feced8bcf24ab2b7bd5829629ea485d4df274f6456af"
+    },
+    {
+      "bytes": 1457,
+      "path": "include/gravastar/optics/core_chart.hpp",
+      "scope": "computational",
+      "sha256": "90643630a201d927f75beb3bba6199173189e14122447e3f120120f386ebd984"
+    },
+    {
+      "bytes": 3424,
+      "path": "include/gravastar/optics/ray.hpp",
+      "scope": "computational",
+      "sha256": "10713b907163bc82b0144ed64d2c204c8117e4fd0fa2b73351e8e19d93bcdbea"
+    },
+    {
+      "bytes": 6479,
+      "path": "include/gravastar/optics/sampling.hpp",
+      "scope": "computational",
+      "sha256": "883834ce89bf6c87c4385ac846e8c63c0b144770520d370e76038dff5c05dd87"
+    },
+    {
+      "bytes": 3838,
+      "path": "include/gravastar/reference/angular.hpp",
+      "scope": "computational",
+      "sha256": "9bf621ba558db9131e73d8999488f936fdc4094db9df7eb325c3c977a1676404"
+    },
+    {
+      "bytes": 8368,
+      "path": "include/gravastar/reference/geometry.hpp",
+      "scope": "computational",
+      "sha256": "12c5f2abcfdeeba267df55872356278f35f0216c21e12a6725cc8ea5aa6efe3b"
+    },
+    {
+      "bytes": 12868,
+      "path": "include/gravastar/reference/number.hpp",
+      "scope": "computational",
+      "sha256": "2ebab15a252804e6765d24916a143dd12803a65adef28aae142be50effb4a2be"
+    },
+    {
+      "bytes": 6756,
+      "path": "include/gravastar/reference/polynomial.hpp",
+      "scope": "computational",
+      "sha256": "38e6a1533821ae4860552ed303ebcfe748d270227f45591388f9a8d5f0723f82"
+    },
+    {
+      "bytes": 7875,
+      "path": "include/gravastar/tools/artifacts.hpp",
+      "scope": "computational",
+      "sha256": "d7b09e853895c04b45bca50630a91a9bbac45d764095e75e476871af96067497"
+    },
+    {
+      "bytes": 984,
+      "path": "include/gravastar/tools/process.hpp",
+      "scope": "computational",
+      "sha256": "26591a8c5c9cde9a5707946afb9c4f982f89a6091a8fe3a4e1b1dbfaf11aba83"
+    },
+    {
+      "bytes": 8126,
+      "path": "src/experiments/angular_benchmark.cpp",
+      "scope": "computational",
+      "sha256": "00b8d18639ebaf66a5520fd0af214db16c5874aefd2ed829dd9265ab3ab6d4ea"
+    },
+    {
+      "bytes": 5420,
+      "path": "src/experiments/benchmark.cpp",
+      "scope": "computational",
+      "sha256": "e2327ce021cc42db304bc61d835260cb682ebc13666dbf71ce3c0beb46db7272"
+    },
+    {
+      "bytes": 9015,
+      "path": "src/experiments/ray_benchmark.cpp",
+      "scope": "computational",
+      "sha256": "9c53b0254ce3f1681efc84420def8a493a45246ecfaf8bed69863d921cf09a2d"
+    },
+    {
+      "bytes": 13611,
+      "path": "src/experiments/sampling.cpp",
+      "scope": "computational",
+      "sha256": "35ed14a75da2585b2bbb9345f146c877ce43c31045a1e020146057c08c55a6f2"
+    },
+    {
+      "bytes": 15177,
+      "path": "src/experiments/trace.cpp",
+      "scope": "computational",
+      "sha256": "00f4edbefbbeb1157715826514ff1f7e206d31fd05fceeb236428d46f4d9742b"
+    },
+    {
+      "bytes": 26719,
+      "path": "src/experiments/validate.cpp",
+      "scope": "computational",
+      "sha256": "b90057b4804ec3f8aa8922169786062820b0daeb4210adbbcc88109d51a74671"
+    },
+    {
+      "bytes": 6603,
+      "path": "src/geometry/angular.cpp",
+      "scope": "computational",
+      "sha256": "8853624035ee7a69745bce8b517115d164645c26cc409b64e2615dac620a3fb5"
+    },
+    {
+      "bytes": 5019,
+      "path": "src/geometry/core.cpp",
+      "scope": "computational",
+      "sha256": "1c24088e8df9c987e2a4e63f291664d09e736cb1014222af2ce63e1c97e2acc8"
+    },
+    {
+      "bytes": 390,
+      "path": "src/geometry/curvature.hpp",
+      "scope": "computational",
+      "sha256": "cedb8cf8828ab6b5283d684003fac99213925da5a5fb093c7b4db639ba11f7a8"
+    },
+    {
+      "bytes": 9234,
+      "path": "src/geometry/geometry.cpp",
+      "scope": "computational",
+      "sha256": "04ab6922418c719ca27fd7b9d9db2d1c411da3546183aad6e00a72ded92d042a"
+    },
+    {
+      "bytes": 1551,
+      "path": "src/geometry/profile.hpp",
+      "scope": "computational",
+      "sha256": "8a74ca21fdee0273295e58313247b1caece2cf300e1a3bb5319263fd87373ac1"
+    },
+    {
+      "bytes": 5397,
+      "path": "src/optics/chart.cpp",
+      "scope": "computational",
+      "sha256": "e1fda4cf6f81ea80f409bae3e1e4628cfe3f496dfa78be06be377a23b310ad85"
+    },
+    {
+      "bytes": 8639,
+      "path": "src/optics/core_chart.cpp",
+      "scope": "computational",
+      "sha256": "31463405100641449e467589399622ed8ddc3854bd03d212fc1cb9d12c1be22d"
+    },
+    {
+      "bytes": 22376,
+      "path": "src/optics/ray.cpp",
+      "scope": "computational",
+      "sha256": "91766d43519f738290f8d0110f3b44b4971dca22db885f9bb2a291d7bb38d025"
+    },
+    {
+      "bytes": 8381,
+      "path": "tests/angular_geometry_tests.cpp",
+      "scope": "computational",
+      "sha256": "772d777fe670df4cf29bf159f245920df4bd9c94786e7cf0afe995b497f5dccc"
+    },
+    {
+      "bytes": 17147,
+      "path": "tests/angular_optics_tests.cpp",
+      "scope": "computational",
+      "sha256": "ead8da7259115f3e817f2e8528a30ae16dbe98ce2fa3cfd3da6702499b8ab479"
+    },
+    {
+      "bytes": 8804,
+      "path": "tests/angular_reference_tests.cpp",
+      "scope": "computational",
+      "sha256": "982cbc5064b3d210e11e87ef5b472d676b189c754cb68c921cbdc671ef0f4129"
+    },
+    {
+      "bytes": 14006,
+      "path": "tests/axis_chart_tests.cpp",
+      "scope": "computational",
+      "sha256": "727fa2208fa4ec010169e3476380b3450c22d7baf9f7a4f6557154da00096194"
+    },
+    {
+      "bytes": 8700,
+      "path": "tests/core_chart_tests.cpp",
+      "scope": "computational",
+      "sha256": "3aa749e52601af7292c6e38362eaac4fe645fc8e6fe6686b3a0fa7424a11cb55"
+    },
+    {
+      "bytes": 11784,
+      "path": "tests/core_cli_tests.cpp",
+      "scope": "computational",
+      "sha256": "c97a754eef6272e31e77f70534b538dd762ac02f5c8381aa7be6106eb8cebe98"
+    },
+    {
+      "bytes": 10536,
+      "path": "tests/core_geometry_tests.cpp",
+      "scope": "computational",
+      "sha256": "f35cee1c057d48e1a8fa4bfa34022016aeb7f7f3b051815e8aab12826f248810"
+    },
+    {
+      "bytes": 14624,
+      "path": "tests/core_optics_tests.cpp",
+      "scope": "computational",
+      "sha256": "5c0080f88a28c26f038abcb921d7a608fca480d911ddf1c4b7774fa4ca7f4b23"
+    },
+    {
+      "bytes": 12557,
+      "path": "tests/cpp_geometry.cpp",
+      "scope": "computational",
+      "sha256": "ac92f908fedf0b27ce69a71c4c613ec2399bb59906f20fe242735f9d17f3c885"
+    },
+    {
+      "bytes": 15230,
+      "path": "tests/optics_cli_tests.cpp",
+      "scope": "computational",
+      "sha256": "00184791bdffae82534bab51d9e88eb794fbe531498ba0609f018d351f04629b"
+    },
+    {
+      "bytes": 16985,
+      "path": "tests/optics_tests.cpp",
+      "scope": "computational",
+      "sha256": "dc6fc77e2ee88dad363a0f0fa7add4789c5fad8d6cdb80c12872c37f148e58fd"
+    },
+    {
+      "bytes": 6598,
+      "path": "tests/reference_tests.cpp",
+      "scope": "computational",
+      "sha256": "dd190c498bf3ae022f4a17a0d8c5edf662f1cb56d3e707212a2f3f24211ee9b4"
+    },
+    {
+      "bytes": 6740,
+      "path": "tests/sampling_cli_tests.cpp",
+      "scope": "computational",
+      "sha256": "69cfc87fc89ba96b507dd937d54f712e58b5bfaaed91ff2927763cf6947d0105"
+    },
+    {
+      "bytes": 6443,
+      "path": "tests/sampling_tests.cpp",
+      "scope": "computational",
+      "sha256": "872474368f6df8a93e2fde775a19ef246dadeee52c1282466009554314ee2ffc"
+    },
+    {
+      "bytes": 2389,
+      "path": "tests/validation_failures.cpp",
+      "scope": "computational",
+      "sha256": "51dcaae09c4af9d696455d35c2793ce837c0aa290ebca977b624c79d2b0c9f10"
+    },
+    {
+      "bytes": 0,
+      "path": "third_party/licenses/.gitkeep",
+      "scope": "computational",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 1076,
+      "path": "third_party/licenses/nlohmann-json-3.12.0.txt",
+      "scope": "computational",
+      "sha256": "46a65cffd1ea955132d95a8dd921640714a8d6b537d2e4e482d31145ae95b603"
+    },
+    {
+      "bytes": 8707,
+      "path": "tools/project.cpp",
+      "scope": "computational",
+      "sha256": "6a90a901868ff835e35b0277bc1e7b684e7b5d21f61381bafd8c4ec4ee90b7d4"
+    }
+  ],
+  "schema_version": 1,
+  "source_sha256": "6ed381d947ddfe8555fa9fbdf7ca6b2c9cd8c521220d0b5aaee8ed51538bb19c"
+}

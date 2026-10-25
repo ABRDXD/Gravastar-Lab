@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "record_kind": "transcribed verification matrix; numerical measurements are in the linked native C++20 reports",
+  "date": "2026-10-25",
+  "computational_source_sha256": "58be5d8157e4bc8afe6070cbd850cd7f660d9a25be5aac83013cf52b29d5fdb7",
+  "verification_complete": true,
+  "complete_P2_acceptance": false,
+  "core_extension": "static_cartesian_single_sheet_v1",
+  "extension_scope": "Explicit project-selected smooth filling of the omitted oblate focal disk; not the source paper's unspecified deep topology.",
+  "builds": [
+    {
+      "configuration": "GCC Release",
+      "compiler": "16.2.1 20260810",
+      "command": "ctest --preset headless-release --output-on-failure --output-log results/p2_core_gcc_ctest.txt",
+      "passed": 22,
+      "total": 22,
+      "elapsed_seconds": 48.18,
+      "log": "results/p2_core_gcc_ctest.txt"
+    },
+    {
+      "configuration": "Clang Release",
+      "compiler": "Clang 23.1.3",
+      "command": "ctest --test-dir build/clang-release --output-on-failure --output-log results/p2_core_clang_ctest.txt",
+      "passed": 22,
+      "total": 22,
+      "elapsed_seconds": 38.20,
+      "log": "results/p2_core_clang_ctest.txt"
+    },
+    {
+      "configuration": "GCC optimized ASan/UBSan subset",
+      "build_type": "RelWithDebInfo",
+      "optimization_flags": "-O2 -g -DNDEBUG",
+      "tests": ["core_cli", "core_chart", "core_optics", "core_geometry", "optics_reference"],
+      "command": "ctest --test-dir build/sanitizers-optimized -R '^core_cli$|^core_chart$|^core_optics$|^core_geometry$|^optics_reference$' --output-on-failure --output-log results/p2_core_sanitizers_ctest.txt",
+      "passed": 5,
+      "total": 5,
+      "elapsed_seconds": 25.50,
+      "log": "results/p2_core_sanitizers_ctest.txt",
+      "environment_overrides": [],
+      "suppressions": [],
+      "diagnostics": "none",
+      "leak_detection": "Linux default; no disabling override"
+    }
+  ],
+  "test_timing_scope": "Concurrent validation work; test durations are not performance measurements.",
+  "native_validation": {
+    "core_geometry_checks": 15,
+    "core_geometry_points": 72,
+    "core_geometry_report": "results/p2_core_geometry_validation.json",
+    "core_chart_checks": 10,
+    "core_chart_report": "results/p2_core_chart_validation.json",
+    "core_optics_checks": 55,
+    "core_optics_report": "results/p2_core_optics_validation.json",
+    "CLI_checks": 28,
+    "CLI_report": "results/p2_core_image_validation.json",
+    "oblique_de_Sitter_path_time_error": 7.438494264988549e-14,
+    "toy_scaled_endpoint_refinement": 9.283592850248928e-11,
+    "toy_affine_refinement": 1.0995364618793246e-9
+  },
+  "sampling": {
+    "scales": [1, 2, 4, 8],
+    "finest_grid": [128, 96],
+    "policy_unchanged": "benchmarks/sampling_v1.json",
+    "budget_40": {
+      "report": "results/p2_core_toy_sampling.json",
+      "classifications": {"emitted": 5453, "escaped": 6834, "affine_limit": 1},
+      "radial_domain_stops": 0,
+      "common_resolved_base_pixels": 191,
+      "base_pixels": 192,
+      "final_relative_intensity_l1": 0.026399103591866778,
+      "final_mean_classification_tv": 0.010416666666666668,
+      "pilot_refinement_criteria_passed_on_common_mask": true,
+      "full_image_refinement_criteria_passed": false
+    },
+    "budget_80": {
+      "report": "results/p2_core_long_toy_sampling.json",
+      "classifications": {"emitted": 5453, "escaped": 6835},
+      "radial_domain_stops": 0,
+      "common_resolved_base_pixels": 192,
+      "base_pixels": 192,
+      "final_relative_intensity_l1": 0.02670175531719939,
+      "final_mean_classification_tv": 0.010335286458333336,
+      "pilot_refinement_criteria_passed_on_common_mask": true,
+      "full_image_refinement_criteria_passed": true,
+      "selection": "Separate follow-up after observing one budget-40 ray censored near r=10. Only the affine budget changes; original report and all thresholds preserved."
+    },
+    "selected_budget_witness": {
+      "pixel": [42, 0],
+      "grid": [128, 96],
+      "budget_40_radius": 9.840382538626047,
+      "budget_80_escape_affine": 40.19739760385086,
+      "refined_escape_affine": 40.197398218118614,
+      "escape_affine_difference": 6.142677548837128e-7,
+      "scaled_endpoint_difference": 4.363321958988081e-7,
+      "report": "results/p2_core_image_validation.json"
+    },
+    "limitations": "Fixed-scene pilot criteria, not global bounds or complete P2 acceptance. Raw rays remain in ignored unique local directories; hashes and aggregate pixels are tracked."
+  },
+  "preservation": {
+    "P1_baseline": "609debe",
+    "unchanged_paths": ["results/rotating_v1.json", "results/source_manifest.json", "README.txt"],
+    "verification_command": "git diff --exit-code 609debe -- results/rotating_v1.json results/source_manifest.json README.txt",
+    "CXX20_language_policy_passed": true,
+    "new_dependencies": []
+  },
+  "remaining": [
+    "actual pinned GYOTO executable comparison",
+    "multiple hidden or grazing events within a trial step",
+    "broader near-critical rays and complete advertised-domain acceptance",
+    "camera launch at coordinate poles, horizon continuation and inner-patch emission are outside the current CLI contract"
+  ]
+}
