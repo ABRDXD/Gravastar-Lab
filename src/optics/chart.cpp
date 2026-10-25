@@ -91,6 +91,8 @@ Frame transform_frame(const Frame &f, const State &s, Chart from, Chart to) {
   return out;
 }
 double axial_momentum(const State &s, Chart chart) {
+  if (chart == Chart::core_cartesian)
+    return s[1] * s[6] - s[2] * s[5];
   return chart == Chart::boyer_lindquist ? s[7] : -s[3] * s[6] + s[2] * s[7];
 }
 geometry::AngularMetric angular_metric(const Parameters &p, const State &s) {

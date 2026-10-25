@@ -11,7 +11,8 @@ using Parameters = geometry::Parameters;
 enum class Chart { boyer_lindquist, north, south, core_cartesian };
 struct Frame {
   std::array<Vector, 4> basis{}; // u, e_r, e_theta, e_phi
-  double omega{};
+  double omega{}; // Angular speed in the original BL convention, even after a
+                  // frame coordinate transformation; not a Cartesian component.
 };
 geometry::Evaluation metric(const Parameters &, const State &);
 Frame circular_frame(const geometry::Evaluation &,
@@ -36,6 +37,10 @@ struct Settings {
   // Used only by trace_angular: switch accepted endpoints at q>=this value.
   // Hysteresis (q -> 1/q) requires >1; <=2 leaves room for RK trial stages.
   double angular_switch_q{1.5};
+  // Opt-in single-sheet Cartesian completion of the exact core. Both overlap
+  // radii must lie strictly inside r_in; the legacy inner cutoff is replaced.
+  bool continue_core{false};
+  double core_entry_radius{.75}, core_exit_radius{1.0};
 };
 enum class Outcome {
   escaped,
@@ -70,8 +75,8 @@ struct Trace {
 };
 Trace trace(const Parameters &, const State &, const Settings & = {});
 // Opt-in regular angular integration. Initial state is in the named north or
-// south patch. Every output point retains its chart; BL trace remains
-// available.
+// south patch, or core_cartesian when continue_core is enabled. Every output
+// point retains its chart; the original bounded BL trace remains available.
 Trace trace_angular(const Parameters &, const State &, Chart,
                     const Settings & = {});
 struct Emission {

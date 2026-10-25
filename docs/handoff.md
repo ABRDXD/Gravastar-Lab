@@ -13,13 +13,16 @@ controlled complexity, numerical verification and measured baselines.
 
 ## Current implementation
 
-Central continuation work has started. The static Cartesian core geometry
-builds and passes 15 checks over 72 points: center/focal-disk regularity,
-analytic derivatives and curvature, finite-difference refinement, inverse and
-domain guards. Candidate angular/core canonical transformations are compiled
-in `optics/core_chart.hpp`; their independent tests and tracer entry/exit
-integration are still pending. Do not treat this first checkpoint as completed
-central ray continuation. The complete angular milestone below remains intact.
+Central continuation now has a working opt-in solver path. The static core
+geometry passes 15 checks over 72 points. Ten independent chart checks verify
+metric pullback, arbitrary covector Hamiltonians, frame/frequency and Killing
+invariance, poles, spin signs and domain restrictions. Fifty-four core optics
+checks cover analytic flat/de Sitter lines through the center and focal disk,
+transactional entry/exit and a toy ray that previously stopped at the radial
+cutoff and now escapes. Five focused CTests (including prior optics suites)
+pass. The CLI/presets, complete compiler/sanitizer matrix and image pilot still
+remain. `CORE_CONTINUATION.md` makes the single-sheet extension choice explicit;
+it is not claimed as the source paper's unspecified deep-interior topology.
 
 The opt-in `trace_angular` integrates through both angular poles using the regular
 geometry backend. It shares the original Dormand-Prince stepping, event refinement

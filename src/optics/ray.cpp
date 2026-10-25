@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "gravastar/optics/ray.hpp"
 #include "gravastar/optics/chart.hpp"
+#include "gravastar/optics/core_chart.hpp"
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -24,6 +25,8 @@ struct Step {
   State next{}, error{};
 };
 double residual(const Parameters &p, const State &y, Chart chart) {
+  if (chart == Chart::core_cartesian)
+    return core_null_residual(core_metric(p, y), y);
   return chart == Chart::boyer_lindquist
              ? null_residual(metric(p, y), y)
              : angular_null_residual(angular_metric(p, y), y);
@@ -49,7 +52,9 @@ Step step(const Parameters &p, const State &y, double h, std::size_t &calls,
       for (int j = 0; j < s; ++j)
         v[i] += h * a[s][j] * k[j][i];
     ++calls;
-    k[s] = chart == Chart::boyer_lindquist ? rhs(p, v) : angular_rhs(p, v);
+    k[s] = chart == Chart::boyer_lindquist  ? rhs(p, v)
+           : chart == Chart::core_cartesian ? core_rhs(p, v)
+                                            : angular_rhs(p, v);
   }
   Step out;
   out.next = y;
@@ -71,13 +76,23 @@ double error_norm(const Step &s, const State &y, const Settings &c) {
                              std::max(std::abs(y[i]), std::abs(s.next[i]))));
   return e;
 }
+enum class Transition { none, enter_core, exit_core };
 struct Surface {
-  int axis; // -1 denotes q=x*x+y*y in an angular patch.
+  int axis; // -1: angular q; -2: Cartesian oblate ellipsoid.
   double value;
   std::string name;
   std::optional<Outcome> terminal;
+  Transition transition{Transition::none};
 };
-double surface_value(const State &y, const Surface &surface) {
+double surface_value(const Parameters &p, const State &y,
+                     const Surface &surface) {
+  if (surface.axis == -2) {
+    const double k =
+        p.family == geometry::Family::flat ? 0 : p.cosmological_constant / 3;
+    const double a2 = p.spin * p.spin, r2 = surface.value * surface.value;
+    return (1 + k * a2) * (y[1] * y[1] + y[2] * y[2]) / (r2 + a2) +
+           y[3] * y[3] / r2 - 1;
+  }
   return (surface.axis == -1 ? y[2] * y[2] + y[3] * y[3] : y[surface.axis]) -
          surface.value;
 }
@@ -87,14 +102,14 @@ bool brackets(double a, double b) {
 Point refine(const Parameters &p, const State &y, const State &end, double s,
              double h, const Surface &surface, const Settings &c,
              std::size_t &calls, Chart chart) {
-  double lo = 0, hi = h, start = surface_value(y, surface);
+  double lo = 0, hi = h, start = surface_value(p, y, surface);
   State best = end;
   for (int i = 0; i < 80 && hi - lo > c.event_tolerance; ++i) {
     double mid = (lo + hi) / 2;
     auto trial = step(p, y, mid, calls, chart);
     if (error_norm(trial, y, c) > 1)
       throw std::runtime_error("event substep fails integration tolerance");
-    double value = surface_value(trial.next, surface);
+    double value = surface_value(p, trial.next, surface);
     if (brackets(start, value)) {
       hi = mid;
       best = trial.next;
@@ -111,7 +126,7 @@ Point refine(const Parameters &p, const State &y, const State &end, double s,
 void validate(const Parameters &p, const State &y, const Settings &c,
               Chart chart) {
   if (chart != Chart::boyer_lindquist && chart != Chart::north &&
-      chart != Chart::south)
+      chart != Chart::south && chart != Chart::core_cartesian)
     throw std::invalid_argument("unknown tracing chart");
   for (double x :
        {c.absolute_tolerance, c.relative_tolerance, c.initial_step,
@@ -128,7 +143,32 @@ void validate(const Parameters &p, const State &y, const Settings &c,
       (!std::isfinite(c.angular_switch_q) || c.angular_switch_q <= 1 ||
        c.angular_switch_q > 2))
     throw std::invalid_argument("angular switch threshold must satisfy 1<q<=2");
-  if (!finite(y) || y[1] <= c.inner_radius || y[1] >= c.outer_radius ||
+  if (c.continue_core) {
+    if (chart == Chart::boyer_lindquist || p.family == geometry::Family::kerr ||
+        !std::isfinite(c.core_entry_radius) ||
+        !std::isfinite(c.core_exit_radius) ||
+        c.core_entry_radius <= c.inner_radius ||
+        c.core_exit_radius <= c.core_entry_radius ||
+        c.core_exit_radius >= p.r_in || c.core_exit_radius >= c.outer_radius ||
+        (c.disk && c.disk_inner <= c.core_exit_radius))
+      throw std::invalid_argument(
+          "core continuation requires angular charts, exact core overlap, and "
+          "disk outside the core patch");
+    const double k =
+        p.family == geometry::Family::flat ? 0 : p.cosmological_constant / 3;
+    const double r2 = c.core_exit_radius * c.core_exit_radius,
+                 a2 = p.spin * p.spin;
+    if (!(1 - k * std::max(r2, (r2 + a2) / (1 + k * a2)) >
+          64 * std::numeric_limits<double>::epsilon()))
+      throw std::invalid_argument(
+          "core overlap must remain inside the static horizon");
+  } else if (chart == Chart::core_cartesian)
+    throw std::invalid_argument("Cartesian core launch requires continue_core");
+  if (!finite(y) ||
+      (chart == Chart::core_cartesian
+           ? core_oblate_radius(p, y) >= c.core_exit_radius
+           : (y[1] <= (c.continue_core ? 0 : c.inner_radius) ||
+              y[1] >= c.outer_radius)) ||
       (chart == Chart::boyer_lindquist &&
        (y[2] <= c.polar_margin || y[2] >= std::numbers::pi - c.polar_margin)))
     throw std::invalid_argument(
@@ -151,6 +191,10 @@ void validate(const Parameters &p, const State &y, const Settings &c,
     const auto g = metric(p, y);
     null = null_residual(g, y);
     nu = frequency(y, circular_frame(g).basis[0]);
+  } else if (chart == Chart::core_cartesian) {
+    const auto g = core_metric(p, y);
+    null = core_null_residual(g, y);
+    nu = core_normal_frequency(g, y);
   } else {
     const auto g = angular_metric(p, y);
     null = angular_null_residual(g, y);
@@ -283,8 +327,15 @@ static Trace trace_impl(const Parameters &p, const State &initial,
     return out;
   }
   std::vector<Surface> surfaces{
-      {1, c.inner_radius, "inner_chart_limit", Outcome::domain_limit},
       {1, c.outer_radius, "escape", Outcome::escaped}};
+  if (c.continue_core)
+    surfaces.push_back(
+        {1, c.core_entry_radius, "core_entry", {}, Transition::enter_core});
+  else
+    surfaces.push_back(
+        {1, c.inner_radius, "inner_chart_limit", Outcome::domain_limit});
+  const std::vector<Surface> core_surfaces{
+      {-2, c.core_exit_radius, "core_exit", {}, Transition::exit_core}};
   if (initial_chart == Chart::boyer_lindquist) {
     surfaces.push_back(
         {2, c.polar_margin, "north_chart_limit", Outcome::domain_limit});
@@ -305,9 +356,11 @@ static Trace trace_impl(const Parameters &p, const State &initial,
   }
   auto monitor = [&](const Point &q) {
     out.maximum_null_error = std::max(out.maximum_null_error, q.null_error);
-    out.energy_error =
-        std::max(out.energy_error, std::abs(q.state[4] - initial[4]) /
-                                       (1 + std::abs(initial[4])));
+    const double initial_pt = stationary_momentum(p, initial, initial_chart);
+    out.energy_error = std::max(
+        out.energy_error,
+        std::abs(stationary_momentum(p, q.state, q.chart) - initial_pt) /
+            (1 + std::abs(initial_pt)));
     const double initial_lz = axial_momentum(initial, initial_chart);
     out.angular_momentum_error =
         std::max(out.angular_momentum_error,
@@ -321,7 +374,7 @@ static Trace trace_impl(const Parameters &p, const State &initial,
       out.trajectory.push_back(q);
   };
   auto switch_patch = [&](Point &q) {
-    if (q.chart == Chart::boyer_lindquist ||
+    if (q.chart == Chart::boyer_lindquist || q.chart == Chart::core_cartesian ||
         q.state[2] * q.state[2] + q.state[3] * q.state[3] < c.angular_switch_q)
       return;
     if (!std::isfinite(q.null_error) || q.null_error > c.null_tolerance)
@@ -337,9 +390,31 @@ static Trace trace_impl(const Parameters &p, const State &initial,
           "chart transition exceeds null constraint tolerance");
     ++out.chart_switches;
   };
+  auto change_core = [&](Point &q, Transition transition) {
+    // Prepare the candidate before publishing its crossing. A failed transform
+    // must not publish half of an entry/exit transaction.
+    if (transition == Transition::enter_core) {
+      q.state = to_core(p, q.state, q.chart);
+      q.chart = Chart::core_cartesian;
+    } else if (transition == Transition::exit_core) {
+      const Chart destination = q.state[3] >= 0 ? Chart::north : Chart::south;
+      q.state = from_core(p, q.state, destination);
+      q.chart = destination;
+    }
+    q.null_error = residual(p, q.state, q.chart);
+    if (!std::isfinite(q.null_error) || q.null_error > c.null_tolerance)
+      throw std::runtime_error(
+          "core transition exceeds null constraint tolerance");
+  };
   double h = c.initial_step;
   try {
     Point start{0, initial, residual(p, initial, initial_chart), initial_chart};
+    if (c.continue_core && start.chart != Chart::core_cartesian &&
+        start.state[1] <= c.core_entry_radius) {
+      monitor(start);
+      change_core(start, Transition::enter_core);
+      ++out.chart_switches;
+    }
     switch_patch(start);
     record(start);
     for (std::size_t attempt = 0; attempt < c.maximum_attempts; ++attempt) {
@@ -376,10 +451,15 @@ static Trace trace_impl(const Parameters &p, const State &initial,
       }
       Point next{s + h, trial.next, residual(p, trial.next, chart), chart};
       std::vector<std::pair<Surface, Point>> hits;
+      std::optional<Outcome> terminal;
+      Transition transition = Transition::none;
+      std::size_t publish_count = 0;
       try {
-        for (const auto &surface : surfaces)
-          if (brackets(surface_value(y, surface),
-                       surface_value(trial.next, surface))) {
+        const auto &active =
+            chart == Chart::core_cartesian ? core_surfaces : surfaces;
+        for (const auto &surface : active)
+          if (brackets(surface_value(p, y, surface),
+                       surface_value(p, trial.next, surface))) {
             auto hit = refine(p, y, trial.next, s, h, surface, c, out.rhs_calls,
                               chart);
             if (surface.terminal == Outcome::emitted &&
@@ -387,6 +467,21 @@ static Trace trace_impl(const Parameters &p, const State &initial,
               continue;
             hits.emplace_back(surface, hit);
           }
+        std::stable_sort(hits.begin(), hits.end(),
+                         [](const auto &a, const auto &b) {
+                           return a.second.affine < b.second.affine;
+                         });
+        for (const auto &[surface, hit] : hits) {
+          ++publish_count;
+          if (surface.terminal || surface.transition != Transition::none) {
+            terminal = surface.terminal;
+            transition = surface.transition;
+            next = hit;
+            if (transition != Transition::none)
+              change_core(next, transition);
+            break;
+          }
+        }
       } catch (const std::exception &) {
         // An accepted full-step estimate does not bound every shorter substep.
         // Reject the entire trial before committing any trajectory or event.
@@ -396,23 +491,17 @@ static Trace trace_impl(const Parameters &p, const State &initial,
         h = std::max(c.minimum_step, h / 2);
         continue;
       }
-      std::stable_sort(hits.begin(), hits.end(),
-                       [](const auto &a, const auto &b) {
-                         return a.second.affine < b.second.affine;
-                       });
-      std::optional<Outcome> terminal;
-      for (const auto &[surface, hit] : hits) {
-        if (terminal)
-          break;
+      for (std::size_t i = 0; i < publish_count; ++i) {
+        const auto &[surface, hit] = hits[i];
         monitor(hit);
         out.crossings.push_back({surface.name, hit});
         if (surface.terminal) {
-          terminal = surface.terminal;
-          next = hit;
           out.detail = surface.name;
         }
       }
       ++out.accepted;
+      if (transition != Transition::none)
+        ++out.chart_switches;
       if (!terminal)
         switch_patch(next);
       record(next);
