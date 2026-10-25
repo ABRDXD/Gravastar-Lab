@@ -9,6 +9,7 @@ using Vector = std::array<double, 4>;
 using State = std::array<double, 8>; // x^mu, future-directed p_mu
 using Parameters = geometry::Parameters;
 enum class Chart { boyer_lindquist, north, south, core_cartesian };
+std::string_view chart_name(Chart);
 struct Frame {
   std::array<Vector, 4> basis{}; // u, e_r, e_theta, e_phi
   double omega{}; // Angular speed in the original BL convention, even after a

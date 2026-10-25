@@ -20,8 +20,12 @@ invariance, poles, spin signs and domain restrictions. Fifty-four core optics
 checks cover analytic flat/de Sitter lines through the center and focal disk,
 transactional entry/exit and a toy ray that previously stopped at the radial
 cutoff and now escapes. Five focused CTests (including prior optics suites)
-pass. The CLI/presets, complete compiler/sanitizer matrix and image pilot still
-remain. `CORE_CONTINUATION.md` makes the single-sheet extension choice explicit;
+pass. The CLI now exposes the extension through `benchmarks/optics_core_v1.json`.
+The core CLI regression test passes paired-image integration/overlap refinement,
+checks previously resolved classifications/intensities, labels Cartesian states,
+and rejects unsupported model/domain combinations. The complete compiler/
+sanitizer matrix and spatial pilot still remain.
+`CORE_CONTINUATION.md` makes the single-sheet extension choice explicit;
 it is not claimed as the source paper's unspecified deep-interior topology.
 
 The opt-in `trace_angular` integrates through both angular poles using the regular

@@ -187,6 +187,22 @@ not a reinterpretation of historical BL reports as resolved rays.
 
 ## Independent checks and analytic core rays
 
+The native implementation is selected with `integrator.coordinates="angular"`
+and `continue_core=true`; `benchmarks/optics_core_v1.json` records the complete
+fixed preset. Default entry/exit radii are .75 and 1.0. Settings require the
+legacy inner cutoff below entry, entry below exit, and exit strictly below
+r_in and the escape radius. The old inner stop is replaced in this explicit
+mode; disk emission must start outside the Cartesian patch. The CLI labels
+every Cartesian point `core_cartesian` and records the extension identifier
+`static_cartesian_single_sheet_v1`. The original bounded presets remain valid.
+
+The earliest entry/exit root clips the accepted step. The implementation
+transforms and checks its candidate before publishing any crossings; later
+hits in the discarded part of that trial are not published. It resumes with
+the new chart and unchanged affine parameter. Trial stages outside the exact
+core are rejected, preventing the constant-curvature backend from entering
+the shell. The ZAMO disk calculation still takes place in its original chart.
+
 Suitable checks include metric pullback at both angular poles and away from
 them, both spin signs, k=0 and a=0 limits, state/frame round trips, canonical
 pairings, Hamiltonian invariance and both global Killing momenta. Testing only

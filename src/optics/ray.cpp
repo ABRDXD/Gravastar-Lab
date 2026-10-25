@@ -315,6 +315,19 @@ std::string_view outcome_name(Outcome x) {
   }
   return "invalid_outcome";
 }
+std::string_view chart_name(Chart chart) {
+  switch (chart) {
+  case Chart::boyer_lindquist:
+    return "boyer_lindquist";
+  case Chart::north:
+    return "north";
+  case Chart::south:
+    return "south";
+  case Chart::core_cartesian:
+    return "core_cartesian";
+  }
+  return "invalid_chart";
+}
 static Trace trace_impl(const Parameters &p, const State &initial,
                         const Settings &c, Chart initial_chart) {
   Trace out;
