@@ -43,6 +43,11 @@ fetch or implicit sibling-directory dependency should occur during the P1 build.
 
 ## Available but not integrated
 
+P2 native optics adds no dependency. Its Dormand-Prince coefficient reference
+and scientific conventions are documented in `docs/OPTICS.md`; no Boost code
+was copied or linked. GYOTO remains an unintegrated candidate. PPM serialization
+uses original C++20 and requires no image library.
+
 These are environment findings and future candidates, not adopted dependency
 pins. No code, notice, or binary was copied from these packages into P1.
 

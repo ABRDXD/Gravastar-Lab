@@ -1,0 +1,308 @@
+{
+  "checks": [
+    {
+      "measured": 3.6925083269060426e-16,
+      "name": "state and covector chart round trips",
+      "passed": true,
+      "threshold": 3e-14
+    },
+    {
+      "measured": 2.220446049250313e-15,
+      "name": "transformed frame orthonormality",
+      "passed": true,
+      "threshold": 5e-13
+    },
+    {
+      "measured": 3.3306690738754696e-16,
+      "name": "canonical covector/vector pairing",
+      "passed": true,
+      "threshold": 5e-14
+    },
+    {
+      "measured": 2.220446049250313e-16,
+      "name": "axial Killing momentum invariance",
+      "passed": true,
+      "threshold": 3e-14
+    },
+    {
+      "measured": 2.494725105507528e-15,
+      "name": "transformed launch nullness",
+      "passed": true,
+      "threshold": 3e-14
+    },
+    {
+      "measured": 3.469228581265306e-16,
+      "name": "Hamiltonian coordinate velocity transform",
+      "passed": true,
+      "threshold": 3e-14
+    },
+    {
+      "measured": 0.0,
+      "name": "singular opposite-pole transition rejected",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "flat ray crosses pole and reaches budget",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "exact pole can launch a ray",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "flat ray crosses pole and reaches budget",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "exact pole can launch a ray",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 5.870304242705515e-13,
+      "name": "flat pole-crossing Cartesian line",
+      "passed": true,
+      "threshold": 3e-10
+    },
+    {
+      "measured": 0.0,
+      "name": "Schwarzschild polar photon orbit crosses multiple patches",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "Schwarzschild polar photon orbit crosses multiple patches",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "Schwarzschild polar photon orbit crosses multiple patches",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 5.805063096886443e-10,
+      "name": "analytic polar photon orbit under three switch thresholds",
+      "passed": true,
+      "threshold": 2e-07
+    },
+    {
+      "measured": 1.970645868709653e-15,
+      "name": "polar photon orbit axial Killing drift",
+      "passed": true,
+      "threshold": 2e-11
+    },
+    {
+      "measured": 2.041491975242085e-13,
+      "name": "polar photon orbit null residual",
+      "passed": true,
+      "threshold": 2e-10
+    },
+    {
+      "measured": 0.0,
+      "name": "angular and BL rays reach same affine budget",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "angular and BL rays reach same affine budget",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 7.952692583184347e-14,
+      "name": "angular and BL ray endpoint agreement",
+      "passed": true,
+      "threshold": 2e-09
+    },
+    {
+      "measured": 2.4643778972715034e-14,
+      "name": "rotating ray axial Killing drift",
+      "passed": true,
+      "threshold": 2e-10
+    },
+    {
+      "measured": 4.336808689942018e-19,
+      "name": "Kerr polar fixture has zero axial momentum",
+      "passed": true,
+      "threshold": 1e-15
+    },
+    {
+      "measured": 0.0,
+      "name": "Kerr ray traverses north pole",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 3.992639552308219e-14,
+      "name": "Kerr polar axial Killing drift",
+      "passed": true,
+      "threshold": 2e-11
+    },
+    {
+      "measured": 4.336808689942018e-19,
+      "name": "Kerr polar fixture has zero axial momentum",
+      "passed": true,
+      "threshold": 1e-15
+    },
+    {
+      "measured": 0.0,
+      "name": "Kerr ray traverses north pole",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 3.992639552308219e-14,
+      "name": "Kerr polar axial Killing drift",
+      "passed": true,
+      "threshold": 2e-11
+    },
+    {
+      "measured": 7.993605777301127e-15,
+      "name": "independent separated Kerr RK4 refinement",
+      "passed": true,
+      "threshold": 2e-11
+    },
+    {
+      "measured": 1.7763568394002505e-13,
+      "name": "Kerr pole-crossing vs separated reference",
+      "passed": true,
+      "threshold": 3e-10
+    },
+    {
+      "measured": 2.965391337466118e-15,
+      "name": "Kerr pole-crossing regular Carter invariant",
+      "passed": true,
+      "threshold": 2e-10
+    },
+    {
+      "measured": 0.0,
+      "name": "angular event carries chart and enforced null residual",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "angular event carries chart and enforced null residual",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "angular event carries chart and enforced null residual",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "angular event carries chart and enforced null residual",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "angular event carries chart and enforced null residual",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "angular toy ray crosses shell twice and escapes",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 1.6857248930080004e-10,
+      "name": "angular one-sided join event location",
+      "passed": true,
+      "threshold": 3e-09
+    },
+    {
+      "measured": 0.0,
+      "name": "angular equatorial disk event",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 1.7220047610067013e-10,
+      "name": "angular disk analytic radius",
+      "passed": true,
+      "threshold": 3e-09
+    },
+    {
+      "measured": 2.93647772764416e-10,
+      "name": "angular disk analytic affine time",
+      "passed": true,
+      "threshold": 3e-09
+    },
+    {
+      "measured": 0.0,
+      "name": "angular equatorial disk event",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 1.6349144260630055e-10,
+      "name": "angular disk analytic radius",
+      "passed": true,
+      "threshold": 3e-09
+    },
+    {
+      "measured": 2.788951292131969e-10,
+      "name": "angular disk analytic affine time",
+      "passed": true,
+      "threshold": 3e-09
+    },
+    {
+      "measured": 0.0,
+      "name": "angular Schwarzschild capture event",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 5.0892623448817176e-12,
+      "name": "angular Schwarzschild radial analytic time",
+      "passed": true,
+      "threshold": 2e-08
+    },
+    {
+      "measured": 0.0,
+      "name": "invalid angular switch threshold rejected",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "invalid angular switch threshold rejected",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "invalid angular switch threshold rejected",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "invalid angular switch threshold rejected",
+      "passed": true,
+      "threshold": 0.0
+    }
+  ],
+  "compiler": "16.2.1 20260810",
+  "computational_source_sha256": "6efaffd9fdafd50e88fabc9bc9bede4c2c87aef7f2b00b69d465cfc7acd89489",
+  "passed": true,
+  "schema_version": 1
+}

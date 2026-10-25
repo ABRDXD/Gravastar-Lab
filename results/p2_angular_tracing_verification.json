@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "record_kind": "transcribed verification matrix; numerical measurements are in the linked native C++20 reports",
+  "date": "2026-10-24",
+  "computational_source_sha256": "6efaffd9fdafd50e88fabc9bc9bede4c2c87aef7f2b00b69d465cfc7acd89489",
+  "complete_P2_acceptance": false,
+  "verification_complete": true,
+  "builds": [
+    {
+      "configuration": "GCC Release",
+      "compiler": "16.2.1 20260810",
+      "command": "ctest --preset headless-release --output-on-failure --output-log results/p2_angular_tracing_gcc_ctest.txt",
+      "passed": 18,
+      "total": 18,
+      "elapsed_seconds": 40.14,
+      "log": "results/p2_angular_tracing_gcc_ctest.txt"
+    },
+    {
+      "configuration": "Clang Release",
+      "compiler": "Clang 23.1.3",
+      "command": "ctest --test-dir build/clang-release --output-on-failure --output-log results/p2_angular_tracing_clang_ctest.txt",
+      "passed": 18,
+      "total": 18,
+      "elapsed_seconds": 43.27,
+      "log": "results/p2_angular_tracing_clang_ctest.txt"
+    },
+    {
+      "configuration": "GCC optimized ASan/UBSan subset",
+      "build_type": "RelWithDebInfo",
+      "optimization_flags": "-O2 -g -DNDEBUG",
+      "tests": ["angular_optics", "optics_reference", "optics_cli"],
+      "command": "ctest --test-dir build/sanitizers-optimized -R '^angular_optics$|^optics_reference$|^optics_cli$' --output-on-failure --output-log results/p2_angular_tracing_sanitizers_ctest.txt",
+      "status": "passed",
+      "passed": 3,
+      "total": 3,
+      "elapsed_seconds": 247.43,
+      "log": "results/p2_angular_tracing_sanitizers_ctest.txt",
+      "environment_overrides": [],
+      "suppressions": [],
+      "diagnostics": "none",
+      "leak_detection": "Linux default; no disabling override"
+    }
+  ],
+  "native_validation": {
+    "angular_optics_checks": 50,
+    "angular_optics_report": "results/p2_angular_optics_validation.json",
+    "CLI_image_checks": 58,
+    "CLI_image_report": "results/p2_angular_image_validation.json",
+    "flat_pole_cartesian_error": 5.870304242705515e-13,
+    "Schwarzschild_polar_orbit_error": 5.805063096886443e-10,
+    "Kerr_separated_reference_error": 1.7763568394002505e-13,
+    "Kerr_reference_step_refinement": 7.993605777301127e-15,
+    "Kerr_regular_Carter_drift": 2.965391337466118e-15
+  },
+  "performance": {
+    "fixed_rays": 48,
+    "rounds": 7,
+    "GCC_median_BL_over_angular_ratio": 28.65024668470754,
+    "Clang_median_BL_over_angular_ratio": 35.848544645846836,
+    "maximum_scaled_endpoint_difference": 6.261723069866477e-10,
+    "reports": ["results/p2_angular_ray_benchmark_gcc.json", "results/p2_angular_ray_benchmark_clang.json"],
+    "limitations": "Bounded ray integration, including conversions and events but excluding camera, emission, file I/O and trajectory storage. Different coordinates may select different steps. No concurrent project builds/tests during timing; no CPU affinity or frequency control. Not a whole-render or pole-continuation speedup."
+  },
+  "sampling": {
+    "scales": [1, 2, 4, 8],
+    "finest_grid": [128, 96],
+    "policy_unchanged": "benchmarks/sampling_v1.json",
+    "toy": {
+      "report": "results/p2_angular_toy_sampling.json",
+      "classifications": {"emitted": 5453, "escaped": 6599, "domain_limit": 235, "affine_limit": 1},
+      "common_resolved_base_pixels": 183,
+      "base_pixels": 192,
+      "pilot_refinement_criteria_passed_on_common_mask": true,
+      "full_image_refinement_criteria_passed": false
+    },
+    "kerr": {
+      "report": "results/p2_angular_kerr_sampling.json",
+      "classifications": {"emitted": 4665, "escaped": 612, "capture_surface": 7011},
+      "common_resolved_base_pixels": 192,
+      "base_pixels": 192,
+      "pilot_refinement_criteria_passed_on_common_mask": true,
+      "full_image_refinement_criteria_passed": true
+    },
+    "limitations": "Fixed-scene refinement criteria, not global error bounds or full P2 acceptance. Raw rays remain in ignored unique local directories with paths/hashes in tracked summaries."
+  },
+  "preservation": {
+    "P1_baseline": "609debe",
+    "unchanged_paths": ["results/rotating_v1.json", "results/source_manifest.json", "README.txt"],
+    "verification_command": "git diff --exit-code 609debe -- results/rotating_v1.json results/source_manifest.json README.txt",
+    "CXX20_language_policy_passed": true,
+    "new_dependencies": []
+  },
+  "remaining": [
+    "regular central de Sitter continuation and remaining toy radial/affine stops",
+    "actual pinned GYOTO executable comparison",
+    "multiple hidden or grazing events within a trial step",
+    "near-critical rays and complete advertised-domain acceptance"
+  ]
+}

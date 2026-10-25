@@ -1,0 +1,120 @@
+Start testing: Oct 22 22:20 IST
+----------------------------------------------------------
+1/12 Testing: optics_reference
+1/12 Test: optics_reference
+Command: "/home/abrsdxd/Projects/GravastarLab-Cpp20/build/headless-debug/gravastar_optics_tests"
+Directory: /home/abrsdxd/Projects/GravastarLab-Cpp20/build/headless-debug
+"optics_reference" start time: Oct 22 22:20 IST
+Output:
+----------------------------------------------------------
+toy outcome escaped joins 5 detail escape
+toy refinement 7.33725e-06 -> 1.43394e-07
+PASS 49 optics checks
+<end of output>
+Test time =  13.85 sec
+----------------------------------------------------------
+Test Passed.
+"optics_reference" end time: Oct 22 22:20 IST
+"optics_reference" time elapsed: 00:00:13
+----------------------------------------------------------
+
+2/12 Testing: optics_help
+2/12 Test: optics_help
+Command: "/home/abrsdxd/Projects/GravastarLab-Cpp20/build/headless-debug/gravastar_trace" "--help"
+Directory: /home/abrsdxd/Projects/GravastarLab-Cpp20/build/headless-debug
+"optics_help" start time: Oct 22 22:20 IST
+Output:
+----------------------------------------------------------
+gravastar_trace image|ray [--root PATH] [--config benchmarks/optics_v1.json] [--output results/FILE.json] [--x N --y N]
+Future covariant photon momentum; past-directed integration. Bounded chart only.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"optics_help" end time: Oct 22 22:20 IST
+"optics_help" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/12 Testing: optics_cli
+3/12 Test: optics_cli
+Command: "/home/abrsdxd/Projects/GravastarLab-Cpp20/build/headless-debug/gravastar_optics_cli_tests" "/home/abrsdxd/Projects/GravastarLab-Cpp20/build/headless-debug/gravastar_trace"
+Directory: /home/abrsdxd/Projects/GravastarLab-Cpp20/build/headless-debug
+"optics_cli" start time: Oct 22 22:20 IST
+Output:
+----------------------------------------------------------
+optics error: unsupported optics schema
+optics error: image dimensions must be integers in [1,128]
+optics error: image dimensions must be integers in [1,128]
+optics error: maximum_attempts must be an integer in [1,10000000]
+optics error: settings must be finite and positive
+optics error: output must be within project results/
+optics error: invalid pixel index
+row 1/12
+row 2/12
+row 3/12
+row 4/12
+row 5/12
+row 6/12
+row 7/12
+row 8/12
+row 9/12
+row 10/12
+row 11/12
+row 12/12
+{"domain_limit":4,"emitted":87,"escaped":101}; unresolved=4; "/tmp/gravastar-optics-NUZwvT/results/image.json"
+row 1/12
+row 2/12
+row 3/12
+row 4/12
+row 5/12
+row 6/12
+row 7/12
+row 8/12
+row 9/12
+row 10/12
+row 11/12
+row 12/12
+{"domain_limit":4,"emitted":87,"escaped":101}; unresolved=4; "/tmp/gravastar-optics-NUZwvT/results/fine.json"
+row 1/12
+row 2/12
+row 3/12
+row 4/12
+row 5/12
+row 6/12
+row 7/12
+row 8/12
+row 9/12
+row 10/12
+row 11/12
+row 12/12
+{"capture_surface":108,"emitted":76,"escaped":8}; unresolved=0; "/tmp/gravastar-optics-NUZwvT/results/image.json"
+row 1/12
+row 2/12
+row 3/12
+row 4/12
+row 5/12
+row 6/12
+row 7/12
+row 8/12
+row 9/12
+row 10/12
+row 11/12
+row 12/12
+{"capture_surface":108,"emitted":76,"escaped":8}; unresolved=0; "/tmp/gravastar-optics-NUZwvT/results/fine.json"
+row 1/1
+{"numerical_failure":1}; unresolved=1; "/tmp/gravastar-optics-NUZwvT/results/image.failed.json"
+toy image refinement: state=1.41732e-07 intensity=3.35405e-09 shift=1.115e-08 mismatches=0
+kerr image refinement: state=2.86692e-08 intensity=4.67546e-11 shift=6.2167e-11 mismatches=0
+PASS 31 optics CLI and image checks
+<end of output>
+Test time = 557.47 sec
+----------------------------------------------------------
+Test Passed.
+"optics_cli" end time: Oct 22 22:29 IST
+"optics_cli" time elapsed: 00:09:17
+----------------------------------------------------------
+
+End testing: Oct 22 22:29 IST
+
+optics = 571.32 sec*proc
+

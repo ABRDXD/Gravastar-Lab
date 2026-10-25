@@ -1,0 +1,96 @@
+{
+  "checks": [
+    {
+      "ceiling": 2e-12,
+      "measured": 1.8575916084615122e-14,
+      "name": "double metric vs transformed canonical geometry",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-12,
+      "measured": 1.1368683772161603e-13,
+      "name": "double analytic inverse identity",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-08,
+      "measured": 3.4247386072203585e-09,
+      "name": "double pole continuity at angular radius 1e-9",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-12,
+      "measured": 4.008335570199722e-15,
+      "name": "north/south patch metric consistency",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-13,
+      "measured": 5.551115123125783e-17,
+      "name": "axial Killing momentum under patch transition",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-13,
+      "measured": 2.220446049250313e-16,
+      "name": "canonical one-form under patch transition",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-12,
+      "measured": 7.418530940406741e-16,
+      "name": "Hamiltonian under patch transition",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-13,
+      "measured": 2.7755575615628914e-16,
+      "name": "covariant momentum patch round trip",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-60,
+      "measured": 6.5192232887956776e-74,
+      "name": "90-place independently expanded metric transform",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-80,
+      "measured": 7.553834371776492e-94,
+      "name": "110-place expanded metric transform",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-60,
+      "measured": 3.70544977187774e-76,
+      "name": "90-place inverse vs pivoted elimination",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-80,
+      "measured": 6.31115151958541e-96,
+      "name": "110-place inverse vs pivoted elimination",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-60,
+      "measured": 2.288928448058782e-75,
+      "name": "90-place transformed determinant",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-80,
+      "measured": 2.443184030873733e-95,
+      "name": "110-place transformed determinant",
+      "passed": true
+    }
+  ],
+  "compiler": "16.2.1 20260810",
+  "complete_P2_acceptance": false,
+  "computational_source_sha256": "e687d16b28e12f4ee4da93d6c66cd68f2b88ea368fa6aec71dcffe1f6ddbdbd0",
+  "double_points": 480,
+  "passed": true,
+  "reference_points_per_precision": 120,
+  "schema_version": 1,
+  "scope": "Metric/inverse/chart-transition algebra preflight only. No production angular derivative evaluator, curvature validation, axis-crossing ray or central continuation. Candidate and independent reference share the previously tested radial profile helper."
+}

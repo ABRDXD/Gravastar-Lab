@@ -1,0 +1,37 @@
+Test project /home/abrsdxd/Projects/GravastarLab-Cpp20/build/clang-release
+      Start  1: optics_sampling
+ 1/14 Test  #1: optics_sampling ..................   Passed    0.00 sec
+      Start  2: optics_sampling_cli
+ 2/14 Test  #2: optics_sampling_cli ..............   Passed    1.55 sec
+      Start  3: optics_reference
+ 3/14 Test  #3: optics_reference .................   Passed    0.74 sec
+      Start  4: optics_help
+ 4/14 Test  #4: optics_help ......................   Passed    0.00 sec
+      Start  5: optics_cli
+ 5/14 Test  #5: optics_cli .......................   Passed   23.04 sec
+      Start  6: validation_failure_isolation
+ 6/14 Test  #6: validation_failure_isolation .....   Passed    4.64 sec
+      Start  7: tools_migration
+ 7/14 Test  #7: tools_migration ..................   Passed    0.02 sec
+      Start  8: cpp20_language_policy
+ 8/14 Test  #8: cpp20_language_policy ............   Passed    0.00 sec
+      Start  9: rotating_geometry
+ 9/14 Test  #9: rotating_geometry ................   Passed    7.10 sec
+      Start 10: reference_migration
+10/14 Test #10: reference_migration ..............   Passed    0.22 sec
+      Start 11: geometry_unit
+11/14 Test #11: geometry_unit ....................   Passed    0.01 sec
+      Start 12: benchmark_help
+12/14 Test #12: benchmark_help ...................   Passed    0.01 sec
+      Start 13: benchmark_shell_endpoint
+13/14 Test #13: benchmark_shell_endpoint .........   Passed    0.00 sec
+      Start 14: benchmark_reject_axis
+14/14 Test #14: benchmark_reject_axis ............   Passed    0.00 sec
+
+100% tests passed out of 14
+
+Label Time Summary:
+optics        =  25.33 sec*proc (4 tests)
+scientific    =   7.10 sec*proc (1 test)
+
+Total Test time (real) =  37.34 sec

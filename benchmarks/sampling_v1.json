@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "scales": [1, 2, 4, 8],
+  "relative_l1_intensity_ceiling": 0.05,
+  "mean_classification_tv_ceiling": 0.02,
+  "minimum_common_resolved_fraction": 0.9,
+  "scope": "Pilot image-plane refinement criteria selected before running the experiment; no global error bound or complete P2 acceptance."
+}

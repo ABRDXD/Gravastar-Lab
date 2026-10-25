@@ -150,6 +150,8 @@ struct Bounds {
 };
 inline std::optional<Bounds> positive_bounds(const Polynomial &p,
                                              int maximum_depth = 24) {
+  if (p.empty())
+    throw std::invalid_argument("Bernstein polynomial must contain a coefficient");
   if (p.size() > 32)
     throw std::invalid_argument(
         "Bernstein degree exceeds tested combinatorial range");

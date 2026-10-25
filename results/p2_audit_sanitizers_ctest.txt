@@ -1,0 +1,14 @@
+Test project /home/abrsdxd/Projects/GravastarLab-Cpp20/build/sanitizers-optimized
+    Start  6: optics_reference
+1/3 Test  #6: optics_reference .................   Passed    8.11 sec
+    Start  8: optics_cli
+2/3 Test  #8: optics_cli .......................   Passed  251.98 sec
+    Start 13: reference_migration
+3/3 Test #13: reference_migration ..............   Passed    4.32 sec
+
+100% tests passed out of 3
+
+Label Time Summary:
+optics    = 260.08 sec*proc (2 tests)
+
+Total Test time (real) = 264.40 sec

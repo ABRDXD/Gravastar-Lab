@@ -1,0 +1,316 @@
+{
+  "checks": [
+    {
+      "measured": 6.661338147750939e-16,
+      "name": "circular tetrad orthonormality",
+      "passed": true,
+      "threshold": 2e-13
+    },
+    {
+      "measured": 3.0752853456904584e-16,
+      "name": "future photon launch nullness",
+      "passed": true,
+      "threshold": 2e-14
+    },
+    {
+      "measured": 2.220446049250313e-16,
+      "name": "observer launch frequency",
+      "passed": true,
+      "threshold": 2e-14
+    },
+    {
+      "measured": 4.390049383057301e-16,
+      "name": "Hamiltonian RHS vs independent 90-place derivatives",
+      "passed": true,
+      "threshold": 2e-11
+    },
+    {
+      "measured": 0.0,
+      "name": "flat ray reaches affine budget",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 2.97983859809392e-13,
+      "name": "flat Cartesian straight line",
+      "passed": true,
+      "threshold": 2e-10
+    },
+    {
+      "measured": 2.220446049250313e-16,
+      "name": "flat coordinate time orientation",
+      "passed": true,
+      "threshold": 2e-12
+    },
+    {
+      "measured": 0.0,
+      "name": "Schwarzschild exterior capture proxy",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 2.442264168678321e-10,
+      "name": "capture event location",
+      "passed": true,
+      "threshold": 2e-09
+    },
+    {
+      "measured": 6.377121053446899e-13,
+      "name": "Schwarzschild radial analytic time",
+      "passed": true,
+      "threshold": 2e-08
+    },
+    {
+      "measured": 7.558398351648066e-13,
+      "name": "Schwarzschild radial affine coordinate",
+      "passed": true,
+      "threshold": 2e-09
+    },
+    {
+      "measured": 2.7755575615628914e-16,
+      "name": "Schwarzschild gravitational frequency shift",
+      "passed": true,
+      "threshold": 2e-10
+    },
+    {
+      "measured": 0.0,
+      "name": "radial escape",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 2.2093082918672735e-10,
+      "name": "escape event location",
+      "passed": true,
+      "threshold": 2e-09
+    },
+    {
+      "measured": 0.0,
+      "name": "circular null orbit remains unresolved at budget",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "Schwarzschild photon orbit radius",
+      "passed": true,
+      "threshold": 2e-09
+    },
+    {
+      "measured": 2.6645352591003757e-15,
+      "name": "Schwarzschild photon orbit azimuth",
+      "passed": true,
+      "threshold": 2e-09
+    },
+    {
+      "measured": 3.552713678800501e-15,
+      "name": "Schwarzschild photon orbit time",
+      "passed": true,
+      "threshold": 2e-09
+    },
+    {
+      "measured": 0.0,
+      "name": "Kerr reference ray reaches budget",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 8.176963082886513e-14,
+      "name": "exterior Kerr Carter conservation",
+      "passed": true,
+      "threshold": 2e-09
+    },
+    {
+      "measured": 0.0,
+      "name": "central boundary is a domain limit",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 5.960354709788618e-10,
+      "name": "central boundary refined",
+      "passed": true,
+      "threshold": 2e-09
+    },
+    {
+      "measured": 0.0,
+      "name": "axis boundary is a domain limit",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 2.478182242748872e-11,
+      "name": "axis boundary refined",
+      "passed": true,
+      "threshold": 2e-09
+    },
+    {
+      "measured": 0.0,
+      "name": "step exhaustion distinct",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "zero photon rejected",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "past momentum convention rejected",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "flat artificial capture rejected",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "invalid tolerance rejected",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "zero sight rejected",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "spacelike circular observer rejected",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "transverse disk event",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 2.121414155453749e-11,
+      "name": "flat disk analytic hit radius",
+      "passed": true,
+      "threshold": 2e-09
+    },
+    {
+      "measured": 3.646594137762804e-11,
+      "name": "flat disk analytic travel time",
+      "passed": true,
+      "threshold": 2e-09
+    },
+    {
+      "measured": 7.191136575102064e-12,
+      "name": "disk event plane",
+      "passed": true,
+      "threshold": 2e-10
+    },
+    {
+      "measured": 0.0,
+      "name": "flat disk redshift",
+      "passed": true,
+      "threshold": 2e-13
+    },
+    {
+      "measured": 6.712352895732465e-12,
+      "name": "linear bolometric transfer",
+      "passed": true,
+      "threshold": 2e-09
+    },
+    {
+      "measured": 0.0,
+      "name": "toy shell/core traversal escapes",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "both joins crossed inward and outward",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 1.5384759585836256e-10,
+      "name": "toy maximum null residual",
+      "passed": true,
+      "threshold": 2e-08
+    },
+    {
+      "measured": 0.0,
+      "name": "structural energy conservation",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "structural angular momentum conservation",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "convergence target remains inside chart",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 9.225541370203241e-10,
+      "name": "RK4 refinement endpoint",
+      "passed": true,
+      "threshold": 1e-07
+    },
+    {
+      "measured": 3.6454639980624994e-10,
+      "name": "Dormand-Prince vs independently stepped RK4",
+      "passed": true,
+      "threshold": 1e-07
+    },
+    {
+      "measured": 0.0,
+      "name": "tolerance refinement reduces endpoint error",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 1.4339350124176187e-07,
+      "name": "medium tolerance endpoint error",
+      "passed": true,
+      "threshold": 2e-06
+    },
+    {
+      "measured": 0.0,
+      "name": "image event substep rejection recovers",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 8.98257896246202e-09,
+      "name": "event retry null constraint",
+      "passed": true,
+      "threshold": 1e-06
+    },
+    {
+      "measured": 0.0,
+      "name": "refined crossings included in maximum null residual",
+      "passed": true,
+      "threshold": 0.0
+    },
+    {
+      "measured": 0.0,
+      "name": "refined crossings enforce the null ceiling before publication",
+      "passed": true,
+      "threshold": 0.0
+    }
+  ],
+  "compiler": "16.2.1 20260810",
+  "computational_source_sha256": "d0e73493552790f529738e9dee5029b82937ee53d950f14ed4eae85b69909f76",
+  "cplusplus": 202002,
+  "passed": true,
+  "schema_version": 1,
+  "scope": "bounded native P2 foundation; complete interior optics and GYOTO not accepted"
+}

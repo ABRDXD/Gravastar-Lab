@@ -1,9 +1,10 @@
 # GravastarLab implementation plan
 
-Status: **P0 bounded-domain specification and P1 geometry benchmark implemented**
-(2026-10-21). The earlier planning-only boundary was explicitly lifted by the
+Status: **P0/P1 implemented; P2 bounded native reference optics in progress**
+(2026-10-22). The earlier planning-only boundary was explicitly lifted by the
 user. The subsequent C++20-only instruction supersedes all earlier language
 choices. See `docs/STATUS.md` for measured acceptance and unresolved gates.
+The P2 checkpoint and remaining full-domain/GYOTO gates are in `docs/P2_STATUS.md`.
 
 All scientific references, tests, benchmarks, validation and development tools
 must be C++20. CMake is limited to build/dependency configuration and CTest
@@ -207,7 +208,8 @@ Mark interpolated, extrapolated, and unchecked configurations accordingly.
 
 ## Proposed repository layout
 
-The following is the overall target layout; only P0/P1 modules are implemented:
+The following is the overall target layout; P0/P1 and bounded native P2 optics
+are implemented:
 
 ```text
 GravastarLab/
@@ -627,6 +629,12 @@ questions whose answers can be found in the references or local environment.
 - [x] Implement and validate P1 rotating geometry benchmark for the fixed
       project-selected preset; independent audit remains requested.
 - [ ] Implement and validate P2 reference optics and GYOTO integration.
+      Native observers, adaptive tracing, emission and bounded images are
+      implemented. Regular angular geometry, independent derivative/curvature
+      verification and kernel benchmarks are complete. Opt-in angular ray
+      transitions now pass analytic pole-crossing and independent separated-Kerr
+      checks, paired images and integration benchmarks. Central continuation,
+      complete-image acceptance and GYOTO comparisons remain incomplete.
 - [ ] Implement and compare P3 Vulkan optics.
 - [ ] Implement and verify P4 desktop studio.
 - [ ] Implement and verify P5 deterministic recording and encoding.

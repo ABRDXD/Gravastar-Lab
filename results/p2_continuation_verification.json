@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "evidence_kind": "matrix transcribed from retained native CTest output",
+  "computational_source_sha256": "e687d16b28e12f4ee4da93d6c66cd68f2b88ea368fa6aec71dcffe1f6ddbdbd0",
+  "complete_P2_acceptance": false,
+  "axis_preflight_aggregate_checks": 14,
+  "runs": [
+    {"configuration": "GCC Release", "scope": "complete suite", "passed": 15, "total": 15, "seconds": 32.65, "log": "results/p2_continuation_gcc_ctest.txt"},
+    {"configuration": "Clang Release", "scope": "complete suite", "passed": 15, "total": 15, "seconds": 31.01, "log": "results/p2_continuation_clang_ctest.txt"},
+    {"configuration": "GCC Debug", "scope": "axis_chart_preflight", "passed": 1, "total": 1, "seconds": 12.35, "log": "results/p2_axis_debug_ctest.txt"},
+    {"configuration": "GCC RelWithDebInfo ASan/UBSan", "scope": "axis_chart_preflight; leak detection enabled, no overrides", "passed": 1, "total": 1, "seconds": 24.85, "log": "results/p2_axis_sanitizers_ctest.txt"}
+  ],
+  "prior_sampling_verification": "results/p2_sampling_verification.json",
+  "limitations": ["Same host and standard library for both compilers", "Runs overlapped; wall times are not performance benchmarks", "Instrumented/debug runs cover the new target only at this final source digest", "Production angular derivatives, curvature and axis-crossing rays remain unimplemented"]
+}

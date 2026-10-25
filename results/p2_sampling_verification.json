@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "evidence_kind": "matrix transcribed from retained native CTest output",
+  "computational_source_sha256": "dae307807b8356874d724aa83f766abdb5f0046271005534137fb58f8b91b6be",
+  "complete_P2_acceptance": false,
+  "arithmetic_checks": 64,
+  "sampling_cli_checks": 31,
+  "runs": [
+    {"configuration": "GCC Release", "scope": "complete suite", "passed": 14, "total": 14, "seconds": 45.33, "log": "results/p2_sampling_gcc_ctest.txt"},
+    {"configuration": "Clang Release", "scope": "complete suite", "passed": 14, "total": 14, "seconds": 37.34, "log": "results/p2_sampling_clang_ctest.txt"},
+    {"configuration": "GCC Debug", "scope": "optics_sampling and optics_sampling_cli", "passed": 2, "total": 2, "seconds": 47.31, "log": "results/p2_sampling_debug_ctest.txt"},
+    {"configuration": "GCC RelWithDebInfo ASan/UBSan", "scope": "optics_sampling and optics_sampling_cli; leak detection enabled, no overrides", "passed": 2, "total": 2, "seconds": 23.34, "log": "results/p2_sampling_sanitizers_ctest.txt"}
+  ],
+  "limitations": ["Same host and standard library for both compilers", "Runs overlapped; wall times are not performance benchmarks", "Debug and sanitizer coverage in this continuation is the new sampling subset only"]
+}

@@ -1,0 +1,39 @@
+Test project /home/abrsdxd/Projects/GravastarLab-Cpp20/build/headless-release
+      Start  1: axis_chart_preflight
+ 1/15 Test  #1: axis_chart_preflight .............   Passed    0.76 sec
+      Start  2: optics_sampling
+ 2/15 Test  #2: optics_sampling ..................   Passed    0.00 sec
+      Start  3: optics_sampling_cli
+ 3/15 Test  #3: optics_sampling_cli ..............   Passed    1.24 sec
+      Start  4: optics_reference
+ 4/15 Test  #4: optics_reference .................   Passed    0.48 sec
+      Start  5: optics_help
+ 5/15 Test  #5: optics_help ......................   Passed    0.00 sec
+      Start  6: optics_cli
+ 6/15 Test  #6: optics_cli .......................   Passed   20.27 sec
+      Start  7: validation_failure_isolation
+ 7/15 Test  #7: validation_failure_isolation .....   Passed    3.64 sec
+      Start  8: tools_migration
+ 8/15 Test  #8: tools_migration ..................   Passed    0.01 sec
+      Start  9: cpp20_language_policy
+ 9/15 Test  #9: cpp20_language_policy ............   Passed    0.00 sec
+      Start 10: rotating_geometry
+10/15 Test #10: rotating_geometry ................   Passed    6.05 sec
+      Start 11: reference_migration
+11/15 Test #11: reference_migration ..............   Passed    0.14 sec
+      Start 12: geometry_unit
+12/15 Test #12: geometry_unit ....................   Passed    0.01 sec
+      Start 13: benchmark_help
+13/15 Test #13: benchmark_help ...................   Passed    0.00 sec
+      Start 14: benchmark_shell_endpoint
+14/15 Test #14: benchmark_shell_endpoint .........   Passed    0.00 sec
+      Start 15: benchmark_reject_axis
+15/15 Test #15: benchmark_reject_axis ............   Passed    0.00 sec
+
+100% tests passed out of 15
+
+Label Time Summary:
+optics        =  21.99 sec*proc (4 tests)
+scientific    =   6.81 sec*proc (2 tests)
+
+Total Test time (real) =  32.65 sec

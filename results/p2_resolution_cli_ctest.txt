@@ -1,0 +1,91 @@
+Start testing: Oct 22 22:45 IST
+----------------------------------------------------------
+3/12 Testing: optics_cli
+3/12 Test: optics_cli
+Command: "/home/abrsdxd/Projects/GravastarLab-Cpp20/build/headless-release/gravastar_optics_cli_tests" "/home/abrsdxd/Projects/GravastarLab-Cpp20/build/headless-release/gravastar_trace"
+Directory: /home/abrsdxd/Projects/GravastarLab-Cpp20/build/headless-release
+"optics_cli" start time: Oct 22 22:45 IST
+Output:
+----------------------------------------------------------
+optics error: unsupported optics schema
+optics error: image dimensions must be integers in [1,128]
+optics error: image dimensions must be integers in [1,128]
+optics error: maximum_attempts must be an integer in [1,10000000]
+optics error: settings must be finite and positive
+optics error: output must be within project results/
+optics error: invalid pixel index
+optics error: resolution scale must be an integer in [1,8]
+optics error: resolution scale must be an integer in [1,8]
+optics error: resolution scale must be an integer in [1,8]
+optics error: resolution scale must be an integer in [1,8]
+optics error: resolution scaling is only supported for images
+optics error: scaled image exceeds 128x128
+row 1/12
+row 2/12
+row 3/12
+row 4/12
+row 5/12
+row 6/12
+row 7/12
+row 8/12
+row 9/12
+row 10/12
+row 11/12
+row 12/12
+{"domain_limit":4,"emitted":87,"escaped":101}; unresolved=4; "/tmp/gravastar-optics-r9GgHT/results/image.json"
+row 1/12
+row 2/12
+row 3/12
+row 4/12
+row 5/12
+row 6/12
+row 7/12
+row 8/12
+row 9/12
+row 10/12
+row 11/12
+row 12/12
+{"domain_limit":4,"emitted":87,"escaped":101}; unresolved=4; "/tmp/gravastar-optics-r9GgHT/results/fine.json"
+row 1/12
+row 2/12
+row 3/12
+row 4/12
+row 5/12
+row 6/12
+row 7/12
+row 8/12
+row 9/12
+row 10/12
+row 11/12
+row 12/12
+{"capture_surface":108,"emitted":76,"escaped":8}; unresolved=0; "/tmp/gravastar-optics-r9GgHT/results/image.json"
+row 1/12
+row 2/12
+row 3/12
+row 4/12
+row 5/12
+row 6/12
+row 7/12
+row 8/12
+row 9/12
+row 10/12
+row 11/12
+row 12/12
+{"capture_surface":108,"emitted":76,"escaped":8}; unresolved=0; "/tmp/gravastar-optics-r9GgHT/results/fine.json"
+row 1/1
+{"numerical_failure":1}; unresolved=1; "/tmp/gravastar-optics-r9GgHT/results/image.failed.json"
+toy image refinement: state=1.41732e-07 intensity=3.35405e-09 shift=1.115e-08 mismatches=0
+kerr image refinement: state=2.86692e-08 intensity=4.67546e-11 shift=6.2167e-11 mismatches=0
+PASS 37 optics CLI and image checks
+<end of output>
+Test time =  22.02 sec
+----------------------------------------------------------
+Test Passed.
+"optics_cli" end time: Oct 22 22:45 IST
+"optics_cli" time elapsed: 00:00:22
+----------------------------------------------------------
+
+End testing: Oct 22 22:45 IST
+
+optics =  22.02 sec*proc
+
