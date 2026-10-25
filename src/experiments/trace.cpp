@@ -45,6 +45,9 @@ Scene scene(const J &j) {
     throw std::invalid_argument("unknown integration coordinates");
   s.angular = coordinates == "angular";
   c.angular_switch_q = i.value("angular_switch_q", 1.5);
+  c.continue_core = i.value("continue_core", false);
+  c.core_entry_radius = i.value("core_entry_radius", .75);
+  c.core_exit_radius = i.value("core_exit_radius", 1.0);
   c.absolute_tolerance = i.at("absolute_tolerance");
   c.relative_tolerance = i.at("relative_tolerance");
   c.initial_step = i.at("initial_step");
@@ -94,9 +97,7 @@ o::State pixel(const Scene &s, int x, int y) {
 J point(const o::Point &p) {
   return {{"affine", p.affine},
           {"state", p.state},
-          {"chart", p.chart == o::Chart::boyer_lindquist ? "boyer_lindquist"
-                    : p.chart == o::Chart::north         ? "north"
-                                                         : "south"},
+          {"chart", o::chart_name(p.chart)},
           {"null_residual", p.null_error}};
 }
 J ray(const Scene &s, const o::State &initial, const o::Trace &trace) {
@@ -252,7 +253,20 @@ int main(int argc, char **argv) {
          u::sha256(u::read_file(fs::canonical("/proc/self/exe")))},
         {"complete_P2_acceptance", false},
         {"GYOTO_comparison", "not implemented"},
-        {"full_interior_continuation", "not implemented"},
+        {"full_interior_continuation",
+         s.settings.continue_core
+             ? "single-sheet static Cartesian core; outer/static limits remain"
+             : "disabled"},
+        {"core_extension", s.settings.continue_core
+                               ? "static_cartesian_single_sheet_v1"
+                               : "disabled"},
+        {"core_overlap", s.settings.continue_core
+                             ? J{{"entry_radius", s.settings.core_entry_radius},
+                                 {"exit_radius", s.settings.core_exit_radius}}
+                             : J(nullptr)},
+        {"inner_radius_role", s.settings.continue_core
+                                  ? "replaced by core continuation"
+                                  : "terminal chart limit"},
         {"integration_coordinates", s.angular ? "angular" : "boyer_lindquist"},
         {"angular_switch_q",
          s.angular ? J(s.settings.angular_switch_q) : J(nullptr)},

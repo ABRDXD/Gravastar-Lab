@@ -1,0 +1,19 @@
+Test project /home/abrsdxd/Projects/GravastarLab-Cpp20/build/sanitizers-optimized
+    Start  1: core_cli
+1/5 Test  #1: core_cli .........................   Passed   16.33 sec
+    Start  2: core_chart
+2/5 Test  #2: core_chart .......................   Passed    0.19 sec
+    Start  3: core_optics
+3/5 Test  #3: core_optics ......................   Passed    0.21 sec
+    Start  4: core_geometry
+4/5 Test  #4: core_geometry ....................   Passed    0.13 sec
+    Start 11: optics_reference
+5/5 Test #11: optics_reference .................   Passed    8.64 sec
+
+100% tests passed out of 5
+
+Label Time Summary:
+optics        =  25.37 sec*proc (4 tests)
+scientific    =   0.13 sec*proc (1 test)
+
+Total Test time (real) =  25.50 sec

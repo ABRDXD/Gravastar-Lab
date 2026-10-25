@@ -1,0 +1,105 @@
+{
+  "checks": [
+    {
+      "ceiling": 2e-14,
+      "measured": 0.0,
+      "name": "static Cartesian metric vs standalone formula",
+      "passed": true
+    },
+    {
+      "ceiling": 3e-14,
+      "measured": 1.1102230246251565e-16,
+      "name": "analytic inverse identity",
+      "passed": true
+    },
+    {
+      "ceiling": 3e-14,
+      "measured": 2.220446049250313e-16,
+      "name": "constant determinant vs pivoted elimination",
+      "passed": true
+    },
+    {
+      "ceiling": 3e-14,
+      "measured": 9.862376829722756e-17,
+      "name": "first derivatives vs closed formulas",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-14,
+      "measured": 1.429112554859905e-16,
+      "name": "Hessian vs closed formulas",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-12,
+      "measured": 1.4802973661668753e-16,
+      "name": "de Sitter and flat analytic curvature identities",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "requested derivative orders agree",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "regular Cartesian center metric and vanishing first derivatives",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-06,
+      "measured": 2.5968120842545517e-07,
+      "name": "independent finite-difference first derivative",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-06,
+      "measured": 4.343418651409081e-07,
+      "name": "independent finite-difference Hessian",
+      "passed": true
+    },
+    {
+      "ceiling": 0.08,
+      "measured": 0.062238288471013016,
+      "name": "first derivative fourth-order refinement ratio",
+      "passed": true
+    },
+    {
+      "ceiling": 0.08,
+      "measured": 0.06223863657800803,
+      "name": "Hessian fourth-order refinement ratio",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "invalid families parameters horizons and outside-core points rejected",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "oblate focal disk remains a regular geometry point",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "closed exact-core boundary is admitted",
+      "passed": true
+    }
+  ],
+  "compiler": "16.2.1 20260810",
+  "complete_P2_acceptance": false,
+  "computational_source_sha256": "58be5d8157e4bc8afe6070cbd850cd7f660d9a25be5aac83013cf52b29d5fdb7",
+  "coordinate_points": 72,
+  "finite_difference_steps": [
+    0.04,
+    0.02
+  ],
+  "passed": true,
+  "schema_version": 1,
+  "scope": "Static Cartesian de Sitter core geometry including center and focal disk; no horizon extension or tracer acceptance implied."
+}

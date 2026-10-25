@@ -1,7 +1,7 @@
 # GravastarLab implementation plan
 
-Status: **P0/P1 implemented; P2 bounded native reference optics in progress**
-(2026-10-22). The earlier planning-only boundary was explicitly lifted by the
+Status: **P0/P1 implemented; P2 native core continuation verified, GYOTO pending**
+(2026-10-25). The earlier planning-only boundary was explicitly lifted by the
 user. The subsequent C++20-only instruction supersedes all earlier language
 choices. See `docs/STATUS.md` for measured acceptance and unresolved gates.
 The P2 checkpoint and remaining full-domain/GYOTO gates are in `docs/P2_STATUS.md`.
@@ -633,8 +633,13 @@ questions whose answers can be found in the references or local environment.
       implemented. Regular angular geometry, independent derivative/curvature
       verification and kernel benchmarks are complete. Opt-in angular ray
       transitions now pass analytic pole-crossing and independent separated-Kerr
-      checks, paired images and integration benchmarks. Central continuation,
-      complete-image acceptance and GYOTO comparisons remain incomplete.
+      checks, paired images and integration benchmarks. Opt-in single-sheet
+      Cartesian core continuation now passes analytic traversal and canonical
+      transition checks. The explicit budget-80 toy pilot resolves all 128x96
+      rays and passes fixed-scene image refinement criteria; the budget-40
+      result remains recorded with one censored ray. Actual GYOTO comparison,
+      broader grazing/near-critical coverage and general domain acceptance
+      remain incomplete. See docs/CORE_CONTINUATION.md and docs/P2_STATUS.md.
 - [ ] Implement and compare P3 Vulkan optics.
 - [ ] Implement and verify P4 desktop studio.
 - [ ] Implement and verify P5 deterministic recording and encoding.

@@ -1,0 +1,298 @@
+{
+  "budget_witness": {
+    "budget_40_final": {
+      "affine": 40.0,
+      "chart": "south",
+      "null_residual": 8.065644115058424e-10,
+      "state": [
+        -105.2721408482794,
+        9.840382538626047,
+        -0.6499237120602128,
+        -0.017264233102114147,
+        -0.8711410445190182,
+        -1.0050234160942078,
+        4.730582382935843,
+        -1.8746512184367279
+      ]
+    },
+    "budget_40_outcome": "affine_limit",
+    "budget_80_final": {
+      "affine": 40.19739760385086,
+      "chart": "south",
+      "null_residual": 8.098135781226436e-10,
+      "state": [
+        -105.48681798981355,
+        10.000000000503803,
+        -0.6547333574388909,
+        -0.015121500723587608,
+        -0.8711410445190182,
+        -1.0035716662783614,
+        4.705294342251537,
+        -1.8769458282656815
+      ]
+    },
+    "budget_80_outcome": "escaped",
+    "escape_affine_difference": 6.142677548837128e-07,
+    "maximum_null_residual": 8.098135781226436e-10,
+    "refined_budget_80_final": {
+      "affine": 40.197398218118614,
+      "chart": "south",
+      "null_residual": 1.2976384906274833e-11,
+      "state": [
+        -105.48682028178654,
+        10.000000000056549,
+        -0.6547336626742365,
+        -0.015121210828781748,
+        -0.8711410445190182,
+        -1.0035716653265463,
+        4.705292312080022,
+        -1.87694708357032
+      ]
+    },
+    "refined_maximum_null_residual": 1.2976384906274833e-11,
+    "scaled_endpoint_difference": 4.363321958988081e-07,
+    "selection": "Observed budget-40 pilot pixel (42,0) at 128x96"
+  },
+  "checks": [
+    {
+      "name": "bounded angular comparison image executes",
+      "passed": true
+    },
+    {
+      "name": "continued core image executes",
+      "passed": true
+    },
+    {
+      "name": "refined core overlap and integration image executes",
+      "passed": true
+    },
+    {
+      "name": "extension choice and unchanged P2 gate explicit",
+      "passed": true
+    },
+    {
+      "name": "all 192 pixel records retained",
+      "passed": true
+    },
+    {
+      "name": "core continuation resolves previously stopped rays",
+      "passed": true
+    },
+    {
+      "name": "core image classifications stable under refinement",
+      "passed": true
+    },
+    {
+      "name": "previously resolved classifications preserved",
+      "passed": true
+    },
+    {
+      "name": "core image intensity refinement",
+      "passed": true
+    },
+    {
+      "name": "previously resolved intensities preserved",
+      "passed": true
+    },
+    {
+      "name": "core image null and Killing drift bounded",
+      "passed": true
+    },
+    {
+      "name": "core-entry witness available",
+      "passed": true
+    },
+    {
+      "name": "core trajectory report executes",
+      "passed": true
+    },
+    {
+      "name": "Cartesian states and exit crossings correctly tagged",
+      "passed": true
+    },
+    {
+      "name": "long-budget preset changes only the affine budget",
+      "passed": true
+    },
+    {
+      "name": "budget-40 witness executes",
+      "passed": true
+    },
+    {
+      "name": "budget-80 witness executes",
+      "passed": true
+    },
+    {
+      "name": "refined budget-80 witness executes",
+      "passed": true
+    },
+    {
+      "name": "budget-40 witness remains explicitly unresolved",
+      "passed": true
+    },
+    {
+      "name": "both budget-80 witnesses escape",
+      "passed": true
+    },
+    {
+      "name": "escape event and endpoint stable under refinement",
+      "passed": true
+    },
+    {
+      "name": "long-budget null and Killing drift bounded",
+      "passed": true
+    },
+    {
+      "name": "long-budget null and Killing drift bounded",
+      "passed": true
+    },
+    {
+      "name": "Kerr core mode rejected without replacing accepted report",
+      "passed": true
+    },
+    {
+      "name": "shell-crossing core patch rejected",
+      "passed": true
+    },
+    {
+      "name": "core flag cannot silently use BL tracing",
+      "passed": true
+    },
+    {
+      "name": "unsupported disk inside Cartesian patch rejected",
+      "passed": true
+    },
+    {
+      "name": "computational sources unchanged",
+      "passed": true
+    }
+  ],
+  "classification_mismatches": 0,
+  "classifications": {
+    "emitted": 87,
+    "escaped": 105
+  },
+  "compiler": "16.2.1 20260810",
+  "complete_P2_acceptance": false,
+  "computational_source_sha256": "58be5d8157e4bc8afe6070cbd850cd7f660d9a25be5aac83013cf52b29d5fdb7",
+  "configuration": {
+    "camera": {
+      "omega": null,
+      "position": [
+        0.0,
+        8.0,
+        1.0471975511965976,
+        0.0
+      ],
+      "vertical_field_of_view_degrees": 50.0
+    },
+    "disk": {
+      "emissivity": "bolometric_r_inverse_cubed",
+      "enabled": true,
+      "inner_radius": 3.0,
+      "motion": "ZAMO",
+      "outer_radius": 6.0
+    },
+    "domain": {
+      "capture_radius": null,
+      "inner_radius": 0.25,
+      "outer_radius": 10.0,
+      "polar_margin": 0.05
+    },
+    "geometry": {
+      "Lambda": 0.5,
+      "M": 1.0,
+      "a": 0.875,
+      "family": "toy",
+      "r_in": 1.5,
+      "r_out": 1.8
+    },
+    "image": {
+      "height": 12,
+      "width": 16
+    },
+    "integrator": {
+      "absolute_tolerance": 1e-10,
+      "angular_switch_q": 1.5,
+      "continue_core": true,
+      "coordinates": "angular",
+      "core_entry_radius": 0.75,
+      "core_exit_radius": 1.0,
+      "event_tolerance": 1e-09,
+      "initial_step": 0.01,
+      "maximum_affine": 40.0,
+      "maximum_attempts": 100000,
+      "maximum_step": 0.1,
+      "minimum_step": 1e-10,
+      "null_tolerance": 1e-06,
+      "relative_tolerance": 1e-10
+    },
+    "preset_id": "p2_single_sheet_core_v1",
+    "schema_version": 1,
+    "scope": "Explicit single-sheet Cartesian de Sitter completion; original inner cutoff replaced. Static/outer domains, affine budgets and missing GYOTO comparison remain."
+  },
+  "maximum_axial_momentum_error": 8.957495918273087e-11,
+  "maximum_energy_error": 3.090537180999515e-13,
+  "maximum_intensity_error": 2.9984084296790484e-08,
+  "maximum_null_residual": 1.6120647167062665e-07,
+  "maximum_previous_intensity_error": 0.0,
+  "newly_resolved_pixels": 4,
+  "passed": true,
+  "refined_configuration": {
+    "camera": {
+      "omega": null,
+      "position": [
+        0.0,
+        8.0,
+        1.0471975511965976,
+        0.0
+      ],
+      "vertical_field_of_view_degrees": 50.0
+    },
+    "disk": {
+      "emissivity": "bolometric_r_inverse_cubed",
+      "enabled": true,
+      "inner_radius": 3.0,
+      "motion": "ZAMO",
+      "outer_radius": 6.0
+    },
+    "domain": {
+      "capture_radius": null,
+      "inner_radius": 0.25,
+      "outer_radius": 10.0,
+      "polar_margin": 0.05
+    },
+    "geometry": {
+      "Lambda": 0.5,
+      "M": 1.0,
+      "a": 0.875,
+      "family": "toy",
+      "r_in": 1.5,
+      "r_out": 1.8
+    },
+    "image": {
+      "height": 12,
+      "width": 16
+    },
+    "integrator": {
+      "absolute_tolerance": 1e-11,
+      "angular_switch_q": 1.2,
+      "continue_core": true,
+      "coordinates": "angular",
+      "core_entry_radius": 0.55,
+      "core_exit_radius": 0.9,
+      "event_tolerance": 1e-10,
+      "initial_step": 0.01,
+      "maximum_affine": 40.0,
+      "maximum_attempts": 100000,
+      "maximum_step": 0.05,
+      "minimum_step": 1e-10,
+      "null_tolerance": 1e-06,
+      "relative_tolerance": 1e-11
+    },
+    "preset_id": "p2_single_sheet_core_v1",
+    "schema_version": 1,
+    "scope": "Explicit single-sheet Cartesian de Sitter completion; original inner cutoff replaced. Static/outer domains, affine budgets and missing GYOTO comparison remain."
+  },
+  "scope": "Fixed 16x12 pixel integration/patch refinement; separate from spatial acceptance and GYOTO. Includes the observed 128x96 budget-limit witness and a refined longer run."
+}
