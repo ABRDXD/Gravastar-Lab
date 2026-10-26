@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-License-Identifier: MIT
 #include "gravastar/reference/geometry.hpp"
 #include "gravastar/reference/polynomial.hpp"
 #include <iostream>

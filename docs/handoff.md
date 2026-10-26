@@ -1,6 +1,6 @@
 # Handoff: P2 central continuation verified
 
-Updated 2026-10-25. Implementation is authorized. Active isolated worktree:
+Updated 2026-10-26. Implementation is authorized. Active isolated worktree:
 `/home/abrsdxd/Projects/GravastarLab-Cpp20`, branch
 `codex/p2-reference-optics`. Preserve the original checkout and Gemini Argon's
 concurrent work. Commit and push tested checkpoints roughly every three minutes.
@@ -12,6 +12,21 @@ Optimizations require explainable algorithms, numerical verification and measure
 baselines. This milestone makes no performance claim.
 
 ## Completed milestone
+
+Current follow-up: turning-point event isolation is under implementation; see
+`EVENT_COVERAGE.md`. Opposite endpoint surface rates now trigger a stationary
+point search and split the crossing search. Analytic grazing and independent
+near-critical reference validation are in progress. Do not treat this work as
+general certification of all hidden roots or tangencies.
+
+The owner's MIT choice supersedes the earlier GPL plan. The migration updates
+the root license, original-code SPDX comments and documentation, preserving
+third-party notices and historical numerical reports. See `LICENSING.md`.
+The current inventory is `results/mit_source_manifest.json`; byte-based source
+hashes change because comments changed. Core reports below retain the source
+digest of their original numerical validation, before the license migration.
+The rebuilt MIT source passes all 22 GCC Release CTests; the transcript is
+`results/mit_gcc_ctest.txt`. No executable code changed during this migration.
 
 The opt-in regular angular tracer now continues through the exact core in
 static Cartesian coordinates. Geometry is regular at the origin and oblate
@@ -89,9 +104,9 @@ in aggregate refinement measures reflects different common masks.
 These results establish this fixed-scene pilot and tested continuation domain,
 not full P2 acceptance or global accuracy over all ray families/parameters.
 
-Current computational digest:
+Pre-migration core validation computational digest:
 `58be5d8157e4bc8afe6070cbd850cd7f660d9a25be5aac83013cf52b29d5fdb7`.
-Reports use `results/p2_core_*`; the final matrix and inventory are
+Core reports use `results/p2_core_*`; their matrix and historical inventory are
 `p2_core_verification.json` and `p2_core_source_manifest.json`.
 Raw sampling rays stay in ignored unique `results/local/sampling/` directories;
 tracked reports preserve their hashes and aggregate pixels. Documentation-only
@@ -102,7 +117,8 @@ changes do not alter the computational digest.
 - P1 is frozen at `609debe`. Its one-sided C0-C3 shell and outward K_AB tests,
   independent 90/110-decimal references and arbitrary-integer exact Delta
   certificates remain intact. `results/rotating_v1.json`,
-  `results/source_manifest.json` and `README.txt` are unchanged from that baseline.
+  `results/source_manifest.json` are unchanged from that baseline. `README.txt`
+  differs only in its licensing sentence, intentionally updated to MIT.
 - The 2026-10-24 audit fixed report/PPM path collision (`9740933`), refined-event
   null ceiling/diagnostic bypass (`d16fdf7`) and empty Bernstein input segfault
   (`2e213e5`). See `AUDIT_2026-10-24.md` and historical `p2_audit_*` reports.
@@ -137,7 +153,7 @@ build/headless-release/gravastar_core_optics_tests --report results/local/reprod
 build/headless-release/gravastar_core_cli_tests build/headless-release/gravastar_trace --report results/local/reproduced_core_images.json
 build/headless-release/gravastar_sampling --scene benchmarks/optics_core_v1.json --output results/local/reproduced_core_sampling.json
 build/headless-release/gravastar_sampling --scene benchmarks/optics_core_long_v1.json --output results/local/reproduced_core_long_sampling.json
-build/headless-release/gravastar_tools manifest --verify results/p2_core_source_manifest.json
+build/headless-release/gravastar_tools manifest --verify results/mit_source_manifest.json
 ```
 
 The verification matrix records the exact Clang and sanitizer CTest commands.

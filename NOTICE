@@ -1,13 +1,9 @@
 GravastarLab
 Copyright (C) 2026 GravastarLab contributors
 
-Original project source is licensed under the GNU General Public License,
-version 3 or, at your option, any later version (GPL-3.0-or-later).
-The full license is provided in LICENSE.
-
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See LICENSE for the full terms.
+Original project source and documentation are licensed under the MIT License.
+The full permission grant and warranty disclaimer are provided in LICENSE.
+Third-party components retain their own licenses and notices; see THIRD_PARTY.md.
 
 Scientific model reference:
 S. Ilijic and A. DeBenedictis, arXiv:2309.00551v2.

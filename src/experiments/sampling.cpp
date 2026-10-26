@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-License-Identifier: MIT
 #include "gravastar/optics/sampling.hpp"
 #include "gravastar/tools/artifacts.hpp"
 #include "gravastar/tools/process.hpp"
