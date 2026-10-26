@@ -23,6 +23,7 @@ Vector velocity(const geometry::Evaluation &g, const State &y) {
 }
 struct Step {
   State next{}, error{};
+  State start_rate{}, end_rate{};
 };
 double residual(const Parameters &p, const State &y, Chart chart) {
   if (chart == Chart::core_cartesian)
@@ -57,6 +58,8 @@ Step step(const Parameters &p, const State &y, double h, std::size_t &calls,
                                             : angular_rhs(p, v);
   }
   Step out;
+  out.start_rate = k.front();
+  out.end_rate = k.back();
   out.next = y;
   for (int i = 0; i < 8; ++i)
     for (int j = 0; j < 7; ++j) {
@@ -99,11 +102,59 @@ double surface_value(const Parameters &p, const State &y,
 bool brackets(double a, double b) {
   return (a < 0 && b >= 0) || (a > 0 && b <= 0);
 }
-Point refine(const Parameters &p, const State &y, const State &end, double s,
-             double h, const Surface &surface, const Settings &c,
-             std::size_t &calls, Chart chart) {
-  double lo = 0, hi = h, start = surface_value(p, y, surface);
-  State best = end;
+double surface_rate(const Parameters &p, const State &y, const State &dy,
+                    const Surface &surface) {
+  if (surface.axis == -2) {
+    const double k =
+        p.family == geometry::Family::flat ? 0 : p.cosmological_constant / 3;
+    const double a2 = p.spin * p.spin, r2 = surface.value * surface.value;
+    return 2 * ((1 + k * a2) * (y[1] * dy[1] + y[2] * dy[2]) / (r2 + a2) +
+                y[3] * dy[3] / r2);
+  }
+  return surface.axis == -1 ? 2 * (y[2] * dy[2] + y[3] * dy[3])
+                            : dy[surface.axis];
+}
+struct EventNode {
+  double offset;
+  State state;
+};
+EventNode stationary_point(const Parameters &p, const State &y,
+                           const Step &full, double h, const Surface &surface,
+                           const Settings &c, std::size_t &calls, Chart chart) {
+  double lo = 0, hi = h;
+  double left_rate = surface_rate(p, y, full.start_rate, surface);
+  EventNode point{h, full.next};
+  // Opposite endpoint rates bracket at least one stationary point. Resolve
+  // it using actual integrated states, not an interpolated trajectory. This
+  // isolates a single turning excursion; arbitrary hidden extrema remain
+  // outside this bounded detector's guarantee.
+  for (int i = 0; i < 80 && hi - lo > c.event_tolerance; ++i) {
+    const double mid = (lo + hi) / 2;
+    const auto trial = step(p, y, mid, calls, chart);
+    if (error_norm(trial, y, c) > 1)
+      throw std::runtime_error(
+          "stationary event substep fails integration tolerance");
+    point = {mid, trial.next};
+    const double rate = surface_rate(p, trial.next, trial.end_rate, surface);
+    if (rate == 0)
+      return point;
+    if (brackets(left_rate, rate))
+      hi = mid;
+    else {
+      lo = mid;
+      left_rate = rate;
+    }
+  }
+  if (hi - lo > c.event_tolerance)
+    throw std::runtime_error("stationary event refinement failed");
+  return point;
+}
+Point refine(const Parameters &p, const State &y, const EventNode &left,
+             const EventNode &right, double s, const Surface &surface,
+             const Settings &c, std::size_t &calls, Chart chart) {
+  double lo = left.offset, hi = right.offset;
+  const double start = surface_value(p, left.state, surface);
+  State best = right.state;
   for (int i = 0; i < 80 && hi - lo > c.event_tolerance; ++i) {
     double mid = (lo + hi) / 2;
     auto trial = step(p, y, mid, calls, chart);
@@ -470,16 +521,29 @@ static Trace trace_impl(const Parameters &p, const State &initial,
       try {
         const auto &active =
             chart == Chart::core_cartesian ? core_surfaces : surfaces;
-        for (const auto &surface : active)
-          if (brackets(surface_value(p, y, surface),
-                       surface_value(p, trial.next, surface))) {
-            auto hit = refine(p, y, trial.next, s, h, surface, c, out.rhs_calls,
-                              chart);
+        for (const auto &surface : active) {
+          std::vector<EventNode> nodes{{0, y}};
+          const double first_rate =
+              surface_rate(p, y, trial.start_rate, surface);
+          const double last_rate =
+              surface_rate(p, trial.next, trial.end_rate, surface);
+          if ((first_rate < 0 && last_rate > 0) ||
+              (first_rate > 0 && last_rate < 0))
+            nodes.push_back(stationary_point(p, y, trial, h, surface, c,
+                                             out.rhs_calls, chart));
+          nodes.push_back({h, trial.next});
+          for (std::size_t n = 1; n < nodes.size(); ++n) {
+            if (!brackets(surface_value(p, nodes[n - 1].state, surface),
+                          surface_value(p, nodes[n].state, surface)))
+              continue;
+            auto hit = refine(p, y, nodes[n - 1], nodes[n], s, surface, c,
+                              out.rhs_calls, chart);
             if (surface.terminal == Outcome::emitted &&
                 (hit.state[1] < c.disk_inner || hit.state[1] > c.disk_outer))
               continue;
             hits.emplace_back(surface, hit);
           }
+        }
         std::stable_sort(hits.begin(), hits.end(),
                          [](const auto &a, const auto &b) {
                            return a.second.affine < b.second.affine;

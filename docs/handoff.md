@@ -13,6 +13,12 @@ baselines. This milestone makes no performance claim.
 
 ## Completed milestone
 
+Current follow-up: turning-point event isolation is under implementation; see
+`EVENT_COVERAGE.md`. Opposite endpoint surface rates now trigger a stationary
+point search and split the crossing search. Analytic grazing and independent
+near-critical reference validation are in progress. Do not treat this work as
+general certification of all hidden roots or tangencies.
+
 The owner's MIT choice supersedes the earlier GPL plan. The migration updates
 the root license, original-code SPDX comments and documentation, preserving
 third-party notices and historical numerical reports. See `LICENSING.md`.
