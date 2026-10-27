@@ -1,4 +1,4 @@
-# Handoff: P2 turning events and near-critical references verified
+# Handoff: P2 GYOTO CMake build investigation underway
 
 Updated 2026-10-27. Implementation is authorized. Active isolated worktree:
 `/home/abrsdxd/Projects/GravastarLab-Cpp20`, branch
@@ -12,6 +12,12 @@ Optimizations require explainable algorithms, numerical verification and measure
 baselines. This milestone makes no performance claim.
 
 ## Completed milestone
+
+The next active gate is the optional real GYOTO reference build. Its pinned
+2.0.2 source was inspected from an ignored bare Git store, with no upstream
+scripts checked out or executed. The upstream Legacy integrator can avoid
+Boost, but Eigen remains required. See `GYOTO_FEASIBILITY.md` for the bounded
+CMake-only source-selection approach. No GYOTO build or comparison passes yet.
 
 Turning-point event isolation is verified; see `EVENT_COVERAGE.md`. Opposite
 endpoint surface rates trigger a stationary-point search and split the crossing

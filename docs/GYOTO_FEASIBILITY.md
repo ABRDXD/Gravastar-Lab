@@ -1,6 +1,6 @@
 # GYOTO reference integration boundary
 
-Read-only assessment on 2026-10-26; no dependency was installed or integrated.
+Initial assessment on 2026-10-26; source-build investigation resumed 2026-10-27.
 The original GravastarLab project remains MIT licensed and C++20 only.
 
 ## Candidate and build constraints
@@ -45,3 +45,20 @@ be silently changed to fit a planned integration.
 Only a real executable comparison, with recorded source revisions, conventions,
 fixtures, tolerances and measured errors, can satisfy the GYOTO gate. The native
 flat/Schwarzschild/Kerr references remain useful but do not substitute for it.
+
+## Source inspection checkpoint, 2026-10-27
+
+The pinned tag was fetched into an ignored bare Git object store and its peeled
+commit checked against the pin above. No upstream scripts were checked out or
+executed. Local headers confirm that Boost, Eigen and Xerces-C are absent.
+The actual `GyotoWorldline.h` and `WorldlineIntegState.C` guard Boost integration
+with `GYOTO_HAVE_BOOST_INTEGRATORS`; the upstream Legacy integrator remains an
+option without Boost. Eigen is still unconditionally included by `GyotoAstrobj.h`
+and `GyotoPhoton.h`, so it cannot be omitted or replaced by a fake interface.
+XML, FITS, MPI, threading, unit conversion and optional special-function
+backends will remain disabled in the first bounded reference build.
+
+Next: materialize only pinned C++ sources/headers and license notices through
+CMake dependency integration, configure the genuine core and Kerr/Minkowski
+metrics, then test a linked C++20 executable. Build and scientific acceptance
+are still open; fetching source is not evidence that either has passed.
