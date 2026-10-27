@@ -15,9 +15,12 @@ baselines. This milestone makes no performance claim.
 
 The next active gate is the optional real GYOTO reference build. Its pinned
 2.0.2 source was inspected from an ignored bare Git store, with no upstream
-scripts checked out or executed. The upstream Legacy integrator can avoid
-Boost, but Eigen remains required. See `GYOTO_FEASIBILITY.md` for the bounded
-CMake-only source-selection approach. No GYOTO build or comparison passes yet.
+scripts checked out or executed. Legacy integration avoids Boost odeint, but
+the core photon code still requires Boost math; Eigen is also required. The
+optional `GRAVASTAR_GYOTO_REFERENCE` CMake experiment is disabled by default.
+It currently configures and compiles part of the core; Boost header integration
+is the next build repair. No GYOTO build or comparison passes yet. See
+`GYOTO_FEASIBILITY.md` for compatibility fixes and the source-selection approach.
 
 Turning-point event isolation is verified; see `EVENT_COVERAGE.md`. Opposite
 endpoint surface rates trigger a stationary-point search and split the crossing

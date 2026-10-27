@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.25)
 project(GravastarLab VERSION 0.1.0 LANGUAGES CXX)
 
 option(GRAVASTAR_SANITIZERS "Enable address and undefined-behavior sanitizers" OFF)
+option(GRAVASTAR_GYOTO_REFERENCE "Build optional GPL GYOTO reference executable" OFF)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(gravastar_geometry src/geometry/geometry.cpp src/geometry/angular.cpp src/geometry/core.cpp)
@@ -18,6 +19,10 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     endif()
 elseif(GRAVASTAR_SANITIZERS)
     message(FATAL_ERROR "GRAVASTAR_SANITIZERS requires GCC or Clang")
+endif()
+
+if(GRAVASTAR_GYOTO_REFERENCE)
+    add_subdirectory(reference/gyoto)
 endif()
 
 add_executable(gravastar_benchmark src/experiments/benchmark.cpp)

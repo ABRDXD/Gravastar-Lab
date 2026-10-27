@@ -62,3 +62,13 @@ Next: materialize only pinned C++ sources/headers and license notices through
 CMake dependency integration, configure the genuine core and Kerr/Minkowski
 metrics, then test a linked C++20 executable. Build and scientific acceptance
 are still open; fetching source is not evidence that either has passed.
+
+The first C++20 compile exposed an unconditional Boost math dependency in
+`Photon.C`, despite the optional Boost integrator. Boost headers are therefore
+still needed. The XML-free build also leaves two `FactoryMessenger` array-parser
+calls unguarded. The optional CMake integration explicitly rejects those textual
+vector-property inputs; typed setters are unaffected. Deprecated APIs are
+disabled, and `<cmath>` is included before the upstream fallback `sincos` macro
+to avoid corrupting system declarations. No scientific formula has been changed.
+The default build still configures and its language-policy/geometry checks pass;
+the optional upstream core has not finished compiling at this checkpoint.
