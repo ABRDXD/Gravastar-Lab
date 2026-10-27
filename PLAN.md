@@ -639,9 +639,12 @@ questions whose answers can be found in the references or local environment.
       Cartesian core continuation now passes analytic traversal and canonical
       transition checks. The explicit budget-80 toy pilot resolves all 128x96
       rays and passes fixed-scene image refinement criteria; the budget-40
-      result remains recorded with one censored ray. Actual GYOTO comparison,
-      broader grazing/near-critical coverage and general domain acceptance
-      remain incomplete. See docs/CORE_CONTINUATION.md and docs/P2_STATUS.md.
+      result remains recorded with one censored ray. Single-turning-excursion
+      event isolation and six independent near-critical Schwarzschild reference
+      rays now pass; see docs/EVENT_COVERAGE.md. Actual GYOTO comparison,
+      arbitrary hidden extrema/tangencies, broader ray families and general
+      domain acceptance remain incomplete. See docs/GYOTO_FEASIBILITY.md,
+      docs/CORE_CONTINUATION.md and docs/P2_STATUS.md.
 - [ ] Implement and compare P3 Vulkan optics.
 - [ ] Implement and verify P4 desktop studio.
 - [ ] Implement and verify P5 deterministic recording and encoding.

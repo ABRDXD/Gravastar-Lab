@@ -1,0 +1,20 @@
+Test project /home/abrsdxd/Projects/GravastarLab-Cpp20/build/sanitizers-optimized
+    Start  1: event_optics
+1/6 Test  #1: event_optics .....................   Passed    1.01 sec
+    Start  2: critical_optics
+2/6 Test  #2: critical_optics ..................   Passed    8.76 sec
+    Start  3: core_cli
+3/6 Test  #3: core_cli .........................   Passed   17.56 sec
+    Start  5: core_optics
+4/6 Test  #5: core_optics ......................   Passed    0.19 sec
+    Start  7: angular_optics
+5/6 Test  #7: angular_optics ...................   Passed    0.24 sec
+    Start 13: optics_reference
+6/6 Test #13: optics_reference .................   Passed    8.45 sec
+
+100% tests passed out of 6
+
+Label Time Summary:
+optics    =  36.20 sec*proc (6 tests)
+
+Total Test time (real) =  36.21 sec

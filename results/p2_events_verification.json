@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "record_kind": "transcribed verification matrix; measurements are in linked native C++20 reports",
+  "date": "2026-10-27",
+  "computational_source_sha256": "ef17eca351bbc5cb3a181a7cbaa4f281482c6f987ec43390d04902805a415908",
+  "verification_complete": true,
+  "complete_P2_acceptance": false,
+  "builds": [
+    {
+      "configuration": "GCC Release",
+      "command": "ctest --preset headless-release --output-on-failure --output-log results/p2_events_gcc_ctest.txt",
+      "passed": 24, "total": 24, "elapsed_seconds": 84.47,
+      "log": "results/p2_events_gcc_ctest.txt"
+    },
+    {
+      "configuration": "Clang Release",
+      "command": "ctest --test-dir build/clang-release --output-on-failure --output-log results/p2_events_clang_ctest.txt",
+      "passed": 24, "total": 24, "elapsed_seconds": 42.07,
+      "log": "results/p2_events_clang_ctest.txt"
+    },
+    {
+      "configuration": "GCC optimized ASan/UBSan subset",
+      "command": "ctest --test-dir build/sanitizers-optimized -R '^event_optics$|^critical_optics$|^core_optics$|^angular_optics$|^optics_reference$|^core_cli$' --output-on-failure --output-log results/p2_events_sanitizers_ctest.txt",
+      "passed": 6, "total": 6, "elapsed_seconds": 36.21,
+      "log": "results/p2_events_sanitizers_ctest.txt",
+      "environment_overrides": [], "suppressions": [],
+      "diagnostics": "none", "leak_detection": "Linux default; no disabling override"
+    }
+  ],
+  "timing_scope": "Concurrent validation work; durations are not performance measurements.",
+  "native_validation": {
+    "event_checks": 63,
+    "event_report": "results/p2_event_validation.json",
+    "critical_checks": 73,
+    "critical_report": "results/p2_critical_validation.json",
+    "critical_relative_offsets": [-0.001, -0.00001, -0.0000001, 0.001, 0.00001, 0.0000001],
+    "maximum_critical_affine_error": 3.372304746562804e-8,
+    "maximum_critical_coordinate_time_error": 1.0117238957718655e-7,
+    "maximum_critical_azimuth_error": 1.9470530077114745e-8,
+    "maximum_reference_affine_refinement": 4.665664923853008e-9,
+    "maximum_reference_azimuth_refinement": 2.693772937351069e-9,
+    "baseline_reproduction": "The new event test linked against ray.cpp from eae1dc9 fails: three charts miss the analytic shallow boundary, all miss both diagnostic join roots, and angular modes miss the shallow core entry. Temporary probe under ignored build/; no historical report relabeled."
+  },
+  "sampling": {
+    "scales": [1, 2, 4, 8], "finest_grid": [128, 96],
+    "policy": "benchmarks/sampling_v1.json",
+    "toy_budget_80": {
+      "report": "results/p2_events_toy_sampling.json",
+      "classifications": {"emitted": 5453, "escaped": 6835},
+      "unresolved": 0, "common_resolved_base_pixels": 192,
+      "full_image_refinement_criteria_passed": true,
+      "final_relative_intensity_l1": 0.02670175531719939,
+      "final_mean_classification_tv": 0.010335286458333336
+    },
+    "kerr": {
+      "report": "results/p2_events_kerr_sampling.json",
+      "classifications": {"emitted": 4665, "escaped": 612, "capture_surface": 7011},
+      "unresolved": 0, "common_resolved_base_pixels": 192,
+      "full_image_refinement_criteria_passed": true,
+      "final_relative_intensity_l1": 0.018463846975744932,
+      "final_mean_classification_tv": 0.006022135416666667
+    },
+    "scope": "Fixed-scene regression pilots, not global image error bounds. Raw rays are in ignored unique directories with hashes and aggregate pixels in tracked reports."
+  },
+  "preservation": {
+    "license": "MIT", "new_dependencies": [], "CXX20_policy_passed": true,
+    "P1_reports_unchanged": ["results/rotating_v1.json", "results/source_manifest.json"],
+    "sampling_thresholds_unchanged": true,
+    "historical_reports_and_manifests_preserved": true
+  },
+  "remaining": [
+    "arbitrary hidden extrema, exact tangencies and sub-resolution crossings",
+    "broader near-critical Kerr and toy coverage and general advertised-domain acceptance",
+    "actual pinned GYOTO C++20/CMake build and executable comparison"
+  ]
+}

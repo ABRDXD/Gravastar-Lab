@@ -1,8 +1,31 @@
 # P2 checkpoint: bounded native reference optics
 
+## Turning events and near-critical references on 2026-10-27
+
+The event detector now splits a trial at a resolved stationary point when
+endpoint surface rates reverse sign. This recovers shallow in-and-out crossings
+with same-side endpoints. Independent flat-space regressions reproduce the miss
+in `eae1dc9` and pass with the fix in all three charts, including two shell joins
+and transactional core entry. Sixty-three event checks and 73 independent
+near-critical Schwarzschild checks pass. The latter cover impact offsets
+±1e-3, ±1e-5 and ±1e-7 around 3*sqrt(3)*M, with long-double RK4 refinement.
+Maximum production/reference affine difference is 3.38e-8 and unwrapped azimuth
+difference is 1.95e-8 on those fixtures.
+
+GCC and Clang Release pass 24/24 each; targeted optimized ASan/UBSan passes 6/6.
+Refreshed toy budget-80 and Kerr spatial pilots both pass full-image refinement
+criteria with zero unresolved rays and unchanged 128x96 outcome counts.
+`EVENT_COVERAGE.md` records methods, thresholds, limitations and reproduction.
+Current reports/matrix/inventory use `results/p2_events_*`, with native check
+reports `p2_event_validation.json` and `p2_critical_validation.json`. Digest:
+`ef17eca351bbc5cb3a181a7cbaa4f281482c6f987ec43390d04902805a415908`.
+Full P2 remains open: arbitrary hidden extrema/tangencies, broader ray-domain
+coverage and actual GYOTO comparison are not established. See
+`GYOTO_FEASIBILITY.md` for the pinned candidate and C++20/CMake build constraints.
+
 License update, 2026-10-26: the owner selected MIT for original code and
 documentation. Source changes are SPDX comments only. All numerical reports
-below preserve their pre-migration source digests; the current inventory is
+from earlier checkpoints preserve their pre-migration source digests; that inventory is
 `results/mit_source_manifest.json`. See `LICENSING.md` for the scope and
 preserved third-party notices.
 

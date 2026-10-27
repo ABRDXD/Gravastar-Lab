@@ -1,6 +1,6 @@
-# Handoff: P2 central continuation verified
+# Handoff: P2 turning events and near-critical references verified
 
-Updated 2026-10-26. Implementation is authorized. Active isolated worktree:
+Updated 2026-10-27. Implementation is authorized. Active isolated worktree:
 `/home/abrsdxd/Projects/GravastarLab-Cpp20`, branch
 `codex/p2-reference-optics`. Preserve the original checkout and Gemini Argon's
 concurrent work. Commit and push tested checkpoints roughly every three minutes.
@@ -13,16 +13,23 @@ baselines. This milestone makes no performance claim.
 
 ## Completed milestone
 
-Current follow-up: turning-point event isolation is under implementation; see
-`EVENT_COVERAGE.md`. Opposite endpoint surface rates now trigger a stationary
-point search and split the crossing search. Analytic grazing and independent
-near-critical reference validation are in progress. Do not treat this work as
-general certification of all hidden roots or tangencies.
+Turning-point event isolation is verified; see `EVENT_COVERAGE.md`. Opposite
+endpoint surface rates trigger a stationary-point search and split the crossing
+search, recovering shallow crossing pairs that the preserved tracer missed.
+There are 63 analytic event checks and 73 independent near-critical Schwarzschild
+checks. GCC/Clang Release pass 24/24 each; targeted optimized ASan/UBSan passes
+6/6 without diagnostics or overrides. New source digest:
+`ef17eca351bbc5cb3a181a7cbaa4f281482c6f987ec43390d04902805a415908`.
+The current matrix/inventory are `results/p2_events_verification.json` and
+`results/p2_events_source_manifest.json`. Both refreshed toy budget-80 and Kerr
+four-grid pilots pass with zero unresolved rays and unchanged finest-grid counts.
+This does not certify arbitrary hidden extrema, exact tangencies or all ray
+families. The GYOTO build/license assessment is in `GYOTO_FEASIBILITY.md`.
 
 The owner's MIT choice supersedes the earlier GPL plan. The migration updates
 the root license, original-code SPDX comments and documentation, preserving
 third-party notices and historical numerical reports. See `LICENSING.md`.
-The current inventory is `results/mit_source_manifest.json`; byte-based source
+The migration inventory is `results/mit_source_manifest.json`; byte-based source
 hashes change because comments changed. Core reports below retain the source
 digest of their original numerical validation, before the license migration.
 The rebuilt MIT source passes all 22 GCC Release CTests; the transcript is
@@ -53,7 +60,7 @@ still requires a nonsingular BL position; arbitrary frame transformations do
 not imply polarization parallel transport. Static/capture/escape limits retain
 their existing meanings; r=10 escape is a finite-domain event.
 
-## Current verification
+## Prior core verification and preserved evidence
 
 GCC and Clang Release pass **22/22** CTests (48.18 s and 38.20 s). Optimized
 ASan/UBSan passes **5/5** in 25.50 s: core geometry, core chart, core optics,
@@ -134,9 +141,10 @@ changes do not alter the computational digest.
 
 1. Audit the explicit topology choice, time/azimuth normalization, global energy
    transformation, canonical transitions and analytic oblique reference.
-2. Strengthen grazing/near-critical event coverage. Endpoint sign-change
-   bracketing does not certify multiple hidden crossings or tangencies within
-   one trial step; accepted examples require refinement evidence.
+2. Extend beyond the verified single-turning-excursion and six Schwarzschild
+   fixtures. Endpoint-rate reversal cannot certify arbitrary hidden extrema,
+   exact tangencies or all near-critical Kerr/toy rays. Keep unresolved cases
+   explicit and require refinement evidence for accepted examples.
 3. Establish an actual pinned GYOTO dependency/build and executable comparison
    compatible with the C++20-only constraint. A placeholder adapter is not an
    accepted comparison. Revisit complete advertised-domain acceptance after
@@ -153,7 +161,9 @@ build/headless-release/gravastar_core_optics_tests --report results/local/reprod
 build/headless-release/gravastar_core_cli_tests build/headless-release/gravastar_trace --report results/local/reproduced_core_images.json
 build/headless-release/gravastar_sampling --scene benchmarks/optics_core_v1.json --output results/local/reproduced_core_sampling.json
 build/headless-release/gravastar_sampling --scene benchmarks/optics_core_long_v1.json --output results/local/reproduced_core_long_sampling.json
-build/headless-release/gravastar_tools manifest --verify results/mit_source_manifest.json
+build/headless-release/gravastar_event_optics_tests --report results/local/reproduced_events.json
+build/headless-release/gravastar_critical_optics_tests --report results/local/reproduced_critical.json
+build/headless-release/gravastar_tools manifest --verify results/p2_events_source_manifest.json
 ```
 
 The verification matrix records the exact Clang and sanitizer CTest commands.
