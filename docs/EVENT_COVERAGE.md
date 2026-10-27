@@ -20,7 +20,12 @@ Additional work at turning points consumes RHS calls; correctness takes priority
 over a performance claim. The ordinary Dormand-Prince stages already provide the
 endpoint derivatives.
 
-Focused existing core, angular, original-reference and core-CLI tests are being
-checked before the first checkpoint. Independent flat grazing regressions and
-near-critical Schwarzschild references are being added separately. Full P2
-acceptance and GYOTO comparison remain open.
+The four focused existing core, angular, original-reference and core-CLI CTests
+pass. New native tests pass 63 analytic event checks and 73 near-critical
+Schwarzschild checks. Both suites are registered with CTest. The flat fixtures
+check a shallow excursion, an adjacent miss, two nonterminal roots and clipping
+of the discarded angular trial tail at Cartesian-core entry. The Schwarzschild
+fixtures compare six impact parameters on both sides of 3*sqrt(3)*M, at relative
+offsets 1e-3, 1e-5 and 1e-7, against independently stepped long-double equations.
+Full compiler/sanitizer verification and final provenance are still pending.
+Full P2 acceptance and GYOTO comparison remain open.

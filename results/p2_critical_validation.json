@@ -1,0 +1,663 @@
+{
+  "baseline": {
+    "atol": 2e-11,
+    "event_tolerance": 1e-10,
+    "maximum_step": 0.1,
+    "rtol": 2e-11
+  },
+  "capture_proxy_radius": 2.2,
+  "checks": [
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "capture 0.001 expected fate at both integration tolerances",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-06,
+      "measured": 5.518328849429821e-14,
+      "name": "capture 0.001 independent RK4 affine refinement",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-07,
+      "measured": 9.132278266932303e-14,
+      "name": "capture 0.001 independent RK4 azimuth refinement",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0002,
+      "measured": 7.847944516470307e-12,
+      "name": "capture 0.001 affine endpoint vs independent reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0008,
+      "measured": 2.5082158572331537e-11,
+      "name": "capture 0.001 coordinate time vs independent reference",
+      "passed": true
+    },
+    {
+      "ceiling": 3e-05,
+      "measured": 4.479971948967432e-12,
+      "name": "capture 0.001 unwrapped azimuth vs independent reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "capture 0.001 production azimuth converges toward reference",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 4.402599622715009e-14,
+      "name": "capture 0.001 normalized null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-12,
+      "measured": 0.0,
+      "name": "capture 0.001 stationary and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "capture 0.001 increased winding near critical impact",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "capture 0.001 increased sampled photon-region dwell",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "capture 1e-05 expected fate at both integration tolerances",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-06,
+      "measured": 4.6206930642833655e-11,
+      "name": "capture 1e-05 independent RK4 affine refinement",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-07,
+      "measured": 2.6543965810088554e-11,
+      "name": "capture 1e-05 independent RK4 azimuth refinement",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0002,
+      "measured": 4.425722011092148e-10,
+      "name": "capture 1e-05 affine endpoint vs independent reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0008,
+      "measured": 1.322362663813692e-09,
+      "name": "capture 1e-05 coordinate time vs independent reference",
+      "passed": true
+    },
+    {
+      "ceiling": 3e-05,
+      "measured": 2.5505819678528496e-10,
+      "name": "capture 1e-05 unwrapped azimuth vs independent reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "capture 1e-05 production azimuth converges toward reference",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 5.652044488984901e-14,
+      "name": "capture 1e-05 normalized null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-12,
+      "measured": 0.0,
+      "name": "capture 1e-05 stationary and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "capture 1e-05 increased winding near critical impact",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "capture 1e-05 increased sampled photon-region dwell",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "capture 1e-07 expected fate at both integration tolerances",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-06,
+      "measured": 4.624649007495263e-09,
+      "name": "capture 1e-07 independent RK4 affine refinement",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-07,
+      "measured": 2.669900311252915e-09,
+      "name": "capture 1e-07 independent RK4 azimuth refinement",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0002,
+      "measured": 2.7980071592992317e-08,
+      "name": "capture 1e-07 affine endpoint vs independent reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0008,
+      "measured": 8.393698180952924e-08,
+      "name": "capture 1e-07 coordinate time vs independent reference",
+      "passed": true
+    },
+    {
+      "ceiling": 3e-05,
+      "measured": 1.615400435639458e-08,
+      "name": "capture 1e-07 unwrapped azimuth vs independent reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "capture 1e-07 production azimuth converges toward reference",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 5.2360744095668446e-14,
+      "name": "capture 1e-07 normalized null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-12,
+      "measured": 0.0,
+      "name": "capture 1e-07 stationary and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "capture 1e-07 increased winding near critical impact",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "capture 1e-07 increased sampled photon-region dwell",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "scatter 0.001 expected fate at both integration tolerances",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-06,
+      "measured": 5.231821920137492e-13,
+      "name": "scatter 0.001 independent RK4 affine refinement",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-07,
+      "measured": 3.0149667484824505e-13,
+      "name": "scatter 0.001 independent RK4 azimuth refinement",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0002,
+      "measured": 2.9203306439740118e-12,
+      "name": "scatter 0.001 affine endpoint vs independent reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0008,
+      "measured": 9.36495325731812e-12,
+      "name": "scatter 0.001 coordinate time vs independent reference",
+      "passed": true
+    },
+    {
+      "ceiling": 3e-05,
+      "measured": 1.8065549056700547e-12,
+      "name": "scatter 0.001 unwrapped azimuth vs independent reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "scatter 0.001 production azimuth converges toward reference",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 1.0566558491052273e-14,
+      "name": "scatter 0.001 normalized null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-12,
+      "measured": 0.0,
+      "name": "scatter 0.001 stationary and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "scatter 0.001 increased winding near critical impact",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "scatter 0.001 increased sampled photon-region dwell",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0002,
+      "measured": 1.002431782026747e-07,
+      "name": "scatter 0.001 sampled periapsis vs independent cubic root",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "scatter 0.001 radial momentum reverses through the turn",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "scatter 1e-05 expected fate at both integration tolerances",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-06,
+      "measured": 4.614416487802586e-11,
+      "name": "scatter 1e-05 independent RK4 affine refinement",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-07,
+      "measured": 2.6653537883725154e-11,
+      "name": "scatter 1e-05 independent RK4 azimuth refinement",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0002,
+      "measured": 2.8537527896332904e-10,
+      "name": "scatter 1e-05 affine endpoint vs independent reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0008,
+      "measured": 8.590745892433915e-10,
+      "name": "scatter 1e-05 coordinate time vs independent reference",
+      "passed": true
+    },
+    {
+      "ceiling": 3e-05,
+      "measured": 1.6539658531655732e-10,
+      "name": "scatter 1e-05 unwrapped azimuth vs independent reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "scatter 1e-05 production azimuth converges toward reference",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 1.5604609469204578e-14,
+      "name": "scatter 1e-05 normalized null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-12,
+      "measured": 0.0,
+      "name": "scatter 1e-05 stationary and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "scatter 1e-05 increased winding near critical impact",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "scatter 1e-05 increased sampled photon-region dwell",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0002,
+      "measured": 3.181492713721923e-07,
+      "name": "scatter 1e-05 sampled periapsis vs independent cubic root",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "scatter 1e-05 radial momentum reverses through the turn",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "scatter 1e-07 expected fate at both integration tolerances",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-06,
+      "measured": 4.665664923853008e-09,
+      "name": "scatter 1e-07 independent RK4 affine refinement",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-07,
+      "measured": 2.693772937351069e-09,
+      "name": "scatter 1e-07 independent RK4 azimuth refinement",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0002,
+      "measured": 3.372304746562804e-08,
+      "name": "scatter 1e-07 affine endpoint vs independent reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0008,
+      "measured": 1.0117238957718655e-07,
+      "name": "scatter 1e-07 coordinate time vs independent reference",
+      "passed": true
+    },
+    {
+      "ceiling": 3e-05,
+      "measured": 1.9470530077114745e-08,
+      "name": "scatter 1e-07 unwrapped azimuth vs independent reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "scatter 1e-07 production azimuth converges toward reference",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 1.498962405045783e-14,
+      "name": "scatter 1e-07 normalized null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-12,
+      "measured": 0.0,
+      "name": "scatter 1e-07 stationary and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "scatter 1e-07 increased winding near critical impact",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "scatter 1e-07 increased sampled photon-region dwell",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0002,
+      "measured": 3.5165990119878643e-09,
+      "name": "scatter 1e-07 sampled periapsis vs independent cubic root",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "scatter 1e-07 radial momentum reverses through the turn",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "computational sources unchanged during validation",
+      "passed": true
+    }
+  ],
+  "compiler": "16.2.1 20260810",
+  "complete_P2_acceptance": false,
+  "computational_source_sha256": "ef17eca351bbc5cb3a181a7cbaa4f281482c6f987ec43390d04902805a415908",
+  "critical_impact_parameter": 5.196152422706632,
+  "energy": 1,
+  "escape_radius": 20.0,
+  "fixtures": [
+    {
+      "affine_error": 7.847944516470307e-12,
+      "baseline_azimuth_error": 2.630535789194255e-10,
+      "baseline_outcome": "capture_surface",
+      "coordinate_time_error": 2.5082158572331537e-11,
+      "impact_parameter": 5.190956270283926,
+      "initial_state": [
+        0.0,
+        10.0,
+        1.5707963267948966,
+        0.0,
+        -1.0,
+        1.1071019205565493,
+        0.0,
+        5.190956270283926
+      ],
+      "maximum_null_residual": 4.402599622715009e-14,
+      "periapsis": null,
+      "reference_affine": 19.50058275080239,
+      "reference_affine_refinement": 5.518328849429821e-14,
+      "reference_azimuth_refinement": 9.132278266932303e-14,
+      "reference_unwrapped_azimuth": 7.507524250002904,
+      "refined_affine": 19.500582750794543,
+      "refined_azimuth_error": 4.479971948967432e-12,
+      "refined_detail": "Kerr_capture_proxy",
+      "refined_outcome": "capture_surface",
+      "relative_critical_offset": -0.001,
+      "sampled_affine_dwell_within_point_one_of_r3": 3.7124885941047125,
+      "unwrapped_azimuth": 7.507524249998424
+    },
+    {
+      "affine_error": 4.425722011092148e-10,
+      "baseline_azimuth_error": 9.698798209001325e-09,
+      "baseline_outcome": "capture_surface",
+      "coordinate_time_error": 1.322362663813692e-09,
+      "impact_parameter": 5.1961004611824055,
+      "initial_state": [
+        0.0,
+        10.0,
+        1.5707963267948966,
+        0.0,
+        -1.0,
+        1.1068002303786577,
+        0.0,
+        5.1961004611824055
+      ],
+      "maximum_null_residual": 5.652044488984901e-14,
+      "periapsis": null,
+      "reference_affine": 27.48715439005416,
+      "reference_affine_refinement": 4.6206930642833655e-11,
+      "reference_azimuth_refinement": 2.6543965810088554e-11,
+      "reference_unwrapped_azimuth": 12.114609722224973,
+      "refined_affine": 27.48715438961159,
+      "refined_azimuth_error": 2.5505819678528496e-10,
+      "refined_detail": "Kerr_capture_proxy",
+      "refined_outcome": "capture_surface",
+      "relative_critical_offset": -1e-05,
+      "sampled_affine_dwell_within_point_one_of_r3": 11.274213789817978,
+      "unwrapped_azimuth": 12.114609721969915
+    },
+    {
+      "affine_error": 2.7980071592992317e-08,
+      "baseline_azimuth_error": 9.051435654328088e-07,
+      "baseline_outcome": "capture_surface",
+      "coordinate_time_error": 8.393698180952924e-08,
+      "impact_parameter": 5.19615190309139,
+      "initial_state": [
+        0.0,
+        10.0,
+        1.5707963267948966,
+        0.0,
+        -1.0,
+        1.1067972115523226,
+        0.0,
+        5.19615190309139
+      ],
+      "maximum_null_residual": 5.2360744095668446e-14,
+      "periapsis": null,
+      "reference_affine": 35.463719525073934,
+      "reference_affine_refinement": 4.624649007495263e-09,
+      "reference_azimuth_refinement": 2.669900311252915e-09,
+      "reference_unwrapped_azimuth": 16.719811710747045,
+      "refined_affine": 35.46371949709386,
+      "refined_azimuth_error": 1.615400435639458e-08,
+      "refined_detail": "Kerr_capture_proxy",
+      "refined_outcome": "capture_surface",
+      "relative_critical_offset": -1e-07,
+      "sampled_affine_dwell_within_point_one_of_r3": 19.249915209561845,
+      "unwrapped_azimuth": 16.71981169459304
+    },
+    {
+      "affine_error": 2.9203306439740118e-12,
+      "baseline_azimuth_error": 1.6688872506165353e-11,
+      "baseline_outcome": "escaped",
+      "coordinate_time_error": 9.36495325731812e-12,
+      "impact_parameter": 5.201348575129338,
+      "initial_state": [
+        0.0,
+        10.0,
+        1.5707963267948966,
+        0.0,
+        -1.0,
+        1.1064920526149296,
+        0.0,
+        5.201348575129338
+      ],
+      "maximum_null_residual": 1.0566558491052273e-14,
+      "periapsis": {
+        "analytic_periapsis": 3.080168589470578,
+        "minimum_sampled_radius": 3.0801686897137563
+      },
+      "reference_affine": 40.38886031934834,
+      "reference_affine_refinement": 5.231821920137492e-13,
+      "reference_azimuth_refinement": 3.0149667484824505e-13,
+      "reference_unwrapped_azimuth": 8.84702104111944,
+      "refined_affine": 40.38886031935126,
+      "refined_azimuth_error": 1.8065549056700547e-12,
+      "refined_detail": "escape",
+      "refined_outcome": "escaped",
+      "relative_critical_offset": 0.001,
+      "sampled_affine_dwell_within_point_one_of_r3": 2.524118308268564,
+      "unwrapped_azimuth": 8.847021041121247
+    },
+    {
+      "affine_error": 2.8537527896332904e-10,
+      "baseline_azimuth_error": 8.390257377755006e-09,
+      "baseline_outcome": "escaped",
+      "coordinate_time_error": 8.590745892433915e-10,
+      "impact_parameter": 5.196204384230859,
+      "initial_state": [
+        0.0,
+        10.0,
+        1.5707963267948966,
+        0.0,
+        -1.0,
+        1.1067941317003132,
+        0.0,
+        5.196204384230859
+      ],
+      "maximum_null_residual": 1.5604609469204578e-14,
+      "periapsis": {
+        "analytic_periapsis": 3.007772675669999,
+        "minimum_sampled_radius": 3.0077729938192705
+      },
+      "reference_affine": 48.35644387194544,
+      "reference_affine_refinement": 4.614416487802586e-11,
+      "reference_azimuth_refinement": 2.6653537883725154e-11,
+      "reference_unwrapped_azimuth": 13.449966791457928,
+      "refined_affine": 48.35644387223081,
+      "refined_azimuth_error": 1.6539658531655732e-10,
+      "refined_detail": "escape",
+      "refined_outcome": "escaped",
+      "relative_critical_offset": 1e-05,
+      "sampled_affine_dwell_within_point_one_of_r3": 11.413674878253776,
+      "unwrapped_azimuth": 13.449966791623325
+    },
+    {
+      "affine_error": 3.372304746562804e-08,
+      "baseline_azimuth_error": 9.051426772543891e-07,
+      "baseline_outcome": "escaped",
+      "coordinate_time_error": 1.0117238957718655e-07,
+      "impact_parameter": 5.196152942321874,
+      "initial_state": [
+        0.0,
+        10.0,
+        1.5707963267948966,
+        0.0,
+        -1.0,
+        1.1067971505655392,
+        0.0,
+        5.196152942321874
+      ],
+      "maximum_null_residual": 1.498962405045783e-14,
+      "periapsis": {
+        "analytic_periapsis": 3.000774863378419,
+        "minimum_sampled_radius": 3.000774866895018
+      },
+      "reference_affine": 56.332669963096336,
+      "reference_affine_refinement": 4.665664923853008e-09,
+      "reference_azimuth_refinement": 2.693772937351069e-09,
+      "reference_unwrapped_azimuth": 18.05510205596786,
+      "refined_affine": 56.332669996819384,
+      "refined_azimuth_error": 1.9470530077114745e-08,
+      "refined_detail": "escape",
+      "refined_outcome": "escaped",
+      "relative_critical_offset": 1e-07,
+      "sampled_affine_dwell_within_point_one_of_r3": 19.419390306339658,
+      "unwrapped_azimuth": 18.05510207543839
+    }
+  ],
+  "launch_radius": 10.0,
+  "mass": 1,
+  "maximum_affine": 150.0,
+  "passed": true,
+  "reference": "Independent long-double RK4 of r,v,t,-phi; no production metric or integrator",
+  "reference_steps": [
+    0.002,
+    0.001
+  ],
+  "refined": {
+    "atol": 2e-13,
+    "event_tolerance": 1e-12,
+    "maximum_step": 0.05,
+    "rtol": 2e-13
+  },
+  "schema_version": 1,
+  "scope": "Six selected equatorial Schwarzschild near-critical rays, finite capture/escape boundaries and sampled periapsis/dwell. No global grazing-event certification or GYOTO comparison."
+}

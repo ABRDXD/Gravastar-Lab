@@ -1,0 +1,423 @@
+{
+  "checks": [
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "both exact endpoints outside despite interior excursion",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "boyer_lindquist shallow excursion terminates at first boundary",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 2.810149682397345e-12,
+      "name": "boyer_lindquist analytic first crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "boyer_lindquist small-step baseline also finds crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 3.808111811998138e-12,
+      "name": "boyer_lindquist coarse and small-step crossing agreement",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "boyer_lindquist nearby miss is not an absorbing boundary",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "boyer_lindquist shallow crossing crossing diagnostics included",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 3.330669073875471e-16,
+      "name": "boyer_lindquist shallow crossing null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 0.0,
+      "name": "boyer_lindquist shallow crossing Killing drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "boyer_lindquist both nonterminal join roots retained",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "boyer_lindquist join events ordered and named",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 2.810149682397345e-12,
+      "name": "boyer_lindquist first nonterminal analytic root",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 2.668389814663996e-12,
+      "name": "boyer_lindquist second nonterminal analytic root",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "boyer_lindquist two join roots crossing diagnostics included",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 2.5535129566378667e-15,
+      "name": "boyer_lindquist two join roots null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 0.0,
+      "name": "boyer_lindquist two join roots Killing drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "north shallow excursion terminates at first boundary",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 1.0444157691469336e-11,
+      "name": "north analytic first crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "north small-step baseline also finds crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 7.55118710615843e-12,
+      "name": "north coarse and small-step crossing agreement",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "north nearby miss is not an absorbing boundary",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "north shallow crossing crossing diagnostics included",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 1.3156097886196192e-15,
+      "name": "north shallow crossing null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 1.2688263211077578e-16,
+      "name": "north shallow crossing Killing drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "north both nonterminal join roots retained",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "north join events ordered and named",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 1.0444157691469336e-11,
+      "name": "north first nonterminal analytic root",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 7.231715226652113e-14,
+      "name": "north second nonterminal analytic root",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "north two join roots crossing diagnostics included",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 2.6808050679512434e-15,
+      "name": "north two join roots null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 2.5376526422155156e-16,
+      "name": "north two join roots Killing drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "north shallow core entry continues to budget",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 1.0444157691469336e-11,
+      "name": "north core first entry time",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 7.989664485563708e-12,
+      "name": "north core analytic exit time",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "north discarded angular trial tail publishes no extra entry",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-10,
+      "measured": 1.2989609388114332e-14,
+      "name": "north continued Cartesian line",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "north core excursion crossing diagnostics included",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 2.2426505097428664e-14,
+      "name": "north core excursion null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 4.060244227544825e-15,
+      "name": "north core excursion Killing drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "south shallow excursion terminates at first boundary",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 1.0444157691469336e-11,
+      "name": "south analytic first crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "south small-step baseline also finds crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 7.55118710615843e-12,
+      "name": "south coarse and small-step crossing agreement",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "south nearby miss is not an absorbing boundary",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "south shallow crossing crossing diagnostics included",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 1.3156097886196192e-15,
+      "name": "south shallow crossing null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 1.2688263211077578e-16,
+      "name": "south shallow crossing Killing drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "south both nonterminal join roots retained",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "south join events ordered and named",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 1.0444157691469336e-11,
+      "name": "south first nonterminal analytic root",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 7.231715226652113e-14,
+      "name": "south second nonterminal analytic root",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "south two join roots crossing diagnostics included",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 2.6808050679512434e-15,
+      "name": "south two join roots null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 2.5376526422155156e-16,
+      "name": "south two join roots Killing drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "south shallow core entry continues to budget",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 1.0444157691469336e-11,
+      "name": "south core first entry time",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 7.989664485563708e-12,
+      "name": "south core analytic exit time",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "south discarded angular trial tail publishes no extra entry",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-10,
+      "measured": 1.2989609388114332e-14,
+      "name": "south continued Cartesian line",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "south core excursion crossing diagnostics included",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 2.2426505097428664e-14,
+      "name": "south core excursion null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 4.060244227544825e-15,
+      "name": "south core excursion Killing drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "computational sources unchanged during validation",
+      "passed": true
+    }
+  ],
+  "compiler": "16.2.1 20260810",
+  "complete_P2_acceptance": false,
+  "computational_source_sha256": "ef17eca351bbc5cb3a181a7cbaa4f281482c6f987ec43390d04902805a415908",
+  "fixtures": [
+    {
+      "affine": 0.004877525515771537,
+      "chart": "boyer_lindquist",
+      "expected_affine": 0.0048775255129613875,
+      "impact": 0.74999999,
+      "join_count": 2,
+      "miss_outcome": "affine_limit",
+      "outcome": "domain_limit",
+      "rhs_calls": 833,
+      "small_step_affine": 0.004877525519579649
+    },
+    {
+      "affine": 0.004877525523405545,
+      "chart": "north",
+      "expected_affine": 0.0048775255129613875,
+      "impact": 0.74999999,
+      "join_count": 2,
+      "miss_outcome": "affine_limit",
+      "outcome": "domain_limit",
+      "rhs_calls": 798,
+      "small_step_affine": 0.004877525515854358
+    },
+    {
+      "affine": 0.004877525523405545,
+      "chart": "south",
+      "expected_affine": 0.0048775255129613875,
+      "impact": 0.74999999,
+      "join_count": 2,
+      "miss_outcome": "affine_limit",
+      "outcome": "domain_limit",
+      "rhs_calls": 798,
+      "small_step_affine": 0.004877525515854358
+    }
+  ],
+  "passed": true,
+  "schema_version": 1,
+  "scope": "Analytic shallow flat-space crossing pairs, nearby misses and transactional core entry; no global certification of arbitrary extrema or tangencies."
+}
