@@ -51,10 +51,14 @@ provides an independently published tableau; no Boost implementation is copied
 or linked.
 
 Transverse sign-changing event brackets are refined by reintegrating from the
-left endpoint and bisecting affine distance, rather than linearly interpolating
-coordinates. Select the earliest terminal event. Record shell crossings with
-refined states. Grazing contacts and multiple crossings hidden inside one step
-are not certified; step/tolerance convergence is required for accepted examples.
+trial's initial state and bisecting affine distance, rather than linearly
+interpolating coordinates. When endpoint surface rates have opposite signs,
+locate a stationary point and split the search there. This detects a resolved
+shallow in-and-out excursion with same-side endpoints; both nonterminal roots
+are retained, or the earliest terminal/transition event clips the trial.
+See `EVENT_COVERAGE.md` for analytic regressions and near-critical references.
+Arbitrary hidden extrema and exact grazing contacts are not certified;
+step/tolerance convergence remains required for accepted examples.
 The disk convention is a **transverse crossing** of an infinitesimally thin
 surface; a ray lying in its plane is not silently treated as an intersection.
 If a refinement substep fails the local error test or its refined event exceeds
