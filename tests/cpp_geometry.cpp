@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "gravastar/geometry/geometry.hpp"
+#include "gravastar/geometry/reference.hpp"
 #include "gravastar/math/jet.hpp"
+#include "gravastar/math/polynomial.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -149,6 +151,45 @@ void matching_and_derivatives() {
         }
     }
 }
+void polynomial_and_reference_cases() {
+    using namespace gravastar::math;
+    // Test Sturm counting and root isolation including even-multiplicity tangency:
+    // (u - 1/3)^2 * (u - 2/3) = u^3 - 4/3 u^2 + 5/9 u - 2/27.
+    Poly f1{Rational(-1, 3), Rational(1)};
+    Poly f2{Rational(-2, 3), Rational(1)};
+    Poly tangent_poly = multiply(multiply(f1, f1), f2);
+    check(count_roots(tangent_poly, Rational(0), Rational(1)) == 2,
+          "Sturm counts distinct roots including even-multiplicity tangency");
+    auto isolated = isolate_roots(tangent_poly, Rational(0), Rational(1), Rational(1, 1000000));
+    check(isolated.size() == 2, "isolate_roots finds both tangency and simple root");
+
+    // Certify both presets ([1.5, 1.8] and [1.8, 2.2]).
+    const auto cert1 = certify_radial_delta({
+        Rational::from_string("1"), Rational::from_string("0.875"),
+        Rational::from_string("0.5"), Rational::from_string("1.5"), Rational::from_string("1.8")
+    });
+    check(cert1.certified && cert1.shell_lower_bound == Rational(2237, 8000),
+          "exact Bernstein bound 2237/8000 for [1.5, 1.8]");
+
+    const auto cert2 = certify_radial_delta({
+        Rational::from_string("1"), Rational::from_string("0.875"),
+        Rational::from_string("0.5"), Rational::from_string("1.8"), Rational::from_string("2.2")
+    });
+    check(cert2.certified && cert2.shell_lower_bound == Rational(13639237, 15840000),
+          "exact Bernstein bound 13639237/15840000 for [1.8, 2.2]");
+
+    // Compare C++ Jet evaluation against quad-precision (__float128) reference.
+    using namespace gravastar::geometry::reference;
+    const Parameters p{Family::toy, 1, 0.875, 0.5, 1.5, 1.8};
+    const ParametersQ pq{};
+    const auto e = at(p, 1.65, 1.1, Region::shell);
+    const auto dref = derivatives_q(pq, static_cast<Real>(1.65L), static_cast<Real>(1.1L),
+                                    static_cast<Real>(1e-6L), Region::shell);
+    const auto cref = curvature_q(dref.g, dref.first, dref.second);
+    check(normalized_error_matrix(e.metric, dref.g) < 1e-14, "Jet vs quad metric agreement");
+    check(normalized_error(e.ricci_scalar, cref.ricci_scalar) < 1e-9, "Jet vs quad Ricci scalar");
+    check(normalized_error(e.kretschmann, cref.kretschmann) < 1e-9, "Jet vs quad Kretschmann");
+}
 void jet_cases() {
     using namespace gravastar::math;
     const Jet x = Jet::variable(2, 0), y = Jet::variable(3, 1);
@@ -165,6 +206,8 @@ void error_cases() {
         check(std::holds_alternative<Error>(evaluate(p, 1.5, theta)), "reject axis/outside angle");
     for (double r : {0.0, -1.0, std::numeric_limits<double>::infinity()})
         check(std::holds_alternative<Error>(evaluate(p, r, 1.0)), "reject invalid radius");
+    check(std::holds_alternative<Error>(evaluate(p, 3.0, 1.0, Region::shell)),
+          "reject shell extrapolation");
     p.mass = -1;
     check(std::holds_alternative<Error>(evaluate(p, 1.5, 1.0)), "reject negative mass");
     p.mass = std::numeric_limits<double>::quiet_NaN();
@@ -193,6 +236,7 @@ void error_cases() {
 
 int main() {
     jet_cases();
+    polynomial_and_reference_cases();
     reference_cases();
     matching_and_derivatives();
     error_cases();
@@ -200,7 +244,8 @@ int main() {
         std::cerr << failures << " checks failed\n";
         return 1;
     }
-    std::cout << "Geometry checks passed: jets, flat, Schwarzschild, Kerr, de Sitter, "
-                 "matching, derivative convergence, inverse, structured errors.\n";
+    std::cout << "Geometry checks passed: jets, BigInt/Rational Sturm & Bernstein, "
+                 "quad reference, flat, Schwarzschild, Kerr, de Sitter, "
+                 "one-sided C3 & extrinsic joins, derivative convergence, structured errors.\n";
     return 0;
 }
