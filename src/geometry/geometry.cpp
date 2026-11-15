@@ -92,14 +92,13 @@ void compute_curvature(Evaluation& result) {
         for (int d = 0; d < 4; ++d)
             result.ricci_scalar += inv[b][d] * result.ricci[b][d];
 
-    Tensor4 lower{};
     for (int a = 0; a < 4; ++a)
         for (int b = 0; b < 4; ++b)
             for (int c = 0; c < 4; ++c)
                 for (int d = 0; d < 4; ++d)
                     for (int e = 0; e < 4; ++e)
-                        lower[a][b][c][d] += g[a][e] * riemann[e][b][c][d];
-    Tensor4 raised = lower;
+                        result.riemann_lower[a][b][c][d] += g[a][e] * riemann[e][b][c][d];
+    Tensor4 raised = result.riemann_lower;
     for (int axis = 0; axis < 4; ++axis) {
         Tensor4 next{};
         for (int a = 0; a < 4; ++a)
@@ -120,7 +119,7 @@ void compute_curvature(Evaluation& result) {
         for (int b = 0; b < 4; ++b)
             for (int c = 0; c < 4; ++c)
                 for (int d = 0; d < 4; ++d)
-                    result.kretschmann += lower[a][b][c][d] * raised[a][b][c][d];
+                    result.kretschmann += result.riemann_lower[a][b][c][d] * raised[a][b][c][d];
 }
 }  // namespace
 
