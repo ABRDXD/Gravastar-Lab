@@ -76,3 +76,7 @@ if(BUILD_TESTING)
     add_test(NAME p1_scientific_validation
         COMMAND gravastar_validate --root ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
+
+add_executable(gravastar_conserved_tests tests/conserved_quantities_test.cpp)
+target_link_libraries(gravastar_conserved_tests PRIVATE gravastar_integration)
+add_test(NAME conserved_quantities_unit COMMAND gravastar_conserved_tests)
