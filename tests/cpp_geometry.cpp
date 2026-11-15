@@ -89,32 +89,35 @@ void reference_cases() {
 void matching_and_derivatives() {
     Parameters p{Family::toy, 1, 0.875, 0.5, 1.5, 1.8};
     for (double r : {p.r_in, p.r_out}) {
-        auto reference = p;
-        reference.family = r == p.r_in ? Family::de_sitter : Family::kerr;
+        auto ref_param = p;
+        ref_param.family = r == p.r_in ? Family::de_sitter : Family::kerr;
+        const Region exact_reg = r == p.r_in ? Region::core : Region::exterior;
         for (double theta : {0.3, 1.2, 2.7}) {
-            const auto join = at(p, r, theta);
-            const auto exact = at(reference, r, theta);
-            inverse_check(join);
+            // Evaluate the polynomial branch at the join via Region::shell!
+            const auto shell_join = at(p, r, theta, Region::shell);
+            const auto region_join = at(p, r, theta, exact_reg);
+            const auto exact = at(ref_param, r, theta);
+            inverse_check(shell_join);
             for (int i = 0; i < 4; ++i)
                 for (int j = 0; j < 4; ++j) {
-                    near(join.metric[i][j], exact.metric[i][j], 1e-14, "join value");
-                    near(join.dg[1][i][j], exact.dg[1][i][j], 1e-14, "join first derivative");
-                    near(join.ddg[1][1][i][j], exact.ddg[1][1][i][j], 1e-14, "join second derivative");
-                    near(join.drrr[i][j], exact.drrr[i][j], 1e-14, "join third derivative");
+                    near(shell_join.metric[i][j], exact.metric[i][j], 1e-14, "one-sided shell join value");
+                    near(shell_join.dg[1][i][j], exact.dg[1][i][j], 1e-14, "one-sided shell join d_r");
+                    near(shell_join.ddg[1][1][i][j], exact.ddg[1][1][i][j], 1e-14, "one-sided shell join d_rr");
+                    near(shell_join.drrr[i][j], exact.drrr[i][j], 1e-14, "one-sided shell join d_rrr");
+                    near(shell_join.extrinsic_curvature[i][j],
+                         region_join.extrinsic_curvature[i][j], 1e-14, "extrinsic curvature join");
                 }
         }
     }
     near(at(p, 1.65, 1.2).mu, 0.5, 1e-14, "transition midpoint");
     const auto upper = at(p, p.r_out - 1e-8, 1.2);
     check(upper.lambda > 0 && upper.lambda < 1e-28, "upper transition tail survives cancellation");
-    // Check approach from the shell, where the polynomial must tend to the
-    // constant branch through third order. Third derivatives approach linearly.
     for (double join : {p.r_in, p.r_out}) {
-        const auto endpoint = at(p, join, 1.2);
+        const auto endpoint = at(p, join, 1.2, Region::shell);
         const double direction = join == p.r_in ? 1 : -1;
         double previous_error = 0;
         for (double distance : {1e-5, 5e-6, 2.5e-6}) {
-            const auto nearby = at(p, join + direction * distance, 1.2);
+            const auto nearby = at(p, join + direction * distance, 1.2, Region::shell);
             double error = 0;
             for (int i = 0; i < 4; ++i)
                 for (int j = 0; j < 4; ++j)
