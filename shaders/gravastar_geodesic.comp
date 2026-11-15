@@ -1,0 +1,125 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+#version 460
+#extension GL_GOOGLE_include_directive : enable
+
+layout(local_size_x = 64, local_size_y = 1, local_size_z = 1) in;
+
+#include "gravastar_physics.glsl"
+
+struct RayInput {
+    vec4 x0;            // t, r, theta, phi
+    vec4 p0;            // p_t, p_r, p_theta, p_phi
+    vec4 params_geom;   // M, a, Lambda, unused
+    vec4 params_radii;  // r_in, r_out, unused, unused
+    vec4 limits;        // escape_radius, h0, h_min, h_max
+    uvec4 options;      // max_steps, unused, unused, unused
+};
+
+struct RayOutput {
+    vec4 final_x;
+    vec4 final_p;
+    vec4 stats;         // min_r, max_null_drift, final_lambda, outcome
+    uvec4 counts;       // steps, crossed_shell_in, crossed_shell_out, status
+};
+
+layout(std430, set = 0, binding = 0) readonly buffer Inputs {
+    RayInput rays[];
+} in_data;
+
+layout(std430, set = 0, binding = 1) writeonly buffer Outputs {
+    RayOutput rays[];
+} out_data;
+
+void main() {
+    uint id = gl_GlobalInvocationID.x;
+    RayInput inp = in_data.rays[id];
+
+    float M = inp.params_geom.x;
+    float a = inp.params_geom.y;
+    float Lambda = inp.params_geom.z;
+    float r_in = inp.params_radii.x;
+    float r_out = inp.params_radii.y;
+
+    float escape_radius = inp.limits.x;
+    float h0 = inp.limits.y;
+    float h_min = inp.limits.z;
+    float h_max = inp.limits.w;
+    uint max_steps = inp.options.x;
+
+    vec4 cur_x = inp.x0;
+    vec4 cur_p = inp.p0;
+
+    float min_r = cur_x.y;
+    float max_null_drift = 0.0;
+    float lambda = 0.0;
+    uint steps = 0;
+    uint crossed_shell_in = 0;
+    uint crossed_shell_out = 0;
+    float outcome = 2.0; // 0: Escaped, 1: CorePassed, 2: Captured/Exhausted
+
+    for (uint step = 0; step < max_steps; ++step) {
+        steps = step + 1;
+        float r = cur_x.y;
+
+        if (r < min_r) min_r = r;
+        if (r < r_in) crossed_shell_in = 1;
+        if (crossed_shell_in == 1 && r > r_out) crossed_shell_out = 1;
+
+        if (r >= escape_radius) {
+            outcome = (crossed_shell_in == 1) ? 1.0 : 0.0;
+            break;
+        }
+
+        // Adaptive step based on proximity to transition shell
+        float dist_shell = min(abs(r - r_in), abs(r - r_out));
+        float factor = clamp(dist_shell / r_in, 0.05, 1.0);
+        float h = clamp(h0 * factor, h_min, h_max);
+
+        // RK4 Stage 1
+        MetricEvaluation m1 = evaluate_gravastar_metric(cur_x.y, cur_x.z, M, a, Lambda, r_in, r_out);
+        if (!m1.valid) { outcome = 2.0; break; }
+        vec4 dx1, dp1;
+        float null1;
+        compute_geodesic_rhs(m1, cur_x, cur_p, dx1, dp1, null1);
+        max_null_drift = max(max_null_drift, abs(null1));
+
+        // RK4 Stage 2
+        vec4 x2 = cur_x + 0.5 * h * dx1;
+        vec4 p2 = cur_p + 0.5 * h * dp1;
+        MetricEvaluation m2 = evaluate_gravastar_metric(x2.y, x2.z, M, a, Lambda, r_in, r_out);
+        if (!m2.valid) { outcome = 2.0; break; }
+        vec4 dx2, dp2;
+        float null2;
+        compute_geodesic_rhs(m2, x2, p2, dx2, dp2, null2);
+
+        // RK4 Stage 3
+        vec4 x3 = cur_x + 0.5 * h * dx2;
+        vec4 p3 = cur_p + 0.5 * h * dp2;
+        MetricEvaluation m3 = evaluate_gravastar_metric(x3.y, x3.z, M, a, Lambda, r_in, r_out);
+        if (!m3.valid) { outcome = 2.0; break; }
+        vec4 dx3, dp3;
+        float null3;
+        compute_geodesic_rhs(m3, x3, p3, dx3, dp3, null3);
+
+        // RK4 Stage 4
+        vec4 x4 = cur_x + h * dx3;
+        vec4 p4 = cur_p + h * dp3;
+        MetricEvaluation m4 = evaluate_gravastar_metric(x4.y, x4.z, M, a, Lambda, r_in, r_out);
+        if (!m4.valid) { outcome = 2.0; break; }
+        vec4 dx4, dp4;
+        float null4;
+        compute_geodesic_rhs(m4, x4, p4, dx4, dp4, null4);
+
+        cur_x += (h / 6.0) * (dx1 + 2.0 * dx2 + 2.0 * dx3 + dx4);
+        cur_p += (h / 6.0) * (dp1 + 2.0 * dp2 + 2.0 * dp3 + dp4);
+        lambda += h;
+    }
+
+    RayOutput outp;
+    outp.final_x = cur_x;
+    outp.final_p = cur_p;
+    outp.stats = vec4(min_r, max_null_drift, lambda, outcome);
+    outp.counts = uvec4(steps, crossed_shell_in, crossed_shell_out, 1);
+
+    out_data.rays[id] = outp;
+}
