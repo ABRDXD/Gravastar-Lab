@@ -620,7 +620,7 @@ questions whose answers can be found in the references or local environment.
 - [x] Implement and validate P2 reference optics and GYOTO integration.
 - [x] Implement and compare P3 Vulkan optics.
 - [x] Implement and verify P4 desktop studio.
-- [ ] Implement and verify P5 deterministic recording and encoding.
+- [x] Implement and verify P5 deterministic recording and encoding.
 - [ ] Complete P6 documentation and Linux release acceptance.
 - [ ] Define and carry out R1 stability research.
 - [ ] Define and carry out R2 full evolution work.
