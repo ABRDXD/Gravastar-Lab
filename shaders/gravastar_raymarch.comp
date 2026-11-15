@@ -1,0 +1,161 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+#version 460
+#extension GL_GOOGLE_include_directive : enable
+
+layout(local_size_x = 64, local_size_y = 1, local_size_z = 1) in;
+
+#include "gravastar_physics.glsl"
+
+struct SceneParams {
+    vec4 cam_pos;           // r, theta, phi, tan_half_fov
+    vec4 params_geom;       // M, a, Lambda, aspect
+    vec4 params_radii;      // r_in, r_out, width, height
+    vec4 limits;            // escape_radius, h0, h_min, h_max
+    uvec4 options;          // max_steps, render_mode, unused, unused
+
+    // Observer orthonormal tetrad basis vectors (contravariant)
+    vec4 tetrad_e0;
+    vec4 tetrad_e1;
+    vec4 tetrad_e2;
+    vec4 tetrad_e3;
+
+    // Observer metric components at camera position
+    vec4 metric_diag;       // g00, g11, g22, g33
+    vec4 metric_off;        // g03, unused, unused, unused
+};
+
+layout(std430, set = 0, binding = 0) readonly buffer SceneInput {
+    SceneParams scene;
+} in_data;
+
+layout(std430, set = 0, binding = 1) writeonly buffer ImageOutput {
+    vec4 pixels[];
+} out_data;
+
+void main() {
+    uint id = gl_GlobalInvocationID.x;
+    SceneParams sp = in_data.scene;
+
+    uint width = uint(sp.params_radii.z);
+    uint height = uint(sp.params_radii.w);
+    if (id >= width * height) return;
+
+    uint px = id % width;
+    uint py = id / width;
+
+    float M = sp.params_geom.x;
+    float a = sp.params_geom.y;
+    float Lambda = sp.params_geom.z;
+    float aspect = sp.params_geom.w;
+
+    float r_in = sp.params_radii.x;
+    float r_out = sp.params_radii.y;
+
+    float escape_radius = sp.limits.x;
+    float h0 = sp.limits.y;
+    float h_min = sp.limits.z;
+    float h_max = sp.limits.w;
+    uint max_steps = sp.options.x;
+
+    float tan_half_fov = sp.cam_pos.w;
+
+    // NDC coordinates
+    float ndc_x = (2.0 * (float(px) + 0.5) / float(width)) - 1.0;
+    float ndc_y = 1.0 - (2.0 * (float(py) + 0.5) / float(height));
+
+    // Direction vector in camera frame
+    float dx = ndc_x * tan_half_fov * aspect;
+    float dy = ndc_y * tan_half_fov;
+    float dz = 1.0;
+    float norm = sqrt(dx * dx + dy * dy + dz * dz);
+    float nx = dx / norm;
+    float ny = dy / norm;
+    float nz = dz / norm;
+
+    // Contravariant photon 4-momentum k^mu
+    vec4 k_up = -sp.tetrad_e0 + nz * sp.tetrad_e1 - ny * sp.tetrad_e2 + nx * sp.tetrad_e3;
+
+    // Covariant momentum p_mu = g_{mu nu} k^nu
+    float pt    = sp.metric_diag.x * k_up.x + sp.metric_off.x * k_up.w;
+    float pr    = sp.metric_diag.y * k_up.y;
+    float pth   = sp.metric_diag.z * k_up.z;
+    float pphi  = sp.metric_off.x * k_up.x + sp.metric_diag.w * k_up.w;
+
+    vec4 cur_x = vec4(0.0, sp.cam_pos.x, sp.cam_pos.y, sp.cam_pos.z);
+    vec4 cur_p = vec4(pt, pr, pth, pphi);
+
+    uint crossed_shell_in = 0;
+    uint crossed_shell_out = 0;
+    vec3 color = vec3(0.0);
+
+    for (uint step = 0; step < max_steps; ++step) {
+        float r = cur_x.y;
+
+        if (r < r_in) crossed_shell_in = 1;
+        if (crossed_shell_in == 1 && r > r_out) crossed_shell_out = 1;
+
+        if (r >= escape_radius) {
+            if (crossed_shell_in == 1) {
+                // Ray passed through core and escaped
+                color = vec3(0.2, 0.7, 1.0); // Cyan-blue core luminescence
+            } else {
+                // Celestial background checkerboard
+                const float PI = 3.14159265358979323846;
+                float final_th = cur_x.z;
+                float final_ph = cur_x.w;
+                int u = int(floor(final_ph * 3.0 / PI));
+                int v = int(floor(final_th * 6.0 / PI));
+                if (((u + v) % 2) == 0) {
+                    color = vec3(0.05, 0.05, 0.08);
+                } else {
+                    color = vec3(0.02, 0.02, 0.03);
+                }
+            }
+            break;
+        }
+
+        // Adaptive step based on proximity to shell
+        float dist_shell = min(abs(r - r_in), abs(r - r_out));
+        float factor = clamp(dist_shell / r_in, 0.05, 1.0);
+        float h = clamp(h0 * factor, h_min, h_max);
+
+        // RK4 Stage 1
+        MetricEvaluation m1 = evaluate_gravastar_metric(cur_x.y, cur_x.z, M, a, Lambda, r_in, r_out);
+        if (!m1.valid) { break; }
+        vec4 dx1, dp1;
+        float null1;
+        compute_geodesic_rhs(m1, cur_x, cur_p, dx1, dp1, null1);
+
+        // RK4 Stage 2
+        vec4 x2 = cur_x + 0.5 * h * dx1;
+        vec4 p2 = cur_p + 0.5 * h * dp1;
+        MetricEvaluation m2 = evaluate_gravastar_metric(x2.y, x2.z, M, a, Lambda, r_in, r_out);
+        if (!m2.valid) { break; }
+        vec4 dx2, dp2;
+        float null2;
+        compute_geodesic_rhs(m2, x2, p2, dx2, dp2, null2);
+
+        // RK4 Stage 3
+        vec4 x3 = cur_x + 0.5 * h * dx2;
+        vec4 p3 = cur_p + 0.5 * h * dp2;
+        MetricEvaluation m3 = evaluate_gravastar_metric(x3.y, x3.z, M, a, Lambda, r_in, r_out);
+        if (!m3.valid) { break; }
+        vec4 dx3, dp3;
+        float null3;
+        compute_geodesic_rhs(m3, x3, p3, dx3, dp3, null3);
+
+        // RK4 Stage 4
+        vec4 x4 = cur_x + h * dx3;
+        vec4 p4 = cur_p + h * dp3;
+        MetricEvaluation m4 = evaluate_gravastar_metric(x4.y, x4.z, M, a, Lambda, r_in, r_out);
+        if (!m4.valid) { break; }
+        vec4 dx4, dp4;
+        float null4;
+        compute_geodesic_rhs(m4, x4, p4, dx4, dp4, null4);
+
+        cur_x += (h / 6.0) * (dx1 + 2.0 * dx2 + 2.0 * dx3 + dx4);
+        cur_p += (h / 6.0) * (dp1 + 2.0 * dp2 + 2.0 * dp3 + dp4);
+    }
+
+    out_data.pixels[id] = vec4(color, 1.0);
+}
