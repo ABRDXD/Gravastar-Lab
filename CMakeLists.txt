@@ -23,6 +23,9 @@ endif()
 add_executable(gravastar_benchmark src/experiments/benchmark.cpp)
 target_link_libraries(gravastar_benchmark PRIVATE gravastar_geometry)
 
+add_executable(gravastar_validate src/experiments/validate.cpp)
+target_link_libraries(gravastar_validate PRIVATE gravastar_geometry)
+
 include(CTest)
 if(BUILD_TESTING)
     add_executable(gravastar_geometry_tests tests/cpp_geometry.cpp)
@@ -32,4 +35,6 @@ if(BUILD_TESTING)
     add_test(NAME benchmark_reject_axis COMMAND gravastar_benchmark
         evaluate toy 1 0.875 0.5 1 2 1.5 0)
     set_tests_properties(benchmark_reject_axis PROPERTIES WILL_FAIL TRUE)
+    add_test(NAME p1_scientific_validation
+        COMMAND gravastar_validate --root ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
