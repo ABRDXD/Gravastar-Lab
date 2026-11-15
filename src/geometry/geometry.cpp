@@ -72,7 +72,7 @@ void compute_curvature(Evaluation& result) {
                         const double second = ddg[k][b][e][c] + ddg[k][c][e][b]
                                             - ddg[k][e][b][c];
                         dgamma[k][a][b][c] += 0.5 * (dinv[k][a][e] * first
-                                                                 + inv[a][e] * second);
+                                                   + inv[a][e] * second);
                     }
                 }
     // R^a_bcd = d_c Gamma^a_db - d_d Gamma^a_cb
