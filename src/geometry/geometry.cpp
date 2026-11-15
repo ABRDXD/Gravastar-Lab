@@ -19,12 +19,12 @@ Jet smoothstep(const Jet& u) {
     return u2 * u2 * (Jet(35) + u * (Jet(-84) + u * (Jet(70) - Jet(20) * u)));
 }
 
-std::pair<Jet, Jet> transition(const Parameters& p, const Jet& r) {
+std::pair<Jet, Jet> transition(const Parameters& p, const Jet& r, Region region) {
     if (p.family == Family::kerr) return {Jet(1), Jet(0)};
     if (p.family == Family::de_sitter) return {Jet(0), Jet(1)};
     if (p.family == Family::flat) return {Jet(0), Jet(0)};
-    if (r.value() <= p.r_in) return {Jet(0), Jet(1)};
-    if (r.value() >= p.r_out) return {Jet(1), Jet(0)};
+    if (region == Region::core) return {Jet(0), Jet(1)};
+    if (region == Region::exterior) return {Jet(1), Jet(0)};
     const double width = p.r_out - p.r_in;
     // Evaluate the small tail directly: avoid cancellation in lambda near r_out.
     if (r.value() - p.r_in <= width * 0.5) {
