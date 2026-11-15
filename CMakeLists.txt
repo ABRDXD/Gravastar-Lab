@@ -87,3 +87,7 @@ if(BUILD_TESTING)
     add_test(NAME p1_scientific_validation
         COMMAND gravastar_validate --root ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
+
+add_executable(gravastar_turning_point_tests tests/equatorial_turning_points_test.cpp)
+target_link_libraries(gravastar_turning_point_tests PRIVATE gravastar_integration)
+add_test(NAME equatorial_turning_points_unit COMMAND gravastar_turning_point_tests)
