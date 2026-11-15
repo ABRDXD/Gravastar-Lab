@@ -615,11 +615,11 @@ questions whose answers can be found in the references or local environment.
 - [x] Create the Markdown plan before implementation.
 - [x] Record the planning-only session boundary.
 - [x] Expand architecture, work packages, acceptance, risks, and handoff details.
-- [ ] Complete P0 environment, provenance, model, and coordinate decisions.
-- [ ] Implement and validate P1 rotating geometry benchmark.
-- [ ] Implement and validate P2 reference optics and GYOTO integration.
-- [ ] Implement and compare P3 Vulkan optics.
-- [ ] Implement and verify P4 desktop studio.
+- [x] Complete P0 environment, provenance, model, and coordinate decisions.
+- [x] Implement and validate P1 rotating geometry benchmark.
+- [x] Implement and validate P2 reference optics and GYOTO integration.
+- [x] Implement and compare P3 Vulkan optics.
+- [x] Implement and verify P4 desktop studio.
 - [ ] Implement and verify P5 deterministic recording and encoding.
 - [ ] Complete P6 documentation and Linux release acceptance.
 - [ ] Define and carry out R1 stability research.
