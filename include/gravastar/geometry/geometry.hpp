@@ -43,7 +43,7 @@ struct Evaluation {
     Matrix inverse{};
     Tensor3 dg{};   // dg[k][i][j] = partial_k g_ij, order t,r,theta,phi.
     Tensor4 ddg{};  // ddg[k][l][i][j] = partial_k partial_l g_ij.
-    Matrix drrr{};
+    Matrix drrr{};  // drrr[i][j] = partial_r^3 g_ij.
     Matrix ricci{};
     double ricci_scalar{};
     double kretschmann{};
