@@ -14,42 +14,36 @@ Tetrad make_observer_tetrad(const geometry::Parameters& params, double r, double
 
     Tetrad tetrad{};
 
-    // Static observer has u^mu proportional to (1, 0, 0, 0)
-    // g_00 u^0 u^0 = -1 => u^0 = 1 / sqrt(-g_00)
-    // For Boyer-Lindquist outside ergosphere, g_00 < 0
-    if (g.metric[0][0] >= 0.0) {
-        throw std::runtime_error("Static observer requires g_00 < 0 (outside ergosphere)");
+    // ZAMO (Bardeen Locally Non-Rotating Frame) Orthonormal Tetrad:
+    // Regular everywhere outside, on the boundary, and inside the ergoregion (unlike static observers where g_00 >= 0 fails).
+    const double g_tt = g.metric[0][0];
+    const double g_rr = g.metric[1][1];
+    const double g_thth = g.metric[2][2];
+    const double g_phiphi = g.metric[3][3];
+    const double g_tphi = g.metric[0][3];
+
+    if (g_phiphi <= 0.0 || g_rr <= 0.0 || g_thth <= 0.0) {
+        throw std::runtime_error("Invalid metric signature for observer frame");
     }
 
-    const double u0 = 1.0 / std::sqrt(-g.metric[0][0]);
-    tetrad.e0 = {u0, 0.0, 0.0, 0.0};
-
-    // e1 (radial basis vector): aligned with -partial_r (looking inwards towards center)
-    // g_11 (e1^1)^2 = 1 => e1^1 = -1 / sqrt(g_11)
-    if (g.metric[1][1] <= 0.0) {
-        throw std::runtime_error("Invalid radial metric signature");
+    const double omega = -g_tphi / g_phiphi;
+    const double lapse_sq = -g_tt + omega * omega * g_phiphi;
+    if (lapse_sq <= 0.0) {
+        throw std::runtime_error("ZAMO lapse squared must be strictly positive");
     }
-    tetrad.e1 = {0.0, -1.0 / std::sqrt(g.metric[1][1]), 0.0, 0.0};
+    const double alpha = std::sqrt(lapse_sq);
 
-    // e2 (polar basis vector): aligned with partial_theta
-    // g_22 (e2^2)^2 = 1 => e2^2 = 1 / sqrt(g_22)
-    if (g.metric[2][2] <= 0.0) {
-        throw std::runtime_error("Invalid polar metric signature");
-    }
-    tetrad.e2 = {0.0, 0.0, 1.0 / std::sqrt(g.metric[2][2]), 0.0};
+    // e0: timelike 4-velocity u^mu = (1/alpha) * (delta^mu_t + omega * delta^mu_phi)
+    tetrad.e0 = {1.0 / alpha, 0.0, 0.0, omega / alpha};
 
-    // e3 (azimuthal basis vector): orthogonal to e0
-    // e3 has components in t and phi due to frame dragging g_03:
-    // g(e0, e3) = g_00 e0^0 e3^0 + g_03 e0^0 e3^3 = 0 => e3^0 = - (g_03 / g_00) e3^3
-    // g(e3, e3) = g_00 (e3^0)^2 + 2 g_03 e3^0 e3^3 + g_33 (e3^3)^2 = 1
-    // (g_33 - g_03^2 / g_00) (e3^3)^2 = 1
-    const double delta_phi = g.metric[3][3] - (g.metric[0][3] * g.metric[0][3]) / g.metric[0][0];
-    if (delta_phi <= 0.0) {
-        throw std::runtime_error("Invalid azimuthal metric signature");
-    }
-    const double e3_phi = 1.0 / std::sqrt(delta_phi);
-    const double e3_t = - (g.metric[0][3] / g.metric[0][0]) * e3_phi;
-    tetrad.e3 = {e3_t, 0.0, 0.0, e3_phi};
+    // e1: radial basis vector (pointing inwards towards center: -partial_r)
+    tetrad.e1 = {0.0, -1.0 / std::sqrt(g_rr), 0.0, 0.0};
+
+    // e2: polar basis vector (partial_theta)
+    tetrad.e2 = {0.0, 0.0, 1.0 / std::sqrt(g_thth), 0.0};
+
+    // e3: azimuthal basis vector (partial_phi)
+    tetrad.e3 = {0.0, 0.0, 0.0, 1.0 / std::sqrt(g_phiphi)};
 
     return tetrad;
 }
