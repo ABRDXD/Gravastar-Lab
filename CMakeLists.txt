@@ -189,3 +189,15 @@ target_link_libraries(gravastar_studio PRIVATE gravastar_vulkan gravastar_platfo
 target_compile_definitions(gravastar_studio PRIVATE GRAVASTAR_PRESENTATION_SHADER="${GRAVASTAR_PRESENTATION_SPV}")
 add_dependencies(gravastar_studio gravastar_presentation_shader)
 add_test(NAME vulkan_studio_smoke COMMAND gravastar_studio --smoke)
+
+# --- Stage P5: Deterministic Recording & Video Timeline ---
+add_library(gravastar_recording src/recording/recorder.cpp)
+target_include_directories(gravastar_recording PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
+target_compile_features(gravastar_recording PUBLIC cxx_std_20)
+target_link_libraries(gravastar_recording PUBLIC gravastar_geometry gravastar_optics)
+
+add_executable(gravastar_recording_test tests/deterministic_recording_test.cpp)
+target_link_libraries(gravastar_recording_test PRIVATE gravastar_recording)
+add_test(NAME deterministic_recording_unit COMMAND gravastar_recording_test)
