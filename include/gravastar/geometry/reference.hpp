@@ -164,5 +164,176 @@ inline DerivativesQ derivatives_q(const ParametersQ& p, Real r, Real theta, Real
     DerivativesQ out{};
     out.g = metric_q(p, r, theta, region);
 
+    const std::array<int, 4> offsets{-2, -1, 1, 2};
+    const std::array<Real, 4> w1{
+        static_cast<Real>(1) / static_cast<Real>(12),
+        -static_cast<Real>(2) / static_cast<Real>(3),
+        static_cast<Real>(2) / static_cast<Real>(3),
+        -static_cast<Real>(1) / static_cast<Real>(12),
+    };
+    const std::array<int, 5> offsets2{-2, -1, 0, 1, 2};
+    const std::array<Real, 5> w2{
+        -static_cast<Real>(1) / static_cast<Real>(12),
+        static_cast<Real>(4) / static_cast<Real>(3),
+        -static_cast<Real>(5) / static_cast<Real>(2),
+        static_cast<Real>(4) / static_cast<Real>(3),
+        -static_cast<Real>(1) / static_cast<Real>(12),
+    };
+    const std::array<int, 6> offsets3{-3, -2, -1, 1, 2, 3};
+    const std::array<Real, 6> w3{
+        static_cast<Real>(1) / static_cast<Real>(8),
+        -static_cast<Real>(1),
+        static_cast<Real>(13) / static_cast<Real>(8),
+        -static_cast<Real>(13) / static_cast<Real>(8),
+        static_cast<Real>(1),
+        -static_cast<Real>(1) / static_cast<Real>(8),
+    };
+
+    std::array<MatrixQ, 7> r_samples{};
+    for (int idx = -3; idx <= 3; ++idx)
+        r_samples[idx + 3] = metric_q(p, r + static_cast<Real>(idx) * h, theta, region);
+
+    std::array<MatrixQ, 5> th_samples{};
+    for (int idx = -2; idx <= 2; ++idx)
+        th_samples[idx + 2] = metric_q(p, r, theta + static_cast<Real>(idx) * h, region);
+
+    std::array<std::array<MatrixQ, 4>, 4> mixed_samples{};
+    for (int i = 0; i < 4; ++i)
+        for (int j = 0; j < 4; ++j)
+            mixed_samples[i][j] = metric_q(p, r + static_cast<Real>(offsets[i]) * h,
+                                           theta + static_cast<Real>(offsets[j]) * h, region);
+
+    const Real h2 = h * h;
+    const Real h3 = h2 * h;
+    for (int a = 0; a < 4; ++a) {
+        for (int b = 0; b < 4; ++b) {
+            Real d1r = 0, d1th = 0;
+            for (int m = 0; m < 4; ++m) {
+                d1r += w1[m] * r_samples[offsets[m] + 3][a][b];
+                d1th += w1[m] * th_samples[offsets[m] + 2][a][b];
+            }
+            out.first[1][a][b] = d1r / h;
+            out.first[2][a][b] = d1th / h;
+
+            Real d2r = 0, d2th = 0;
+            for (int m = 0; m < 5; ++m) {
+                d2r += w2[m] * r_samples[offsets2[m] + 3][a][b];
+                d2th += w2[m] * th_samples[offsets2[m] + 2][a][b];
+            }
+            out.second[1][1][a][b] = d2r / h2;
+            out.second[2][2][a][b] = d2th / h2;
+
+            Real dmix = 0;
+            for (int i = 0; i < 4; ++i)
+                for (int j = 0; j < 4; ++j)
+                    dmix += w1[i] * w1[j] * mixed_samples[i][j][a][b];
+            out.second[1][2][a][b] = out.second[2][1][a][b] = dmix / h2;
+
+            Real d3r = 0;
+            for (int m = 0; m < 6; ++m)
+                d3r += w3[m] * r_samples[offsets3[m] + 3][a][b];
+            out.drrr[a][b] = d3r / h3;
+        }
+    }
+    if (out.g[1][1] > 0) {
+        Real inv_two_sqrt_grr = static_cast<Real>(0.5) / sqrt_q(out.g[1][1]);
+        for (int a : {0, 2, 3})
+            for (int b : {0, 2, 3})
+                out.extrinsic_curvature[a][b] = out.first[1][a][b] * inv_two_sqrt_grr;
+    }
+    return out;
+}
+
+struct CurvatureQ {
+    MatrixQ ricci{};
+    Real ricci_scalar{};
+    Real kretschmann{};
+    Tensor4Q riemann_lower{};
+};
+
+// R_abcd from metric Hessians and first-kind Christoffel products, avoiding
+// the production implementation's differentiated inverse/connection.
+inline CurvatureQ curvature_q(const MatrixQ& g, const Tensor3Q& dg, const Tensor4Q& ddg) {
+    MatrixQ inv = inverse_q(g);
+    Tensor3Q lower_gamma{};
+    Tensor3Q upper_gamma{};
+    for (int a = 0; a < 4; ++a)
+        for (int b = 0; b < 4; ++b)
+            for (int c = 0; c < 4; ++c)
+                lower_gamma[a][b][c] =
+                    (dg[b][a][c] + dg[c][a][b] - dg[a][b][c]) / static_cast<Real>(2);
+
+    for (int a = 0; a < 4; ++a)
+        for (int b = 0; b < 4; ++b)
+            for (int c = 0; c < 4; ++c) {
+                Real sum = 0;
+                for (int e = 0; e < 4; ++e) sum += inv[a][e] * lower_gamma[e][b][c];
+                upper_gamma[a][b][c] = sum;
+            }
+
+    CurvatureQ out{};
+    for (int a = 0; a < 4; ++a)
+        for (int b = 0; b < 4; ++b)
+            for (int c = 0; c < 4; ++c)
+                for (int d = 0; d < 4; ++d) {
+                    Real v = (ddg[b][c][a][d] + ddg[a][d][b][c]
+                              - ddg[b][d][a][c] - ddg[a][c][b][d])
+                           / static_cast<Real>(2);
+                    for (int e = 0; e < 4; ++e)
+                        v += lower_gamma[e][b][c] * upper_gamma[e][a][d]
+                           - lower_gamma[e][b][d] * upper_gamma[e][a][c];
+                    out.riemann_lower[a][b][c][d] = v;
+                }
+
+    for (int b = 0; b < 4; ++b)
+        for (int d = 0; d < 4; ++d) {
+            Real sum = 0;
+            for (int a = 0; a < 4; ++a)
+                for (int c = 0; c < 4; ++c)
+                    sum += inv[a][c] * out.riemann_lower[a][b][c][d];
+            out.ricci[b][d] = sum;
+            out.ricci_scalar += inv[b][d] * sum;
+        }
+
+    Tensor4Q raised = out.riemann_lower;
+    for (int axis = 0; axis < 4; ++axis) {
+        Tensor4Q next{};
+        for (int a = 0; a < 4; ++a)
+            for (int b = 0; b < 4; ++b)
+                for (int c = 0; c < 4; ++c)
+                    for (int d = 0; d < 4; ++d) {
+                        std::array<int, 4> indices{a, b, c, d};
+                        Real value = 0;
+                        for (int e = 0; e < 4; ++e) {
+                            auto src = indices;
+                            src[axis] = e;
+                            value += inv[indices[axis]][e] * raised[src[0]][src[1]][src[2]][src[3]];
+                        }
+                        next[a][b][c][d] = value;
+                    }
+        raised = next;
+    }
+
+    for (int a = 0; a < 4; ++a)
+        for (int b = 0; b < 4; ++b)
+            for (int c = 0; c < 4; ++c)
+                for (int d = 0; d < 4; ++d)
+                    out.kretschmann += out.riemann_lower[a][b][c][d] * raised[a][b][c][d];
+    return out;
+}
+
+inline double normalized_error(double actual, Real expected) {
+    Real diff = abs_q(static_cast<Real>(actual) - expected);
+    Real denom = static_cast<Real>(1) + abs_q(expected);
+    return static_cast<double>(diff / denom);
+}
+
+inline double normalized_error_matrix(const Matrix& actual, const MatrixQ& expected) {
+    double max_err = 0.0;
+    for (int i = 0; i < 4; ++i)
+        for (int j = 0; j < 4; ++j)
+            max_err = std::max(max_err, normalized_error(actual[i][j], expected[i][j]));
+    return max_err;
+}
 
 }  // namespace gravastar::geometry::reference
