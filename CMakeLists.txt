@@ -155,3 +155,37 @@ add_executable(gravastar_vulkan_render tools/gravastar_vulkan_render.cpp)
 target_link_libraries(gravastar_vulkan_render PRIVATE gravastar_vulkan gravastar_geometry gravastar_optics)
 target_compile_definitions(gravastar_vulkan_render PRIVATE GRAVASTAR_RAYMARCH_SPV="${GRAVASTAR_RAYMARCH_SPV}")
 add_dependencies(gravastar_vulkan_render gravastar_shaders)
+
+# --- Desktop Window & Presentation Studio (Stage P4) ---
+enable_language(C)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
+set(GLFW_LIBRARY_TYPE STATIC CACHE STRING "" FORCE)
+add_subdirectory(third_party/glfw "${CMAKE_CURRENT_BINARY_DIR}/third_party/glfw" EXCLUDE_FROM_ALL)
+
+add_library(gravastar_platform src/platform/Window.cpp)
+target_include_directories(gravastar_platform PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third_party/include>
+)
+target_compile_features(gravastar_platform PUBLIC cxx_std_20)
+target_link_libraries(gravastar_platform PUBLIC glfw)
+
+target_sources(gravastar_vulkan PRIVATE src/rendering/vulkan/WindowRenderer.cpp)
+
+set(GRAVASTAR_PRESENTATION_SPV "${GRAVASTAR_SPV_DIR}/gravastar_presentation.spv")
+add_custom_command(
+    OUTPUT "${GRAVASTAR_PRESENTATION_SPV}"
+    COMMAND "${GLSLC_EXECUTABLE}" -O "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_presentation.comp" -o "${GRAVASTAR_PRESENTATION_SPV}"
+    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_presentation.comp"
+    VERBATIM
+)
+add_custom_target(gravastar_presentation_shader DEPENDS "${GRAVASTAR_PRESENTATION_SPV}")
+
+add_executable(gravastar_studio tools/gravastar_studio.cpp)
+target_link_libraries(gravastar_studio PRIVATE gravastar_vulkan gravastar_platform)
+target_compile_definitions(gravastar_studio PRIVATE GRAVASTAR_PRESENTATION_SHADER="${GRAVASTAR_PRESENTATION_SPV}")
+add_dependencies(gravastar_studio gravastar_presentation_shader)
+add_test(NAME vulkan_studio_smoke COMMAND gravastar_studio --smoke)
