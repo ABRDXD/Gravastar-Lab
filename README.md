@@ -61,7 +61,7 @@ Other available presets:
 
 ### 2. Run Tests
 
-Execute the 15-test suite (100% passing across geometry, geodesics, GPU compute, swapchain, and video timeline):
+Execute the 16-test suite (100% passing across geometry, geodesics, ZAMO tetrad, GPU compute, swapchain, and video timeline):
 
 ```bash
 ctest --test-dir build/headless-release --output-on-failure

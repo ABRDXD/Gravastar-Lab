@@ -96,6 +96,11 @@ add_executable(gravastar_geodesic_cross_val tests/geodesic_cross_validation.cpp)
 target_include_directories(gravastar_geodesic_cross_val PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_test(NAME geodesic_cross_validation_unit COMMAND gravastar_geodesic_cross_val)
 
+add_executable(gravastar_zamo_shadow_val tests/zamo_shadow_validation.cpp)
+target_include_directories(gravastar_zamo_shadow_val PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_link_libraries(gravastar_zamo_shadow_val PRIVATE quadmath)
+add_test(NAME zamo_shadow_validation_unit COMMAND gravastar_zamo_shadow_val)
+
 # --- Vulkan GPU Compute Pipeline (Stage P3) ---
 find_program(GLSLC_EXECUTABLE glslc REQUIRED)
 
