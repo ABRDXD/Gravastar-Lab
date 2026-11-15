@@ -44,6 +44,7 @@ struct Evaluation {
     Tensor3 dg{};   // dg[k][i][j] = partial_k g_ij, order t,r,theta,phi.
     Tensor4 ddg{};  // ddg[k][l][i][j] = partial_k partial_l g_ij.
     Matrix drrr{};  // drrr[i][j] = partial_r^3 g_ij.
+    Matrix extrinsic_curvature{};  // K_AB = partial_r g_AB / (2 sqrt(g_rr)), A,B in {t,theta,phi}.
     Matrix ricci{};
     double ricci_scalar{};
     double kretschmann{};
