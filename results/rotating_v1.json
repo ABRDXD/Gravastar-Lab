@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "model": "toy-c3-v1",
+  "preset_id": "rapid_rotation_project_v1",
+  "language_runtime": "C++20 native (__float128 reference + BigInt/Rational Sturm/Bernstein)",
+  "computational_source_sha256": "beef93791a3c875c6bc89db2e1d004c0b939e88d6ef9ba4e7415ff7730bb5e10",
+  "passed": true,
+  "elapsed_seconds": 1.604962464,
+  "radial_certificate": {
+    "min_delta": 0.3542390627590426,
+    "shell_bernstein_lower_bound": "2237/8000",
+    "shell_bernstein_lower_bound_float": 0.27962500000000001,
+    "core_factor_lower_bound": 0.625,
+    "exterior_delta_minimum": 0.40562500000000001,
+    "internal_roots": 0,
+    "sturm_count": 0
+  },
+  "independent_comparison": {
+    "max_metric_error": 3.042433906894395e-16,
+    "max_inverse_error": 3.7628188284493858e-16,
+    "max_dg_error": 1.5298269307996778e-15,
+    "max_ddg_error": 1.6863520898624132e-14,
+    "max_drrr_error": 3.7532197808301235e-14,
+    "max_ricci_error": 1.8641155921290239e-14,
+    "max_ricci_scalar_error": 1.5543122877079367e-14,
+    "max_kretschmann_error": 1.8740565294465254e-14
+  },
+  "matching": {
+    "max_c0_error": 0,
+    "max_c1_error": 0,
+    "max_c2_error": 0,
+    "max_c3_error": 0,
+    "max_extrinsic_curvature_error": 0,
+    "max_quad_reference_join_error": 1.2839692765408011e-15
+  },
+  "convergence": {
+    "min_step_ratio": 15.966426819102981,
+    "step_refinement_diff": 7.3795960771079789e-22,
+    "trig_identity_error": 1.9259299443872359e-34
+  },
+  "energy": {
+    "finding": "NEC violation witnessed",
+    "min_Tkk": -2.259849494392312,
+    "witness_r": 1.575,
+    "witness_axis": 3,
+    "witness_sign": -1,
+    "null_residual": 1.1102230246251565e-16,
+    "excluded_from_mathematical_acceptance": true
+  },
+  "checks": [
+    {"name": "shell Delta positive inside interval", "passed": true, "reason": "min Delta = 0.354239"},
+    {"name": "shell Delta root-free inside interval", "passed": true},
+    {"name": "shell Delta Sturm count zero", "passed": true},
+    {"name": "shell Delta Bernstein lower bound positive", "passed": true, "reason": "Bernstein lower bound = 2237/8000"},
+    {"name": "core 1 - Lambda r^2 / 3 positive", "passed": true},
+    {"name": "exterior Delta minimum positive", "passed": true},
+    {"name": "metric determinant negative across validation box", "passed": true},
+    {"name": "azimuthal g_phiphi positive off-axis (no closed timelike phi loops)", "passed": true},
+    {"name": "ZAMO observer discriminant g_tphi^2 - g_tt g_phiphi > 0", "passed": true},
+    {"name": "C++ metric inverse identity", "passed": true, "observed": 1.7763568394002505e-15, "threshold": 1.9999999999999999e-11},
+    {"name": "reject axis theta=0", "passed": true},
+    {"name": "reject axis theta=pi", "passed": true},
+    {"name": "reject r<=0", "passed": true},
+    {"name": "reject shell extrapolation at r=3.0", "passed": true},
+    {"name": "C++ Jet vs quad-precision reference metric", "passed": true, "observed": 3.042433906894395e-16, "threshold": 2e-12},
+    {"name": "C++ block inverse vs quad Gauss-Jordan inverse", "passed": true, "observed": 3.7628188284493858e-16, "threshold": 1.9999999999999999e-11},
+    {"name": "C++ Jet vs quad finite-difference dg", "passed": true, "observed": 1.5298269307996778e-15, "threshold": 2.0000000000000001e-10},
+    {"name": "C++ Jet vs quad finite-difference ddg", "passed": true, "observed": 1.6863520898624132e-14, "threshold": 2.0000000000000001e-09},
+    {"name": "C++ Jet vs quad finite-difference drrr", "passed": true, "observed": 3.7532197808301235e-14, "threshold": 2e-08},
+    {"name": "C++ curvature vs quad Hessian ricci", "passed": true, "observed": 1.8641155921290239e-14, "threshold": 2e-08},
+    {"name": "C++ curvature vs quad Hessian ricci_scalar", "passed": true, "observed": 1.5543122877079367e-14, "threshold": 2e-08},
+    {"name": "C++ curvature vs quad Hessian kretschmann", "passed": true, "observed": 1.8740565294465254e-14, "threshold": 2e-08},
+    {"name": "one-sided C0 join matching (shell vs de_sitter/kerr)", "passed": true, "observed": 0, "threshold": 1e-13},
+    {"name": "one-sided C1 join matching (shell vs de_sitter/kerr)", "passed": true, "observed": 0, "threshold": 1e-13},
+    {"name": "one-sided C2 join matching (shell vs de_sitter/kerr)", "passed": true, "observed": 0, "threshold": 1e-13},
+    {"name": "one-sided C3 join matching (shell vs de_sitter/kerr)", "passed": true, "observed": 0, "threshold": 1e-13},
+    {"name": "outward-normal extrinsic curvature K_AB join matching", "passed": true, "observed": 0, "threshold": 1e-13},
+    {"name": "shell join vs quad-precision finite-difference reference", "passed": true, "observed": 1.2839692765408011e-15, "threshold": 2.0000000000000001e-09},
+    {"name": "finite-difference refinement convergence ratio", "passed": true, "observed": 15.966426819102981, "threshold": 3},
+    {"name": "quad reference step refinement (1e-7 vs 5e-7)", "passed": true, "observed": 7.3795960771079789e-22, "threshold": 1.0000000000000001e-18},
+    {"name": "quad Taylor trigonometry sin^2 + cos^2 = 1 identity", "passed": true, "observed": 1.9259299443872359e-34, "threshold": 1.0000000000000001e-30}
+  ]
+}
