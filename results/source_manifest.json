@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "computational_sha256": "beef93791a3c875c6bc89db2e1d004c0b939e88d6ef9ba4e7415ff7730bb5e10",
+  "documentation_sha256": "8198d8cb7c6a0387706d37253dfe49ea54391df518d452f339a6ad7f5ca9e869",
+  "files": [
+    {"path": "CMakeLists.txt", "sha256": "867771c7bfa31a7533535a1a5fd801c796574172f0d3f5461eccc5eb5f9881c7", "size": 1852, "role": "computational"},
+    {"path": "PLAN.md", "sha256": "238d6f13dbbc75e7722c1c6a8d9c54d7c7a26e72f85424fc2b1d878a607a5fa1", "size": 36302, "role": "documentation"},
+    {"path": "benchmarks/rotating_v1.json", "sha256": "468da7e4dbd13e443a202337f5e5822ddf7b102ab4c48fcec42153e31430aaf7", "size": 786, "role": "computational"},
+    {"path": "include/gravastar/geometry/geometry.hpp", "sha256": "e919f21d1b73afe1dc118264cef37f6f551b2309fc13698e4f1e6f50a8dec823", "size": 2123, "role": "computational"},
+    {"path": "include/gravastar/geometry/reference.hpp", "sha256": "f897c85f2028b033e71a1ce0945764c25c97dbd7062774ef490902ef98d5e109", "size": 12673, "role": "computational"},
+    {"path": "include/gravastar/math/jet.hpp", "sha256": "381047885cfa8135e52eb0f2c37bc21303aacc24494e981ea80ce61ab9463261", "size": 2596, "role": "computational"},
+    {"path": "include/gravastar/math/polynomial.hpp", "sha256": "78fc2b2ed210644f8f7c1b7ed14631e075467bdd9e26efb9da82cf442c9effcf", "size": 25403, "role": "computational"},
+    {"path": "src/experiments/benchmark.cpp", "sha256": "01ddb6ad836dc89f7ac6a46c37c7d44b302ff30c236d0325046ff4c315682caf", "size": 5360, "role": "computational"},
+    {"path": "src/experiments/validate.cpp", "sha256": "633dac4a6e1871bc58c2345fc6ad8a1b5d584b9e32dc6c218f8599a355c485ab", "size": 32734, "role": "computational"},
+    {"path": "src/geometry/geometry.cpp", "sha256": "a9d352825be0718cf25f0e4cf14978728bf75eccbde6f68db0efe2a543b62e9e", "size": 11695, "role": "computational"},
+    {"path": "tests/cpp_geometry.cpp", "sha256": "45c045ff2e44d53ba6eabcb863f3658ab94fc33a3c5fdae82c3630b1dce65cf9", "size": 12351, "role": "computational"}
+  ]
+}
