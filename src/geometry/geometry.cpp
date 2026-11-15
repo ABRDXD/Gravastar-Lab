@@ -47,7 +47,7 @@ bool finite_array(const Array& array) {
     return true;
 }
 
-void curvature(Evaluation& result) {
+void compute_curvature(Evaluation& result) {
     const auto& g = result.metric;
     const auto& inv = result.inverse;
     const auto& dg = result.dg;
@@ -232,7 +232,7 @@ Result evaluate(const Parameters& p, double radius, double polar_angle) {
         || !finite_array(out.ddg) || !finite_array(out.drrr) || !std::isfinite(out.determinant)
         || out.determinant == 0)
         return Error{"numerical_failure", "nonfinite or underflowed metric/derivatives"};
-    curvature(out);
+    compute_curvature(out);
     if (!finite_array(out.ricci) || !std::isfinite(out.ricci_scalar)
         || !std::isfinite(out.kretschmann))
         return Error{"numerical_failure", "nonfinite curvature"};
