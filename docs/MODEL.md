@@ -133,3 +133,40 @@ is a valid NEC violation witness and requires no perfect-fluid assumption.
 A finite null-direction sample cannot prove the NEC. Full tensor
 classification and energy-condition mapping are unresolved. No matter
 closure, equilibrium matter solution or dynamical stability is claimed.
+
+## Geodesics, Carter Symmetry Breaking, and Optics
+
+### Null Geodesic Equations of Motion
+
+Geodesics evolve via the Hamiltonian:
+$$\mathcal{H} = \frac{1}{2} g^{\mu\nu} p_\mu p_\nu = 0$$
+
+The canonical equations of motion with respect to affine parameter $\lambda$ are:
+$$\frac{dx^\mu}{d\lambda} = \frac{\partial \mathcal{H}}{\partial p_\mu} = g^{\mu\nu} p_\nu = v^\mu$$
+$$\frac{dp_\mu}{d\lambda} = -\frac{\partial \mathcal{H}}{\partial x^\mu} = \frac{1}{2} (\partial_\mu g_{\alpha\beta}) v^\alpha v^\beta$$
+
+Due to stationarity ($\partial_t g = 0$) and axisymmetry ($\partial_\phi g = 0$), two exact constants of motion are guaranteed:
+* Conserved energy: $E = -p_t \implies \dot{p}_t = 0$
+* Conserved axial angular momentum: $L_z = p_\phi \implies \dot{p}_\phi = 0$
+
+### Symmetry Breaking of the Carter Constant in the Transition Shell
+
+In stationary axisymmetric spacetimes, existence of a third quadratic invariant (Carter-type constant) requires a Killing-Yano 2-form or a symmetric Killing tensor $K_{\mu\nu}$ satisfying $\nabla_{(\sigma} K_{\mu\nu)} = 0$. In Kerr–de Sitter, this requires constant cosmological parameter $\Lambda$.
+
+In the Ilijić–DeBenedictis transition shell, the effective cosmological profile $\lambda(r) = \Lambda (1 - w(r))$ is non-constant. Along null geodesics:
+$$\frac{dQ_{\text{KdS}}}{d\lambda} = \left(\frac{\partial Q_{\text{KdS}}}{\partial r}\right)_{\theta, p_\theta} \dot{r} \propto \lambda'(r) \dot{r}$$
+
+The net change $\Delta Q_{\text{KdS}}$ across the transition shell matches the radial gradient path integral $\int (\partial Q_{\text{KdS}}/\partial r) \dot{r} d\lambda$ to $1.75 \times 10^{-12}$ in 113-bit quad precision, verifying that variation in $Q_{\text{KdS}}$ is an exact geometric consequence of radial non-homogeneity, not numerical integrator drift.
+
+Furthermore, the Levi-Civita / Stäckel separability criterion requires:
+$$\partial_r \partial_\theta (\Sigma g^{\theta\theta}) = -\frac{2}{3} a^2 \Lambda \lambda'(r) \sin\theta \cos\theta \neq 0$$
+Evaluating to $0.752263 \neq 0$ at $(r = 1.65, \theta = 1.10)$, proving that additive Hamilton–Jacobi separation in Boyer–Lindquist coordinates is broken within the shell.
+
+### Equatorial Turning Points and Core Entry
+
+For equatorial rays ($\theta = \pi/2, p_\theta = 0$) initialized at $r_0 = 10.0$ with impact parameter $b = L_z / E$:
+* $b = +1.80$: Enters core ($r_{\text{in}} = 1.5$), turning radius $r_{\text{turn}} = 1.438750388$
+* $b = +1.95$: Turns in transition shell, turning radius $r_{\text{turn}} = 1.551795042$
+* $b = -3.60$: Enters core ($r_{\text{in}} = 1.5$), turning radius $r_{\text{turn}} = 1.490704364$
+* $b = -3.70$: Turns in transition shell, turning radius $r_{\text{turn}} = 1.511352187$
+

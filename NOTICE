@@ -14,7 +14,10 @@ S. Ilijic and A. DeBenedictis, arXiv:2309.00551v2.
 See docs/MODEL.md and docs/SOURCE_AUDIT.md for the equation mapping, locally
 chosen benchmark parameters, coordinate restrictions, and scientific limits.
 
-No KerrLab implementation, renderer, assets, or validation claims are imported.
-External tool/runtime observations and future dependency decisions are recorded
-in THIRD_PARTY.md. No endorsement by the cited authors or dependency authors
-is implied.
+Third-party dependencies incorporated:
+- GLFW 3.4: Copyright (c) 2002-2006 Marcus Geelnard, 2006-2019 Camilla Löwy (zlib license).
+- Vulkan-Headers 1.4: Copyright (c) 2015-2026 The Khronos Group Inc. (Apache-2.0).
+- nlohmann/json: Copyright (c) 2013-2022 Niels Lohmann (MIT license).
+See THIRD_PARTY.md for license details.
+
+No endorsement by the cited authors or dependency authors is implied.

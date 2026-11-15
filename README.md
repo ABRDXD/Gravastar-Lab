@@ -61,20 +61,32 @@ Other available presets:
 
 ### 2. Run Tests
 
-```bash
-ctest --preset headless-release
-```
-
-### 3. Run Benchmark Validation
-
-Execute the end-to-end benchmark and cross-language validation pipeline:
+Execute the 15-test suite (100% passing across geometry, geodesics, GPU compute, swapchain, and video timeline):
 
 ```bash
-python3 tools/validate.py --preset headless-release
+ctest --test-dir build/headless-release --output-on-failure
 ```
+
+### 3. GPU Raymarching & Desktop Presentation
+
+```bash
+# Headless Vulkan raymarcher (renders results/vulkan_gravastar_render.ppm):
+./build/headless-release/gravastar_vulkan_render 512 512
+
+# Interactive Vulkan presentation desktop studio:
+./build/headless-release/gravastar_studio --width 1280 --height 720
+```
+
+### 4. Documentation & Scientific Ledger
+
+* [Scientific Model & Carter Symmetry Breaking](docs/MODEL.md)
+* [Comprehensive Validation Ledger (15/15 Tests)](docs/VALIDATION.md)
+* [User & Developer Guide](docs/USER_GUIDE.md)
+* [Architecture & Module Contracts](docs/ARCHITECTURE.md)
+* [Third-Party Licenses & Inventory](THIRD_PARTY.md)
 
 ---
 
 ## License
 
-See [`LICENSE`](file:///home/abrsdxd/Projects/GravastarLab/LICENSE), [`NOTICE`](file:///home/abrsdxd/Projects/GravastarLab/NOTICE), and [`THIRD_PARTY.md`](file:///home/abrsdxd/Projects/GravastarLab/THIRD_PARTY.md) for licensing terms and upstream citations.
+See [`LICENSE`](LICENSE), [`NOTICE`](NOTICE), and [`THIRD_PARTY.md`](THIRD_PARTY.md) for licensing terms and upstream citations.

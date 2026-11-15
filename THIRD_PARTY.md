@@ -35,28 +35,16 @@ The audited toolchain versions are the tested environment, not claims of
 reproducible binary identity across compiler or library versions. No network
 fetch or implicit sibling-directory dependency should occur during the P1 build.
 
-## Available but not integrated
+## Dependencies Adopted in Stages P3, P4, P5
 
-These are environment findings and future candidates, not adopted dependency
-pins. No code, notice, or binary was copied from these packages into P1.
+| Component | Pinned Version / Path | Relationship to project | License evidence and decision |
+| --- | --- | --- | --- |
+| Khronos Vulkan Headers | 1.4.321 (`third_party/include/vulkan/`, `third_party/include/vk_video/`) | Pinned C header definitions | Apache-2.0 license; preserves Khronos copyright notices |
+| GLFW | 3.4 (`third_party/glfw/`) | Pinned static windowing library for Wayland & X11 | zlib license (`third_party/glfw/LICENSE.md`); GPL-compatible |
+| nlohmann/json | 3.11.x (system or header) | JSON serialization for jobs, progress, and schemas | MIT license |
+| FFmpeg / ffprobe | External executable `/usr/bin/ffmpeg`, `/usr/bin/ffprobe` | Subprocess execution for MP4 encoding | GPL-3.0-or-later; no codecs or binary objects bundled |
 
-| Component | Installed observation | Relationship and remaining decision |
-| --- | --- | --- |
-| Vulkan headers | `1.4.363.0`; installed MIT license inspected | Future API declarations; pin selected source and preserve applicable notices when adopted |
-| Vulkan loader | `1.4.363.0` | Future external system runtime; device access failed in this session |
-| shaderc / glslc | `2026.4` | Future external shader build tool; not invoked for a project shader |
-| glslang | Reports `16.6.0`; installed composite LICENSE inspected | Future external build tool; includes multiple notices, so do not reduce a bundled distribution to one blanket label |
-| libpng | `1.6.59`; installed PNG Reference Library License v2 inspected | Future linked image library; not selected yet |
-| OpenEXR | `3.5.2`; installed BSD-3-Clause notice inspected | Future linked scientific image library; not selected yet |
-| FFmpeg | `n9.0.2`, configured `--enable-gpl --enable-version3`; `ffmpeg -L` reports GPL-3.0-or-later | Future external executable; no binary or codecs bundled |
-| GLFW / Dear ImGui / ImPlot | Not found by checked system package/header probes | Choose immutable source pins and inspect actual notices before integration |
-| GYOTO | Executable/package absent | Official project states GPL-3.0-or-later; exact revision, dependency notices, API, ABI, and build remain P2 work |
-
-The [GYOTO project](https://gyoto.obspm.fr/) describes custom metric plugins and
-its GPL-3.0-or-later terms. This matches the intended whole-project license.
-The website also requests scientific citation and publication of research
-extensions; an eventual adapter must document both source obligations and
-scientific attribution. No GYOTO adapter or reference result exists in P1.
+## Dependencies used by P0/P1
 
 For a later distribution, review each actually linked/bundled component and its
 transitive notices at the selected immutable revision. The presence of a system
