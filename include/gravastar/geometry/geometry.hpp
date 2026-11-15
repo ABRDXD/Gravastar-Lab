@@ -26,7 +26,7 @@ std::variant<Region, std::string> parse_region(std::string_view text);
 // All fields must be finite, Lambda >= 0, and 0 < r_in < r_out.
 struct Parameters {
     Family family{Family::toy};
-    double mass{1};
+    double mass{1.0};
     double spin{0.875};
     double cosmological_constant{0.5};
     double r_in{1.5};
