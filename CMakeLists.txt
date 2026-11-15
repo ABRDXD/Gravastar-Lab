@@ -93,6 +93,7 @@ target_link_libraries(gravastar_turning_point_tests PRIVATE gravastar_integratio
 add_test(NAME equatorial_turning_points_unit COMMAND gravastar_turning_point_tests)
 
 add_executable(gravastar_geodesic_cross_val tests/geodesic_cross_validation.cpp)
+target_include_directories(gravastar_geodesic_cross_val PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_test(NAME geodesic_cross_validation_unit COMMAND gravastar_geodesic_cross_val)
 
 # --- Vulkan GPU Compute Pipeline (Stage P3) ---
@@ -201,3 +202,21 @@ target_link_libraries(gravastar_recording PUBLIC gravastar_geometry gravastar_op
 add_executable(gravastar_recording_test tests/deterministic_recording_test.cpp)
 target_link_libraries(gravastar_recording_test PRIVATE gravastar_recording)
 add_test(NAME deterministic_recording_unit COMMAND gravastar_recording_test)
+
+# --- Stage P6: Release Packaging ---
+set(CPACK_PACKAGE_NAME "GravastarLab")
+set(CPACK_PACKAGE_VERSION "1.0.0")
+set(CPACK_PACKAGE_VENDOR "GravastarLab Contributors")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Rotating gravastar research, Vulkan compute optics, and deterministic recording")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
+set(CPACK_SOURCE_GENERATOR "TGZ")
+set(CPACK_SOURCE_IGNORE_FILES
+    "/.git/"
+    "/build/"
+    "\\\\.tmp$"
+    "\\\\.log$"
+    "/results/local/"
+    "/results/test_recording_session/"
+)
+include(CPack)

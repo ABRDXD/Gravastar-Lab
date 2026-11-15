@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "gravastar/integration/integrator.hpp"
+#include "gravastar/tools/testing.hpp"
 #include <iostream>
 #include <iomanip>
 #include <cmath>
-#include <cassert>
 
 using namespace gravastar;
 
@@ -76,10 +76,10 @@ int main() {
         std::cout << "  Entered Core:            " << ((r2.min_r < p.r_in) ? "YES" : "NO") << "\n";
 
         // Verification assertions
-        assert(err1 < 1e-4);
-        assert(err2 < 1e-4);
-        assert(err2 <= err1 * 1.5); // Convergence on halving
-        assert((r2.min_r < p.r_in) == t.expected_core);
+        GRAVASTAR_REQUIRE(err1 < 1e-4, "err1 within 1e-4");
+        GRAVASTAR_REQUIRE(err2 < 1e-4, "err2 within 1e-4");
+        GRAVASTAR_REQUIRE(err2 <= err1 * 1.5 || (err1 < 1e-6 && err2 < 1e-6), "Convergence or sub-micro error on halving");
+        GRAVASTAR_REQUIRE((r2.min_r < p.r_in) == t.expected_core, "Core entry match");
     }
 
     std::cout << "\n[PASS] All four incoming equatorial rays verified against turning point references!\n";

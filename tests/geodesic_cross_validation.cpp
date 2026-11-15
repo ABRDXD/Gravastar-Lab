@@ -14,9 +14,9 @@
 // Build & Run (strict C++20, zero external dependencies):
 //   g++ -std=c++20 -O2 -Wall -Wextra -Wpedantic -Werror -fno-fast-math -ffp-contract=off tests/geodesic_validation.cpp -o build/geodesic_validation && ./build/geodesic_validation
 
+#include "gravastar/tools/testing.hpp"
 #include <algorithm>
 #include <array>
-#include <cassert>
 #include <cmath>
 #include <cstdint>
 #include <iomanip>
@@ -783,13 +783,13 @@ int main() {
             std::cout << " | shell = N/A (ray never entered shell)\n";
         }
 
-        assert(res.max_abs_dE < 1e-10);
-        assert(res.max_abs_dLz < 1e-10);
-        assert(res.max_abs_H < 1e-9);
+        GRAVASTAR_REQUIRE(res.max_abs_dE < 1e-10, "Energy conservation max |dE| < 1e-10");
+        GRAVASTAR_REQUIRE(res.max_abs_dLz < 1e-10, "Angular momentum conservation max |dLz| < 1e-10");
+        GRAVASTAR_REQUIRE(res.max_abs_H < 1e-9, "Null condition max |H| < 1e-9");
         // Verify Q_kds is genuinely conserved along constant-Lambda exterior and core legs:
-        assert(res.max_abs_dQ_exterior < 1e-10);
+        GRAVASTAR_REQUIRE(res.max_abs_dQ_exterior < 1e-10, "Exterior Q_kds conservation < 1e-10");
         if (res.entered_core) {
-            assert(res.max_abs_dQ_core < 1e-10);
+            GRAVASTAR_REQUIRE(res.max_abs_dQ_core < 1e-10, "Core Q_kds conservation < 1e-10");
         }
     }
 
@@ -808,7 +808,7 @@ int main() {
                   << lc_obstruction << " != 0\n"
                   << "      (Rules out additive (r, theta) Hamilton-Jacobi separation in the shell; does not\n"
                   << "       by itself exclude non-separable or higher-order hidden invariants.)\n";
-        assert(std::abs(lc_obstruction) > 0.1);
+        GRAVASTAR_REQUIRE(std::abs(lc_obstruction) > 0.1, "Levi-Civita obstruction must be non-zero");
     }
 
     const auto res_2nd = integrate_null_geodesic<double>(
@@ -826,7 +826,7 @@ int main() {
     std::cout << std::scientific << std::setprecision(3);
     std::cout << "  * 2nd-Order Christoffel vs. 1st-Order Hamiltonian RK4 (2000 steps through shell/core):\n"
               << "      max |dx^mu| = " << max_dx << " | max |du^mu| = " << max_du << "\n\n";
-    assert(max_dx < 1e-12 && max_du < 1e-12);
+    GRAVASTAR_REQUIRE(max_dx < 1e-12 && max_du < 1e-12, "2nd-order vs 1st-order RK4 agreement within 1e-12");
 
     // -------------------------------------------------------------------------
     // 2. 113-Bit Quad-Precision (`__float128`) Radial & Polar Verification
@@ -858,10 +858,10 @@ int main() {
               << " | max |H| = " << static_cast<double>(res_quad.max_abs_H) << "\n"
               << "      2nd-Order vs. Hamiltonian __float128 O(h^4) agreement: max |dx^mu| = "
               << static_cast<double>(max_dx_q) << "\n\n";
-    assert(res_quad.max_abs_dE < static_cast<float128_t>(1e-20));
-    assert(res_quad.max_abs_dLz < static_cast<float128_t>(1e-20));
-    assert(res_quad.max_abs_H < static_cast<float128_t>(1e-19));
-    assert(max_dx_q < static_cast<float128_t>(1e-17));
+    GRAVASTAR_REQUIRE(res_quad.max_abs_dE < static_cast<float128_t>(1e-20), "__float128 max |dE| < 1e-20");
+    GRAVASTAR_REQUIRE(res_quad.max_abs_dLz < static_cast<float128_t>(1e-20), "__float128 max |dLz| < 1e-20");
+    GRAVASTAR_REQUIRE(res_quad.max_abs_H < static_cast<float128_t>(1e-19), "__float128 max |H| < 1e-19");
+    GRAVASTAR_REQUIRE(max_dx_q < static_cast<float128_t>(1e-17), "__float128 2nd vs 1st order agreement < 1e-17");
 
     // -------------------------------------------------------------------------
     // 3. Critical Equatorial Impact Parameters b_crit = L_z / E
@@ -916,8 +916,8 @@ int main() {
               << "): r_min = " << ret_out.r_min << " >  1.8 (entered_shell = "
               << (ret_out.entered_shell ? "true" : "false") << ")\n\n";
 
-    assert(pro_in.entered_shell && !pro_out.entered_shell);
-    assert(ret_in.entered_shell && !ret_out.entered_shell);
+    GRAVASTAR_REQUIRE(pro_in.entered_shell && !pro_out.entered_shell, "Prograde shell shooting bracket");
+    GRAVASTAR_REQUIRE(ret_in.entered_shell && !ret_out.entered_shell, "Retrograde shell shooting bracket");
 
     std::cout << "ALL C++20 GEODESIC CROSS-VALIDATION CHECKS PASSED.\n";
     return 0;

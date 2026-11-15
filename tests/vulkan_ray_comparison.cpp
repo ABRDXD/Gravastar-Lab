@@ -2,12 +2,12 @@
 #include "gravastar/rendering/vulkan/ComputeContext.hpp"
 #include "gravastar/geometry/geometry.hpp"
 #include "gravastar/integration/integrator.hpp"
+#include "gravastar/tools/testing.hpp"
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <cmath>
 #include <cstring>
-#include <cassert>
 #include <iomanip>
 
 using namespace gravastar;
@@ -67,7 +67,7 @@ int main() {
     double r0 = 10.0;
     double th0 = M_PI / 2.0;
     const auto res0 = geometry::evaluate(p, r0, th0);
-    assert(std::holds_alternative<geometry::Evaluation>(res0));
+    GRAVASTAR_REQUIRE(std::holds_alternative<geometry::Evaluation>(res0), "Valid evaluation at r0, th0");
     const auto& g0 = std::get<geometry::Evaluation>(res0);
 
     size_t num_rays = 4;
@@ -164,8 +164,8 @@ int main() {
                       << std::setw(9) << (gpu_core ? "YES" : "NO") << " | "
                       << (diff < 2e-3 && (cpu_core == gpu_core) ? "PASS" : "FAIL") << " |\n";
 
-            assert(cpu_core == gpu_core);
-            assert(diff < 2e-3);
+            GRAVASTAR_REQUIRE(cpu_core == gpu_core, "Core crossing agreement between CPU and GPU");
+            GRAVASTAR_REQUIRE(diff < 2e-3, "Turning radius diff within single-precision tolerance 2e-3");
         }
 
         std::cout << "\nAll GPU vs CPU geodesic trajectory comparisons PASSED!\n";

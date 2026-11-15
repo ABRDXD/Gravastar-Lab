@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "gravastar/integration/critical_impact.hpp"
+#include "gravastar/tools/testing.hpp"
 #include <iostream>
 #include <cmath>
-#include <cassert>
 
 using namespace gravastar;
 
@@ -28,13 +28,13 @@ int main() {
 
     // Numerical checks matching theoretical predictions:
     // b_crit_pro_shell = 3.018017...
-    assert(std::abs(res.b_crit_pro_shell - 3.0180173587) < 1e-6);
+    GRAVASTAR_REQUIRE(std::abs(res.b_crit_pro_shell - 3.0180173587) < 1e-6, "b_crit_pro_shell theoretical match");
     // b_crit_ret_shell = -6.790071...
-    assert(std::abs(res.b_crit_ret_shell - (-6.7900713688)) < 1e-6);
+    GRAVASTAR_REQUIRE(std::abs(res.b_crit_ret_shell - (-6.7900713688)) < 1e-6, "b_crit_ret_shell theoretical match");
     // b_crit_pro_core = 1.875948...
-    assert(std::abs(res.b_crit_pro_core - 1.8759486035) < 1e-6);
+    GRAVASTAR_REQUIRE(std::abs(res.b_crit_pro_core - 1.8759486035) < 1e-6, "b_crit_pro_core theoretical match");
     // b_crit_ret_core = -3.644273...
-    assert(std::abs(res.b_crit_ret_core - (-3.6442732108)) < 1e-6);
+    GRAVASTAR_REQUIRE(std::abs(res.b_crit_ret_core - (-3.6442732108)) < 1e-6, "b_crit_ret_core theoretical match");
 
     std::cout << "[SUCCESS] Critical impact parameters match theory within 1e-6!" << std::endl;
     return 0;

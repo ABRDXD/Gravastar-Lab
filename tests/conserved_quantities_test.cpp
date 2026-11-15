@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "gravastar/integration/integrator.hpp"
+#include "gravastar/tools/testing.hpp"
 #include <iostream>
 #include <cmath>
-#include <cassert>
 #include <algorithm>
 
 using namespace gravastar;
@@ -41,7 +41,7 @@ int main() {
                 + eval.inverse[3][3] * p_phi * p_phi
                 + eval.inverse[2][2] * p_th * p_th;
 
-    assert(quad < 0.0 && "Spacetime geometry must allow ingoing physical photon");
+    GRAVASTAR_REQUIRE(quad < 0.0, "Spacetime geometry must allow ingoing physical photon");
     double p_r0 = -std::sqrt(-quad / eval.inverse[1][1]); // Inward
 
     integration::Vec4 x0 = {0.0, r0, th0, 0.5};
@@ -74,9 +74,9 @@ int main() {
     std::cout << "  Max Null Constraint |H| drift: " << res.max_null_drift << std::endl;
 
     // In a stationary axisymmetric spacetime, Hamilton's equations guarantee dp_0/dlambda = 0 and dp_3/dlambda = 0 identically!
-    assert(max_energy_drift < 1e-12);
-    assert(max_lz_drift < 1e-12);
-    assert(res.max_null_drift < 1e-4);
+    GRAVASTAR_REQUIRE(max_energy_drift < 1e-12, "Max energy drift within 1e-12");
+    GRAVASTAR_REQUIRE(max_lz_drift < 1e-12, "Max Lz drift within 1e-12");
+    GRAVASTAR_REQUIRE(res.max_null_drift < 1e-4, "Max null drift within 1e-4");
 
     std::cout << "[SUCCESS] Conserved quantities verified to machine precision!" << std::endl;
     return 0;

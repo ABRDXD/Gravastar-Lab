@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "gravastar/integration/integrator.hpp"
+#include "gravastar/tools/testing.hpp"
 #include <iostream>
 #include <cmath>
-#include <cassert>
 
 using namespace gravastar;
 
@@ -29,8 +29,8 @@ int main() {
     // (p_r)^2 = - g^{tt} / g^{rr} * (p_t)^2
     double g_inv_tt = eval.inverse[0][0];
     double g_inv_rr = eval.inverse[1][1];
-    assert(g_inv_tt < 0.0);
-    assert(g_inv_rr > 0.0);
+    GRAVASTAR_REQUIRE(g_inv_tt < 0.0, "g^{tt} negative");
+    GRAVASTAR_REQUIRE(g_inv_rr > 0.0, "g^{rr} positive");
 
     double pr_sq = - (g_inv_tt / g_inv_rr) * 1.0;
     double p_r0 = -std::sqrt(pr_sq); // Ingoing (- sign)
@@ -50,8 +50,8 @@ int main() {
     std::cout << "  Max null drift: " << res.max_null_drift << std::endl;
     std::cout << "  Crossed shell into core: " << (res.crossed_shell_in ? "YES" : "NO") << std::endl;
 
-    assert(res.max_null_drift < 1e-4);
-    assert(res.crossed_shell_in == true);
+    GRAVASTAR_REQUIRE(res.max_null_drift < 1e-4, "Max null drift within 1e-4");
+    GRAVASTAR_REQUIRE(res.crossed_shell_in == true, "Must cross shell into core");
 
     std::cout << "[SUCCESS] Geodesic integration verified!" << std::endl;
     return 0;

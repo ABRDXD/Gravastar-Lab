@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "gravastar/rendering/vulkan/ComputeContext.hpp"
 #include "gravastar/geometry/geometry.hpp"
+#include "gravastar/tools/testing.hpp"
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <cmath>
 #include <cstring>
-#include <cassert>
 #include <iomanip>
 
 using namespace gravastar;
@@ -100,7 +100,7 @@ int main() {
             double r = test_radii[k];
             const auto cpu_eval = std::get<geometry::Evaluation>(geometry::evaluate(p, r, theta));
 
-            assert(outputs[k].status[0] == 1);
+            GRAVASTAR_REQUIRE(outputs[k].status[0] == 1, "GPU kernel status must be OK (1)");
 
             for (int i = 0; i < 4; ++i) {
                 for (int j = 0; j < 4; ++j) {
@@ -127,9 +127,9 @@ int main() {
         std::cout << "  Max |dg_dr_gpu - dg_dr_cpu|: " << max_err_dg << "\n";
 
         // Within standard IEEE single-precision float accuracy (1e-6)
-        assert(max_err_g < 5e-5);
-        assert(max_err_inv < 5e-5);
-        assert(max_err_dg < 5e-5);
+        GRAVASTAR_REQUIRE(max_err_g < 5e-5, "max_err_g within 5e-5");
+        GRAVASTAR_REQUIRE(max_err_inv < 5e-5, "max_err_inv within 5e-5");
+        GRAVASTAR_REQUIRE(max_err_dg < 5e-5, "max_err_dg within 5e-5");
 
         std::cout << "[SUCCESS] Vulkan GPU metric calculation independently validated against CPU ground truth!\n";
         return 0;

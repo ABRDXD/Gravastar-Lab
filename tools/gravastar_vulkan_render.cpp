@@ -83,7 +83,9 @@ int main(int argc, char** argv) {
     double fov_deg = 60.0;
 
     const auto eval_res = geometry::evaluate(p, cam_r, cam_theta);
-    assert(std::holds_alternative<geometry::Evaluation>(eval_res));
+    if (!std::holds_alternative<geometry::Evaluation>(eval_res)) {
+        throw std::runtime_error("Failed to evaluate geometry at camera position");
+    }
     const auto& geom = std::get<geometry::Evaluation>(eval_res);
 
     optics::Tetrad tetrad = optics::make_observer_tetrad(p, cam_r, cam_theta);
