@@ -46,6 +46,7 @@ struct Evaluation {
     Matrix drrr{};  // drrr[i][j] = partial_r^3 g_ij.
     Matrix extrinsic_curvature{};  // K_AB = partial_r g_AB / (2 sqrt(g_rr)), A,B in {t,theta,phi}.
     Matrix ricci{};
+    Tensor4 riemann_lower{};  // R_abcd
     double ricci_scalar{};
     double kretschmann{};
     double determinant{};
