@@ -94,3 +94,36 @@ add_test(NAME equatorial_turning_points_unit COMMAND gravastar_turning_point_tes
 
 add_executable(gravastar_geodesic_cross_val tests/geodesic_cross_validation.cpp)
 add_test(NAME geodesic_cross_validation_unit COMMAND gravastar_geodesic_cross_val)
+
+# --- Vulkan GPU Compute Pipeline (Stage P3) ---
+find_program(GLSLC_EXECUTABLE glslc REQUIRED)
+
+set(GRAVASTAR_SPV_DIR "${CMAKE_CURRENT_BINARY_DIR}/shaders")
+file(MAKE_DIRECTORY "${GRAVASTAR_SPV_DIR}")
+
+set(GRAVASTAR_METRIC_SPV "${GRAVASTAR_SPV_DIR}/gravastar_metric.spv")
+add_custom_command(
+    OUTPUT "${GRAVASTAR_METRIC_SPV}"
+    COMMAND "${GLSLC_EXECUTABLE}" -O "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_metric.comp" -o "${GRAVASTAR_METRIC_SPV}"
+    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_metric.comp"
+    VERBATIM
+)
+add_custom_target(gravastar_shaders ALL DEPENDS "${GRAVASTAR_METRIC_SPV}")
+
+add_library(gravastar_vulkan src/rendering/vulkan/ComputeContext.cpp)
+target_include_directories(gravastar_vulkan PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third_party/include>
+)
+target_compile_features(gravastar_vulkan PUBLIC cxx_std_20)
+target_link_libraries(gravastar_vulkan PRIVATE ${CMAKE_DL_LIBS})
+
+add_executable(gravastar_vulkan_audit tests/vulkan_device_audit.cpp)
+target_link_libraries(gravastar_vulkan_audit PRIVATE gravastar_vulkan)
+add_test(NAME vulkan_device_audit COMMAND gravastar_vulkan_audit)
+
+add_executable(gravastar_vulkan_metric_test tests/vulkan_metric_comparison.cpp)
+target_link_libraries(gravastar_vulkan_metric_test PRIVATE gravastar_vulkan gravastar_geometry)
+target_compile_definitions(gravastar_vulkan_metric_test PRIVATE GRAVASTAR_METRIC_SPV="${GRAVASTAR_METRIC_SPV}")
+add_dependencies(gravastar_vulkan_metric_test gravastar_shaders)
+add_test(NAME vulkan_metric_unit COMMAND gravastar_vulkan_metric_test)
