@@ -394,5 +394,325 @@ inline bool any_nonzero(const Poly& p) {
     return false;
 }
 
+inline Poly add(const Poly& a, const Poly& b) {
+    std::size_t n = std::max(a.size(), b.size());
+    Poly out(n, Rational(0));
+    for (std::size_t i = 0; i < n; ++i) {
+        Rational va = i < a.size() ? a[i] : Rational(0);
+        Rational vb = i < b.size() ? b[i] : Rational(0);
+        out[i] = va + vb;
+    }
+    return trim(std::move(out));
+}
+
+inline Poly scale(const Poly& p, const Rational& k) {
+    Poly out;
+    out.reserve(p.size());
+    for (const auto& c : p) out.push_back(c * k);
+    return trim(std::move(out));
+}
+
+inline Poly multiply(const Poly& a, const Poly& b) {
+    if (a.empty() || b.empty()) return {Rational(0)};
+    Poly out(a.size() + b.size() - 1, Rational(0));
+    for (std::size_t i = 0; i < a.size(); ++i)
+        for (std::size_t j = 0; j < b.size(); ++j)
+            out[i + j] = out[i + j] + a[i] * b[j];
+    return trim(std::move(out));
+}
+
+inline Poly derivative(const Poly& p) {
+    if (p.size() <= 1) return {Rational(0)};
+    Poly out(p.size() - 1);
+    for (std::size_t i = 1; i < p.size(); ++i)
+        out[i - 1] = p[i] * Rational(static_cast<std::int64_t>(i));
+    return trim(std::move(out));
+}
+
+inline Rational value(const Poly& p, const Rational& x) {
+    Rational result(0);
+    for (std::size_t i = p.size(); i > 0; --i)
+        result = result * x + p[i - 1];
+    return result;
+}
+
+inline Poly remainder(Poly a, const Poly& b) {
+    a = trim(std::move(a));
+    Poly tb = trim(b);
+    while (a.size() >= tb.size() && any_nonzero(a)) {
+        std::size_t k = a.size() - tb.size();
+        Rational f = a.back() / tb.back();
+        for (std::size_t j = 0; j < tb.size(); ++j)
+            a[j + k] = a[j + k] - f * tb[j];
+        a = trim(std::move(a));
+    }
+    return a;
+}
+
+inline Poly primitive_poly(const Poly& p) {
+    Poly tp = trim(p);
+    BigInt g_num(0), l_den(1);
+    for (const auto& c : tp) {
+        if (!c.is_zero()) {
+            g_num = g_num.is_zero() ? c.num().abs() : BigInt::gcd(g_num, c.num().abs());
+            l_den = (l_den / BigInt::gcd(l_den, c.den())) * c.den();
+        }
+    }
+    if (g_num.is_zero()) return tp;
+    return scale(tp, Rational(l_den, g_num));
+}
+
+// Sign-preserving integer pseudo-remainder: multiplies by |b_lead| > 0 at each degree step
+// and strips integer content GCD so Sturm sequences never construct huge Rational denominators.
+inline Poly sturm_remainder(Poly a, const Poly& b) {
+    a = primitive_poly(a);
+    Poly tb = primitive_poly(b);
+    while (a.size() >= tb.size() && any_nonzero(a)) {
+        std::size_t k = a.size() - tb.size();
+        BigInt a_lead = a.back().num();
+        BigInt b_lead = tb.back().num();
+        BigInt b_abs = b_lead.abs();
+        BigInt factor = (b_lead.sign() < 0) ? -a_lead : a_lead;
+        for (auto& c : a) c = Rational(c.num() * b_abs);
+        for (std::size_t j = 0; j < tb.size(); ++j)
+            a[j + k] = Rational(a[j + k].num() - factor * tb[j].num());
+        a = primitive_poly(a);
+    }
+    return a;
+}
+
+inline std::vector<Poly> sturm(const Poly& p) {
+    std::vector<Poly> seq{primitive_poly(p), primitive_poly(derivative(p))};
+    if (!any_nonzero(seq.back())) {
+        seq.pop_back();
+        return seq;
+    }
+    while (true) {
+        Poly rest = scale(sturm_remainder(seq[seq.size() - 2], seq.back()), Rational(-1));
+        if (!any_nonzero(rest)) return seq;
+        seq.push_back(primitive_poly(rest));
+    }
+}
+
+// Exact sign of p(num/den) without intermediate Rational GCD reductions when p has integer coefficients.
+inline int poly_sign_at(const Poly& p, const Rational& x) {
+    bool all_int = true;
+    for (const auto& c : p) {
+        if (c.den() != BigInt(1)) {
+            all_int = false;
+            break;
+        }
+    }
+    if (!all_int) return value(p, x).sign();
+    const BigInt& num = x.num();
+    const BigInt& den = x.den();
+    BigInt acc(0);
+    BigInt den_pow(1);
+    for (std::size_t i = p.size(); i > 0; --i) {
+        acc = acc * num + p[i - 1].num() * den_pow;
+        if (i > 1) den_pow = den_pow * den;
+    }
+    return acc.sign();
+}
+
+inline int variations(const std::vector<Poly>& seq, const Rational& x) {
+    std::vector<int> signs;
+    signs.reserve(seq.size());
+    for (const auto& p : seq) {
+        int s = poly_sign_at(p, x);
+        if (s != 0) signs.push_back(s);
+    }
+    int count = 0;
+    for (std::size_t i = 0; i + 1 < signs.size(); ++i)
+        if (signs[i] != signs[i + 1]) ++count;
+    return count;
+}
+
+inline int count_roots(const Poly& p, const Rational& lo = Rational(0),
+                       const Rational& hi = Rational(1)) {
+    if (value(p, lo).is_zero() || value(p, hi).is_zero())
+        throw std::invalid_argument("root at interval endpoint must be handled explicitly");
+    auto s = sturm(p);
+    return variations(s, lo) - variations(s, hi);
+}
+
+inline std::vector<std::pair<Rational, Rational>> isolate_roots(
+        const Poly& p, const Rational& lo = Rational(0), const Rational& hi = Rational(1),
+        const Rational& width = Rational(BigInt(1), BigInt::from_string("1000000000000"))) {
+    if (value(p, lo).is_zero() || value(p, hi).is_zero())
+        throw std::invalid_argument("endpoint root");
+    auto seq = sturm(p);
+    struct Item {
+        Rational l, h;
+        int n;
+    };
+    std::vector<Item> pending{{lo, hi, variations(seq, lo) - variations(seq, hi)}};
+    std::vector<std::pair<Rational, Rational>> out;
+    while (!pending.empty()) {
+        auto [l, h, n] = pending.back();
+        pending.pop_back();
+        if (n <= 0) continue;
+        if (n == 1 && (h - l) <= width) {
+            out.emplace_back(l, h);
+            continue;
+        }
+        Rational mid = (l + h) / Rational(2);
+        std::int64_t denom = 3;
+        while (value(p, mid).is_zero()) {
+            mid = l + (h - l) / Rational(denom);
+            ++denom;
+        }
+        int left = variations(seq, l) - variations(seq, mid);
+        pending.push_back({l, mid, left});
+        pending.push_back({mid, h, n - left});
+    }
+    std::sort(out.begin(), out.end());
+    return out;
+}
+
+struct RationalParameters {
+    Rational M{1};
+    Rational a = Rational::from_string("0.875");
+    Rational Lambda = Rational::from_string("0.5");
+    Rational r_in = Rational::from_string("1.5");
+    Rational r_out = Rational::from_string("1.8");
+};
+
+// Shell polynomial Delta(u) for u in [0, 1], where r(u) = r_in + (r_out - r_in) u.
+inline Poly shell_delta(const RationalParameters& p) {
+    Poly r{p.r_in, p.r_out - p.r_in};
+    Poly r2 = multiply(r, r);
+    Poly b = add(r2, {p.a * p.a});
+    Poly mu{Rational(0), Rational(0), Rational(0), Rational(0),
+            Rational(35), Rational(-84), Rational(70), Rational(-20)};
+    Poly lam = add({Rational(1)}, scale(mu, Rational(-1)));
+    return add(multiply(b, add({Rational(1)}, scale(multiply(r2, lam), -p.Lambda / Rational(3)))),
+               scale(multiply(r, mu), Rational(-2) * p.M));
+}
+
+inline BigInt binomial(std::size_t n, std::size_t k) {
+    if (k > n) return BigInt(0);
+    if (k == 0 || k == n) return BigInt(1);
+    k = std::min(k, n - k);
+    BigInt res(1);
+    for (std::size_t i = 1; i <= k; ++i) {
+        res = res * BigInt(static_cast<std::int64_t>(n - k + i));
+        res = res / BigInt(static_cast<std::int64_t>(i));
+    }
+    return res;
+}
+
+inline Poly bernstein_coefficients(const Poly& p) {
+    std::size_t n = p.size() - 1;
+    Poly out(n + 1, Rational(0));
+    for (std::size_t k = 0; k <= n; ++k) {
+        Rational sum(0);
+        for (std::size_t j = 0; j <= k; ++j) {
+            Rational factor(binomial(k, j), binomial(n, j));
+            sum = sum + p[j] * factor;
+        }
+        out[k] = sum;
+    }
+    return out;
+}
+
+struct BernsteinCertificate {
+    bool certified{false};
+    Rational lower_bound{0};
+    Rational upper_bound{0};
+    std::size_t subintervals{0};
+    std::size_t max_depth{0};
+};
+
+inline BernsteinCertificate bernstein_subdivide(const Poly& p, std::size_t max_depth = 24) {
+    struct Node {
+        Poly coeffs;
+        std::size_t depth;
+    };
+    std::vector<Node> pending{{bernstein_coefficients(p), 0}};
+    BernsteinCertificate cert{};
+    bool first_leaf = true;
+    while (!pending.empty()) {
+        auto [b, depth] = pending.back();
+        pending.pop_back();
+        Rational min_c = *std::min_element(b.begin(), b.end());
+        Rational max_c = *std::max_element(b.begin(), b.end());
+        if (min_c > Rational(0)) {
+            if (first_leaf) {
+                cert.lower_bound = min_c;
+                cert.upper_bound = max_c;
+                first_leaf = false;
+            } else {
+                if (min_c < cert.lower_bound) cert.lower_bound = min_c;
+                if (max_c > cert.upper_bound) cert.upper_bound = max_c;
+            }
+            ++cert.subintervals;
+            cert.max_depth = std::max(cert.max_depth, depth);
+            continue;
+        }
+        if (depth >= max_depth) {
+            cert.certified = false;
+            return cert;
+        }
+        std::vector<Poly> rows{b};
+        while (rows.back().size() > 1) {
+            const auto& prev = rows.back();
+            Poly next(prev.size() - 1);
+            for (std::size_t i = 0; i + 1 < prev.size(); ++i)
+                next[i] = (prev[i] + prev[i + 1]) / Rational(2);
+            rows.push_back(std::move(next));
+        }
+        Poly left(rows.size()), right(rows.size());
+        for (std::size_t i = 0; i < rows.size(); ++i) {
+            left[i] = rows[i].front();
+            right[i] = rows[rows.size() - 1 - i].back();
+        }
+        pending.push_back({std::move(left), depth + 1});
+        pending.push_back({std::move(right), depth + 1});
+    }
+    cert.certified = !first_leaf;
+    return cert;
+}
+
+inline std::optional<Rational> bernstein_positive_bound(const Poly& p,
+                                                        std::size_t max_depth = 24) {
+    auto cert = bernstein_subdivide(p, max_depth);
+    if (!cert.certified) return std::nullopt;
+    return cert.lower_bound;
+}
+
+struct RadialCertificate {
+    bool certified{false};
+    int sturm_roots{0};
+    std::size_t isolated_roots{0};
+    Rational shell_lower_bound{0};
+    Rational shell_upper_bound{0};
+    Rational core_factor_lower_bound{0};
+    Rational exterior_delta_minimum{0};
+    std::size_t bernstein_subintervals{0};
+    std::size_t bernstein_max_depth{0};
+};
+
+inline RadialCertificate certify_radial_delta(const RationalParameters& p) {
+    RadialCertificate out{};
+    Poly poly = shell_delta(p);
+    out.sturm_roots = count_roots(poly, Rational(0), Rational(1));
+    auto roots = isolate_roots(poly, Rational(0), Rational(1));
+    out.isolated_roots = roots.size();
+    auto bcert = bernstein_subdivide(poly, 24);
+    out.shell_lower_bound = bcert.lower_bound;
+    out.shell_upper_bound = bcert.upper_bound;
+    out.bernstein_subintervals = bcert.subintervals;
+    out.bernstein_max_depth = bcert.max_depth;
+
+    Rational L_pos = p.Lambda > Rational(0) ? p.Lambda : Rational(0);
+    out.core_factor_lower_bound = Rational(1) - L_pos * p.r_in * p.r_in / Rational(3);
+    out.exterior_delta_minimum = p.r_out * p.r_out - Rational(2) * p.M * p.r_out + p.a * p.a;
+
+    out.certified = bcert.certified && out.sturm_roots == 0 && out.isolated_roots == 0
+                 && out.core_factor_lower_bound > Rational(0) && p.r_out > p.M
+                 && out.exterior_delta_minimum > Rational(0);
+    return out;
+}
 
 }  // namespace gravastar::math
