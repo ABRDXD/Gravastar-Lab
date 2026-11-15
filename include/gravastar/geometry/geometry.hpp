@@ -15,12 +15,12 @@ using Tensor4 = std::array<Tensor3, 4>;
 enum class Family { toy, kerr, de_sitter, flat };
 std::string_view family_name(Family family);
 std::variant<Family, std::string> parse_family(std::string_view text);
+
 // Explicit region selection allows exact one-sided C^3 join and extrinsic
 // curvature tests at r_in and r_out without extrapolating outside the shell.
 enum class Region { automatic, core, shell, exterior };
 std::string_view region_name(Region region);
 std::variant<Region, std::string> parse_region(std::string_view text);
-
 
 // Geometric units (G = c = 1). M >= 0 includes flat/de Sitter reference cases.
 // All fields must be finite, Lambda >= 0, and 0 < r_in < r_out.
@@ -55,8 +55,9 @@ struct Evaluation {
 
 using Result = std::variant<Evaluation, Error>;
 
-// Bounded Boyer-Lindquist chart: r>0, 0<theta<pi; axes and numerically
+// Bounded Boyer-Lindquist chart: r > 0, 0 < theta < pi; axes and numerically
 // singular Delta surfaces are rejected. No central continuation is implied.
-Result evaluate(const Parameters& parameters, double r, double theta);
+Result evaluate(const Parameters& parameters, double r, double theta,
+                Region region = Region::automatic);
 
 }  // namespace gravastar::geometry
