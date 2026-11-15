@@ -10,6 +10,7 @@ compile_commands.json
 
 # Local results and third-party sources
 results/local/
+*.ppm
 third_party/sources/
 
 # Editor and IDE metadata
