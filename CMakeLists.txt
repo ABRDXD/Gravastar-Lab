@@ -91,3 +91,6 @@ endif()
 add_executable(gravastar_turning_point_tests tests/equatorial_turning_points_test.cpp)
 target_link_libraries(gravastar_turning_point_tests PRIVATE gravastar_integration)
 add_test(NAME equatorial_turning_points_unit COMMAND gravastar_turning_point_tests)
+
+add_executable(gravastar_geodesic_cross_val tests/geodesic_cross_validation.cpp)
+add_test(NAME geodesic_cross_validation_unit COMMAND gravastar_geodesic_cross_val)
