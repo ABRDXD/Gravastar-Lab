@@ -15,10 +15,23 @@ target_include_directories(gravastar_integration PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 target_compile_features(gravastar_integration PUBLIC cxx_std_20)
 
+add_library(gravastar_optics src/optics/camera.cpp src/optics/renderer.cpp)
+target_link_libraries(gravastar_optics PUBLIC gravastar_integration gravastar_geometry)
+target_include_directories(gravastar_optics PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+target_compile_features(gravastar_optics PUBLIC cxx_std_20)
+
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(gravastar_optics PUBLIC OpenMP::OpenMP_CXX)
+endif()
+
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(gravastar_geometry PUBLIC
         -Wall -Wextra -Wpedantic -fno-fast-math -ffp-contract=off)
     target_compile_options(gravastar_integration PUBLIC
+        -Wall -Wextra -Wpedantic -fno-fast-math -ffp-contract=off)
+    target_compile_options(gravastar_optics PUBLIC
         -Wall -Wextra -Wpedantic -fno-fast-math -ffp-contract=off)
     if(GRAVASTAR_SANITIZERS)
         target_compile_options(gravastar_geometry PUBLIC
@@ -27,6 +40,9 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         target_compile_options(gravastar_integration PUBLIC
             -fsanitize=address,undefined -fno-omit-frame-pointer)
         target_link_options(gravastar_integration PUBLIC -fsanitize=address,undefined)
+        target_compile_options(gravastar_optics PUBLIC
+            -fsanitize=address,undefined -fno-omit-frame-pointer)
+        target_link_options(gravastar_optics PUBLIC -fsanitize=address,undefined)
     endif()
 elseif(GRAVASTAR_SANITIZERS)
     message(FATAL_ERROR "GRAVASTAR_SANITIZERS requires GCC or Clang")
@@ -38,6 +54,9 @@ target_link_libraries(gravastar_benchmark PRIVATE gravastar_geometry)
 add_executable(gravastar_validate src/experiments/validate.cpp)
 target_link_libraries(gravastar_validate PRIVATE gravastar_geometry)
 
+add_executable(gravastar_render_test tools/render_test.cpp)
+target_link_libraries(gravastar_render_test PRIVATE gravastar_optics)
+
 include(CTest)
 if(BUILD_TESTING)
     add_executable(gravastar_geometry_tests tests/cpp_geometry.cpp)
@@ -47,6 +66,8 @@ if(BUILD_TESTING)
     add_executable(gravastar_integration_tests tests/integration_tests.cpp)
     target_link_libraries(gravastar_integration_tests PRIVATE gravastar_integration)
     add_test(NAME integration_unit COMMAND gravastar_integration_tests)
+
+    add_test(NAME optical_simulation_test COMMAND gravastar_render_test)
 
     add_test(NAME benchmark_help COMMAND gravastar_benchmark --help)
     add_test(NAME benchmark_reject_axis COMMAND gravastar_benchmark
