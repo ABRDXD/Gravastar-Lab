@@ -142,6 +142,25 @@ std::variant<Family, std::string> parse_family(std::string_view text) {
     return std::string("family must be toy, kerr, de_sitter, or flat");
 }
 
+std::string_view region_name(Region region) {
+    switch (region) {
+        case Region::automatic: return "automatic";
+        case Region::core: return "core";
+        case Region::shell: return "shell";
+        case Region::exterior: return "exterior";
+    }
+    return "invalid";
+}
+
+std::variant<Region, std::string> parse_region(std::string_view text) {
+    if (text == "automatic" || text == "auto") return Region::automatic;
+    if (text == "core") return Region::core;
+    if (text == "shell") return Region::shell;
+    if (text == "exterior") return Region::exterior;
+    return std::string("region must be automatic, core, shell, or exterior");
+}
+
+
 Result evaluate(const Parameters& p, double radius, double polar_angle) {
     if (family_name(p.family) == "invalid")
         return Error{"invalid_parameter", "unknown geometry family"};
