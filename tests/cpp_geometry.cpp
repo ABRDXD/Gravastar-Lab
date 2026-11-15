@@ -24,8 +24,8 @@ void near(double actual, double expected, double tolerance, const std::string& m
     check(std::isfinite(actual) && std::abs(actual - expected)
           <= tolerance * std::max(1.0, std::abs(expected)), message);
 }
-Evaluation at(const Parameters& p, double r, double theta) {
-    const auto result = evaluate(p, r, theta);
+Evaluation at(const Parameters& p, double r, double theta, Region reg = Region::automatic) {
+    const auto result = evaluate(p, r, theta, reg);
     if (const auto* error = std::get_if<Error>(&result)) {
         std::cerr << "Unexpected evaluation error: " << error->code << ": " << error->message << '\n';
         std::exit(2);
