@@ -22,7 +22,7 @@ std::string_view region_name(Region region);
 std::variant<Region, std::string> parse_region(std::string_view text);
 
 
-// Geometric units. M >= 0 includes flat/de Sitter reference cases.
+// Geometric units (G = c = 1). M >= 0 includes flat/de Sitter reference cases.
 // All fields must be finite, Lambda >= 0, and 0 < r_in < r_out.
 struct Parameters {
     Family family{Family::toy};
