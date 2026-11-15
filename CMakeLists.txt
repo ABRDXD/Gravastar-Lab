@@ -117,7 +117,15 @@ add_custom_command(
     VERBATIM
 )
 
-add_custom_target(gravastar_shaders ALL DEPENDS "${GRAVASTAR_METRIC_SPV}" "${GRAVASTAR_GEODESIC_SPV}")
+set(GRAVASTAR_RAYMARCH_SPV "${GRAVASTAR_SPV_DIR}/gravastar_raymarch.spv")
+add_custom_command(
+    OUTPUT "${GRAVASTAR_RAYMARCH_SPV}"
+    COMMAND "${GLSLC_EXECUTABLE}" -I "${CMAKE_CURRENT_SOURCE_DIR}/shaders" -O "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_raymarch.comp" -o "${GRAVASTAR_RAYMARCH_SPV}"
+    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_raymarch.comp" "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_physics.glsl"
+    VERBATIM
+)
+
+add_custom_target(gravastar_shaders ALL DEPENDS "${GRAVASTAR_METRIC_SPV}" "${GRAVASTAR_GEODESIC_SPV}" "${GRAVASTAR_RAYMARCH_SPV}")
 
 add_library(gravastar_vulkan src/rendering/vulkan/ComputeContext.cpp)
 target_include_directories(gravastar_vulkan PUBLIC
@@ -142,3 +150,8 @@ target_link_libraries(gravastar_vulkan_ray_test PRIVATE gravastar_vulkan gravast
 target_compile_definitions(gravastar_vulkan_ray_test PRIVATE GRAVASTAR_GEODESIC_SPV="${GRAVASTAR_GEODESIC_SPV}")
 add_dependencies(gravastar_vulkan_ray_test gravastar_shaders)
 add_test(NAME vulkan_ray_unit COMMAND gravastar_vulkan_ray_test)
+
+add_executable(gravastar_vulkan_render tools/gravastar_vulkan_render.cpp)
+target_link_libraries(gravastar_vulkan_render PRIVATE gravastar_vulkan gravastar_geometry gravastar_optics)
+target_compile_definitions(gravastar_vulkan_render PRIVATE GRAVASTAR_RAYMARCH_SPV="${GRAVASTAR_RAYMARCH_SPV}")
+add_dependencies(gravastar_vulkan_render gravastar_shaders)
