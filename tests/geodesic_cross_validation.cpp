@@ -54,7 +54,6 @@ inline float128_t sqrt_s(float128_t x) noexcept {
 }
 
 inline constexpr float128_t pi_q() noexcept {
-    // 3.141592653589793238462643383279502884197Q constructed from exact integer limbs
     return static_cast<float128_t>(3)
          + static_cast<float128_t>(141592653589793238ULL) / static_cast<float128_t>(1000000000000000000ULL)
          + static_cast<float128_t>(462643383279502884ULL)
@@ -67,7 +66,6 @@ inline void sincos_s(double theta, double& s_out, double& c_out) noexcept {
 }
 
 inline void sincos_s(float128_t theta, float128_t& s_out, float128_t& c_out) noexcept {
-    // Range-reduce theta by 4 (sin(4x), cos(4x)) and sum Taylor series to 113-bit precision
     const float128_t x = theta / static_cast<float128_t>(4);
     const float128_t x2 = x * x;
     float128_t s = x;
@@ -80,7 +78,6 @@ inline void sincos_s(float128_t theta, float128_t& s_out, float128_t& c_out) noe
         c += c_term;
         s += s_term;
     }
-    // Double-angle twice: x -> 2x -> 4x
     float128_t s2 = static_cast<float128_t>(2) * s * c;
     float128_t c2 = c * c - s * s;
     s_out = static_cast<float128_t>(2) * s2 * c2;
@@ -174,9 +171,13 @@ struct MetricGeometry {
     T delta{};
     T sigma{};
     T delta_theta{};
+    T dT_dr{};
+    T dT_dtheta{};
     T xi{};
+    T dX_dr{};
     T mu{};
     T lam{};
+    T dlam_dr{};
 };
 
 template <typename T>
@@ -240,9 +241,13 @@ inline MetricGeometry<T> evaluate_geometry(T r, T theta, const Parameters<T>& p)
     out.delta = delta;
     out.sigma = sigma;
     out.delta_theta = T_func;
+    out.dT_dr = dT_dr;
+    out.dT_dtheta = dT_dth;
     out.xi = X;
+    out.dX_dr = dX_dr;
     out.mu = tr.mu;
     out.lam = tr.lam;
+    out.dlam_dr = tr.dlam_dr;
 
     out.g[0][0] = n00 / denom;
     out.g[0][3] = out.g[3][0] = n03 / denom;
@@ -276,7 +281,7 @@ inline MetricGeometry<T> evaluate_geometry(T r, T theta, const Parameters<T>& p)
 }
 
 // =============================================================================
-// 3. Conserved Quantities (E = -p_0, L_z = p_3) & 2nd-Order Geodesic ODEs
+// 3. Conserved Quantities, Region-Segmented KdS Carter Analysis & Geodesic ODEs
 // =============================================================================
 
 template <typename T>
@@ -284,7 +289,8 @@ struct ConservedQuantities {
     T E{};
     T Lz{};
     T H{};
-    T Q{};
+    T Q_kds{};        // Constant-Lambda KdS Carter quantity
+    T dQ_kds_dlam{};  // Exact analytical rate d(Q_kds)/dlambda = (dQ_kds/dr)_{theta,p_theta} * u^r
     std::array<T, 4> p_cov{};
 };
 
@@ -292,10 +298,25 @@ template <typename T>
 inline ConservedQuantities<T> compute_conserved_quantities(
     T r, T theta, const std::array<T, 4>& u, const Parameters<T>& p
 ) noexcept {
-    // Mathematical Derivation:
-    //   For H(x, p) = (1/2) g^{mu nu}(r, theta) p_mu p_nu = 0:
-    //     dp_0 / dlambda = -dH/dt   = (1/2)(d_t g_{ab}) u^a u^b   = 0  => E = -p_0 = const
-    //     dp_3 / dlambda = -dH/dphi = (1/2)(d_phi g_{ab}) u^a u^b = 0  => L_z = p_3 = const
+    // 1. Exact Killing-Vector Conservation of E = -p_0 and L_z = p_3:
+    //    For H(x, p) = (1/2) g^{mu nu}(r, theta) p_mu p_nu = 0:
+    //      dp_0 / dlambda = -dH/dt   = (1/2)(d_t g_{ab}) u^a u^b   = 0  => E = -p_0 = const
+    //      dp_3 / dlambda = -dH/dphi = (1/2)(d_phi g_{ab}) u^a u^b = 0  => L_z = p_3 = const
+    //
+    // 2. Exact Evolution Law for the Kerr-de Sitter Candidate Quantity Q_kds:
+    //    Define K_kds(r, theta, p_theta) = Delta_theta p_theta^2 + (Xi^2 / (Delta_theta sin^2 theta))(L_z - a E sin^2 theta)^2
+    //    and Q_kds = K_kds - Xi^2 (L_z - a E)^2.
+    //    Along any null geodesic (H = 0), Hamilton's equations for (theta, p_theta) give:
+    //      (dK_kds / dtheta) u^theta + (dK_kds / dp_theta) dp_theta/dlambda = 0  IDENTICALLY.
+    //    Therefore, the exact rate of change of Q_kds along a null geodesic is driven
+    //    solely by the explicit radial derivative of lambda(r) inside Delta_theta and Xi:
+    //      dQ_kds / dlambda = (dQ_kds / dr)_{theta, p_theta} * u^r
+    //    which vanishes identically in the Kerr exterior (lambda' = 0), in the de Sitter core
+    //    (lambda' = 0), and on the equatorial plane (theta = pi/2, p_theta = 0).
+    //    Note: Non-conservation of Q_kds inside the shell only shows that the standard KdS
+    //    formula is not invariant when lambda'(r) != 0. Coordinate non-separability in
+    //    Boyer-Lindquist (r, theta) coordinates is established separately by the Levi-Civita
+    //    mixed-partial obstruction d_r d_theta (Sigma g^{theta theta}) = d_r d_theta Delta_theta != 0.
     const auto geom = evaluate_geometry(r, theta, p);
     const auto& g = geom.g;
 
@@ -311,22 +332,28 @@ inline ConservedQuantities<T> compute_conserved_quantities(
     T s{}, c{};
     sincos_s(theta, s, c);
     const T s2 = s * s;
-    const T xi2 = geom.xi * geom.xi;
+    const T xi = geom.xi;
+    const T xi2 = xi * xi;
+    const T T_func = geom.delta_theta;
     const T term = Lz - p.a * E * s2;
-    const T K_sep = geom.delta_theta * (p2 * p2) + (xi2 / (geom.delta_theta * s2)) * (term * term);
     const T l_minus_ae = Lz - p.a * E;
-    const T Q = K_sep - xi2 * (l_minus_ae * l_minus_ae);
 
-    return {E, Lz, H, Q, {p0, p1, p2, p3}};
+    const T K_sep = T_func * (p2 * p2) + (xi2 / (T_func * s2)) * (term * term);
+    const T Q_kds = K_sep - xi2 * (l_minus_ae * l_minus_ae);
+
+    const T two = static_cast<T>(2);
+    const T dK_dr = geom.dT_dr * (p2 * p2)
+                  + ((two * xi * geom.dX_dr * T_func - xi2 * geom.dT_dr) / (T_func * T_func * s2)) * (term * term);
+    const T dQ_dr = dK_dr - two * xi * geom.dX_dr * (l_minus_ae * l_minus_ae);
+    const T dQ_dlam = dQ_dr * u[1];
+
+    return {E, Lz, H, Q_kds, dQ_dlam, {p0, p1, p2, p3}};
 }
 
 template <typename T>
 inline std::array<T, 4> null_geodesic_second_derivatives(
     T r, T theta, const std::array<T, 4>& u, const Parameters<T>& p
 ) noexcept {
-    // Evaluates d^2 x^mu / dlambda^2 = -Gamma^mu_{ab} u^a u^b:
-    //   d^2 r / dlambda^2     = (1 / g_rr) [ (1/2)(d_r g_{ab}) u^a u^b - (d_r g_rr)(u^r)^2 - (d_th g_rr) u^r u^th ]
-    //   d^2 theta / dlambda^2 = (1 / g_thth) [ (1/2)(d_th g_{ab}) u^a u^b - (d_r g_thth) u^r u^th - (d_th g_thth)(u^th)^2 ]
     const auto geom = evaluate_geometry(r, theta, p);
     const auto& g = geom.g;
     const auto& ginv = geom.ginv;
@@ -403,7 +430,12 @@ struct GeodesicResult {
     T max_abs_dE{};
     T max_abs_dLz{};
     T max_abs_H{};
-    T max_abs_dQ{};
+    T Q_initial{};
+    T Q_final{};
+    T integrated_dQ_source{};      // Path integral of (dQ_kds/dr)_{theta,p_theta} * u^r dlambda
+    T max_abs_dQ_exterior{};       // Drift of Q_kds strictly along constant-Lambda Kerr exterior legs
+    T max_abs_dQ_core{};           // Drift of Q_kds strictly inside constant-Lambda de Sitter core
+    T max_abs_dQ_shell{};          // Variation of Q_kds across the transition shell (r_in < r < r_out)
 };
 
 template <typename T>
@@ -419,6 +451,13 @@ inline T adaptive_step_scale(T r, T b, T dlambda, const Parameters<T>& p) noexce
     }
     const T r_scale = min_s(static_cast<T>(1), max_s(one_fifth, r / static_cast<T>(4)));
     return dlambda * r_scale * b_scale;
+}
+
+template <typename T>
+inline int classify_region(T r, const Parameters<T>& p) noexcept {
+    if (r <= p.r_in) return 0;   // de Sitter core
+    if (r >= p.r_out) return 2;  // Kerr exterior
+    return 1;                    // C^3 transition shell
 }
 
 template <typename T>
@@ -440,13 +479,17 @@ inline GeodesicResult<T> integrate_null_geodesic(
     const auto init_cons = compute_conserved_quantities(x[1], x[2], u, p);
     const T E_ref = init_cons.E;
     const T Lz_ref = init_cons.Lz;
-    const T Q_ref = init_cons.Q;
 
     GeodesicResult<T> res{};
     res.r_min = r0;
-    res.entered_shell = (r0 <= p.r_out);
+    res.entered_shell = (r0 < p.r_out);
     res.entered_core = (r0 <= p.r_in);
     res.max_abs_H = abs_s(init_cons.H);
+    res.Q_initial = init_cons.Q_kds;
+
+    int prev_reg = classify_region(x[1], p);
+    T Q_leg_anchor = init_cons.Q_kds;
+    T dQ_rate_prev = init_cons.dQ_kds_dlam;
 
     const T half = static_cast<T>(1) / static_cast<T>(2);
     const T two = static_cast<T>(2);
@@ -501,7 +544,27 @@ inline GeodesicResult<T> integrate_null_geodesic(
         res.max_abs_dE = max_s(res.max_abs_dE, abs_s(cons.E - E_ref));
         res.max_abs_dLz = max_s(res.max_abs_dLz, abs_s(cons.Lz - Lz_ref));
         res.max_abs_H = max_s(res.max_abs_H, abs_s(cons.H));
-        res.max_abs_dQ = max_s(res.max_abs_dQ, abs_s(cons.Q - Q_ref));
+
+        // Trapezoidal accumulation of the exact analytical radial source term dQ_kds/dlambda
+        res.integrated_dQ_source += half * h * (dQ_rate_prev + cons.dQ_kds_dlam);
+        dQ_rate_prev = cons.dQ_kds_dlam;
+
+        // Region-segmented tracking of Q_kds (re-anchored whenever a region boundary is crossed)
+        const int curr_reg = classify_region(x[1], p);
+        if (curr_reg != prev_reg) {
+            Q_leg_anchor = cons.Q_kds;
+            prev_reg = curr_reg;
+        } else {
+            const T leg_drift = abs_s(cons.Q_kds - Q_leg_anchor);
+            if (curr_reg == 2) {
+                res.max_abs_dQ_exterior = max_s(res.max_abs_dQ_exterior, leg_drift);
+            } else if (curr_reg == 0) {
+                res.max_abs_dQ_core = max_s(res.max_abs_dQ_core, leg_drift);
+            } else {
+                res.max_abs_dQ_shell = max_s(res.max_abs_dQ_shell, leg_drift);
+            }
+        }
+        res.Q_final = cons.Q_kds;
     }
 
     res.x_final = x;
@@ -672,9 +735,9 @@ int main() {
     std::cout << std::string(78, '=') << "\n\n";
 
     // -------------------------------------------------------------------------
-    // 1. Conserved Quantities (E = -p_0, L_z = p_3) & Hamiltonian Cross-Check
+    // 1. Conserved Quantities (E = -p_0, L_z = p_3) & Region-Segmented Q_kds
     // -------------------------------------------------------------------------
-    std::cout << "[1] CONSERVED QUANTITIES & 2ND-ORDER VS. HAMILTONIAN RK4 CROSS-CHECK\n";
+    std::cout << "[1] CONSERVED QUANTITIES, REGION-SEGMENTED Q_kds & HAMILTONIAN CROSS-CHECK\n";
     struct RaySpec {
         const char* label;
         double r0;
@@ -683,19 +746,21 @@ int main() {
         double uth0;
     };
     const std::array<RaySpec, 4> rays = {{
-        {"Core-traversing off-equatorial ray", 8.0, 1.15,  1.20,  0.015},
-        {"Shell-reflecting prograde ray",      8.0, 1.30,  2.40, -0.010},
-        {"Exterior-scattering prograde ray",   8.0, std::numbers::pi / 2.0,  3.20, 0.0},
-        {"Shell-reflecting retrograde ray",    8.0, std::numbers::pi / 2.0, -5.00, 0.0},
+        {"Core-traversing off-equatorial ray",     8.0, 1.15,  1.20,  0.015},
+        {"Shell-reflecting off-equatorial ray",    8.0, 1.30,  2.40, -0.010},
+        {"Exterior-scattering off-equatorial ray", 8.0, 1.15,  3.40,  0.020},
+        {"Shell-reflecting equatorial retrograde", 8.0, std::numbers::pi / 2.0, -5.00, 0.0},
     }};
 
-    std::cout << std::scientific << std::setprecision(3);
     for (const auto& ray : rays) {
         const auto res = integrate_null_geodesic<double>(
             ray.r0, ray.th0, ray.b, ray.uth0, 1.0, 0.004, 80000, 12.0, p_d
         );
+        const double net_dQ = res.Q_final - res.Q_initial;
+        const double source_err = std::abs(net_dQ - res.integrated_dQ_source);
+
         std::cout << "  * " << ray.label << " (b=" << std::fixed << std::setprecision(2) << ray.b
-                  << ", theta0=" << ray.th0 << "):\n"
+                  << ", theta0=" << ray.th0 << ", Q0=" << std::setprecision(4) << res.Q_initial << "):\n"
                   << "      r_min = " << std::setprecision(8) << res.r_min
                   << " | entered_shell=" << (res.entered_shell ? "true" : "false")
                   << " | entered_core=" << (res.entered_core ? "true" : "false")
@@ -703,11 +768,47 @@ int main() {
                   << std::scientific << std::setprecision(3)
                   << "      max |dE| = " << res.max_abs_dE
                   << " | max |dL_z| = " << res.max_abs_dLz
-                  << " | max |H| = " << res.max_abs_H
-                  << " | max |dQ_shell| = " << res.max_abs_dQ << "\n";
+                  << " | max |H| = " << res.max_abs_H << "\n"
+                  << "      Region-segmented Q_kds drift: "
+                  << "exterior = " << res.max_abs_dQ_exterior;
+        if (res.entered_core) {
+            std::cout << " | core = " << res.max_abs_dQ_core;
+        } else {
+            std::cout << " | core = N/A";
+        }
+        if (res.entered_shell) {
+            std::cout << " | shell = " << res.max_abs_dQ_shell
+                      << " (|dQ - int(dQ/dr dr)| = " << source_err << ")\n";
+        } else {
+            std::cout << " | shell = N/A (ray never entered shell)\n";
+        }
+
         assert(res.max_abs_dE < 1e-10);
         assert(res.max_abs_dLz < 1e-10);
         assert(res.max_abs_H < 1e-9);
+        // Verify Q_kds is genuinely conserved along constant-Lambda exterior and core legs:
+        assert(res.max_abs_dQ_exterior < 1e-10);
+        if (res.entered_core) {
+            assert(res.max_abs_dQ_core < 1e-10);
+        }
+    }
+
+    // Levi-Civita / Stäckel coordinate-separability obstruction check inside the shell:
+    // For additive Hamilton-Jacobi separation in (r, theta), Sigma * g^{theta theta} = Delta_theta(r, theta)
+    // must satisfy d_r d_theta Delta_theta = -(2/3) a^2 Lambda lambda'(r) sin(theta) cos(theta) == 0.
+    {
+        const double r_mid = 0.5 * (p_d.r_in + p_d.r_out);
+        const double th_test = 1.1;
+        const auto tr_mid = evaluate_transition(r_mid, p_d);
+        const double lc_obstruction = -(2.0 / 3.0) * (p_d.a * p_d.a) * p_d.Lambda * tr_mid.dlam_dr
+                                      * std::sin(th_test) * std::cos(th_test);
+        std::cout << "  * Levi-Civita Coordinate Separability Obstruction at r=" << std::fixed << std::setprecision(2)
+                  << r_mid << ", theta=" << th_test << ":\n"
+                  << "      d_r d_theta (Sigma g^{theta theta}) = " << std::scientific << std::setprecision(6)
+                  << lc_obstruction << " != 0\n"
+                  << "      (Rules out additive (r, theta) Hamilton-Jacobi separation in the shell; does not\n"
+                  << "       by itself exclude non-separable or higher-order hidden invariants.)\n";
+        assert(std::abs(lc_obstruction) > 0.1);
     }
 
     const auto res_2nd = integrate_null_geodesic<double>(
@@ -722,6 +823,7 @@ int main() {
         max_dx = std::max(max_dx, std::abs(res_2nd.x_final[i] - x_ham[i]));
         max_du = std::max(max_du, std::abs(res_2nd.u_final[i] - u_ham[i]));
     }
+    std::cout << std::scientific << std::setprecision(3);
     std::cout << "  * 2nd-Order Christoffel vs. 1st-Order Hamiltonian RK4 (2000 steps through shell/core):\n"
               << "      max |dx^mu| = " << max_dx << " | max |du^mu| = " << max_du << "\n\n";
     assert(max_dx < 1e-12 && max_du < 1e-12);
