@@ -8,13 +8,25 @@ add_library(gravastar_geometry src/geometry/geometry.cpp)
 target_include_directories(gravastar_geometry PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 target_compile_features(gravastar_geometry PUBLIC cxx_std_20)
+
+add_library(gravastar_integration src/integration/integrator.cpp)
+target_link_libraries(gravastar_integration PUBLIC gravastar_geometry)
+target_include_directories(gravastar_integration PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+target_compile_features(gravastar_integration PUBLIC cxx_std_20)
+
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(gravastar_geometry PUBLIC
+        -Wall -Wextra -Wpedantic -fno-fast-math -ffp-contract=off)
+    target_compile_options(gravastar_integration PUBLIC
         -Wall -Wextra -Wpedantic -fno-fast-math -ffp-contract=off)
     if(GRAVASTAR_SANITIZERS)
         target_compile_options(gravastar_geometry PUBLIC
             -fsanitize=address,undefined -fno-omit-frame-pointer)
         target_link_options(gravastar_geometry PUBLIC -fsanitize=address,undefined)
+        target_compile_options(gravastar_integration PUBLIC
+            -fsanitize=address,undefined -fno-omit-frame-pointer)
+        target_link_options(gravastar_integration PUBLIC -fsanitize=address,undefined)
     endif()
 elseif(GRAVASTAR_SANITIZERS)
     message(FATAL_ERROR "GRAVASTAR_SANITIZERS requires GCC or Clang")
@@ -31,6 +43,11 @@ if(BUILD_TESTING)
     add_executable(gravastar_geometry_tests tests/cpp_geometry.cpp)
     target_link_libraries(gravastar_geometry_tests PRIVATE gravastar_geometry)
     add_test(NAME geometry_unit COMMAND gravastar_geometry_tests)
+
+    add_executable(gravastar_integration_tests tests/integration_tests.cpp)
+    target_link_libraries(gravastar_integration_tests PRIVATE gravastar_integration)
+    add_test(NAME integration_unit COMMAND gravastar_integration_tests)
+
     add_test(NAME benchmark_help COMMAND gravastar_benchmark --help)
     add_test(NAME benchmark_reject_axis COMMAND gravastar_benchmark
         evaluate toy 1 0.875 0.5 1 2 1.5 0)
