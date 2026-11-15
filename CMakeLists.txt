@@ -9,7 +9,10 @@ target_include_directories(gravastar_geometry PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 target_compile_features(gravastar_geometry PUBLIC cxx_std_20)
 
-add_library(gravastar_integration src/integration/integrator.cpp)
+add_library(gravastar_integration
+    src/integration/integrator.cpp
+    src/integration/critical_impact.cpp
+)
 target_link_libraries(gravastar_integration PUBLIC gravastar_geometry)
 target_include_directories(gravastar_integration PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
@@ -67,6 +70,14 @@ if(BUILD_TESTING)
     target_link_libraries(gravastar_integration_tests PRIVATE gravastar_integration)
     add_test(NAME integration_unit COMMAND gravastar_integration_tests)
 
+    add_executable(gravastar_conserved_tests tests/conserved_quantities_test.cpp)
+    target_link_libraries(gravastar_conserved_tests PRIVATE gravastar_integration)
+    add_test(NAME conserved_quantities_unit COMMAND gravastar_conserved_tests)
+
+    add_executable(gravastar_critical_impact_tests tests/critical_impact_test.cpp)
+    target_link_libraries(gravastar_critical_impact_tests PRIVATE gravastar_integration)
+    add_test(NAME critical_impact_unit COMMAND gravastar_critical_impact_tests)
+
     add_test(NAME optical_simulation_test COMMAND gravastar_render_test)
 
     add_test(NAME benchmark_help COMMAND gravastar_benchmark --help)
@@ -76,7 +87,3 @@ if(BUILD_TESTING)
     add_test(NAME p1_scientific_validation
         COMMAND gravastar_validate --root ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
-
-add_executable(gravastar_conserved_tests tests/conserved_quantities_test.cpp)
-target_link_libraries(gravastar_conserved_tests PRIVATE gravastar_integration)
-add_test(NAME conserved_quantities_unit COMMAND gravastar_conserved_tests)
