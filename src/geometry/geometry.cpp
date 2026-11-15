@@ -159,10 +159,11 @@ std::variant<Region, std::string> parse_region(std::string_view text) {
     return std::string("region must be automatic, core, shell, or exterior");
 }
 
-
-Result evaluate(const Parameters& p, double radius, double polar_angle) {
+Result evaluate(const Parameters& p, double radius, double polar_angle, Region region) {
     if (family_name(p.family) == "invalid")
         return Error{"invalid_parameter", "unknown geometry family"};
+    if (region_name(region) == "invalid")
+        return Error{"invalid_parameter", "unknown geometry region"};
     for (double value : {p.mass, p.spin, p.cosmological_constant, p.r_in, p.r_out})
         if (!std::isfinite(value))
             return Error{"invalid_parameter", "all parameters must be finite"};
@@ -172,9 +173,22 @@ Result evaluate(const Parameters& p, double radius, double polar_angle) {
             || polar_angle <= 0 || polar_angle >= std::numbers::pi)
         return Error{"coordinate_domain", "require finite r > 0 and 0 < theta < pi"};
 
+    if (region == Region::automatic) {
+        if (radius <= p.r_in) region = Region::core;
+        else if (radius >= p.r_out) region = Region::exterior;
+        else region = Region::shell;
+    } else if (p.family == Family::toy) {
+        // Explicit regions allow one-sided join tests at r_in and r_out, not extrapolation.
+        if ((region == Region::core && radius > p.r_in) ||
+            (region == Region::exterior && radius < p.r_out) ||
+            (region == Region::shell && (radius < p.r_in || radius > p.r_out))) {
+            return Error{"region_mismatch", "radius outside explicit region domain"};
+        }
+    }
+
     const Jet r = Jet::variable(radius, 0);
     const Jet theta = Jet::variable(polar_angle, 1);
-    const auto [mu, lambda] = transition(p, r);
+    const auto [mu, lambda] = transition(p, r, region);
     const Jet effective_lambda = Jet(p.cosmological_constant) * lambda;
     const Jet r2 = r * r;
     const Jet a2(p.spin * p.spin);
@@ -218,22 +232,29 @@ Result evaluate(const Parameters& p, double radius, double polar_angle) {
             out.ddg[2][2][i][j] = g[i][j].derivative(0, 2);
             out.drrr[i][j] = g[i][j].derivative(3, 0);
         }
+    if (out.metric[1][1] > 0) {
+        const double inv_two_sqrt_grr = 0.5 / std::sqrt(out.metric[1][1]);
+        for (int a : {0, 2, 3})
+            for (int b : {0, 2, 3})
+                out.extrinsic_curvature[a][b] = out.dg[1][a][b] * inv_two_sqrt_grr;
+    }
     const double prefactor = X.value() * X.value() / sigma.value();
     out.inverse[0][0] = -prefactor * (A.value() * A.value() / delta.value()
-                                                        - a2.value() * s2.value() / T.value());
+                                    - a2.value() * s2.value() / T.value());
     out.inverse[0][3] = out.inverse[3][0] =
         -p.spin * prefactor * (A.value() / delta.value() - 1 / T.value());
     out.inverse[3][3] = prefactor * (1 / (T.value() * s2.value())
-                                                        - a2.value() / delta.value());
+                                    - a2.value() / delta.value());
     out.inverse[1][1] = delta.value() / sigma.value();
     out.inverse[2][2] = T.value() / sigma.value();
     if (!finite_array(out.metric) || !finite_array(out.inverse) || !finite_array(out.dg)
-        || !finite_array(out.ddg) || !finite_array(out.drrr) || !std::isfinite(out.determinant)
+        || !finite_array(out.ddg) || !finite_array(out.drrr)
+        || !finite_array(out.extrinsic_curvature) || !std::isfinite(out.determinant)
         || out.determinant == 0)
         return Error{"numerical_failure", "nonfinite or underflowed metric/derivatives"};
     compute_curvature(out);
-    if (!finite_array(out.ricci) || !std::isfinite(out.ricci_scalar)
-        || !std::isfinite(out.kretschmann))
+    if (!finite_array(out.ricci) || !finite_array(out.riemann_lower)
+        || !std::isfinite(out.ricci_scalar) || !std::isfinite(out.kretschmann))
         return Error{"numerical_failure", "nonfinite curvature"};
     return out;
 }
