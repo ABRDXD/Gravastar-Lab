@@ -1,9 +1,10 @@
 # GravastarLab constraints
 
-Original project source and documentation use the MIT License, as explicitly
-chosen by the project owner on 2026-10-25. Preserve third-party notices. Review
-future dependencies against this choice; a planned integration does not
-authorize changing the project license.
+Original project source and documentation use GPL-3.0-or-later, as explicitly
+chosen by the project owner on 2026-11-23 (superseding the 2026-10-25 MIT
+choice; see docs/LICENSING.md). Preserve third-party notices. Review future
+dependencies against this choice; a planned integration does not authorize
+changing the project license.
 
 All application code, scientific calculations, independent references, tests,
 benchmarks, validation utilities, and development tools must be C++20.
@@ -11,6 +12,13 @@ CMake is permitted only for build configuration, dependency integration and
 CTest registration. Do not introduce Python, shell scripts, JavaScript,
 Rust, or another implementation/automation language. JSON and Markdown are
 data and documentation. Direct invocations of compiled build tools are allowed.
+
+Exception (owner decision, 2026-11-23): Vulkan GPU compute shaders may be
+written in GLSL, only under the top-level `shaders/` directory. GLSL is a
+C-family language (C syntax, structs, functions, preprocessor; no pointers),
+and no practical C++ route to SPIR-V exists. Everything that can run on the CPU
+stays C++20. Vendored code under `third_party/` keeps its upstream language and
+is audited in THIRD_PARTY.md.
 
 Do not delete a legacy Python file until its replacement builds and passes
 equivalent CTest coverage. Record the migration evidence. If a capability

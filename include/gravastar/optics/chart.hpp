@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: GPL-3.0-or-later
 #pragma once
 #include "gravastar/geometry/angular.hpp"
 #include "gravastar/optics/ray.hpp"

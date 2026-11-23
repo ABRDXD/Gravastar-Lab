@@ -1,7 +1,7 @@
 # Third-party inventory
 
-Environment audit date: **2026-10-20**. License choice updated **2026-10-25**:
-original GravastarLab code is **MIT licensed**; see [LICENSE](LICENSE) and
+Environment audit date: **2026-10-20**. License choice updated **2026-11-23**:
+original GravastarLab code is **GPL-3.0-or-later**; see [LICENSE](LICENSE) and
 [license decision](docs/LICENSING.md). The P1 geometry implementation
 and independent C++20 reference contain no vendored third-party implementation.
 The validation/tool JSON adapter uses the installed header-only C++ dependency
@@ -24,7 +24,7 @@ The C++ runtime's installed grant explicitly includes the GCC exception.
 Its upstream text permits eligible compiled combinations subject to its stated
 terms. [GCC Runtime Library Exception 3.1](https://raw.githubusercontent.com/gcc-mirror/gcc/master/COPYING.RUNTIME).
 External tools and runtimes keep their own terms; their licenses are not
-replaced by GravastarLab's MIT license.
+replaced by GravastarLab's GPL-3.0-or-later license.
 
 No interpreter or non-C++ language dependency is used by P1. The reference's
 integer, rational, fixed-decimal and trigonometric arithmetic are original
@@ -68,7 +68,7 @@ The [GYOTO project](https://gyoto.obspm.fr/) describes custom metric plugins and
 its GPL-3.0-or-later terms. These are GYOTO's terms, not the license selected for
 original GravastarLab code. Before implementation, review the actual revision,
 linking/distribution arrangement and any separately licensed adapter. Prefer an
-optional independent reference workflow that leaves the MIT project usable
+optional independent reference workflow that leaves the project usable
 without GYOTO; process separation alone is not a license-compatibility verdict.
 Scientific attribution must also be retained. No GYOTO code, adapter or binary
 is currently integrated.

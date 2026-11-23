@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Dependency integration only. Never check out or execute upstream build scripts.
 find_package(Git REQUIRED)
 set(GRAVASTAR_REFERENCE_GIT_CACHE "${PROJECT_SOURCE_DIR}/build/reference-sources"

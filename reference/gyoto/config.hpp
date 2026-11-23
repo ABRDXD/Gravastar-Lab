@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: GPL-3.0-or-later
 // Configuration for the bounded C++20 reference build, not a general GYOTO ABI.
 #pragma once
 #include <cstddef>

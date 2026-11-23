@@ -49,7 +49,8 @@ are separate research milestones, not claims of the first release.
 - Version saved scenes, experiment metadata, and recording manifests.
 - Use [GYOTO](https://gyoto.obspm.fr/) with a custom metric plugin for CPU
   reference rays; compare GPU results against those reference calculations.
-- MIT for original code, per the owner's explicit choice on 2026-10-25.
+- GPL-3.0-or-later for original code, per the owner's explicit choice on
+  2026-11-23 (superseding the 2026-10-25 MIT choice).
   Pin reused dependencies, preserve notices,
   and record source, revision, license, and modifications.
 - Inspect existing KerrLab code for useful ideas and verified reuse while
@@ -517,7 +518,7 @@ schedule to demonstrate preview independence. A low-resolution or synthetic
   headers/loader, shader compiler, image libraries, and FFmpeg separately.
 - Record whether each dependency is linked, bundled, a build tool, or an external
   executable. Review its distribution terms and bundled codec options while
-  preserving the MIT license of original GravastarLab code.
+  preserving the GPL-3.0-or-later license of original GravastarLab code.
 - Use a project-local C++20 setup process; avoid global package-manager changes.
 - Inspect KerrLab components and their provenance individually. Reimplement or
   obtain permission where license grants are absent. Keep a source/revision/file

@@ -1,5 +1,38 @@
 # Project license decision
 
+## Current decision: GPL-3.0-or-later (2026-11-23)
+
+On 2026-11-23 the project owner chose **GPL-3.0-or-later** for original
+GravastarLab source and documentation, superseding the MIT choice recorded
+below. The decision was made while combining this branch with the Vulkan,
+window and recording work from `backup/astra-work`, which was already GPL, and
+it matches the initial plan. The full text is in [LICENSE](../LICENSE).
+The copyright attribution remains `2026 GravastarLab contributors`.
+
+Changes made by the migration on branch `integration/reconcile`:
+
+- `LICENSE` replaced by the GPL-3.0 text from `backup/astra-work`.
+- 50 first-line `SPDX-License-Identifier` comments changed from `MIT` to
+  `GPL-3.0-or-later`. No algorithm, equation, threshold, fixture, build rule or
+  dependency changed in that commit.
+- `NOTICE`, `AGENTS.md`, `README.md`, the licensing sentence of `README.txt`,
+  `PLAN.md` and `THIRD_PARTY.md` updated to match.
+
+Third-party notices are unchanged: nlohmann/json 3.12.0 keeps its MIT notice,
+and the Vulkan headers keep theirs. GYOTO is GPL-3.0-or-later, so a future GYOTO
+reference adapter can live in this project under the same license; its exact
+revision, dependencies and notices still need review before import.
+
+As with the earlier migration, SPDX comment edits change the byte-based
+computational source digest without changing numerical behavior. Historical
+reports and their source manifests (including `results/mit_source_manifest.json`
+and `results/mit_gcc_ctest.txt`) keep their original bytes and digests and
+describe the source as it was when they were generated.
+
+## Superseded decision: MIT (2026-10-25)
+
+Kept as history. "Current" below means the state on 2026-10-26.
+
 The project owner explicitly selected the MIT License on 2026-10-25, to make
 the original project freely reusable, including by people without access to
 paid AI tools. The migration was completed on 2026-10-26. This decision

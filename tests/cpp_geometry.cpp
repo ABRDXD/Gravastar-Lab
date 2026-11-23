@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: GPL-3.0-or-later
 #include "gravastar/geometry/geometry.hpp"
 #include "gravastar/math/jet.hpp"
 

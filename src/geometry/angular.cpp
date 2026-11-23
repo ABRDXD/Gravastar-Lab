@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: GPL-3.0-or-later
 #include "gravastar/geometry/angular.hpp"
 #include "curvature.hpp"
 #include "gravastar/math/spatial_jet.hpp"
