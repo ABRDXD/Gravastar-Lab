@@ -11,6 +11,11 @@ compile_commands.json
 # Local results and third-party sources
 results/local/
 third_party/sources/
+*.ppm
+
+# Local tool state and outside reference checkouts
+.kilo/
+.reference/
 
 # Editor and IDE metadata
 .vscode/

@@ -10,18 +10,27 @@ void require(bool b, const std::string &message) {
   if (!b)
     throw std::runtime_error(message);
 }
+// `path` is relative to the project root. GLSL compute shaders are the one
+// non-C++ source format, and only inside the top-level shaders/ directory.
 bool permitted_source(const fs::path &path) {
   static const std::set<std::string> names{"LICENSE", "NOTICE", ".gitignore",
                                            ".gitkeep", ".clang-format"};
   static const std::set<std::string> extensions{".cpp",  ".hpp", ".cmake",
                                                 ".json", ".md",  ".txt"};
-  return names.contains(path.filename().string()) ||
-         extensions.contains(path.extension().string());
+  static const std::set<std::string> shader_extensions{".comp", ".glsl"};
+  if (names.contains(path.filename().string()) ||
+      extensions.contains(path.extension().string()))
+    return true;
+  return !path.empty() && *path.begin() == "shaders" &&
+         shader_extensions.contains(path.extension().string());
 }
 void language_policy(const fs::path &root) {
-  const std::set<std::string> ignored{".git",   "build",  "results",
-                                      ".cache", ".venv",  "__pycache__",
-                                      ".idea",  ".vscode"};
+  // Local tool state and outside reference checkouts are not project
+  // sources. Vendored code under third_party/ keeps its upstream formats and
+  // is audited per dependency in THIRD_PARTY.md instead.
+  const std::set<std::string> ignored{
+      ".git",  "build",  "results", ".cache",    ".venv",      "__pycache__",
+      ".idea", ".vscode", ".kilo",  ".reference", "third_party"};
   for (fs::recursive_directory_iterator it(root), end; it != end; ++it) {
     const auto path = it->path();
     if (ignored.contains(path.filename().string())) {
@@ -31,7 +40,7 @@ void language_policy(const fs::path &root) {
     if (fs::is_symlink(path))
       throw std::runtime_error("source symlink requires review: " +
                                path.string());
-    if (it->is_regular_file() && !permitted_source(path))
+    if (it->is_regular_file() && !permitted_source(path.lexically_relative(root)))
       throw std::runtime_error("unapproved source format: " + path.string());
   }
   std::cout << "C++20 source-format policy passed\n";
@@ -44,6 +53,12 @@ int self_test(const fs::path &self) {
               !permitted_source("automation.js") &&
               !permitted_source("automation"),
           "source-format allow list");
+  require(permitted_source("shaders/ray.comp") &&
+              permitted_source("shaders/common.glsl") &&
+              !permitted_source("src/ray.comp") &&
+              !permitted_source("ray.glsl") &&
+              !permitted_source("shaders/build.sh"),
+          "shader formats only under shaders/");
   require(
       u::sha256("") ==
           "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
