@@ -188,6 +188,18 @@ if(GRAVASTAR_DESKTOP)
         VERBATIM)
     add_custom_target(gravastar_metric_shader DEPENDS "${GRAVASTAR_METRIC_SPV}")
 
+    # FP32 fixed-step RK4 geodesic kernel (includes gravastar_physics.glsl).
+    set(GRAVASTAR_GEODESIC_SPV "${GRAVASTAR_SPV_DIR}/gravastar_geodesic.spv")
+    add_custom_command(
+        OUTPUT "${GRAVASTAR_GEODESIC_SPV}"
+        COMMAND "${GLSLC_EXECUTABLE}" -I "${CMAKE_CURRENT_SOURCE_DIR}/shaders" -O
+            "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_geodesic.comp"
+            -o "${GRAVASTAR_GEODESIC_SPV}"
+        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_geodesic.comp"
+                "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_physics.glsl"
+        VERBATIM)
+    add_custom_target(gravastar_geodesic_shader DEPENDS "${GRAVASTAR_GEODESIC_SPV}")
+
     add_library(gravastar_vulkan
         src/rendering/vulkan/ComputeContext.cpp
         src/rendering/vulkan/WindowRenderer.cpp)
@@ -240,15 +252,24 @@ if(GRAVASTAR_DESKTOP)
             GRAVASTAR_METRIC_SPV="${GRAVASTAR_METRIC_SPV}")
         add_dependencies(gravastar_vulkan_metric_test gravastar_metric_shader)
         add_test(NAME vulkan_metric_fp32 COMMAND gravastar_vulkan_metric_test)
+        add_executable(gravastar_vulkan_ray_test tests/vulkan_ray_comparison.cpp)
+        target_link_libraries(gravastar_vulkan_ray_test PRIVATE gravastar_vulkan gravastar_geometry)
+        target_compile_definitions(gravastar_vulkan_ray_test PRIVATE
+            GRAVASTAR_GEODESIC_SPV="${GRAVASTAR_GEODESIC_SPV}"
+            # Measured 2026-11-23, RTX 3050: worst 5.31e-5 over the four rays
+            # (identical across runs). Ceiling is about twice that.
+            GRAVASTAR_GPU_TURNING_TOLERANCE=1e-4)
+        add_dependencies(gravastar_vulkan_ray_test gravastar_geodesic_shader)
+        add_test(NAME vulkan_ray_fp32 COMMAND gravastar_vulkan_ray_test)
         # Needs a Wayland or X11 session.
         add_test(NAME vulkan_studio_smoke COMMAND gravastar_studio --smoke)
-        set_tests_properties(vulkan_device_audit vulkan_studio_smoke vulkan_metric_fp32
+        set_tests_properties(vulkan_device_audit vulkan_studio_smoke vulkan_metric_fp32 vulkan_ray_fp32
             PROPERTIES LABELS desktop)
         if(GRAVASTAR_SANITIZERS)
             # Measured 2026-11-23: every LeakSanitizer report in these tests is
             # allocated inside the run-time-loaded GPU driver or libdbus, not in
             # project code. Address and undefined-behavior checks stay on.
-            set_tests_properties(vulkan_device_audit vulkan_studio_smoke vulkan_metric_fp32
+            set_tests_properties(vulkan_device_audit vulkan_studio_smoke vulkan_metric_fp32 vulkan_ray_fp32
                 PROPERTIES ENVIRONMENT "ASAN_OPTIONS=detect_leaks=0")
         endif()
     endif()
