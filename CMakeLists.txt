@@ -236,3 +236,35 @@ if(GRAVASTAR_DESKTOP)
         endif()
     endif()
 endif()
+
+# --- Standalone quad-precision reference suites (from backup/astra-work) ---
+# Each carries its own copy of the toy metric and does not call production
+# geometry or optics code, so these are independent references, not tests of
+# the tracer. They need the GCC/Clang __float128 extension and libquadmath.
+if(BUILD_TESTING)
+    include(CheckCXXSourceCompiles)
+    set(CMAKE_REQUIRED_LIBRARIES quadmath)
+    check_cxx_source_compiles("
+        #include <quadmath.h>
+        int main() { __float128 x = 2; return sqrtq(x) > 1 ? 0 : 1; }"
+        GRAVASTAR_HAVE_QUADMATH)
+    unset(CMAKE_REQUIRED_LIBRARIES)
+    if(GRAVASTAR_HAVE_QUADMATH)
+        add_executable(gravastar_geodesic_reference tests/geodesic_cross_validation.cpp)
+        target_include_directories(gravastar_geodesic_reference PRIVATE
+            ${CMAKE_CURRENT_SOURCE_DIR}/include)
+        target_compile_features(gravastar_geodesic_reference PRIVATE cxx_std_20)
+        target_link_libraries(gravastar_geodesic_reference PRIVATE quadmath)
+        add_test(NAME standalone_geodesic_reference COMMAND gravastar_geodesic_reference)
+
+        add_executable(gravastar_zamo_shadow_reference tests/zamo_shadow_validation.cpp)
+        target_compile_features(gravastar_zamo_shadow_reference PRIVATE cxx_std_20)
+        target_link_libraries(gravastar_zamo_shadow_reference PRIVATE quadmath)
+        add_test(NAME standalone_zamo_shadow_reference COMMAND gravastar_zamo_shadow_reference)
+
+        set_tests_properties(standalone_geodesic_reference standalone_zamo_shadow_reference
+            PROPERTIES LABELS standalone-reference TIMEOUT 300)
+    else()
+        message(STATUS "libquadmath not available: standalone quad references skipped")
+    endif()
+endif()
