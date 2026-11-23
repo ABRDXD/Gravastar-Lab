@@ -177,6 +177,17 @@ if(GRAVASTAR_DESKTOP)
         VERBATIM)
     add_custom_target(gravastar_presentation_shader DEPENDS "${GRAVASTAR_PRESENTATION_SPV}")
 
+    # FP32 GLSL metric kernel; compared with the CPU double-precision evaluator.
+    set(GRAVASTAR_METRIC_SPV "${GRAVASTAR_SPV_DIR}/gravastar_metric.spv")
+    add_custom_command(
+        OUTPUT "${GRAVASTAR_METRIC_SPV}"
+        COMMAND "${GLSLC_EXECUTABLE}" -O
+            "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_metric.comp"
+            -o "${GRAVASTAR_METRIC_SPV}"
+        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_metric.comp"
+        VERBATIM)
+    add_custom_target(gravastar_metric_shader DEPENDS "${GRAVASTAR_METRIC_SPV}")
+
     add_library(gravastar_vulkan
         src/rendering/vulkan/ComputeContext.cpp
         src/rendering/vulkan/WindowRenderer.cpp)
@@ -223,15 +234,21 @@ if(GRAVASTAR_DESKTOP)
         add_executable(gravastar_vulkan_audit tests/vulkan_device_audit.cpp)
         target_link_libraries(gravastar_vulkan_audit PRIVATE gravastar_vulkan)
         add_test(NAME vulkan_device_audit COMMAND gravastar_vulkan_audit)
+        add_executable(gravastar_vulkan_metric_test tests/vulkan_metric_comparison.cpp)
+        target_link_libraries(gravastar_vulkan_metric_test PRIVATE gravastar_vulkan gravastar_geometry)
+        target_compile_definitions(gravastar_vulkan_metric_test PRIVATE
+            GRAVASTAR_METRIC_SPV="${GRAVASTAR_METRIC_SPV}")
+        add_dependencies(gravastar_vulkan_metric_test gravastar_metric_shader)
+        add_test(NAME vulkan_metric_fp32 COMMAND gravastar_vulkan_metric_test)
         # Needs a Wayland or X11 session.
         add_test(NAME vulkan_studio_smoke COMMAND gravastar_studio --smoke)
-        set_tests_properties(vulkan_device_audit vulkan_studio_smoke
+        set_tests_properties(vulkan_device_audit vulkan_studio_smoke vulkan_metric_fp32
             PROPERTIES LABELS desktop)
         if(GRAVASTAR_SANITIZERS)
             # Measured 2026-11-23: every LeakSanitizer report in these tests is
             # allocated inside the run-time-loaded GPU driver or libdbus, not in
             # project code. Address and undefined-behavior checks stay on.
-            set_tests_properties(vulkan_device_audit vulkan_studio_smoke
+            set_tests_properties(vulkan_device_audit vulkan_studio_smoke vulkan_metric_fp32
                 PROPERTIES ENVIRONMENT "ASAN_OPTIONS=detect_leaks=0")
         endif()
     endif()
