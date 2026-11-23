@@ -10,6 +10,23 @@ The validation/tool JSON adapter uses the installed header-only C++ dependency
 The scientific equation source and excluded KerrLab code are documented in
 [docs/PROVENANCE.md](docs/PROVENANCE.md).
 
+## Vendored for the optional desktop build (`GRAVASTAR_DESKTOP=ON`)
+
+Brought across from `backup/astra-work` on 2026-11-23. Headless builds do not
+compile or link either component.
+
+| Component | Version | Relationship to project | License evidence |
+| --- | --- | --- | --- |
+| Khronos Vulkan Headers | `VK_HEADER_VERSION 321` (1.4.321), `third_party/include/vulkan/`, `third_party/include/vk_video/` | Vendored C header declarations; the loader is opened at run time with `dlopen` | Every file carries `SPDX-License-Identifier: Apache-2.0` and Khronos copyright lines. Apache-2.0 text added as `third_party/licenses/khronos-vulkan-headers-1.4.321-Apache-2.0.txt` (SHA-256 `074e6e32c86a4c0ef8b3ed25b721ca23aca83df277cd88106ef7177c354615ff`, copied from `/usr/share/licenses/spdx/Apache-2.0.txt`). Apache-2.0 is compatible with GPL-3.0. |
+| GLFW | 3.4.0 (`GLFW_VERSION_*` in `glfw3.h`), `third_party/glfw/` | Vendored C source, built as a static library for the studio only | zlib license, `third_party/glfw/LICENSE.md` (SHA-256 `149704059b5d0bf551637e50042dd4de9c2cae921021f6636298911e3a5f9462`). GPL-compatible. |
+| shaderc / glslc | system executable | External shader build tool, required only when `GRAVASTAR_DESKTOP=ON`; SPIR-V outputs stay in the build tree | Not bundled |
+
+**Open provenance item:** the original vendoring commits (`4db1675`, `694f2c4`)
+did not record an upstream tag, commit or archive hash. The versions above come
+from the files themselves. Before release, compare both trees byte for byte
+with upstream `KhronosGroup/Vulkan-Headers` `v1.4.321` and `glfw/glfw` `3.4`
+and record the result here.
+
 ## Dependencies used by P0/P1
 
 | Component | Actual version | Relationship to project | License evidence and decision |
@@ -61,7 +78,7 @@ pins. No code, notice, or binary was copied from these packages into P1.
 | libpng | `1.6.59`; installed PNG Reference Library License v2 inspected | Future linked image library; not selected yet |
 | OpenEXR | `3.5.2`; installed BSD-3-Clause notice inspected | Future linked scientific image library; not selected yet |
 | FFmpeg | `n9.0.2`, configured `--enable-gpl --enable-version3`; `ffmpeg -L` reports GPL-3.0-or-later | Future external executable; no binary or codecs bundled |
-| GLFW / Dear ImGui / ImPlot | Not found by checked system package/header probes | Choose immutable source pins and inspect actual notices before integration |
+| Dear ImGui / ImPlot | Not found by checked system package/header probes | Choose immutable source pins and inspect actual notices before integration (GLFW is now vendored; see above) |
 | GYOTO | Executable/package absent | Official project states GPL-3.0-or-later; exact revision, dependency notices, API, ABI, and build remain P2 work |
 
 The [GYOTO project](https://gyoto.obspm.fr/) describes custom metric plugins and

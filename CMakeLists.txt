@@ -3,6 +3,7 @@ project(GravastarLab VERSION 0.1.0 LANGUAGES CXX)
 
 option(GRAVASTAR_SANITIZERS "Enable address and undefined-behavior sanitizers" OFF)
 option(GRAVASTAR_GYOTO_REFERENCE "Build optional GPL GYOTO reference executable" OFF)
+option(GRAVASTAR_DESKTOP "Build Vulkan compute, GLFW window and desktop studio targets" OFF)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(gravastar_geometry src/geometry/geometry.cpp src/geometry/angular.cpp src/geometry/core.cpp)
@@ -151,4 +152,74 @@ if(BUILD_TESTING)
     add_test(NAME benchmark_reject_axis COMMAND gravastar_benchmark
         evaluate toy 1 0.875 0.5 1 2 1.5 0)
     set_tests_properties(benchmark_reject_axis PROPERTIES WILL_FAIL TRUE)
+endif()
+
+# --- Optional Vulkan compute and desktop presentation ---
+# Off by default so headless scientific builds need no graphics stack.
+# Vulkan headers 1.4.321 and GLFW 3.4 are vendored; see THIRD_PARTY.md.
+if(GRAVASTAR_DESKTOP)
+    find_program(GLSLC_EXECUTABLE glslc REQUIRED)
+    set(GRAVASTAR_SPV_DIR "${CMAKE_CURRENT_BINARY_DIR}/shaders")
+    file(MAKE_DIRECTORY "${GRAVASTAR_SPV_DIR}")
+
+    set(GRAVASTAR_PRESENTATION_SPV "${GRAVASTAR_SPV_DIR}/gravastar_presentation.spv")
+    add_custom_command(
+        OUTPUT "${GRAVASTAR_PRESENTATION_SPV}"
+        COMMAND "${GLSLC_EXECUTABLE}" -O
+            "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_presentation.comp"
+            -o "${GRAVASTAR_PRESENTATION_SPV}"
+        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_presentation.comp"
+        VERBATIM)
+    add_custom_target(gravastar_presentation_shader DEPENDS "${GRAVASTAR_PRESENTATION_SPV}")
+
+    add_library(gravastar_vulkan
+        src/rendering/vulkan/ComputeContext.cpp
+        src/rendering/vulkan/WindowRenderer.cpp)
+    target_include_directories(gravastar_vulkan PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third_party/include>)
+    target_compile_features(gravastar_vulkan PUBLIC cxx_std_20)
+    target_link_libraries(gravastar_vulkan PRIVATE ${CMAKE_DL_LIBS})
+
+    enable_language(C)
+    set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+    set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
+    set(GLFW_LIBRARY_TYPE STATIC CACHE STRING "" FORCE)
+    add_subdirectory(third_party/glfw "${CMAKE_CURRENT_BINARY_DIR}/third_party/glfw" EXCLUDE_FROM_ALL)
+
+    add_library(gravastar_platform src/platform/Window.cpp)
+    target_include_directories(gravastar_platform PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third_party/include>)
+    target_compile_features(gravastar_platform PUBLIC cxx_std_20)
+    target_link_libraries(gravastar_platform PUBLIC glfw)
+
+    add_executable(gravastar_studio tools/gravastar_studio.cpp)
+    target_link_libraries(gravastar_studio PRIVATE gravastar_vulkan gravastar_platform)
+    target_compile_definitions(gravastar_studio PRIVATE
+        GRAVASTAR_PRESENTATION_SHADER="${GRAVASTAR_PRESENTATION_SPV}")
+    add_dependencies(gravastar_studio gravastar_presentation_shader)
+
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        foreach(target gravastar_vulkan gravastar_platform gravastar_studio)
+            target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic)
+            if(GRAVASTAR_SANITIZERS)
+                target_compile_options(${target} PRIVATE
+                    -fsanitize=address,undefined -fno-omit-frame-pointer)
+                target_link_options(${target} PRIVATE -fsanitize=address,undefined)
+            endif()
+        endforeach()
+    endif()
+
+    if(BUILD_TESTING)
+        add_executable(gravastar_vulkan_audit tests/vulkan_device_audit.cpp)
+        target_link_libraries(gravastar_vulkan_audit PRIVATE gravastar_vulkan)
+        add_test(NAME vulkan_device_audit COMMAND gravastar_vulkan_audit)
+        # Needs a Wayland or X11 session.
+        add_test(NAME vulkan_studio_smoke COMMAND gravastar_studio --smoke)
+        set_tests_properties(vulkan_device_audit vulkan_studio_smoke
+            PROPERTIES LABELS desktop)
+    endif()
 endif()
