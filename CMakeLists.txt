@@ -150,6 +150,10 @@ if(BUILD_TESTING)
     target_compile_definitions(gravastar_optics_cli_tests PRIVATE GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}")
     add_test(NAME optics_cli COMMAND gravastar_optics_cli_tests $<TARGET_FILE:gravastar_trace>)
     set_tests_properties(optics_cli PROPERTIES TIMEOUT 600 LABELS optics)
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        # Unoptimized run measured 680 s (58/58 pass) on 2026-11-23.
+        set_tests_properties(optics_cli PROPERTIES TIMEOUT 1500)
+    endif()
     add_executable(gravastar_validation_failures tests/validation_failures.cpp)
     target_link_libraries(gravastar_validation_failures PRIVATE gravastar_geometry nlohmann_json::nlohmann_json)
     add_test(NAME validation_failure_isolation COMMAND gravastar_validation_failures

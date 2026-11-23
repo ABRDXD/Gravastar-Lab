@@ -116,6 +116,12 @@ The plain Debug sanitizer build still times out on 4 slow science tests
 instrumented build above. The Debug suite has not been run yet; it is part of
 the step 9 gate.
 
+**Phase A complete, 2026-11-23.** Step 9 gate met: GCC Release 28/28, GCC
+desktop 32/32, Clang desktop 30/30, GCC Debug 28/28, optimized ASan/UBSan
+32/32, no compiler warnings. Full record in
+[docs/RECONCILE_STATUS.md](docs/RECONCILE_STATUS.md). The branch is local
+only; `main` has not been moved.
+
 **Steps 6–8 (physics), 2026-11-23:**
 
 - Step 6: p2 wins in all 11 clashing files; the astra side has nothing p2
