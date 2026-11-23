@@ -52,6 +52,22 @@ target_compile_definitions(gravastar_sampling PRIVATE GRAVASTAR_SOURCE_ROOT="${C
 add_executable(gravastar_validate src/experiments/validate.cpp)
 target_link_libraries(gravastar_validate PRIVATE gravastar_geometry nlohmann_json::nlohmann_json)
 target_compile_definitions(gravastar_validate PRIVATE GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}")
+# Deterministic timeline, resumable frame sequence and FFmpeg encoding. The
+# recorder takes frames from a caller-supplied source and links no renderer.
+add_library(gravastar_recording src/recording/recorder.cpp)
+target_include_directories(gravastar_recording PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+target_compile_features(gravastar_recording PUBLIC cxx_std_20)
+target_link_libraries(gravastar_recording PUBLIC nlohmann_json::nlohmann_json)
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(gravastar_recording PRIVATE -Wall -Wextra -Wpedantic)
+    if(GRAVASTAR_SANITIZERS)
+        target_compile_options(gravastar_recording PUBLIC
+            -fsanitize=address,undefined -fno-omit-frame-pointer)
+        target_link_options(gravastar_recording PUBLIC -fsanitize=address,undefined)
+    endif()
+endif()
+
 add_executable(gravastar_tools tools/project.cpp)
 target_link_libraries(gravastar_tools PRIVATE gravastar_geometry nlohmann_json::nlohmann_json)
 target_compile_definitions(gravastar_tools PRIVATE GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}")
@@ -304,5 +320,19 @@ if(BUILD_TESTING)
             PROPERTIES LABELS standalone-reference TIMEOUT 300)
     else()
         message(STATUS "libquadmath not available: standalone quad references skipped")
+    endif()
+endif()
+
+# --- Recording lifecycle test (needs external ffmpeg and ffprobe) ---
+if(BUILD_TESTING)
+    find_program(FFMPEG_EXECUTABLE ffmpeg)
+    find_program(FFPROBE_EXECUTABLE ffprobe)
+    if(FFMPEG_EXECUTABLE AND FFPROBE_EXECUTABLE)
+        add_executable(gravastar_recording_test tests/deterministic_recording_test.cpp)
+        target_link_libraries(gravastar_recording_test PRIVATE gravastar_recording)
+        add_test(NAME recording_lifecycle COMMAND gravastar_recording_test)
+        set_tests_properties(recording_lifecycle PROPERTIES LABELS recording)
+    else()
+        message(STATUS "ffmpeg/ffprobe not found: recording lifecycle test skipped")
     endif()
 endif()

@@ -116,6 +116,49 @@ The plain Debug sanitizer build still times out on 4 slow science tests
 instrumented build above. The Debug suite has not been run yet; it is part of
 the step 9 gate.
 
+**Steps 6–8 (physics), 2026-11-23:**
+
+- Step 6: p2 wins in all 11 clashing files; the astra side has nothing p2
+  lacks. p2's validator covers every astra check with a stronger reference
+  (90–110 decimal places vs `__float128`), already tests extrinsic curvature
+  (4.2e-32) and explicit-region rejection. Astra's `extrinsic_curvature` and
+  `riemann_lower` fields are not ported. Both branches' exact horizon
+  certificates agree: shell lower bound 2237/8000, core 5/8, exterior
+  649/1600, no shell roots (two C++ implementations, likely of the same
+  earlier Python script).
+- Step 7 (`c0cf2e0`, `6c91661`, `16cf7e5`): new `shell_turning` test, 104
+  checks. The four astra equatorial rays are traced with the production
+  tracer against an independent radial potential W(r)
+  (`tests/equatorial_reference.hpp`): turning radii agree to 2.8e-12–2.0e-9
+  at 1e-12 tolerance. The four astra critical impact thresholds are
+  re-derived by global bisection and agree with its closed forms to ≤ 6.8e-11;
+  traced rays at ±1e-4 cross the joins as expected. Astra's hard-coded radii
+  were correct to their 9 digits. `geodesic_cross_validation` and
+  `zamo_shadow_validation` come across unchanged as `standalone_*` tests
+  (own metric copy, no production code; GCC only). Re-pointing their
+  shadow and Carter-drift checks at the tracer moves to Phase C.
+- Step 8 (`c7f53d5`, `cefd1cc`, recorder commit): GPU metric kernel ported
+  unchanged (max metric error 1.74e-5, FP32). GPU ray kernel now compared with
+  the exact turning radius: errors 2.4e-6–5.3e-5, core classification
+  correct, null drift up to 2.8e-4; three GPU minima fall below the exact
+  root (FP32 step error). The old ledger's "≤ 2.4e-6" was the best ray only.
+- Recorder decoupled from physics: it takes a `FrameSource` callback and
+  rejects mis-sized frames; `job.json` stores caller scene metadata. Test
+  uses the synthetic pattern as before (64×64, 30 frames). Plugging in a real
+  renderer is Phase F.
+- **Not ported, by decision:** astra's fixed-step integrator and its CPU
+  OpenMP renderer (no remaining test needs them; p2's tracer replaces them),
+  and `gravastar_vulkan_render` with `gravastar_raymarch.comp` (it paints a
+  fixed cyan colour on core rays, an artistic marker). Both are rebuilt in
+  Phase D on the p2 contracts with a real emission model. They stay on
+  `backup/astra-work`.
+- **Recorder gaps found, for Phase F:** the video is renamed into place
+  before ffprobe runs; ffprobe output is never compared with the expected
+  size/rate/count; FFmpeg gets an integer frame rate (30000/1001 would be
+  wrong); `initialize()` overwrites job.json on resume without checking the
+  settings match; any non-empty frame file is trusted on resume; no hashes
+  or job lock. The "fault injection" in the test is a clean cancel only.
+
 1. Create `integration/reconcile` from `codex/p2-reference-optics`. Leave the
    existing branches untouched. Use build dir `build/reconcile-*` so the old
    build tree is not disturbed.
