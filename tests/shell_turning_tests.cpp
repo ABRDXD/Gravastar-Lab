@@ -75,6 +75,56 @@ Real turning_radius(const Model &q, Real b) {
   return (lo + hi) / 2;
 }
 
+// Minimum of W on [r_target, launch]. Dense samples locate every local
+// minimum; golden-section search refines each, so a narrow negative dip near
+// a photon-orbit double root is not missed between samples.
+Real minimum_W(const Model &q, Real b, Real r_target) {
+  const int n = 20000;
+  const Real h = (launch_radius - r_target) / n;
+  auto at = [&](int i) { return r_target + h * i; };
+  Real best = std::min(W(q, r_target, b), W(q, Real(launch_radius), b));
+  for (int i = 1; i < n; ++i) {
+    const Real w0 = W(q, at(i - 1), b), w1 = W(q, at(i), b),
+               w2 = W(q, at(i + 1), b);
+    if (!(w1 <= w0 && w1 <= w2))
+      continue;
+    Real lo = at(i - 1), hi = at(i + 1);
+    const Real phi = (std::sqrt(Real(5)) - 1) / 2;
+    for (int k = 0; k < 200 && hi - lo > 1e-16L; ++k) {
+      const Real x1 = hi - phi * (hi - lo), x2 = lo + phi * (hi - lo);
+      if (W(q, x1, b) < W(q, x2, b))
+        hi = x2;
+      else
+        lo = x1;
+    }
+    best = std::min(best, W(q, (lo + hi) / 2, b));
+  }
+  return best;
+}
+// An incoming ray from the launch radius reaches r_target iff W > 0 there and
+// at every radius in between (W = 0 at r_target itself is the graze).
+bool reaches(const Model &q, Real b, Real r_target) {
+  return minimum_W(q, b, r_target) > 0;
+}
+// Bisection on b between a reaching and a non-reaching impact parameter.
+Real threshold(const Model &q, Real r_target, Real reach, Real miss) {
+  if (!reaches(q, reach, r_target) || reaches(q, miss, r_target))
+    throw std::runtime_error("threshold bracket does not straddle");
+  for (int i = 0; i < 80 && std::abs(miss - reach) > 1e-15L; ++i) {
+    const Real mid = (reach + miss) / 2;
+    (reaches(q, mid, r_target) ? reach : miss) = mid;
+  }
+  return (reach + miss) / 2;
+}
+
+o::State equatorial_launch(const g::Parameters &p, double b) {
+  o::State s{0, launch_radius, std::numbers::pi / 2, 0, -1, 0, 0, b};
+  const auto &gi = o::metric(p, s).inverse;
+  // Future-directed outgoing p_r: tracing into the past moves inward.
+  s[5] = std::sqrt(-(gi[0][0] - 2 * gi[0][3] * b + gi[3][3] * b * b) / gi[1][1]);
+  return s;
+}
+
 u::Json checks = u::Json::array();
 void check(const std::string &name, double measured, double ceiling) {
   const bool pass = std::isfinite(measured) && measured <= ceiling;
@@ -191,7 +241,57 @@ u::Json run() {
     }
     rows.push_back(row);
   }
-  return {{"fixtures", rows}};
+
+  // Critical impact parameters for entering the shell and the core, ported
+  // from backup/astra-work critical_impact.{hpp,cpp} and its test. That module
+  // used closed forms: the graze b = a + r^2/(a +- sqrt D(r)) at a join, and
+  // the Kerr circular photon orbit for the retrograde shell threshold. Here
+  // each threshold is found by bisection on the global "reaches" condition,
+  // which also detects any barrier between the launch radius and the join.
+  struct Threshold {
+    const char *name;
+    double r_target, reach, miss, astra_value;
+  };
+  const Threshold thresholds[] = {
+      {"prograde shell entry", p.r_out, 2.5, 3.5, 3.0180173587},
+      {"prograde core entry", p.r_in, 1.0, 2.5, 1.8759486035},
+      {"retrograde core entry", p.r_in, -3.0, -4.5, -3.6442732108},
+      {"retrograde shell entry", p.r_out, -6.0, -7.5, -6.7900713688}};
+  o::Settings near = fine;
+  near.maximum_affine = 400; // near-critical retrograde rays wind first
+  u::Json critical = u::Json::array();
+  for (const auto &t : thresholds) {
+    const double b = double(threshold(q, t.r_target, t.reach, t.miss));
+    check(std::string(t.name) + " vs old closed-form value",
+          std::abs(b - t.astra_value), 1e-9);
+    u::Json row{{"name", t.name}, {"reference_threshold", b},
+                {"astra_value", t.astra_value},
+                {"astra_minus_reference", t.astra_value - b}};
+    const bool core = t.r_target == p.r_in;
+    for (double side : {-1.0, 1.0}) {
+      // side -1: |b| below threshold (ray reaches the target), +1: above.
+      const double bb = b * (1 + side * 1e-4);
+      const auto tr = o::trace(p, equatorial_launch(p, bb), near);
+      std::size_t inner = 0, outer = 0;
+      for (const auto &c : tr.crossings) {
+        inner += c.surface == "inner_shell_join";
+        outer += c.surface == "outer_shell_join";
+      }
+      const bool inward = side < 0;
+      const std::size_t want_outer = core ? 2 : (inward ? 2 : 0);
+      const std::size_t want_inner = core && inward ? 2 : 0;
+      const std::string tag = std::string(t.name) + (inward ? " -1e-4" : " +1e-4");
+      require(tag + " escapes", tr.outcome == o::Outcome::escaped);
+      require(tag + " join crossings", outer == want_outer && inner == want_inner);
+      check(tag + " null residual", tr.maximum_null_error, near.null_tolerance);
+      row[inward ? "reaching_side" : "missing_side"] = {
+          {"b", bb}, {"outcome", o::outcome_name(tr.outcome)},
+          {"inner_join_crossings", inner}, {"outer_join_crossings", outer},
+          {"accepted_steps", tr.accepted}};
+    }
+    critical.push_back(row);
+  }
+  return {{"fixtures", rows}, {"critical_impact", critical}};
 }
 } // namespace
 
@@ -221,7 +321,10 @@ int main(int argc, char **argv) {
         output.replace_filename(output.stem().string() + ".failed.json");
       u::atomic_json(output, report);
     }
-    std::cout << report["fixtures"].dump(2) << '\n'
+    std::cout << u::Json{{"fixtures", report["fixtures"]},
+                         {"critical_impact", report["critical_impact"]}}
+                     .dump(2)
+              << '\n'
               << (pass ? "PASS " : "FAIL ") << checks.size()
               << " shell turning checks\n";
     return pass ? 0 : 1;
