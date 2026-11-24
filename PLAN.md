@@ -658,7 +658,11 @@ questions whose answers can be found in the references or local environment.
 - [ ] Implement and compare P3 Vulkan optics.
       Phase D step 1 measured FP32/FP64 on the RTX 3050 with a trig-free
       stereographic kernel: FP64 agrees with long double to 1e-11 at 74x
-      the cost; FP32 has a ~1e-4 floor (docs/GPU_PRECISION.md).
+      the cost; FP32 has a ~1e-4 floor (docs/GPU_PRECISION.md). Steps 2–4:
+      an FP64 GPU tracer on the CPU contracts, with CPU fallback for core
+      and near-tangent rays, matches the CPU per pixel with 0 outcome
+      mismatches on both reference scenes (docs/GPU_TRACER.md). Still open
+      for P3: the core patch on the GPU and a real-time path.
       Optional desktop build only: Vulkan device layer and FP32 metric and
       fixed-step ray kernels compared with the CPU (metric 1.74e-5; turning
       radius 2.4e-6 to 5.3e-5 vs exact). No GPU image renderer, no FP64

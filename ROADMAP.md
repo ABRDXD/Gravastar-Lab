@@ -312,6 +312,15 @@ findings were checked against the code; each was fixed on
 3. Remove the painted core colour; use the Phase C emission model.
 4. Gate: per-pixel CPU/GPU error distribution and failed-ray counts on the
    reference scene; tiled dispatch with a work budget.
+   **Steps 2–4 done 2026-11-24** (docs/GPU_TRACER.md). FP64 GPU tracer with
+   the CPU's DP5 controller, patches and terminal events; core entries,
+   near tangencies and budgets go back to the CPU. 128x96 toy: 95.3% of
+   rays on the GPU, 0 outcome mismatches, disk intensity within 6.3e-9,
+   positions within 8.4e-8. Kerr: 100% on the GPU, 0 mismatches. No
+   painted colour exists; emission is the Phase C model. Batched dispatch
+   (4096 rays). Honest timing: FP64 GPU is only 1.2–1.5x a 12-thread CPU
+   on this laptop. Kerr family bug (toy shell used) caught by the
+   comparison and fixed. Not done: core patch on the GPU, FP32 tracer.
 
 ### Phase E: P4 desktop studio
 
