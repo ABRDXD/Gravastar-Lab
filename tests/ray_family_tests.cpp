@@ -294,10 +294,131 @@ u::Json pole_and_core_family(const g::Parameters &p) {
   return rows;
 }
 
+// Equatorial rays that graze a shell join. At the graze value b_c the
+// turning radius equals the join radius; b = b_c (1 -+ eps) turns a depth
+// delta below or above it. Near the turn r(s) = r_t + r'' (s - s_t)^2 / 2, so
+// the two join crossings are separated by chord = 2 sqrt(2 delta / |r''|),
+// with r'' from the reference Hamiltonian; relative corrections are O(delta).
+//
+// Whether a graze is classified correctly is limited by the radial position
+// error the trace has accumulated before the turn, not by the event search.
+// Each level states the smallest |delta| it is required to classify; below
+// that, cases are reported, and only the even crossing count is required.
+// The chord also measures that position error: curvature * chord^2 / 8 is
+// the depth the trace actually reached.
+struct GrazeSettings {
+  const char *name;
+  o::Settings settings;
+  double resolved_depth, depth_error;
+};
+u::Json graze_family(const g::Parameters &p) {
+  const auto q = model(p);
+  constexpr Real launch = 10;
+  o::Settings fine;
+  fine.absolute_tolerance = fine.relative_tolerance = 1e-12;
+  fine.maximum_step = .02;
+  fine.event_tolerance = 1e-12;
+  fine.null_tolerance = 1e-8;
+  fine.outer_radius = 20;
+  fine.maximum_affine = 100;
+  auto coarse = fine;
+  coarse.absolute_tolerance = coarse.relative_tolerance = 1e-10;
+  coarse.maximum_step = .05;
+  coarse.event_tolerance = 1e-10;
+  coarse.null_tolerance = 1e-7;
+  // Measured position error at the inner join: ~1.2e-9 coarse, ~8e-12 fine.
+  const GrazeSettings levels[] = {{"coarse", coarse, 5e-9, 5e-9},
+                                  {"fine", fine, 5e-11, 3e-11}};
+
+  struct Graze {
+    const char *name, *surface;
+    double radius, reach, miss;
+  };
+  const Graze grazes[] = {
+      {"outer join prograde graze", "outer_shell_join", p.r_out, 2.5, 3.5},
+      {"inner join prograde graze", "inner_shell_join", p.r_in, 1.0, 2.5},
+      {"inner join retrograde graze", "inner_shell_join", p.r_in, -3.0, -4.5}};
+  u::Json rows = u::Json::array();
+  for (const auto &graze : grazes) {
+    const Real bc = ref::threshold(q, graze.radius, graze.reach, graze.miss,
+                                   launch);
+    // The reference graze is a simple root of W at the join, not a double
+    // root, so this family tests tangency rather than photon-orbit winding.
+    u::Json row{{"name", graze.name}, {"graze_impact", double(bc)}};
+    u::Json cases = u::Json::array();
+    for (double eps : {1e-4, 1e-6, 1e-8, 1e-10, 1e-12})
+      for (double side : {-1.0, 1.0}) {
+        const Real b = bc * (1 + side * eps);
+        const Real r_t = ref::turning_radius(q, b, launch);
+        const Real depth = graze.radius - r_t; // > 0: ray enters
+        ref::Phase turn{0, r_t, std::numbers::pi_v<Real> / 2, 0, -1, 0, 0, b};
+        const Real rest = ref::hamiltonian(q, turn);
+        turn[5] = 1;
+        const Real d_over_sigma = 2 * (ref::hamiltonian(q, turn) - rest);
+        turn[5] = 0;
+        const Real curvature =
+            std::abs(d_over_sigma * ref::derivative(q, turn)[5]);
+        const double chord =
+            depth > 0 ? double(2 * std::sqrt(2 * depth / curvature)) : 0;
+        const auto start = ref::null_launch(q, launch, std::numbers::pi / 2,
+                                            -1, 0, double(b));
+        o::State bl{};
+        for (int i = 0; i < 8; ++i)
+          bl[i] = double(start[i]);
+        const std::string tag = std::string(graze.name) + " eps=" +
+                                u::Json(side * eps).dump();
+        u::Json entry{{"relative_offset", side * eps},
+                      {"impact", double(b)},
+                      {"reference_depth", double(depth)},
+                      {"reference_chord", chord}};
+        for (const auto &level : levels) {
+          const auto t = o::trace(p, bl, level.settings);
+          std::vector<double> at;
+          for (const auto &c : t.crossings)
+            if (c.surface == graze.surface)
+              at.push_back(c.point.affine);
+          const std::string name = tag + " " + level.name;
+          require(name + " escapes", t.outcome == o::Outcome::escaped);
+          // An odd count would leave the ray labelled inside a region it
+          // has left; that is never acceptable, resolved or not.
+          require(name + " even join crossing count", at.size() % 2 == 0);
+          const bool resolved = (depth > 0) == (at.size() == 2);
+          const bool required = std::abs(double(depth)) >= level.resolved_depth;
+          if (required)
+            require(name + " join crossings match reference", resolved);
+          const double measured_chord =
+              at.size() == 2 ? at[1] - at[0] : 0;
+          entry[level.name] = {{"join_crossings", at.size()},
+                               {"chord", measured_chord},
+                               {"accepted_steps", t.accepted},
+                               {"matches_reference", resolved},
+                               {"classification_required", required}};
+          if (resolved && at.size() == 2) {
+            const double reached =
+                double(curvature) * measured_chord * measured_chord / 8;
+            const double error = std::abs(reached - double(depth));
+            entry[level.name]["chord_relative_error"] =
+                std::abs(measured_chord - chord) / chord;
+            entry[level.name]["implied_depth_error"] = error;
+            // Above ~1e-6 the quadratic turn model's O(delta^2) error dominates.
+            if (required && depth <= 1e-6)
+              check(name + " depth implied by crossing chord", error,
+                    level.depth_error);
+          }
+        }
+        cases.push_back(entry);
+      }
+    row["cases"] = cases;
+    rows.push_back(row);
+  }
+  return rows;
+}
+
 u::Json run() {
   g::Parameters p; // toy preset: M=1, a=7/8, Lambda=1/2, r_in=1.5, r_out=1.8
   hamiltonian_transcription(p);
-  return {{"pole_and_core", pole_and_core_family(p)}};
+  return {{"pole_and_core", pole_and_core_family(p)},
+          {"join_grazes", graze_family(p)}};
 }
 } // namespace
 
@@ -319,8 +440,10 @@ int main(int argc, char **argv) {
     report["complete_P2_acceptance"] = false;
     report["scope"] =
         "Toy-preset ray families against independent references: pole and "
-        "core crossings in one ray. Sampled fixtures, not a certificate for "
-        "arbitrary rays; no GYOTO comparison.";
+        "core crossings in one ray; equatorial grazes of both shell joins. "
+        "Sampled fixtures, not a certificate for arbitrary rays; grazes "
+        "shallower than the stated depth are reported, not classified; no "
+        "GYOTO comparison.";
     if (argc == 3) {
       auto output = u::result_path(root, argv[2]);
       if (!pass)
