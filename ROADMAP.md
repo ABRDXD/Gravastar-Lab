@@ -260,6 +260,12 @@ below it as history.
 3. **[MAX]** GYOTO: try the CMake-only build of the pinned 2.0.2 subset as a separate
    optional GPL tool. Compare Kerr rays first, then the gravastar adapter.
    If it cannot be built, record that and leave the GYOTO gate open.
+   **Done 2026-11-24.** The pinned GYOTO 2.0.2 core builds as C++20 (three
+   textual compatibility patches, no numerical change). Eight Kerr rays agree
+   with GYOTO's own integrators to 7.8e-11; through a gravastar adapter,
+   seven toy rays through the shell and core agree to 2.7e-9 (integration
+   check; the metric is shared). Not covered: pole/core-patch rays, images,
+   emission. Details in docs/GYOTO_FEASIBILITY.md.
 4. **[MAX]** Thin-disk and star-background emission with redshift, linear radiance
    only. Image convergence study in step tolerance and samples.
 

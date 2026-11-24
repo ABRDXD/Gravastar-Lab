@@ -59,11 +59,32 @@ The audited toolchain versions are the tested environment, not claims of
 reproducible binary identity across compiler or library versions. No network
 fetch or implicit sibling-directory dependency should occur during the P1 build.
 
+## Optional reference build (`GRAVASTAR_GYOTO_REFERENCE=ON`, off by default)
+
+Configure fetches these pinned sources into `build/reference-sources` (or the
+cache named by `GRAVASTAR_REFERENCE_GIT_CACHE`) and exports only the listed
+files into the build tree. No upstream build script is run. Nothing here is
+vendored into the repository or linked into the default build.
+
+| Component | Pin | License (notice file, SHA-256) | Use |
+| --- | --- | --- | --- |
+| GYOTO | 2.0.2, commit `d7dfa50402c40a2f2bf1aef33fc7e98283f35b3a` | GPL-3.0-or-later (`COPYING`, `8ceb4b9e…5eb65b903`) | 28 core sources compiled as C++20 into `gravastar_gyoto_compare` |
+| Eigen | 3.4.0, commit `3147391d946bb4b6c68edd901f2add6ac1f31f8c` | MPL-2.0 and others (`COPYING.MPL2`, `fab3dd6b…0a13863e85`; all `COPYING.*` kept) | Headers required by GYOTO |
+| Boost | 1.84.0 source archive, SHA-256 `a5800f405508f5df8114558ca9855d2640a2de8f0445f051fa1c7c3383045724` | BSL-1.0 (`LICENSE_1_0.txt`, `c9bff757…284ad566`) | Headers only (Boost.Math used by GYOTO `Photon.C`) |
+
+Three textual patches are applied at configure time and fail loudly if the
+pinned text no longer matches: two XML-free guards (`Object.C` vector
+parsing, `UniformSpectrometer.C` XML output) and one thread-free declaration
+(`Scenery.C`). No numerical code is changed. The comparison executable links
+GPL GYOTO and this project's GPL-3.0-or-later code. See
+`docs/GYOTO_FEASIBILITY.md`.
+
 ## Available but not integrated
 
 P2 native optics adds no dependency. Its Dormand-Prince coefficient reference
 and scientific conventions are documented in `docs/OPTICS.md`; no Boost code
-was copied or linked. GYOTO remains an unintegrated candidate. PPM serialization
+was copied or linked. GYOTO is built only by the optional reference build
+above. PPM serialization
 uses original C++20 and requires no image library.
 
 These are environment findings and future candidates, not adopted dependency
@@ -79,7 +100,7 @@ pins. No code, notice, or binary was copied from these packages into P1.
 | OpenEXR | `3.5.2`; installed BSD-3-Clause notice inspected | Future linked scientific image library; not selected yet |
 | FFmpeg | `n9.0.2`, configured `--enable-gpl --enable-version3`; `ffmpeg -L` reports GPL-3.0-or-later | Future external executable; no binary or codecs bundled |
 | Dear ImGui / ImPlot | Not found by checked system package/header probes | Choose immutable source pins and inspect actual notices before integration (GLFW is now vendored; see above) |
-| GYOTO | Executable/package absent | Official project states GPL-3.0-or-later; exact revision, dependency notices, API, ABI, and build remain P2 work |
+| GYOTO | Executable/package absent | Built from pinned source by the optional reference build above |
 
 The [GYOTO project](https://gyoto.obspm.fr/) describes custom metric plugins and
 its GPL-3.0-or-later terms. These are GYOTO's terms, not the license selected for
@@ -87,8 +108,9 @@ original GravastarLab code. Before implementation, review the actual revision,
 linking/distribution arrangement and any separately licensed adapter. Prefer an
 optional independent reference workflow that leaves the project usable
 without GYOTO; process separation alone is not a license-compatibility verdict.
-Scientific attribution must also be retained. No GYOTO code, adapter or binary
-is currently integrated.
+Scientific attribution must also be retained. GYOTO code is compiled only in
+the optional reference build; the adapter in `reference/gyoto/compare.cpp` is
+GPL-3.0-or-later like the rest of this project.
 
 For a later distribution, review each actually linked/bundled component and its
 transitive notices at the selected immutable revision. The presence of a system

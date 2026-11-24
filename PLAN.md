@@ -647,9 +647,10 @@ questions whose answers can be found in the references or local environment.
       orbit) match an independent off-equatorial reference. Approaches
       closer than the trace resolves are flagged per ray; both reference
       scenes end every sampled ray in a named outcome with none censored or
-      flagged. Actual GYOTO comparison,
-      arbitrary hidden extrema/tangencies and general domain acceptance
-      remain incomplete. See docs/GYOTO_FEASIBILITY.md,
+      flagged. An optional pinned GYOTO 2.0.2 build now compares Kerr rays
+      (agreement 7.8e-11) and, through an adapter, toy rays (2.7e-9); see
+      docs/GYOTO_FEASIBILITY.md. Emission/image comparison, arbitrary hidden
+      extrema/tangencies and general domain acceptance remain incomplete. See docs/GYOTO_FEASIBILITY.md,
       docs/CORE_CONTINUATION.md and docs/P2_STATUS.md.
 - [ ] Implement and compare P3 Vulkan optics.
       Optional desktop build only: Vulkan device layer and FP32 metric and
