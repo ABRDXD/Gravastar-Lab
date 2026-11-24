@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-#include "gravastar/optics/background.hpp"
-#include "gravastar/optics/chart.hpp"
-#include "gravastar/optics/ray.hpp"
+#include "gravastar/optics/scene.hpp"
 #include "gravastar/tools/artifacts.hpp"
 #include <algorithm>
 #include <chrono>
@@ -14,214 +12,6 @@ namespace g = gravastar::geometry;
 namespace u = gravastar::tools;
 namespace fs = std::filesystem;
 using J = u::Json;
-struct Scene {
-  g::Parameters geometry;
-  o::Settings settings;
-  o::Vector position;
-  std::optional<double> omega;
-  o::DiskMotion disk_motion{o::DiskMotion::zamo};
-  std::optional<o::StarCatalogue> background; // separate channel when present
-  double fov;
-  int width, height;
-  bool angular{};
-};
-Scene scene(const J &j) {
-  if (j.at("schema_version") != 1)
-    throw std::invalid_argument("unsupported optics schema");
-  Scene s;
-  const auto &p = j.at("geometry");
-  auto f = g::parse_family(p.at("family").get<std::string>());
-  if (auto *error = std::get_if<std::string>(&f))
-    throw std::invalid_argument(*error);
-  s.geometry = {std::get<g::Family>(f), p.at("M"),    p.at("a"),
-                p.at("Lambda"),         p.at("r_in"), p.at("r_out")};
-  const auto &d = j.at("domain");
-  auto &c = s.settings;
-  c.inner_radius = d.at("inner_radius");
-  c.outer_radius = d.at("outer_radius");
-  c.polar_margin = d.at("polar_margin");
-  if (!d.at("capture_radius").is_null())
-    c.capture_radius = d.at("capture_radius").get<double>();
-  const auto &i = j.at("integrator");
-  const auto coordinates =
-      i.value("coordinates", std::string("boyer_lindquist"));
-  if (coordinates != "boyer_lindquist" && coordinates != "angular")
-    throw std::invalid_argument("unknown integration coordinates");
-  s.angular = coordinates == "angular";
-  c.angular_switch_q = i.value("angular_switch_q", 1.5);
-  c.continue_core = i.value("continue_core", false);
-  c.core_entry_radius = i.value("core_entry_radius", .75);
-  c.core_exit_radius = i.value("core_exit_radius", 1.0);
-  c.absolute_tolerance = i.at("absolute_tolerance");
-  c.relative_tolerance = i.at("relative_tolerance");
-  c.initial_step = i.at("initial_step");
-  c.minimum_step = i.at("minimum_step");
-  c.maximum_step = i.at("maximum_step");
-  c.event_tolerance = i.at("event_tolerance");
-  c.null_tolerance = i.at("null_tolerance");
-  c.maximum_affine = i.at("maximum_affine");
-  c.tangency_factor = i.value("tangency_factor", 1000.0);
-  if (!i.at("maximum_attempts").is_number_integer() ||
-      i.at("maximum_attempts") < 1 || i.at("maximum_attempts") > 10000000)
-    throw std::invalid_argument(
-        "maximum_attempts must be an integer in [1,10000000]");
-  c.maximum_attempts = i.at("maximum_attempts");
-  const auto &disk = j.at("disk");
-  const auto motion = disk.at("motion").get<std::string>();
-  if ((motion != "ZAMO" && motion != "keplerian_prograde") ||
-      disk.at("emissivity") != "bolometric_r_inverse_cubed")
-    throw std::invalid_argument("unsupported emission prescription");
-  s.disk_motion = motion == "ZAMO" ? o::DiskMotion::zamo
-                                   : o::DiskMotion::keplerian_prograde;
-  c.disk = disk.at("enabled");
-  c.disk_inner = disk.at("inner_radius");
-  c.disk_outer = disk.at("outer_radius");
-  // Prescribed orbits must stay in their supported timelike, stable domain.
-  if (c.disk && s.disk_motion == o::DiskMotion::keplerian_prograde &&
-      !o::keplerian_annulus_supported(s.geometry, c.disk_inner, c.disk_outer))
-    throw std::invalid_argument(
-        "Keplerian disk annulus leaves the stable timelike circular orbits");
-  if (j.contains("background") && !j.at("background").is_null()) {
-    const auto &b = j.at("background");
-    if (b.at("model") != "static_star_sphere_v1")
-      throw std::invalid_argument("unsupported background model");
-    o::StarField f;
-    f.seed = b.at("seed").get<std::uint64_t>();
-    f.count = b.at("stars").get<int>();
-    f.width = b.at("width").get<double>();
-    f.range = b.at("range").get<double>();
-    if (f.count < 1 || f.count > 100000 || !(f.width > 0 && f.width < 1) ||
-        !(f.range >= 1 && f.range <= 1e6))
-      throw std::invalid_argument("invalid star field parameters");
-    s.background = o::make_catalogue(f);
-  }
-  const auto &camera = j.at("camera");
-  s.position = camera.at("position").get<o::Vector>();
-  if (!camera.at("omega").is_null())
-    s.omega = camera.at("omega").get<double>();
-  s.fov = camera.at("vertical_field_of_view_degrees").get<double>() *
-          std::numbers::pi / 180;
-  for (const auto *axis : {"width", "height"})
-    if (!j.at("image").at(axis).is_number_integer() ||
-        j.at("image").at(axis) < 1 || j.at("image").at(axis) > 128)
-      throw std::invalid_argument(
-          "image dimensions must be integers in [1,128]");
-  s.width = j.at("image").at("width");
-  s.height = j.at("image").at("height");
-  if (!std::isfinite(s.fov) || s.fov <= 0 ||
-      s.fov >= 170 * std::numbers::pi / 180 || s.width < 1 || s.height < 1 ||
-      s.width > 128 || s.height > 128)
-    throw std::invalid_argument(
-        "invalid camera field of view or image size (maximum 128x128)");
-  return s;
-}
-o::State pixel(const Scene &s, int x, int y) {
-  double tangent = std::tan(s.fov / 2);
-  double right = (2 * (x + .5) / s.width - 1) * tangent * s.width / s.height;
-  double up = (1 - 2 * (y + .5) / s.height) * tangent;
-  return o::launch(s.geometry, s.position, {-1, -up, right}, s.omega);
-}
-J point(const o::Point &p) {
-  return {{"affine", p.affine},
-          {"state", p.state},
-          {"chart", o::chart_name(p.chart)},
-          {"null_residual", p.null_error}};
-}
-J ray(const Scene &s, const o::State &initial, const o::Trace &trace) {
-  J result{{"outcome", o::outcome_name(trace.outcome)},
-           {"reason", trace.detail},
-           {"initial_state", initial},
-           {"initial_chart", "boyer_lindquist"},
-           {"final", point(trace.final)},
-           {"accepted_steps", trace.accepted},
-           {"rejected_steps", trace.rejected},
-           {"rhs_calls", trace.rhs_calls},
-           {"chart_switches", trace.chart_switches},
-           {"maximum_null_residual", trace.maximum_null_error},
-           {"energy_error", trace.energy_error},
-           {"angular_momentum_error", trace.angular_momentum_error},
-           {"linear_intensity", nullptr},
-           {"redshift", nullptr},
-           {"alpha", nullptr},
-           {"background_intensity", nullptr},
-           {"background_redshift", nullptr},
-           {"background_direction", nullptr}};
-  if (trace.outcome == o::Outcome::emitted) {
-    auto frame = o::circular_frame(o::metric(s.geometry, initial), s.omega);
-    // Disk hits are at q=1, where conversion to the original emission chart
-    // is regular. The camera and physical ZAMO emission prescription are
-    // shared.
-    auto hit = trace.final.chart == o::Chart::boyer_lindquist
-                   ? trace.final.state
-                   : o::transform_state(trace.final.state, trace.final.chart,
-                                        o::Chart::boyer_lindquist);
-    auto emission =
-        o::disk_emission(s.geometry, hit, o::frequency(initial, frame.basis[0]),
-                         s.settings.disk_inner, s.disk_motion);
-    result["linear_intensity"] = emission.linear_intensity;
-    result["redshift"] = emission.redshift;
-    result["alpha"] = 1;
-  } else if (trace.outcome == o::Outcome::escaped) {
-    result["linear_intensity"] = 0;
-    result["alpha"] = 0;
-    if (s.background) {
-      auto frame = o::circular_frame(o::metric(s.geometry, initial), s.omega);
-      const auto b = o::background_emission(
-          s.geometry, trace.final, o::frequency(initial, frame.basis[0]),
-          *s.background);
-      result["background_intensity"] = b.linear_intensity;
-      result["background_redshift"] = b.redshift;
-      result["background_direction"] = b.direction;
-    }
-  } else if (trace.outcome == o::Outcome::capture_surface) {
-    result["linear_intensity"] = 0;
-    result["alpha"] = 1;
-  }
-  result["crossings"] = J::array();
-  for (const auto &c : trace.crossings)
-    result["crossings"].push_back(
-        {{"surface", c.surface}, {"point", point(c.point)}});
-  // Surface approaches closer than the trace resolves. "terminal": the
-  // outcome itself may differ; otherwise only the crossing list may.
-  result["near_tangencies"] = J::array();
-  for (const auto &n : trace.tangencies)
-    result["near_tangencies"].push_back({{"surface", n.surface},
-                                         {"point", point(n.point)},
-                                         {"surface_value", n.value},
-                                         {"margin", n.margin},
-                                         {"terminal", n.terminal}});
-  if (s.settings.save_trajectory) {
-    result["trajectory"] = J::array();
-    for (const auto &p : trace.trajectory)
-      result["trajectory"].push_back(point(p));
-  }
-  return result;
-}
-std::array<unsigned char, 3> color(const J &p) {
-  auto outcome = p.at("outcome").get<std::string>();
-  if (outcome == "emitted") {
-    double intensity = p.at("linear_intensity");
-    auto v = static_cast<unsigned char>(
-        std::lround(255 * std::pow(intensity / (1 + intensity), 1 / 2.2)));
-    return {v, v, v};
-  }
-  if (outcome == "escaped") {
-    if (p.at("background_intensity").is_null())
-      return {16, 24, 48};
-    const double b = p.at("background_intensity");
-    const double v = std::pow(b / (1 + b), 1 / 2.2);
-    return {static_cast<unsigned char>(std::lround(16 + 200 * v)),
-            static_cast<unsigned char>(std::lround(24 + 210 * v)),
-            static_cast<unsigned char>(std::lround(48 + 207 * v))};
-  }
-  if (outcome == "capture_surface")
-    return {0, 0, 0};
-  if (outcome == "domain_limit")
-    return {255, 0, 255};
-  if (outcome == "affine_limit" || outcome == "step_limit")
-    return {255, 192, 0};
-  return {255, 0, 0};
-}
 int main(int argc, char **argv) {
   try {
     std::string command = argc > 1 ? argv[1] : "help";
@@ -286,7 +76,7 @@ int main(int argc, char **argv) {
           "trace report output must have .json extension");
     auto input = u::read_file(config);
     auto configuration = J::parse(input);
-    auto s = scene(configuration);
+    auto s = o::parse_scene(configuration);
     if (command == "ray" && scale != 1)
       throw std::invalid_argument(
           "resolution scaling is only supported for images");
@@ -351,7 +141,7 @@ int main(int argc, char **argv) {
     std::string ppm = "P6\n" + std::to_string(s.width) + " " +
                       std::to_string(s.height) + "\n255\n";
     auto append = [&](int col, int row) {
-      auto initial = pixel(s, col, row);
+      auto initial = o::scene_pixel(s, col, row);
       const auto patch = s.position[2] <= std::numbers::pi / 2
                              ? o::Chart::north
                              : o::Chart::south;
@@ -364,7 +154,7 @@ int main(int argc, char **argv) {
               : o::trace(s.geometry, initial, s.settings);
       if (traced.outcome == o::Outcome::invalid_input)
         throw std::invalid_argument(traced.detail);
-      auto value = ray(s, initial, traced);
+      auto value = o::ray_report(s, initial, traced);
       value["x"] = col;
       value["y"] = row;
       std::string outcome(o::outcome_name(traced.outcome));
@@ -378,7 +168,7 @@ int main(int argc, char **argv) {
           std::any_of(traced.tangencies.begin(), traced.tangencies.end(),
                       [](const auto &n) { return n.terminal; });
       if (command == "image")
-        for (auto byte : color(value))
+        for (auto byte : o::diagnostic_color(value))
           ppm.push_back(static_cast<char>(byte));
       report["pixels"].push_back(std::move(value));
     };
