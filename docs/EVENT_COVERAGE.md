@@ -87,6 +87,107 @@ The 73 native checks retain their declared ceilings and complete fixture data
 in `results/p2_critical_validation.json`. These observations do not establish
 all near-critical Kerr/toy rays, exact trapping, or asymptotic error bounds.
 
+## Broader ray families (2026-11-24, Phase C step 1)
+
+`tests/ray_family_tests.cpp` (CTest `ray_families`, 456 checks, ~26 s) traces
+three toy-preset families with the production tracer and compares them with
+references that share no production code. The report is
+`results/p2_ray_family_validation.json` (computational digest
+`4fdf403c19af8dfd9bd1a3f72d3f45123b9ee1eba15c06de0b48c12249c775c4`).
+
+**Off-equatorial reference.** `tests/toy_ray_reference.hpp` integrates the
+closed-form inverse of the MODEL.md metric in long double:
+
+```text
+2 Sigma H = D p_r^2 + T p_theta^2 - X^2 (B p_t + a p_phi)^2 / D
+          + X^2 (a^2 sin^2 p_t^2 + 2 a p_t p_phi + p_phi^2/sin^2) / T
+```
+
+with complex-step derivatives and fixed-step RK4. Theta is signed, so
+p_phi=0 rays cross either pole with no chart change. In the shell T and X
+depend on r, so no Carter constant is assumed. The shell's profile has large
+high derivatives; RK4 at h=1e-3 lost four digits there until steps within
+0.05 of the shell were cut by 32. After that, halving h changes every compared
+quantity by at most 4.2e-10. At 300 random points the reference Hamiltonian
+and the production inverse metric agree to 7.5e-16 (relative).
+
+**Pole and core in one ray.** Eight rays launched at r=10, p_t=-1, chosen by
+a scan of (theta, p_theta, p_phi):
+
+| Ray | theta, p_theta, p_phi | Reference r_min | Axis crossings at r |
+| --- | --- | ---: | --- |
+| pole inside Cartesian core patch | 1.2, 0.8, 0 | 0.555 | 0.672 |
+| pole in core, angular chart | 0.8, 1.0, 0 | 0.618 | 1.112 |
+| pole in core, no Cartesian patch | 1.0, 1.2, 0 | 0.866 | 1.115 |
+| pole outside shell, then core | 0.5, 1.2, 0 | 0.733 | 1.911 |
+| two poles, shell only | 0.3, 4.0, 0 | 1.668 | 5.973, 2.261 |
+| rotating, core without Cartesian patch | 1.0, 1.0, 0.5 | 0.875 | none |
+| prograde rotating, Cartesian core | 1.0, 0.6, 0.5 | 0.479 | none |
+| retrograde rotating, Cartesian core | 1.0, 0.8, -0.3 | 0.466 | none |
+
+Each runs through `trace_angular` with core continuation at four settings.
+All give the reference's crossing sequence (shell joins, core entry, core
+exit) and escape. Largest differences from the reference:
+
+| Settings | Crossing affine | Escape affine, t, p_r, direction |
+| --- | ---: | ---: |
+| tol 1e-10, max step 0.1 | 8.0e-8 | 7.4e-7 |
+| tol 1e-12, max step 0.05 | 8.7e-10 | 7.5e-9 |
+| same, max step 0.05/8 | 2.0e-9 | 8.8e-9 |
+| same, max step 0.05*8 | 4.0e-10 | 8.2e-9 |
+| BL chart, no core patch (rotating rays) | combined: 1.1e-8 | |
+
+The step-size runs are sampled evidence that no crossing hides inside a long
+step for these rays. Error control still bounds the real step, so the 8x
+larger maximum changes the step count by only ~15%.
+
+**Grazes of the shell joins.** Equatorial rays at b = b_c (1 -+ eps),
+eps = 1e-4 ... 1e-12, around the three graze values (outer join prograde
+3.0180173587, inner join prograde 1.8759486035, inner join retrograde
+-3.6442732109). The reference depth delta = r_join - r_t comes from the
+equatorial potential; the time inside the join is checked against
+chord = 2 sqrt(2 delta / |r''|), with r'' from the reference Hamiltonian.
+
+- Join crossing counts are even in every case: the tracer never leaves a ray
+  labelled inside a region it has left.
+- Classification is required for |delta| >= 5e-11 (tol 1e-12) and 5e-9
+  (tol 1e-10). Measured: the outer join is right down to delta = 5e-12 at
+  both settings. At the inner join, fine settings are right to 7.6e-11 and
+  wrong at 1.5e-12; coarse settings are right to 7.6e-9 and wrong at 1.5e-10,
+  including one false entry.
+- The limit is the radial position error accumulated before the turn, not
+  the event search. The chord gives it directly: curvature * chord^2 / 8 is
+  the depth the trace reached. Its error is 8e-12 (fine) and 1.2e-9 (coarse)
+  at the inner join, and below 1e-14 at the outer join, which the ray reaches
+  before crossing the shell.
+- **Open:** a graze below that resolution is misclassified silently. The
+  trace carries no flag saying the classification is uncertain. Phase C step
+  2 (explicit outcomes) should add one.
+
+**Buried Kerr photon orbit.** The Kerr prograde equatorial photon orbit of the
+exterior parameters is at r = 1.6287816594, b = 2.9537119158: inside the shell.
+A scan of the toy equatorial potential finds no local minimum for any
+prograde b in [1.8, 3.1], so the toy model has no prograde photon orbit
+there. At b = b_ph (1 -+ 1e-3) and (1 -+ 1e-6):
+
+| Offset | Toy outcome, sweep | Toy turning r | Kerr outcome, sweep |
+| --- | --- | ---: | --- |
+| -1e-3 | escaped, 9.08 rad | 1.74805 | capture proxy (r=1.55), 13.5 rad |
+| +1e-3 | escaped, 9.20 rad | 1.74998 | escaped, 17.5 rad |
+| -1e-6 | escaped, 9.14 rad | 1.74900 | capture proxy, 29.7 rad |
+| +1e-6 | escaped, 9.14 rad | 1.74900 | escaped, 33.7 rad |
+
+Toy turning radii match the independent root to 7e-12 and Kerr's to 9e-12.
+The toy azimuth sweep's difference quotient across b_ph is 19.93 at both
+widths (change 4.5e-4 relative): smooth, with no critical winding.
+
+**Not covered.** Off-equatorial grazes; grazes of the core patch surfaces;
+the retrograde exterior photon orbit at b = -6.79 beyond the existing
+±1e-4 check; rays launched inside the core; rays through the focal disk
+against this reference (its BL chart ends at r=0; the flat and de Sitter
+analytic disk checks remain the evidence there). Sampled fixtures are not
+a certificate for arbitrary rays.
+
 ## Reports and remaining limits
 
 `results/p2_event_validation.json` records analytic regression checks. The

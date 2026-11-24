@@ -1,0 +1,3910 @@
+{
+  "buried_photon_sphere": {
+    "kerr_photon_orbit_impact": 2.953711915796611,
+    "kerr_photon_orbit_radius": 1.6287816593514395,
+    "rays": [
+      {
+        "impact": 2.9507582038808144,
+        "kerr": {
+          "affine": 14.90347421769646,
+          "azimuth_sweep": 13.54897677089491,
+          "outcome": "capture_surface"
+        },
+        "relative_offset": -0.001,
+        "toy": {
+          "affine": 32.83830399055533,
+          "azimuth_sweep": 9.078258259649461,
+          "fitted_turning_radius": 1.7480461988818203,
+          "outcome": "escaped",
+          "reference_turning_radius": 1.7480461988818898
+        }
+      },
+      {
+        "impact": 2.9566656277124075,
+        "kerr": {
+          "affine": 36.87583685287221,
+          "azimuth_sweep": 17.490441124068067,
+          "fitted_turning_radius": 1.6586247817275206,
+          "outcome": "escaped",
+          "reference_turning_radius": 1.6586247817187607
+        },
+        "relative_offset": 0.001,
+        "toy": {
+          "affine": 32.93705699562437,
+          "azimuth_sweep": 9.195994981356241,
+          "fitted_turning_radius": 1.749983129810203,
+          "outcome": "escaped",
+          "reference_turning_radius": 1.7499831298120911
+        }
+      },
+      {
+        "impact": 2.9537089620846952,
+        "kerr": {
+          "affine": 21.396580863321248,
+          "azimuth_sweep": 29.684425840353505,
+          "outcome": "capture_surface"
+        },
+        "relative_offset": -1e-06,
+        "toy": {
+          "affine": 32.8868362604822,
+          "azimuth_sweep": 9.13598092108166,
+          "fitted_turning_radius": 1.74899571937847,
+          "outcome": "escaped",
+          "reference_turning_radius": 1.7489957193813215
+        }
+      },
+      {
+        "impact": 2.9537148695085267,
+        "kerr": {
+          "affine": 43.365028730083694,
+          "azimuth_sweep": 33.67472013304897,
+          "fitted_turning_radius": 1.6296722366480199,
+          "outcome": "escaped",
+          "reference_turning_radius": 1.6296722366469831
+        },
+        "relative_offset": 1e-06,
+        "toy": {
+          "affine": 32.88693497576081,
+          "azimuth_sweep": 9.136098605426032,
+          "fitted_turning_radius": 1.748997655153692,
+          "outcome": "escaped",
+          "reference_turning_radius": 1.748997655160921
+        }
+      }
+    ],
+    "toy_sweep_quotients": [
+      19.930298733115787,
+      19.921432374885597
+    ]
+  },
+  "checks": [
+    {
+      "ceiling": 1e-14,
+      "measured": 7.527493324220675e-16,
+      "name": "reference Hamiltonian vs production inverse metric (300 points)",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole inside Cartesian core patch reference escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole inside Cartesian core patch reference pole crossings",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole inside Cartesian core patch reference core-patch entry matches fixture",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-10,
+      "measured": 1.6916128038952158e-12,
+      "name": "pole inside Cartesian core patch reference null drift",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 2.518446944044239e-10,
+      "name": "pole inside Cartesian core patch reference step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-14,
+      "measured": 1.2497253169884088e-17,
+      "name": "pole inside Cartesian core patch production null residual of reference launch",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole inside Cartesian core patch coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-07,
+      "measured": 3.719556535688212e-08,
+      "name": "pole inside Cartesian core patch coarse null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 1.2154000028630207e-11,
+      "name": "pole inside Cartesian core patch coarse energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole inside Cartesian core patch coarse event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-07,
+      "measured": 4.334726355637031e-09,
+      "name": "pole inside Cartesian core patch coarse event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-06,
+      "measured": 7.388504670302609e-07,
+      "name": "pole inside Cartesian core patch coarse escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole inside Cartesian core patch fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 2.7481712914671504e-11,
+      "name": "pole inside Cartesian core patch fine null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 8.903988657493755e-14,
+      "name": "pole inside Cartesian core patch fine energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole inside Cartesian core patch fine event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 4.078160031895095e-11,
+      "name": "pole inside Cartesian core patch fine event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 6.698641641378345e-11,
+      "name": "pole inside Cartesian core patch fine escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole inside Cartesian core patch fine small steps escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 4.790266793844448e-10,
+      "name": "pole inside Cartesian core patch fine small steps null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 2.4980018054066022e-14,
+      "name": "pole inside Cartesian core patch fine small steps energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole inside Cartesian core patch fine small steps event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 7.512479527349569e-10,
+      "name": "pole inside Cartesian core patch fine small steps event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 5.3578474989990355e-09,
+      "name": "pole inside Cartesian core patch fine small steps escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole inside Cartesian core patch fine large steps escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 7.022822510177207e-11,
+      "name": "pole inside Cartesian core patch fine large steps null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 9.642286968869485e-14,
+      "name": "pole inside Cartesian core patch fine large steps energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole inside Cartesian core patch fine large steps event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 1.0835243813289708e-10,
+      "name": "pole inside Cartesian core patch fine large steps event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 1.1380265618754493e-09,
+      "name": "pole inside Cartesian core patch fine large steps escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, angular chart reference escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, angular chart reference pole crossings",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, angular chart reference core-patch entry matches fixture",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-10,
+      "measured": 1.422809156047021e-12,
+      "name": "pole in core, angular chart reference null drift",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 3.7191297957983593e-10,
+      "name": "pole in core, angular chart reference step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-14,
+      "measured": 5.5573298669608976e-18,
+      "name": "pole in core, angular chart production null residual of reference launch",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, angular chart coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-07,
+      "measured": 1.5419716037658506e-08,
+      "name": "pole in core, angular chart coarse null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 7.814998648214555e-12,
+      "name": "pole in core, angular chart coarse energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, angular chart coarse event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-07,
+      "measured": 2.442785351775001e-08,
+      "name": "pole in core, angular chart coarse event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-06,
+      "measured": 3.4272524374046043e-07,
+      "name": "pole in core, angular chart coarse escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, angular chart fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 7.448189800799585e-11,
+      "name": "pole in core, angular chart fine null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 6.963873921961294e-14,
+      "name": "pole in core, angular chart fine energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, angular chart fine event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 2.1106671965753776e-11,
+      "name": "pole in core, angular chart fine event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 1.5786270068929298e-09,
+      "name": "pole in core, angular chart fine escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, angular chart fine small steps escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 7.463167922299317e-11,
+      "name": "pole in core, angular chart fine small steps null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 1.0047518372857667e-14,
+      "name": "pole in core, angular chart fine small steps energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, angular chart fine small steps event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 1.5120349416974932e-10,
+      "name": "pole in core, angular chart fine small steps event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 1.6730368201933743e-09,
+      "name": "pole in core, angular chart fine small steps escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, angular chart fine large steps escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 4.696346036858258e-11,
+      "name": "pole in core, angular chart fine large steps null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 7.97695243193175e-14,
+      "name": "pole in core, angular chart fine large steps energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, angular chart fine large steps event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 2.6112445539183682e-11,
+      "name": "pole in core, angular chart fine large steps event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 9.590905847289832e-10,
+      "name": "pole in core, angular chart fine large steps escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, no Cartesian patch reference escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, no Cartesian patch reference pole crossings",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, no Cartesian patch reference core-patch entry matches fixture",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-10,
+      "measured": 1.5629605677494572e-12,
+      "name": "pole in core, no Cartesian patch reference null drift",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 4.1914939574727583e-10,
+      "name": "pole in core, no Cartesian patch reference step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-14,
+      "measured": 6.389049227904021e-17,
+      "name": "pole in core, no Cartesian patch production null residual of reference launch",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, no Cartesian patch coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-07,
+      "measured": 3.739026793988104e-09,
+      "name": "pole in core, no Cartesian patch coarse null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 2.4151791677695655e-11,
+      "name": "pole in core, no Cartesian patch coarse energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, no Cartesian patch coarse event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-07,
+      "measured": 9.939835621253224e-10,
+      "name": "pole in core, no Cartesian patch coarse event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-06,
+      "measured": 8.249465111020982e-08,
+      "name": "pole in core, no Cartesian patch coarse escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, no Cartesian patch fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 3.4369794155171177e-10,
+      "name": "pole in core, no Cartesian patch fine null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 2.2570834090629432e-13,
+      "name": "pole in core, no Cartesian patch fine energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, no Cartesian patch fine event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 9.169198733616213e-11,
+      "name": "pole in core, no Cartesian patch fine event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 7.514060484936635e-09,
+      "name": "pole in core, no Cartesian patch fine escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, no Cartesian patch fine small steps escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 6.549711478940443e-11,
+      "name": "pole in core, no Cartesian patch fine small steps null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 3.36952687973735e-14,
+      "name": "pole in core, no Cartesian patch fine small steps energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, no Cartesian patch fine small steps event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 6.062705892873055e-12,
+      "name": "pole in core, no Cartesian patch fine small steps event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 1.3935732567915693e-09,
+      "name": "pole in core, no Cartesian patch fine small steps escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, no Cartesian patch fine large steps escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 9.072139819351135e-11,
+      "name": "pole in core, no Cartesian patch fine large steps null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 2.6029178812336795e-13,
+      "name": "pole in core, no Cartesian patch fine large steps energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole in core, no Cartesian patch fine large steps event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 3.2100544444801926e-11,
+      "name": "pole in core, no Cartesian patch fine large steps event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 2.0035315628774697e-09,
+      "name": "pole in core, no Cartesian patch fine large steps escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole outside shell, then core reference escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole outside shell, then core reference pole crossings",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole outside shell, then core reference core-patch entry matches fixture",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-10,
+      "measured": 1.1931860185097877e-12,
+      "name": "pole outside shell, then core reference null drift",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 3.2269254629513355e-10,
+      "name": "pole outside shell, then core reference step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-14,
+      "measured": 2.1543950046606144e-17,
+      "name": "pole outside shell, then core production null residual of reference launch",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole outside shell, then core coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-07,
+      "measured": 1.6667767596237833e-08,
+      "name": "pole outside shell, then core coarse null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 5.7820970233990465e-12,
+      "name": "pole outside shell, then core coarse energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole outside shell, then core coarse event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-07,
+      "measured": 7.956723813151712e-08,
+      "name": "pole outside shell, then core coarse event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-06,
+      "measured": 3.710889373564896e-07,
+      "name": "pole outside shell, then core coarse escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole outside shell, then core fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 2.1193634790285253e-10,
+      "name": "pole outside shell, then core fine null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 4.757208082323272e-14,
+      "name": "pole outside shell, then core fine energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole outside shell, then core fine event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 8.685177022016433e-10,
+      "name": "pole outside shell, then core fine event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 4.646942386443698e-09,
+      "name": "pole outside shell, then core fine escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole outside shell, then core fine small steps escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 3.9580950602956753e-10,
+      "name": "pole outside shell, then core fine small steps null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 1.426636586643326e-14,
+      "name": "pole outside shell, then core fine small steps energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole outside shell, then core fine small steps event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 1.9504771131551024e-09,
+      "name": "pole outside shell, then core fine small steps event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 8.823498376386851e-09,
+      "name": "pole outside shell, then core fine small steps escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole outside shell, then core fine large steps escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 1.1276485834068372e-11,
+      "name": "pole outside shell, then core fine large steps null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 5.892075022329024e-14,
+      "name": "pole outside shell, then core fine large steps energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "pole outside shell, then core fine large steps event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 6.187583778682892e-11,
+      "name": "pole outside shell, then core fine large steps event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 1.5287715537937174e-11,
+      "name": "pole outside shell, then core fine large steps escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "two poles, shell only reference escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "two poles, shell only reference pole crossings",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "two poles, shell only reference core-patch entry matches fixture",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-10,
+      "measured": 8.008198378562407e-13,
+      "name": "two poles, shell only reference null drift",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 1.3231429493720803e-10,
+      "name": "two poles, shell only reference step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-14,
+      "measured": 1.0009668053606277e-16,
+      "name": "two poles, shell only production null residual of reference launch",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "two poles, shell only coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-07,
+      "measured": 4.979371973328742e-09,
+      "name": "two poles, shell only coarse null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 1.5443495093858672e-10,
+      "name": "two poles, shell only coarse energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "two poles, shell only coarse event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-07,
+      "measured": 1.5404921782646852e-10,
+      "name": "two poles, shell only coarse event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-06,
+      "measured": 1.6042549333405987e-07,
+      "name": "two poles, shell only coarse escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "two poles, shell only fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 2.431257135043601e-11,
+      "name": "two poles, shell only fine null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 1.4694079286670103e-12,
+      "name": "two poles, shell only fine energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "two poles, shell only fine event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 1.6147083670148277e-12,
+      "name": "two poles, shell only fine event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 7.584901595691917e-10,
+      "name": "two poles, shell only fine escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "two poles, shell only fine small steps escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 2.2772923260137516e-10,
+      "name": "two poles, shell only fine small steps null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 6.894484982922222e-14,
+      "name": "two poles, shell only fine small steps energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "two poles, shell only fine small steps event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 1.4708234630234074e-12,
+      "name": "two poles, shell only fine small steps event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 7.285343883722817e-09,
+      "name": "two poles, shell only fine small steps escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "two poles, shell only fine large steps escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 4.8593354789211075e-12,
+      "name": "two poles, shell only fine large steps null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 2.004452159809489e-12,
+      "name": "two poles, shell only fine large steps energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "two poles, shell only fine large steps event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 1.1901590823981678e-12,
+      "name": "two poles, shell only fine large steps event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 1.766125024005305e-10,
+      "name": "two poles, shell only fine large steps escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "rotating ray, core without Cartesian patch reference escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "rotating ray, core without Cartesian patch reference pole crossings",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "rotating ray, core without Cartesian patch reference core-patch entry matches fixture",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-10,
+      "measured": 6.696328231377722e-13,
+      "name": "rotating ray, core without Cartesian patch reference null drift",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 1.827130426124146e-10,
+      "name": "rotating ray, core without Cartesian patch reference step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-14,
+      "measured": 1.822962415570441e-17,
+      "name": "rotating ray, core without Cartesian patch production null residual of reference launch",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "rotating ray, core without Cartesian patch coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-07,
+      "measured": 2.215342834704011e-08,
+      "name": "rotating ray, core without Cartesian patch coarse null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 3.9570346999084904e-11,
+      "name": "rotating ray, core without Cartesian patch coarse energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "rotating ray, core without Cartesian patch coarse event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-07,
+      "measured": 7.088820197509449e-09,
+      "name": "rotating ray, core without Cartesian patch coarse event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-06,
+      "measured": 4.851869164212985e-07,
+      "name": "rotating ray, core without Cartesian patch coarse escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "rotating ray, core without Cartesian patch fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 1.2097278792308218e-10,
+      "name": "rotating ray, core without Cartesian patch fine null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 3.75921516138078e-13,
+      "name": "rotating ray, core without Cartesian patch fine energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "rotating ray, core without Cartesian patch fine event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 6.263434215725283e-12,
+      "name": "rotating ray, core without Cartesian patch fine event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 2.4398048026341712e-09,
+      "name": "rotating ray, core without Cartesian patch fine escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "rotating ray, core without Cartesian patch fine small steps escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 1.171728834294158e-10,
+      "name": "rotating ray, core without Cartesian patch fine small steps null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 1.216064286306088e-13,
+      "name": "rotating ray, core without Cartesian patch fine small steps energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "rotating ray, core without Cartesian patch fine small steps event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 7.716494110354688e-12,
+      "name": "rotating ray, core without Cartesian patch fine small steps event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 2.5047981466741476e-09,
+      "name": "rotating ray, core without Cartesian patch fine small steps escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "rotating ray, core without Cartesian patch fine large steps escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 2.6135724837797204e-10,
+      "name": "rotating ray, core without Cartesian patch fine large steps null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 4.1448326252672513e-13,
+      "name": "rotating ray, core without Cartesian patch fine large steps energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "rotating ray, core without Cartesian patch fine large steps event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 3.206324095117452e-12,
+      "name": "rotating ray, core without Cartesian patch fine large steps event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 5.388812951423461e-09,
+      "name": "rotating ray, core without Cartesian patch fine large steps escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "rotating ray, core without Cartesian patch BL chart escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "rotating ray, core without Cartesian patch BL chart join sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 5.419778403847886e-09,
+      "name": "rotating ray, core without Cartesian patch BL chart events and escape vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "prograde rotating ray through Cartesian core reference escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "prograde rotating ray through Cartesian core reference pole crossings",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "prograde rotating ray through Cartesian core reference core-patch entry matches fixture",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-10,
+      "measured": 7.548976809245499e-13,
+      "name": "prograde rotating ray through Cartesian core reference null drift",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 1.1876494926399417e-10,
+      "name": "prograde rotating ray through Cartesian core reference step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-14,
+      "measured": 3.1771630671370543e-17,
+      "name": "prograde rotating ray through Cartesian core production null residual of reference launch",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "prograde rotating ray through Cartesian core coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-07,
+      "measured": 1.0647800658981384e-08,
+      "name": "prograde rotating ray through Cartesian core coarse null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 2.3244665451708595e-11,
+      "name": "prograde rotating ray through Cartesian core coarse energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "prograde rotating ray through Cartesian core coarse event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-07,
+      "measured": 9.799629552276201e-09,
+      "name": "prograde rotating ray through Cartesian core coarse event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-06,
+      "measured": 1.9711014687118222e-07,
+      "name": "prograde rotating ray through Cartesian core coarse escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "prograde rotating ray through Cartesian core fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 3.215348210437788e-10,
+      "name": "prograde rotating ray through Cartesian core fine null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 2.3277676082974114e-13,
+      "name": "prograde rotating ray through Cartesian core fine energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "prograde rotating ray through Cartesian core fine event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 4.334665959504491e-11,
+      "name": "prograde rotating ray through Cartesian core fine event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 6.663597673650656e-09,
+      "name": "prograde rotating ray through Cartesian core fine escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "prograde rotating ray through Cartesian core fine small steps escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 4.910571448207343e-11,
+      "name": "prograde rotating ray through Cartesian core fine small steps null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 1.1479706074624119e-13,
+      "name": "prograde rotating ray through Cartesian core fine small steps energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "prograde rotating ray through Cartesian core fine small steps event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 3.807265613886557e-11,
+      "name": "prograde rotating ray through Cartesian core fine small steps event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 1.0926584081971669e-09,
+      "name": "prograde rotating ray through Cartesian core fine small steps escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "prograde rotating ray through Cartesian core fine large steps escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 2.9088183806826455e-10,
+      "name": "prograde rotating ray through Cartesian core fine large steps null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 2.5542531053209433e-13,
+      "name": "prograde rotating ray through Cartesian core fine large steps energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "prograde rotating ray through Cartesian core fine large steps event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 8.663292305755022e-12,
+      "name": "prograde rotating ray through Cartesian core fine large steps event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 5.9699303278648586e-09,
+      "name": "prograde rotating ray through Cartesian core fine large steps escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "prograde rotating ray through Cartesian core BL chart escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "prograde rotating ray through Cartesian core BL chart join sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 1.7689174569568422e-09,
+      "name": "prograde rotating ray through Cartesian core BL chart events and escape vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "retrograde rotating ray through Cartesian core reference escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "retrograde rotating ray through Cartesian core reference pole crossings",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "retrograde rotating ray through Cartesian core reference core-patch entry matches fixture",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-10,
+      "measured": 2.2481556288263722e-12,
+      "name": "retrograde rotating ray through Cartesian core reference null drift",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-09,
+      "measured": 4.103604574201558e-10,
+      "name": "retrograde rotating ray through Cartesian core reference step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-14,
+      "measured": 1.549644772881026e-16,
+      "name": "retrograde rotating ray through Cartesian core production null residual of reference launch",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "retrograde rotating ray through Cartesian core coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-07,
+      "measured": 6.92756158994771e-09,
+      "name": "retrograde rotating ray through Cartesian core coarse null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 7.362828295771787e-12,
+      "name": "retrograde rotating ray through Cartesian core coarse energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "retrograde rotating ray through Cartesian core coarse event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-07,
+      "measured": 7.58169704795364e-09,
+      "name": "retrograde rotating ray through Cartesian core coarse event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 2e-06,
+      "measured": 1.5568843991786707e-07,
+      "name": "retrograde rotating ray through Cartesian core coarse escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "retrograde rotating ray through Cartesian core fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 2.18112658343413e-10,
+      "name": "retrograde rotating ray through Cartesian core fine null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 7.481195150551054e-14,
+      "name": "retrograde rotating ray through Cartesian core fine energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "retrograde rotating ray through Cartesian core fine event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 2.476632232628617e-10,
+      "name": "retrograde rotating ray through Cartesian core fine event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 4.9038462179851194e-09,
+      "name": "retrograde rotating ray through Cartesian core fine escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "retrograde rotating ray through Cartesian core fine small steps escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 3.2530267596815376e-11,
+      "name": "retrograde rotating ray through Cartesian core fine small steps null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 4.46651262983813e-14,
+      "name": "retrograde rotating ray through Cartesian core fine small steps energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "retrograde rotating ray through Cartesian core fine small steps event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 4.263611685928481e-11,
+      "name": "retrograde rotating ray through Cartesian core fine small steps event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 7.171081506385235e-10,
+      "name": "retrograde rotating ray through Cartesian core fine small steps escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "retrograde rotating ray through Cartesian core fine large steps escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 3.6385458144302715e-10,
+      "name": "retrograde rotating ray through Cartesian core fine large steps null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-11,
+      "measured": 7.289041165519778e-14,
+      "name": "retrograde rotating ray through Cartesian core fine large steps energy and axial momentum drift",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "retrograde rotating ray through Cartesian core fine large steps event sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 3.998614772626752e-10,
+      "name": "retrograde rotating ray through Cartesian core fine large steps event affine vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 8.173195453764492e-09,
+      "name": "retrograde rotating ray through Cartesian core fine large steps escape affine, time, p_r and direction vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "retrograde rotating ray through Cartesian core BL chart escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "retrograde rotating ray through Cartesian core BL chart join sequence matches reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-08,
+      "measured": 1.104609026469916e-08,
+      "name": "retrograde rotating ray through Cartesian core BL chart events and escape vs reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-0.0001 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-0.0001 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-0.0001 coarse join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-0.0001 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-0.0001 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-0.0001 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=0.0001 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=0.0001 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=0.0001 coarse join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=0.0001 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=0.0001 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=0.0001 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-1e-06 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-1e-06 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-1e-06 coarse join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-1e-06 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-1e-06 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-1e-06 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=1e-06 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=1e-06 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=1e-06 coarse join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=1e-06 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=1e-06 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=1e-06 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-1e-08 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-1e-08 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-1e-08 coarse join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-09,
+      "measured": 5.041372604336301e-13,
+      "name": "outer join prograde graze eps=-1e-08 coarse depth implied by crossing chord",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-1e-08 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-1e-08 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-1e-08 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 3e-11,
+      "measured": 6.300896968540371e-15,
+      "name": "outer join prograde graze eps=-1e-08 fine depth implied by crossing chord",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=1e-08 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=1e-08 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=1e-08 coarse join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=1e-08 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=1e-08 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=1e-08 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-1e-10 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-1e-10 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-1e-10 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-1e-10 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-1e-10 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 3e-11,
+      "measured": 1.1271471387275603e-14,
+      "name": "outer join prograde graze eps=-1e-10 fine depth implied by crossing chord",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=1e-10 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=1e-10 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=1e-10 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=1e-10 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=1e-10 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-1e-12 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-1e-12 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-1e-12 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=-1e-12 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=1e-12 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=1e-12 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=1e-12 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "outer join prograde graze eps=1e-12 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-0.0001 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-0.0001 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-0.0001 coarse join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-0.0001 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-0.0001 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-0.0001 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=0.0001 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=0.0001 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=0.0001 coarse join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=0.0001 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=0.0001 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=0.0001 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-1e-06 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-1e-06 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-1e-06 coarse join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-1e-06 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-1e-06 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-1e-06 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=1e-06 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=1e-06 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=1e-06 coarse join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=1e-06 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=1e-06 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=1e-06 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-1e-08 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-1e-08 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-1e-08 coarse join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-09,
+      "measured": 1.2374394524834725e-09,
+      "name": "inner join prograde graze eps=-1e-08 coarse depth implied by crossing chord",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-1e-08 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-1e-08 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-1e-08 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 3e-11,
+      "measured": 8.16866139368085e-12,
+      "name": "inner join prograde graze eps=-1e-08 fine depth implied by crossing chord",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=1e-08 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=1e-08 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=1e-08 coarse join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=1e-08 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=1e-08 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=1e-08 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-1e-10 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-1e-10 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-1e-10 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-1e-10 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-1e-10 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 3e-11,
+      "measured": 8.235098151727894e-12,
+      "name": "inner join prograde graze eps=-1e-10 fine depth implied by crossing chord",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=1e-10 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=1e-10 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=1e-10 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=1e-10 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=1e-10 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-1e-12 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-1e-12 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-1e-12 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=-1e-12 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=1e-12 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=1e-12 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=1e-12 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join prograde graze eps=1e-12 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-0.0001 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-0.0001 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-0.0001 coarse join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-0.0001 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-0.0001 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-0.0001 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=0.0001 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=0.0001 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=0.0001 coarse join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=0.0001 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=0.0001 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=0.0001 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-1e-06 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-1e-06 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-1e-06 coarse join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-09,
+      "measured": 1.0360033750499046e-09,
+      "name": "inner join retrograde graze eps=-1e-06 coarse depth implied by crossing chord",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-1e-06 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-1e-06 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-1e-06 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 3e-11,
+      "measured": 7.821795354615134e-12,
+      "name": "inner join retrograde graze eps=-1e-06 fine depth implied by crossing chord",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=1e-06 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=1e-06 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=1e-06 coarse join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=1e-06 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=1e-06 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=1e-06 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-1e-08 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-1e-08 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-1e-08 coarse join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-09,
+      "measured": 1.0295221688737211e-09,
+      "name": "inner join retrograde graze eps=-1e-08 coarse depth implied by crossing chord",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-1e-08 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-1e-08 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-1e-08 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 3e-11,
+      "measured": 8.087968964625859e-12,
+      "name": "inner join retrograde graze eps=-1e-08 fine depth implied by crossing chord",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=1e-08 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=1e-08 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=1e-08 coarse join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=1e-08 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=1e-08 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=1e-08 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-1e-10 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-1e-10 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-1e-10 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-1e-10 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-1e-10 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 3e-11,
+      "measured": 8.124738125975796e-12,
+      "name": "inner join retrograde graze eps=-1e-10 fine depth implied by crossing chord",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=1e-10 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=1e-10 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=1e-10 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=1e-10 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=1e-10 fine join crossings match reference",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-1e-12 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-1e-12 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-1e-12 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=-1e-12 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=1e-12 coarse escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=1e-12 coarse even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=1e-12 fine escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "inner join retrograde graze eps=1e-12 fine even join crossing count",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 6.451002926288751e-12,
+      "name": "Kerr photon orbit is a double root of the Kerr potential",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "Kerr prograde photon orbit lies inside the toy shell",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy b = b_ph(1-0.001) escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy b = b_ph(1-0.001) turns in the shell",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy b = b_ph(1-0.001) has one radial turn",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-10,
+      "measured": 6.94999613415348e-14,
+      "name": "toy b = b_ph(1-0.001) turning radius vs independent root",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-14,
+      "measured": 1.665966244006462e-17,
+      "name": "Kerr b = b_ph(1-0.001) launch null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "Kerr b = b_ph(1-0.001) reaches the capture proxy",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy b = b_ph(1+0.001) escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy b = b_ph(1+0.001) turns in the shell",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy b = b_ph(1+0.001) has one radial turn",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-10,
+      "measured": 1.8880452756775412e-12,
+      "name": "toy b = b_ph(1+0.001) turning radius vs independent root",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-14,
+      "measured": 1.6659662440064627e-17,
+      "name": "Kerr b = b_ph(1+0.001) launch null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "Kerr b = b_ph(1+0.001) escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "Kerr b = b_ph(1+0.001) has one radial turn",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-10,
+      "measured": 8.75988170889741e-12,
+      "name": "Kerr b = b_ph(1+0.001) turning radius vs independent root",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "Kerr b = b_ph(1+0.001) winds more than the toy ray",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy b = b_ph(1-1e-06) escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy b = b_ph(1-1e-06) turns in the shell",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy b = b_ph(1-1e-06) has one radial turn",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-10,
+      "measured": 2.851496816447252e-12,
+      "name": "toy b = b_ph(1-1e-06) turning radius vs independent root",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-14,
+      "measured": 1.6104340358729135e-16,
+      "name": "Kerr b = b_ph(1-1e-06) launch null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "Kerr b = b_ph(1-1e-06) reaches the capture proxy",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy b = b_ph(1+1e-06) escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy b = b_ph(1+1e-06) turns in the shell",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy b = b_ph(1+1e-06) has one radial turn",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-10,
+      "measured": 7.228884157939319e-12,
+      "name": "toy b = b_ph(1+1e-06) turning radius vs independent root",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-14,
+      "measured": 1.6659662440064626e-16,
+      "name": "Kerr b = b_ph(1+1e-06) launch null residual",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "Kerr b = b_ph(1+1e-06) escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "Kerr b = b_ph(1+1e-06) has one radial turn",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-10,
+      "measured": 1.0367262603949712e-12,
+      "name": "Kerr b = b_ph(1+1e-06) turning radius vs independent root",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "Kerr b = b_ph(1+1e-06) winds more than the toy ray",
+      "passed": true
+    },
+    {
+      "ceiling": 0.01,
+      "measured": 0.0004450663016263504,
+      "name": "toy azimuth sweep is smooth across b_ph (quotient change)",
+      "passed": true
+    }
+  ],
+  "compiler": "16.2.1 20260810",
+  "complete_P2_acceptance": false,
+  "computational_source_sha256": "4fdf403c19af8dfd9bd1a3f72d3f45123b9ee1eba15c06de0b48c12249c775c4",
+  "join_grazes": [
+    {
+      "cases": [
+        {
+          "coarse": {
+            "accepted_steps": 682,
+            "chord": 0.18470003521070133,
+            "chord_relative_error": 0.00018846117043449235,
+            "classification_required": true,
+            "implied_depth_error": 1.8949348393984978e-07,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 1704,
+            "chord": 0.18470003484922515,
+            "chord_relative_error": 0.00018846312716426603,
+            "classification_required": true,
+            "implied_depth_error": 1.894954512023572e-07,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "impact": 3.01771555697848,
+          "reference_chord": 0.18473485055685732,
+          "reference_depth": 0.0005027861741163323,
+          "relative_offset": -0.0001
+        },
+        {
+          "coarse": {
+            "accepted_steps": 682,
+            "chord": 0.0,
+            "classification_required": true,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 1703,
+            "chord": 0.0,
+            "classification_required": true,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "impact": 3.018319160450223,
+          "reference_chord": 0.0,
+          "reference_depth": -0.0005021099276157877,
+          "relative_offset": 0.0001
+        },
+        {
+          "coarse": {
+            "accepted_steps": 682,
+            "chord": 0.018451033970913855,
+            "chord_relative_error": 1.9379784173483413e-06,
+            "classification_required": true,
+            "implied_depth_error": 1.9474764075513753e-11,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 1704,
+            "chord": 0.018451034884840567,
+            "chord_relative_error": 1.8884459660853012e-06,
+            "classification_required": true,
+            "implied_depth_error": 1.8977012458707505e-11,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "impact": 3.018014340696993,
+          "reference_chord": 0.018451069728688766,
+          "reference_depth": 5.02450976059784e-06,
+          "relative_offset": -1e-06
+        },
+        {
+          "coarse": {
+            "accepted_steps": 682,
+            "chord": 0.0,
+            "classification_required": true,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 1704,
+            "chord": 0.0,
+            "classification_required": true,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "impact": 3.0180203767317098,
+          "reference_chord": 0.0,
+          "reference_depth": -5.024442062536707e-06,
+          "relative_offset": 1e-06
+        },
+        {
+          "coarse": {
+            "accepted_steps": 682,
+            "chord": 0.0018450753090739624,
+            "chord_relative_error": 5.016826610529569e-06,
+            "classification_required": true,
+            "implied_depth_error": 5.041372604336301e-13,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 1704,
+            "chord": 0.001845084449852763,
+            "chord_relative_error": 6.270202933400479e-08,
+            "classification_required": true,
+            "implied_depth_error": 6.300896968540371e-15,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "impact": 3.0180173285341776,
+          "reference_chord": 0.0018450845655433095,
+          "reference_depth": 5.024476269213044e-08,
+          "relative_offset": -1e-08
+        },
+        {
+          "coarse": {
+            "accepted_steps": 682,
+            "chord": 0.0,
+            "classification_required": true,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 1704,
+            "chord": 0.0,
+            "classification_required": true,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "impact": 3.018017388894525,
+          "reference_chord": 0.0,
+          "reference_depth": -5.02447554757892e-08,
+          "relative_offset": 1e-08
+        },
+        {
+          "coarse": {
+            "accepted_steps": 682,
+            "chord": 0.00018441540625069308,
+            "chord_relative_error": 0.0005041761319799514,
+            "classification_required": false,
+            "implied_depth_error": 5.06516432113942e-13,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 1704,
+            "chord": 0.00018450636143541033,
+            "chord_relative_error": 1.1216627498805369e-05,
+            "classification_required": true,
+            "implied_depth_error": 1.1271471387275603e-14,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "impact": 3.01801735841255,
+          "reference_chord": 0.00018450843099775122,
+          "reference_depth": 5.024475762749683e-10,
+          "relative_offset": -1e-10
+        },
+        {
+          "coarse": {
+            "accepted_steps": 682,
+            "chord": 0.0,
+            "classification_required": false,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 1704,
+            "chord": 0.0,
+            "classification_required": true,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "impact": 3.018017359016153,
+          "reference_chord": 0.0,
+          "reference_depth": -5.024476893572549e-10,
+          "relative_offset": 1e-10
+        },
+        {
+          "coarse": {
+            "accepted_steps": 682,
+            "chord": 1.7502320122986248e-05,
+            "chord_relative_error": 0.05139275467910511,
+            "classification_required": false,
+            "implied_depth_error": 5.031562893936441e-13,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 1704,
+            "chord": 1.8449663597763788e-05,
+            "chord_relative_error": 4.7739980098568207e-05,
+            "classification_required": false,
+            "implied_depth_error": 4.797097643726025e-16,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "impact": 3.0180173587113335,
+          "reference_chord": 1.845054442638751e-05,
+          "reference_depth": 5.024313105318756e-12,
+          "relative_offset": -1e-12
+        },
+        {
+          "coarse": {
+            "accepted_steps": 682,
+            "chord": 0.0,
+            "classification_required": false,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 1704,
+            "chord": 0.0,
+            "classification_required": false,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "impact": 3.01801735871737,
+          "reference_chord": 0.0,
+          "reference_depth": -5.024979564394183e-12,
+          "relative_offset": 1e-12
+        }
+      ],
+      "graze_impact": 3.0180173587143515,
+      "name": "outer join prograde graze"
+    },
+    {
+      "cases": [
+        {
+          "coarse": {
+            "accepted_steps": 806,
+            "chord": 0.03449580298845234,
+            "chord_relative_error": 2.8566945586647158e-05,
+            "classification_required": true,
+            "implied_depth_error": 8.406663358793759e-09,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 2009,
+            "chord": 0.03449566284348826,
+            "chord_relative_error": 2.450416242318282e-05,
+            "classification_required": true,
+            "implied_depth_error": 7.211055354103485e-09,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "impact": 1.8757610086775058,
+          "reference_chord": 0.0344948175768756,
+          "reference_depth": 0.0001471375940185443,
+          "relative_offset": -0.0001
+        },
+        {
+          "coarse": {
+            "accepted_steps": 806,
+            "chord": 0.0,
+            "classification_required": true,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 2009,
+            "chord": 0.0,
+            "classification_required": true,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "impact": 1.8761361983982132,
+          "reference_chord": 0.0,
+          "reference_depth": -0.00014711737995277464,
+          "relative_offset": 0.0001
+        },
+        {
+          "coarse": {
+            "accepted_steps": 806,
+            "chord": 0.0034508906614121315,
+            "chord_relative_error": 0.00042043767049803753,
+            "classification_required": true,
+            "implied_depth_error": 1.237419680443362e-09,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 2009,
+            "chord": 0.003449431546869164,
+            "chord_relative_error": 2.5626945989422315e-06,
+            "classification_required": true,
+            "implied_depth_error": 7.540851833117457e-12,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "impact": 1.8759467275892558,
+          "reference_chord": 0.0034494403867314123,
+          "reference_depth": 1.4712758786889933e-06,
+          "relative_offset": -1e-06
+        },
+        {
+          "coarse": {
+            "accepted_steps": 806,
+            "chord": 0.0,
+            "classification_required": true,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 2009,
+            "chord": 0.0,
+            "classification_required": true,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "impact": 1.875950479486463,
+          "reference_chord": 0.0,
+          "reference_depth": -1.4712738576147131e-06,
+          "relative_offset": 1e-06
+        },
+        {
+          "coarse": {
+            "accepted_steps": 806,
+            "chord": 0.00035915720760471004,
+            "chord_relative_error": 0.041204404907231644,
+            "classification_required": true,
+            "implied_depth_error": 1.2374394524834725e-09,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 2009,
+            "chord": 0.0003448482241132922,
+            "chord_relative_error": 0.0002776434146457205,
+            "classification_required": true,
+            "implied_depth_error": 8.16866139368085e-12,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "impact": 1.8759485847783735,
+          "reference_chord": 0.00034494399554207603,
+          "reference_depth": 1.4712748633120831e-08,
+          "relative_offset": -1e-08
+        },
+        {
+          "coarse": {
+            "accepted_steps": 806,
+            "chord": 0.0,
+            "classification_required": true,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 2009,
+            "chord": 0.0,
+            "classification_required": true,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "impact": 1.8759486222973454,
+          "reference_chord": 0.0,
+          "reference_depth": -1.4712748715086515e-08,
+          "relative_offset": 1e-08
+        },
+        {
+          "coarse": {
+            "accepted_steps": 806,
+            "chord": 0.00010581431185308077,
+            "chord_relative_error": 2.067581665034317,
+            "classification_required": false,
+            "implied_depth_error": 1.237348808887107e-09,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 2009,
+            "chord": 3.351510429894233e-05,
+            "chord_relative_error": 0.028389282615222992,
+            "classification_required": true,
+            "implied_depth_error": 8.235098151727894e-12,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "impact": 1.8759486033502646,
+          "reference_chord": 3.44943748553462e-05,
+          "reference_depth": 1.4712727498984723e-10,
+          "relative_offset": -1e-10
+        },
+        {
+          "coarse": {
+            "accepted_steps": 806,
+            "chord": 9.389812927018681e-05,
+            "classification_required": false,
+            "join_crossings": 2,
+            "matches_reference": false
+          },
+          "fine": {
+            "accepted_steps": 2009,
+            "chord": 0.0,
+            "classification_required": true,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "impact": 1.8759486037254545,
+          "reference_chord": 0.0,
+          "reference_depth": -1.4712772276534447e-10,
+          "relative_offset": 1e-10
+        },
+        {
+          "coarse": {
+            "accepted_steps": 806,
+            "chord": 0.00010009753713191571,
+            "chord_relative_error": 28.021016762807935,
+            "classification_required": false,
+            "implied_depth_error": 1.2374494209292162e-09,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 2009,
+            "chord": 0.0,
+            "classification_required": false,
+            "join_crossings": 0,
+            "matches_reference": false
+          },
+          "impact": 1.8759486035359836,
+          "reference_chord": 3.4491395649581904e-06,
+          "reference_depth": 1.4710186194144548e-12,
+          "relative_offset": -1e-12
+        },
+        {
+          "coarse": {
+            "accepted_steps": 806,
+            "chord": 9.997808644790496e-05,
+            "classification_required": false,
+            "join_crossings": 2,
+            "matches_reference": false
+          },
+          "fine": {
+            "accepted_steps": 2009,
+            "chord": 0.0,
+            "classification_required": false,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "impact": 1.8759486035397357,
+          "reference_chord": 0.0,
+          "reference_depth": -1.4716297841790849e-12,
+          "relative_offset": 1e-12
+        }
+      ],
+      "graze_impact": 1.8759486035378594,
+      "name": "inner join prograde graze"
+    },
+    {
+      "cases": [
+        {
+          "coarse": {
+            "accepted_steps": 908,
+            "chord": 0.012740841798905223,
+            "chord_relative_error": 4.632056311889987e-07,
+            "classification_required": true,
+            "implied_depth_error": 7.016882145043524e-11,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 2265,
+            "chord": 0.01274099629554648,
+            "chord_relative_error": 1.2589304931401309e-05,
+            "classification_required": true,
+            "implied_depth_error": 1.9071055846862786e-09,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "impact": -3.6439087835466153,
+          "reference_chord": 0.012740835897278289,
+          "reference_depth": 7.574260813400307e-05,
+          "relative_offset": -0.0001
+        },
+        {
+          "coarse": {
+            "accepted_steps": 908,
+            "chord": 0.0,
+            "classification_required": true,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 2264,
+            "chord": 0.0,
+            "classification_required": true,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "impact": -3.644637638188789,
+          "reference_chord": 0.0,
+          "reference_depth": -7.57299017119348e-05,
+          "relative_offset": 0.0001
+        },
+        {
+          "coarse": {
+            "accepted_steps": 908,
+            "chord": 0.0012731122710469833,
+            "chord_relative_error": 0.0006841882029700095,
+            "classification_required": true,
+            "implied_depth_error": 1.0360033750499046e-09,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 2266,
+            "chord": 0.0012739773371546192,
+            "chord_relative_error": 5.163847247348168e-06,
+            "classification_required": true,
+            "implied_depth_error": 7.821795354615134e-12,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "impact": -3.6442695665944913,
+          "reference_chord": 0.001273983915812956,
+          "reference_depth": 7.573631805389124e-07,
+          "relative_offset": -1e-06
+        },
+        {
+          "coarse": {
+            "accepted_steps": 908,
+            "chord": 0.0,
+            "classification_required": true,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 2266,
+            "chord": 0.0,
+            "classification_required": true,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "impact": -3.644276855140913,
+          "reference_chord": 0.0,
+          "reference_depth": -7.573619098300054e-07,
+          "relative_offset": 1e-06
+        },
+        {
+          "coarse": {
+            "accepted_steps": 908,
+            "chord": 0.00011842319324451012,
+            "chord_relative_error": 0.07044913108601647,
+            "classification_required": true,
+            "implied_depth_error": 1.0295221688737211e-09,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 2266,
+            "chord": 0.00012733024895261735,
+            "chord_relative_error": 0.0005340988520738621,
+            "classification_required": true,
+            "implied_depth_error": 8.087968964625859e-12,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "impact": -3.6442731744249697,
+          "reference_chord": 0.00012739829223425584,
+          "reference_depth": 7.573625554176469e-09,
+          "relative_offset": -1e-08
+        },
+        {
+          "coarse": {
+            "accepted_steps": 908,
+            "chord": 0.0,
+            "classification_required": true,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 2266,
+            "chord": 0.0,
+            "classification_required": true,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "impact": -3.644273247310434,
+          "reference_chord": 0.0,
+          "reference_depth": -7.573625342540205e-09,
+          "relative_offset": 1e-08
+        },
+        {
+          "coarse": {
+            "accepted_steps": 908,
+            "chord": 0.0,
+            "classification_required": false,
+            "join_crossings": 0,
+            "matches_reference": false
+          },
+          "fine": {
+            "accepted_steps": 2266,
+            "chord": 1.2037104985651581e-05,
+            "chord_relative_error": 0.05515965707105841,
+            "classification_required": true,
+            "implied_depth_error": 8.124738125975796e-12,
+            "join_crossings": 2,
+            "matches_reference": true
+          },
+          "impact": -3.644273210503275,
+          "reference_chord": 1.2739829618554775e-05,
+          "reference_depth": 7.573626079580842e-11,
+          "relative_offset": -1e-10
+        },
+        {
+          "coarse": {
+            "accepted_steps": 908,
+            "chord": 0.0,
+            "classification_required": false,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 2266,
+            "chord": 0.0,
+            "classification_required": true,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "impact": -3.6442732112321297,
+          "reference_chord": 0.0,
+          "reference_depth": -7.573626090422864e-11,
+          "relative_offset": 1e-10
+        },
+        {
+          "coarse": {
+            "accepted_steps": 908,
+            "chord": 0.0,
+            "classification_required": false,
+            "join_crossings": 0,
+            "matches_reference": false
+          },
+          "fine": {
+            "accepted_steps": 2266,
+            "chord": 0.0,
+            "classification_required": false,
+            "join_crossings": 0,
+            "matches_reference": false
+          },
+          "impact": -3.644273210864058,
+          "reference_chord": 1.2739687272054529e-06,
+          "reference_depth": 7.573456835621717e-13,
+          "relative_offset": -1e-12
+        },
+        {
+          "coarse": {
+            "accepted_steps": 908,
+            "chord": 0.0,
+            "classification_required": false,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "fine": {
+            "accepted_steps": 2266,
+            "chord": 0.0,
+            "classification_required": false,
+            "join_crossings": 0,
+            "matches_reference": true
+          },
+          "impact": -3.6442732108713467,
+          "reference_chord": 0.0,
+          "reference_depth": -7.574298176507566e-13,
+          "relative_offset": 1e-12
+        }
+      ],
+      "graze_impact": -3.644273210867702,
+      "name": "inner join retrograde graze"
+    }
+  ],
+  "passed": true,
+  "pole_and_core": [
+    {
+      "coarse": {
+        "accepted_steps": 631,
+        "chart_switches": 3,
+        "escape_error": 7.388504670302609e-07,
+        "event_affine_error": 4.334726355637031e-09,
+        "event_count": 6,
+        "maximum_null_error": 3.719556535688212e-08,
+        "outcome": "escaped"
+      },
+      "fine": {
+        "accepted_steps": 1477,
+        "chart_switches": 3,
+        "escape_error": 6.698641641378345e-11,
+        "event_affine_error": 4.078160031895095e-11,
+        "event_count": 6,
+        "maximum_null_error": 2.7481712914671504e-11,
+        "outcome": "escaped"
+      },
+      "fine large steps": {
+        "accepted_steps": 1246,
+        "chart_switches": 3,
+        "escape_error": 1.1380265618754493e-09,
+        "event_affine_error": 1.0835243813289708e-10,
+        "event_count": 6,
+        "maximum_null_error": 7.022822510177207e-11,
+        "outcome": "escaped"
+      },
+      "fine small steps": {
+        "accepted_steps": 5097,
+        "chart_switches": 3,
+        "escape_error": 5.3578474989990355e-09,
+        "event_affine_error": 7.512479527349569e-10,
+        "event_count": 6,
+        "maximum_null_error": 4.790266793844448e-10,
+        "outcome": "escaped"
+      },
+      "label": "pole inside Cartesian core patch",
+      "p_phi": 0.0,
+      "p_theta": 0.8,
+      "reference_escape_affine": 29.100825994122342,
+      "reference_minimum_radius": 0.5549412017454122,
+      "reference_pole_crossings": [
+        {
+          "affine": 9.370873304377946,
+          "radius": 0.6720915428226487
+        }
+      ],
+      "reference_step_halving_change": 2.518446944044239e-10,
+      "theta": 1.2
+    },
+    {
+      "coarse": {
+        "accepted_steps": 625,
+        "chart_switches": 2,
+        "escape_error": 3.4272524374046043e-07,
+        "event_affine_error": 2.442785351775001e-08,
+        "event_count": 6,
+        "maximum_null_error": 1.5419716037658506e-08,
+        "outcome": "escaped"
+      },
+      "fine": {
+        "accepted_steps": 1455,
+        "chart_switches": 2,
+        "escape_error": 1.5786270068929298e-09,
+        "event_affine_error": 2.1106671965753776e-11,
+        "event_count": 6,
+        "maximum_null_error": 7.448189800799585e-11,
+        "outcome": "escaped"
+      },
+      "fine large steps": {
+        "accepted_steps": 1227,
+        "chart_switches": 2,
+        "escape_error": 9.590905847289832e-10,
+        "event_affine_error": 2.6112445539183682e-11,
+        "event_count": 6,
+        "maximum_null_error": 4.696346036858258e-11,
+        "outcome": "escaped"
+      },
+      "fine small steps": {
+        "accepted_steps": 5083,
+        "chart_switches": 2,
+        "escape_error": 1.6730368201933743e-09,
+        "event_affine_error": 1.5120349416974932e-10,
+        "event_count": 6,
+        "maximum_null_error": 7.463167922299317e-11,
+        "outcome": "escaped"
+      },
+      "label": "pole in core, angular chart",
+      "p_phi": 0.0,
+      "p_theta": 1.0,
+      "reference_escape_affine": 29.077726697185447,
+      "reference_minimum_radius": 0.6180189994791263,
+      "reference_pole_crossings": [
+        {
+          "affine": 8.954743037574254,
+          "radius": 1.1121593893139532
+        }
+      ],
+      "reference_step_halving_change": 3.7191297957983593e-10,
+      "theta": 0.8
+    },
+    {
+      "coarse": {
+        "accepted_steps": 633,
+        "chart_switches": 1,
+        "escape_error": 8.249465111020982e-08,
+        "event_affine_error": 9.939835621253224e-10,
+        "event_count": 4,
+        "maximum_null_error": 3.739026793988104e-09,
+        "outcome": "escaped"
+      },
+      "fine": {
+        "accepted_steps": 1473,
+        "chart_switches": 1,
+        "escape_error": 7.514060484936635e-09,
+        "event_affine_error": 9.169198733616213e-11,
+        "event_count": 4,
+        "maximum_null_error": 3.4369794155171177e-10,
+        "outcome": "escaped"
+      },
+      "fine large steps": {
+        "accepted_steps": 1244,
+        "chart_switches": 1,
+        "escape_error": 2.0035315628774697e-09,
+        "event_affine_error": 3.2100544444801926e-11,
+        "event_count": 4,
+        "maximum_null_error": 9.072139819351135e-11,
+        "outcome": "escaped"
+      },
+      "fine small steps": {
+        "accepted_steps": 5062,
+        "chart_switches": 1,
+        "escape_error": 1.3935732567915693e-09,
+        "event_affine_error": 6.062705892873055e-12,
+        "event_count": 4,
+        "maximum_null_error": 6.549711478940443e-11,
+        "outcome": "escaped"
+      },
+      "label": "pole in core, no Cartesian patch",
+      "p_phi": 0.0,
+      "p_theta": 1.2,
+      "reference_escape_affine": 28.923571906239328,
+      "reference_minimum_radius": 0.8659776866670957,
+      "reference_pole_crossings": [
+        {
+          "affine": 9.027207585807513,
+          "radius": 1.115135158722484
+        }
+      ],
+      "reference_step_halving_change": 4.1914939574727583e-10,
+      "theta": 1.0
+    },
+    {
+      "coarse": {
+        "accepted_steps": 624,
+        "chart_switches": 2,
+        "escape_error": 3.710889373564896e-07,
+        "event_affine_error": 7.956723813151712e-08,
+        "event_count": 6,
+        "maximum_null_error": 1.6667767596237833e-08,
+        "outcome": "escaped"
+      },
+      "fine": {
+        "accepted_steps": 1446,
+        "chart_switches": 2,
+        "escape_error": 4.646942386443698e-09,
+        "event_affine_error": 8.685177022016433e-10,
+        "event_count": 6,
+        "maximum_null_error": 2.1193634790285253e-10,
+        "outcome": "escaped"
+      },
+      "fine large steps": {
+        "accepted_steps": 1218,
+        "chart_switches": 2,
+        "escape_error": 1.5287715537937174e-11,
+        "event_affine_error": 6.187583778682892e-11,
+        "event_count": 6,
+        "maximum_null_error": 1.1276485834068372e-11,
+        "outcome": "escaped"
+      },
+      "fine small steps": {
+        "accepted_steps": 5065,
+        "chart_switches": 2,
+        "escape_error": 8.823498376386851e-09,
+        "event_affine_error": 1.9504771131551024e-09,
+        "event_count": 6,
+        "maximum_null_error": 3.9580950602956753e-10,
+        "outcome": "escaped"
+      },
+      "label": "pole outside shell, then core",
+      "p_phi": 0.0,
+      "p_theta": 1.2,
+      "reference_escape_affine": 29.0152105975444,
+      "reference_minimum_radius": 0.7333923534076646,
+      "reference_pole_crossings": [
+        {
+          "affine": 8.209966606490182,
+          "radius": 1.911179540229864
+        }
+      ],
+      "reference_step_halving_change": 3.2269254629513355e-10,
+      "theta": 0.5
+    },
+    {
+      "coarse": {
+        "accepted_steps": 552,
+        "chart_switches": 2,
+        "escape_error": 1.6042549333405987e-07,
+        "event_affine_error": 1.5404921782646852e-10,
+        "event_count": 2,
+        "maximum_null_error": 4.979371973328742e-09,
+        "outcome": "escaped"
+      },
+      "fine": {
+        "accepted_steps": 1257,
+        "chart_switches": 2,
+        "escape_error": 7.584901595691917e-10,
+        "event_affine_error": 1.6147083670148277e-12,
+        "event_count": 2,
+        "maximum_null_error": 2.431257135043601e-11,
+        "outcome": "escaped"
+      },
+      "fine large steps": {
+        "accepted_steps": 983,
+        "chart_switches": 2,
+        "escape_error": 1.766125024005305e-10,
+        "event_affine_error": 1.1901590823981678e-12,
+        "event_count": 2,
+        "maximum_null_error": 4.8593354789211075e-12,
+        "outcome": "escaped"
+      },
+      "fine small steps": {
+        "accepted_steps": 5310,
+        "chart_switches": 2,
+        "escape_error": 7.285343883722817e-09,
+        "event_affine_error": 1.4708234630234074e-12,
+        "event_count": 2,
+        "maximum_null_error": 2.2772923260137516e-10,
+        "outcome": "escaped"
+      },
+      "label": "two poles, shell only",
+      "p_phi": 0.0,
+      "p_theta": 4.0,
+      "reference_escape_affine": 31.226743921165962,
+      "reference_minimum_radius": 1.667640570954973,
+      "reference_pole_crossings": [
+        {
+          "affine": 4.493815125871376,
+          "radius": 5.973023059254443
+        },
+        {
+          "affine": 11.328253542653458,
+          "radius": 2.261071127117906
+        }
+      ],
+      "reference_step_halving_change": 1.3231429493720803e-10,
+      "theta": 0.3
+    },
+    {
+      "bl_chart": {
+        "accepted_steps": 1558,
+        "error": 5.419778403847886e-09,
+        "outcome": "escaped"
+      },
+      "coarse": {
+        "accepted_steps": 620,
+        "chart_switches": 1,
+        "escape_error": 4.851869164212985e-07,
+        "event_affine_error": 7.088820197509449e-09,
+        "event_count": 4,
+        "maximum_null_error": 2.215342834704011e-08,
+        "outcome": "escaped"
+      },
+      "fine": {
+        "accepted_steps": 1446,
+        "chart_switches": 1,
+        "escape_error": 2.4398048026341712e-09,
+        "event_affine_error": 6.263434215725283e-12,
+        "event_count": 4,
+        "maximum_null_error": 1.2097278792308218e-10,
+        "outcome": "escaped"
+      },
+      "fine large steps": {
+        "accepted_steps": 1213,
+        "chart_switches": 1,
+        "escape_error": 5.388812951423461e-09,
+        "event_affine_error": 3.206324095117452e-12,
+        "event_count": 4,
+        "maximum_null_error": 2.6135724837797204e-10,
+        "outcome": "escaped"
+      },
+      "fine small steps": {
+        "accepted_steps": 5088,
+        "chart_switches": 1,
+        "escape_error": 2.5047981466741476e-09,
+        "event_affine_error": 7.716494110354688e-12,
+        "event_count": 4,
+        "maximum_null_error": 1.171728834294158e-10,
+        "outcome": "escaped"
+      },
+      "label": "rotating ray, core without Cartesian patch",
+      "p_phi": 0.5,
+      "p_theta": 1.0,
+      "reference_escape_affine": 29.24700072273968,
+      "reference_minimum_radius": 0.8751177618711166,
+      "reference_pole_crossings": [],
+      "reference_step_halving_change": 1.827130426124146e-10,
+      "theta": 1.0
+    },
+    {
+      "bl_chart": {
+        "accepted_steps": 1596,
+        "error": 1.7689174569568422e-09,
+        "outcome": "escaped"
+      },
+      "coarse": {
+        "accepted_steps": 619,
+        "chart_switches": 2,
+        "escape_error": 1.9711014687118222e-07,
+        "event_affine_error": 9.799629552276201e-09,
+        "event_count": 6,
+        "maximum_null_error": 1.0647800658981384e-08,
+        "outcome": "escaped"
+      },
+      "fine": {
+        "accepted_steps": 1431,
+        "chart_switches": 2,
+        "escape_error": 6.663597673650656e-09,
+        "event_affine_error": 4.334665959504491e-11,
+        "event_count": 6,
+        "maximum_null_error": 3.215348210437788e-10,
+        "outcome": "escaped"
+      },
+      "fine large steps": {
+        "accepted_steps": 1201,
+        "chart_switches": 2,
+        "escape_error": 5.9699303278648586e-09,
+        "event_affine_error": 8.663292305755022e-12,
+        "event_count": 6,
+        "maximum_null_error": 2.9088183806826455e-10,
+        "outcome": "escaped"
+      },
+      "fine small steps": {
+        "accepted_steps": 5122,
+        "chart_switches": 2,
+        "escape_error": 1.0926584081971669e-09,
+        "event_affine_error": 3.807265613886557e-11,
+        "event_count": 6,
+        "maximum_null_error": 4.910571448207343e-11,
+        "outcome": "escaped"
+      },
+      "label": "prograde rotating ray through Cartesian core",
+      "p_phi": 0.5,
+      "p_theta": 0.6,
+      "reference_escape_affine": 29.47030080761999,
+      "reference_minimum_radius": 0.4789764968676049,
+      "reference_pole_crossings": [],
+      "reference_step_halving_change": 1.1876494926399417e-10,
+      "theta": 1.0
+    },
+    {
+      "bl_chart": {
+        "accepted_steps": 1721,
+        "error": 1.104609026469916e-08,
+        "outcome": "escaped"
+      },
+      "coarse": {
+        "accepted_steps": 637,
+        "chart_switches": 2,
+        "escape_error": 1.5568843991786707e-07,
+        "event_affine_error": 7.58169704795364e-09,
+        "event_count": 6,
+        "maximum_null_error": 6.92756158994771e-09,
+        "outcome": "escaped"
+      },
+      "fine": {
+        "accepted_steps": 1491,
+        "chart_switches": 2,
+        "escape_error": 4.9038462179851194e-09,
+        "event_affine_error": 2.476632232628617e-10,
+        "event_count": 6,
+        "maximum_null_error": 2.18112658343413e-10,
+        "outcome": "escaped"
+      },
+      "fine large steps": {
+        "accepted_steps": 1266,
+        "chart_switches": 2,
+        "escape_error": 8.173195453764492e-09,
+        "event_affine_error": 3.998614772626752e-10,
+        "event_count": 6,
+        "maximum_null_error": 3.6385458144302715e-10,
+        "outcome": "escaped"
+      },
+      "fine small steps": {
+        "accepted_steps": 5082,
+        "chart_switches": 2,
+        "escape_error": 7.171081506385235e-10,
+        "event_affine_error": 4.263611685928481e-11,
+        "event_count": 6,
+        "maximum_null_error": 3.2530267596815376e-11,
+        "outcome": "escaped"
+      },
+      "label": "retrograde rotating ray through Cartesian core",
+      "p_phi": -0.3,
+      "p_theta": 0.8,
+      "reference_escape_affine": 28.88926618914811,
+      "reference_minimum_radius": 0.46568519469082037,
+      "reference_pole_crossings": [],
+      "reference_step_halving_change": 4.103604574201558e-10,
+      "theta": 1.0
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Toy-preset ray families against independent references: pole and core crossings in one ray; equatorial grazes of both shell joins; prograde rays at the buried Kerr photon orbit, with Kerr contrast. Sampled fixtures, not a certificate for arbitrary rays; grazes shallower than the stated depth are reported, not classified; no GYOTO comparison."
+}
