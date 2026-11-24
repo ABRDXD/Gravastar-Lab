@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <chrono>
 #include <iostream>
+#include <optional>
 #include <thread>
 
 namespace o = gravastar::optics;
@@ -34,7 +35,9 @@ int main(int argc, char **argv) {
              output = "results/p3_gpu_image.json";
     int scale = 1;
     std::size_t batch = 4096;
-    bool compare = false, check = false, summary_only = false;
+    bool compare = false, check = false, summary_only = false, fp32 = false;
+    std::optional<double> tolerance;
+    unsigned fallback_threads = 0; // 0: every hardware thread
     for (int i = 1; i < argc; ++i) {
       const std::string option = argv[i];
       if (option == "--compare-cpu" || option == "--check" || option == "--summary") {
@@ -48,6 +51,12 @@ int main(int argc, char **argv) {
       else if (option == "--output") output = value;
       else if (option == "--resolution-scale") scale = std::stoi(value);
       else if (option == "--batch") batch = std::stoul(value);
+      else if (option == "--precision") {
+        if (value != "fp64" && value != "fp32")
+          throw std::invalid_argument("--precision must be fp64 or fp32");
+        fp32 = value == "fp32";
+      } else if (option == "--tolerance") tolerance = std::stod(value);
+      else if (option == "--fallback-threads") fallback_threads = std::stoul(value);
       else throw std::invalid_argument("unknown option " + option);
     }
     if (scale < 1 || scale > 8 || batch < 64 || batch > (1u << 20))
@@ -78,7 +87,21 @@ int main(int argc, char **argv) {
 
     v::ComputeOptions options;
     options.validation = v::ValidationMode::disabled;
-    gravastar::rendering::GpuTracer tracer(GRAVASTAR_TRACE64_SPV, options);
+    // The reference (CPU comparison) keeps the scene's own settings; the GPU
+    // path and its CPU fallback may use a looser tolerance (FP32 needs ~1e-6).
+    const auto reference_settings = s.settings;
+    if (tolerance) {
+      s.settings.absolute_tolerance = s.settings.relative_tolerance = *tolerance;
+      s.settings.event_tolerance = 10 * *tolerance;
+      // The null-drift safety net must sit above what this tolerance allows.
+      s.settings.null_tolerance = std::max(s.settings.null_tolerance, 1e3 * *tolerance);
+    }
+    gravastar::rendering::GpuTracer tracer(
+        fp32 ? GRAVASTAR_TRACE32_SPV : GRAVASTAR_TRACE64_SPV, options,
+        fp32 ? gravastar::rendering::GpuTracer::Precision::fp32
+             : gravastar::rendering::GpuTracer::Precision::fp64);
+    if (fallback_threads)
+      tracer.set_fallback_threads(fallback_threads);
     const auto t_trace = std::chrono::steady_clock::now();
     const auto traced = tracer.trace(s, start, patch, batch);
     const double trace_seconds =
@@ -118,7 +141,9 @@ int main(int argc, char **argv) {
              {"input_sha256", u::sha256(input_bytes)},
              {"resolution_scale", scale},
              {"device", tracer.device().name},
-             {"precision", "FP64"},
+             {"precision", fp32 ? "FP32" : "FP64"},
+             {"gpu_tolerance", s.settings.absolute_tolerance},
+             {"reference_tolerance", reference_settings.absolute_tolerance},
              {"rays", n},
              {"gpu_resolved_rays", n - total_flagged},
              {"cpu_fallback_rays", total_flagged},
@@ -126,6 +151,8 @@ int main(int argc, char **argv) {
              {"classifications", counts},
              {"gpu_milliseconds", gpu_ms},
              {"trace_seconds_including_cpu_fallback", trace_seconds},
+             {"cpu_fallback_seconds", traced.fallback_seconds},
+             {"cpu_fallback_threads", tracer.fallback_threads()},
              {"report_assembly_seconds", assembly_seconds},
              {"pixels", pixels}};
 
@@ -142,7 +169,7 @@ int main(int argc, char **argv) {
         for (unsigned w = 0; w < threads; ++w)
           pool.emplace_back([&, w] {
             for (std::size_t i = w; i < n; i += threads)
-              cpu_traces[i] = o::trace_angular(s.geometry, start[i], patch, s.settings);
+              cpu_traces[i] = o::trace_angular(s.geometry, start[i], patch, reference_settings);
           });
       }
       const double cpu_parallel_seconds =

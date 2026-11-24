@@ -291,7 +291,15 @@ if(GRAVASTAR_DESKTOP)
         DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_trace.comp"
                 "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_stereographic.glsl"
         VERBATIM)
-    add_custom_target(gravastar_trace_shader DEPENDS "${GRAVASTAR_TRACE64_SPV}")
+    set(GRAVASTAR_TRACE32_SPV "${GRAVASTAR_SPV_DIR}/gravastar_trace32.spv")
+    add_custom_command(
+        OUTPUT "${GRAVASTAR_TRACE32_SPV}"
+        COMMAND "${GLSLC_EXECUTABLE}" -I "${CMAKE_CURRENT_SOURCE_DIR}/shaders" -O
+            "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_trace.comp" -o "${GRAVASTAR_TRACE32_SPV}"
+        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_trace.comp"
+                "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_stereographic.glsl"
+        VERBATIM)
+    add_custom_target(gravastar_trace_shader DEPENDS "${GRAVASTAR_TRACE64_SPV}" "${GRAVASTAR_TRACE32_SPV}")
     add_custom_target(gravastar_precision_shaders
         DEPENDS "${GRAVASTAR_PRECISION32_SPV}" "${GRAVASTAR_PRECISION64_SPV}"
                 "${GRAVASTAR_PRECISIONMIXED_SPV}")
@@ -405,7 +413,8 @@ if(GRAVASTAR_DESKTOP)
         target_link_libraries(gravastar_gpu_trace PRIVATE gravastar_gpu_optics)
         target_compile_definitions(gravastar_gpu_trace PRIVATE
             GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}"
-            GRAVASTAR_TRACE64_SPV="${GRAVASTAR_TRACE64_SPV}")
+            GRAVASTAR_TRACE64_SPV="${GRAVASTAR_TRACE64_SPV}"
+            GRAVASTAR_TRACE32_SPV="${GRAVASTAR_TRACE32_SPV}")
         add_dependencies(gravastar_gpu_trace gravastar_trace_shader)
         add_test(NAME gpu_trace_vs_cpu COMMAND gravastar_gpu_trace --compare-cpu --check
             --summary --config benchmarks/optics_keplerian_stars_v1.json --resolution-scale 2

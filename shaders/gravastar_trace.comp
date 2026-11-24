@@ -7,7 +7,10 @@
 //   1 core entry (no Cartesian core patch here)  2 near tangency or a
 //   possible hidden crossing of a terminal surface  3 affine budget
 //   4 attempt budget  5 numerical failure  6 null drift.
-// Build with -DGRAVASTAR_FP64 (the Phase D step 1 decision for this path).
+// Build with -DGRAVASTAR_FP64 (the Phase D step 1 decision for reference
+// work). The FP32 build is the recording/preview path: it needs looser
+// tolerances (about 1e-6), and its results carry the FP32 floor measured in
+// docs/GPU_PRECISION.md.
 //
 // Input (REAL[]): header[32], then 16 per ray: state[8] in its patch, patch
 // (0 north, 1 south), 7 unused.
@@ -28,6 +31,15 @@ layout(local_size_x = 64, local_size_y = 1, local_size_z = 1) in;
 
 layout(std430, set = 0, binding = 0) readonly buffer Inputs { REAL v[]; } inp;
 layout(std430, set = 0, binding = 1) writeonly buffer Outputs { REAL v[]; } outp;
+
+// Affine step of the rate probe at a clipping root (curvature by central
+// difference): small in FP64, wider in FP32 so the difference stays above
+// float rounding.
+#ifdef GRAVASTAR_FP64
+const REAL PROBE = REAL(1e-6);
+#else
+const REAL PROBE = REAL(1e-3);
+#endif
 
 StereoModel model;
 REAL atol, rtol, event_tol, null_tol, tangency_factor;
@@ -208,9 +220,10 @@ void main() {
                 x = clamp(x, REAL(0), REAL(1));
                 REAL f_ext = f0 + h * r0 * x + c2 * x * x + c3 * x * x * x;
                 REAL margin = surface_margin(k, levels[k]);
-                // Generous gate (1e-3 of the level) keeps Hermite error far
-                // below the decision; anything near is left to the CPU.
-                REAL gate = max(REAL(1e3) * margin, REAL(1e-3) * (k == 1 ? REAL(1) : abs(levels[k])));
+                // Generous gate (1e-3 of the level, or ten tangency margins
+                // at loose tolerances) keeps Hermite error far below the
+                // decision; anything near is left to the CPU.
+                REAL gate = max(REAL(10) * margin, REAL(1e-3) * (k == 1 ? REAL(1) : abs(levels[k])));
                 if (sign(f_ext) != sign(f0) || abs(f_ext) < gate) {
                     needs_cpu = true;
                     break;
@@ -256,11 +269,11 @@ void main() {
             // the root as the CPU tracer does (f_ext = -f'^2 / (2 f'')).
             REAL d0[8];
             bool ok = rhs(hit_state, d0);
-            Step ahead = dp_step(hit_state, REAL(1e-6));
-            Step behind = dp_step(hit_state, REAL(-1e-6));
+            Step ahead = dp_step(hit_state, PROBE);
+            Step behind = dp_step(hit_state, -PROBE);
             REAL rate = surface_rate(hit, hit_state, d0);
             REAL curvature = (surface_rate(hit, ahead.next, ahead.end_rate) -
-                              surface_rate(hit, behind.next, behind.end_rate)) / REAL(2e-6);
+                              surface_rate(hit, behind.next, behind.end_rate)) / (REAL(2) * PROBE);
             if (!ok || !ahead.ok || !behind.ok) { reason = 5u; break; }
             if (rate * curvature < REAL(0) &&
                 abs(rate * rate / (REAL(2) * curvature)) < surface_margin(hit, levels[hit])) {

@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #pragma once
-// FP64 GPU tracer (shaders/gravastar_trace.comp) with CPU fallback, shared by
-// gravastar_gpu_trace and the studio. Contracts: docs/GPU_TRACER.md.
+// GPU tracer (shaders/gravastar_trace.comp, FP64 reference or FP32 recording
+// build) with CPU fallback, shared by gravastar_gpu_trace, the studio and the
+// recorder. Contracts: docs/GPU_TRACER.md.
 #include "gravastar/optics/scene.hpp"
 #include "gravastar/rendering/vulkan/ComputeContext.hpp"
 #include <array>
@@ -24,21 +25,35 @@ class GpuTracer final {
     struct Result {
         std::vector<Ray> rays;
         double gpu_milliseconds{};
+        double fallback_seconds{}; // wall time of the CPU re-traces
         std::array<std::size_t, 7> fallback{};
         bool cancelled{};
     };
-    GpuTracer(const char *spirv_path, vulkan::ComputeOptions options = {});
+    // FP64 is the reference path. FP32 (built without -DGRAVASTAR_FP64) is the
+    // preview/recording path and needs scene tolerances of about 1e-6.
+    enum class Precision { fp64, fp32 };
+    GpuTracer(const char *spirv_path, vulkan::ComputeOptions options = {},
+              Precision precision = Precision::fp64);
     // Traces launch states given in `patch` (north or south) for one scene.
-    // Flagged rays are re-traced with the CPU tracer. When `cancel` becomes
-    // true the call returns after the current batch with cancelled set and
-    // only the finished rays filled in (the rest default-initialized).
+    // Flagged rays are re-traced with the CPU tracer on fallback_threads()
+    // threads (rays are independent, so the result does not depend on the
+    // count). When `cancel` becomes true the call returns early with
+    // cancelled set and only the finished rays filled in.
     [[nodiscard]] Result trace(const optics::Scene &, std::span<const optics::State> start,
                                optics::Chart patch, std::size_t batch = 4096,
                                const std::atomic<bool> *cancel = nullptr);
     [[nodiscard]] const vulkan::DeviceInfo &device() const;
+    [[nodiscard]] Precision precision() const noexcept { return precision_; }
+    void set_fallback_threads(unsigned n) noexcept { threads_ = n ? n : 1; }
+    [[nodiscard]] unsigned fallback_threads() const noexcept { return threads_; }
 
   private:
+    template <class Real>
+    Result run(const optics::Scene &, std::span<const optics::State>, optics::Chart, std::size_t,
+               const std::atomic<bool> *);
     vulkan::ComputeContext gpu_;
     std::vector<std::uint32_t> code_;
+    Precision precision_;
+    unsigned threads_;
 };
 } // namespace gravastar::rendering

@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "gravastar/rendering/GpuTracer.hpp"
 #include <algorithm>
+#include <chrono>
 #include <cstring>
 #include <fstream>
+#include <thread>
 
 namespace gravastar::rendering {
 namespace o = optics;
@@ -44,9 +46,10 @@ std::array<double, header_size> header(const o::Scene &s) {
 }
 } // namespace
 
-GpuTracer::GpuTracer(const char *spirv_path, vulkan::ComputeOptions options)
-    : gpu_(options), code_(read_spirv(spirv_path)) {
-    if (!gpu_.selected_device().float64)
+GpuTracer::GpuTracer(const char *spirv_path, vulkan::ComputeOptions options, Precision precision)
+    : gpu_(options), code_(read_spirv(spirv_path)), precision_(precision),
+      threads_(std::max(1u, std::thread::hardware_concurrency())) {
+    if (precision_ == Precision::fp64 && !gpu_.selected_device().float64)
         throw std::runtime_error("selected GPU has no shaderFloat64");
 }
 
@@ -55,6 +58,14 @@ const vulkan::DeviceInfo &GpuTracer::device() const { return gpu_.selected_devic
 GpuTracer::Result GpuTracer::trace(const o::Scene &s, std::span<const o::State> start,
                                    o::Chart patch, std::size_t batch,
                                    const std::atomic<bool> *cancel) {
+    return precision_ == Precision::fp64 ? run<double>(s, start, patch, batch, cancel)
+                                         : run<float>(s, start, patch, batch, cancel);
+}
+
+template <class Real>
+GpuTracer::Result GpuTracer::run(const o::Scene &s, std::span<const o::State> start,
+                                 o::Chart patch, std::size_t batch,
+                                 const std::atomic<bool> *cancel) {
     if (!s.angular)
         throw std::invalid_argument("the GPU tracer supports angular-patch scenes only");
     if (patch != o::Chart::north && patch != o::Chart::south)
@@ -65,33 +76,35 @@ GpuTracer::Result GpuTracer::trace(const o::Scene &s, std::span<const o::State> 
     const std::size_t n = start.size();
     out.rays.resize(n);
     const auto h = header(s);
+    std::vector<std::size_t> flagged;
     for (std::size_t first = 0; first < n; first += batch) {
         if (cancel && cancel->load()) {
             out.cancelled = true;
-            return out;
+            break;
         }
         const std::size_t count = std::min(batch, n - first);
-        std::vector<double> in(header_size + input_stride * count, 0);
-        std::copy(h.begin(), h.end(), in.begin());
+        std::vector<Real> in(header_size + input_stride * count, Real(0));
+        for (std::size_t i = 0; i < header_size; ++i)
+            in[i] = Real(h[i]);
         for (std::size_t r = 0; r < count; ++r) {
             for (int i = 0; i < 8; ++i)
-                in[header_size + input_stride * r + i] = start[first + r][i];
+                in[header_size + input_stride * r + i] = Real(start[first + r][i]);
             in[header_size + input_stride * r + 8] = patch == o::Chart::north ? 0 : 1;
         }
         const auto result = gpu_.dispatch(code_, std::as_bytes(std::span(in)),
-                                          count * output_stride * sizeof(double),
+                                          count * output_stride * sizeof(Real),
                                           static_cast<std::uint32_t>((count + 63) / 64));
         out.gpu_milliseconds += result.gpu_milliseconds;
-        std::vector<double> values(count * output_stride);
+        std::vector<Real> values(count * output_stride);
         std::memcpy(values.data(), result.output.data(), result.output.size());
         for (std::size_t r = 0; r < count; ++r) {
-            const double *w = values.data() + output_stride * r;
+            const Real *w = values.data() + output_stride * r;
             auto &ray = out.rays[first + r];
             ray.gpu_outcome = int(w[0]);
             ray.reason = std::clamp(int(w[1]), 0, 6);
             if (ray.gpu_outcome == 0) {
                 ++out.fallback[ray.reason];
-                ray.trace = o::trace_angular(s.geometry, start[first + r], patch, s.settings);
+                flagged.push_back(first + r);
                 continue;
             }
             auto &t = ray.trace;
@@ -108,6 +121,29 @@ GpuTracer::Result GpuTracer::trace(const o::Scene &s, std::span<const o::State> 
             t.maximum_null_error = w[15];
         }
     }
+    // CPU re-traces of the flagged rays, shared out by an atomic counter.
+    const auto t0 = std::chrono::steady_clock::now();
+    std::atomic<std::size_t> next{0};
+    std::atomic<bool> stopped{false};
+    auto work = [&] {
+        for (std::size_t k; (k = next.fetch_add(1)) < flagged.size();) {
+            if (cancel && cancel->load()) {
+                stopped = true;
+                return;
+            }
+            const auto i = flagged[k];
+            out.rays[i].trace = o::trace_angular(s.geometry, start[i], patch, s.settings);
+        }
+    };
+    {
+        const unsigned workers = unsigned(std::min<std::size_t>(threads_, flagged.size()));
+        std::vector<std::jthread> pool;
+        for (unsigned w = 1; w < workers; ++w)
+            pool.emplace_back(work);
+        work();
+    }
+    out.fallback_seconds = std::chrono::duration<double>(std::chrono::steady_clock::now() - t0).count();
+    out.cancelled = out.cancelled || stopped;
     return out;
 }
 } // namespace gravastar::rendering
