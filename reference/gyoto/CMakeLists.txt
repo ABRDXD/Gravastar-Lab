@@ -100,5 +100,5 @@ target_compile_definitions(gravastar_gyoto_compare PRIVATE
     GRAVASTAR_BOOST_SHA256="${boost_sha256}")
 if(BUILD_TESTING)
     add_test(NAME gyoto_reference COMMAND gravastar_gyoto_compare)
-    set_tests_properties(gyoto_reference PROPERTIES TIMEOUT 180 LABELS "optics;optional_reference")
+    set_tests_properties(gyoto_reference PROPERTIES TIMEOUT 400 LABELS "optics;optional_reference")
 endif()

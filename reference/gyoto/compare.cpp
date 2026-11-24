@@ -122,19 +122,17 @@ struct GyotoRun {
 // GYOTO fixed-step integration from the native launch state. Stored point
 // k has lambda = (k - i0) * h. The crossing is located on the cubic Hermite
 // interpolant built from stored positions and velocities.
-GyotoRun gyoto_ray(double spin, const o::State &launch, double h, bool generic,
-                   double target, bool outward, double t_limit) {
-  Gyoto::SmartPointer<Gyoto::Metric::KerrBL> kerr(new Gyoto::Metric::KerrBL());
-  kerr->spin(spin);
-  kerr->genericIntegrator(generic);
+GyotoRun gyoto_ray(Gyoto::SmartPointer<Gyoto::Metric::Generic> metric,
+                   const o::State &launch, double h, double target,
+                   bool outward, double t_limit) {
   double gup[4][4]{};
-  kerr->gmunu_up(gup, launch.data());
+  metric->gmunu_up(gup, launch.data());
   double coord[8]{launch[0], launch[1], launch[2], launch[3]};
   for (int mu = 0; mu < 4; ++mu)
     for (int nu = 0; nu < 4; ++nu)
       coord[4 + mu] += gup[mu][nu] * launch[4 + nu];
   Gyoto::Photon photon;
-  photon.metric(kerr);
+  photon.metric(metric);
   photon.integrator("Legacy");
   photon.adaptive(false);
   photon.delta(h);
@@ -151,7 +149,7 @@ GyotoRun gyoto_ray(double spin, const o::State &launch, double h, bool generic,
     photon.getCoord(k, b);
     out.maximum_norm = std::max(
         out.maximum_norm,
-        std::abs(kerr->ScalarProd(b.data(), b.data() + 4, b.data() + 4)) /
+        std::abs(metric->ScalarProd(b.data(), b.data() + 4, b.data() + 4)) /
             (b[4] * b[4]));
     const bool crossed = outward ? (a[1] < target && b[1] >= target)
                                  : (a[1] > target && b[1] <= target);
@@ -177,6 +175,64 @@ GyotoRun gyoto_ray(double spin, const o::State &launch, double h, bool generic,
   }
   return out;
 }
+
+Gyoto::SmartPointer<Gyoto::Metric::Generic> kerr_metric(double spin,
+                                                        bool generic) {
+  Gyoto::SmartPointer<Gyoto::Metric::KerrBL> kerr(new Gyoto::Metric::KerrBL());
+  kerr->spin(spin);
+  kerr->genericIntegrator(generic);
+  return Gyoto::SmartPointer<Gyoto::Metric::Generic>(kerr);
+}
+
+// Gravastar adapter: the production toy geometry exposed to GYOTO as a
+// spherical-coordinate metric. GYOTO's own integrator, geodesic equation and
+// storage then trace rays through it. This shares the metric with the native
+// tracer, so it checks integration and event handling, not the metric (the
+// metric has its own independent references in tests/).
+class ToyGravastar : public Gyoto::Metric::Generic {
+public:
+  explicit ToyGravastar(const g::Parameters &p)
+      : Gyoto::Metric::Generic(GYOTO_COORDKIND_SPHERICAL, "GravastarLabToy"),
+        p_(p) {}
+  ToyGravastar *clone() const override { return new ToyGravastar(*this); }
+  using Gyoto::Metric::Generic::christoffel;
+  using Gyoto::Metric::Generic::gmunu;
+  using Gyoto::Metric::Generic::gmunu_up;
+  void gmunu(double out[4][4], const double x[4]) const override {
+    const auto e = evaluate(x);
+    for (int a = 0; a < 4; ++a)
+      for (int b = 0; b < 4; ++b)
+        out[a][b] = e.metric[a][b];
+  }
+  void gmunu_up(double out[4][4], const double x[4]) const override {
+    const auto e = evaluate(x);
+    for (int a = 0; a < 4; ++a)
+      for (int b = 0; b < 4; ++b)
+        out[a][b] = e.inverse[a][b];
+  }
+  int christoffel(double dst[4][4][4], const double x[4]) const override {
+    const auto e = evaluate(x);
+    for (int a = 0; a < 4; ++a)
+      for (int b = 0; b < 4; ++b)
+        for (int c = 0; c < 4; ++c) {
+          double gamma = 0;
+          for (int d = 0; d < 4; ++d)
+            gamma += .5 * e.inverse[a][d] *
+                     (e.dg[b][d][c] + e.dg[c][d][b] - e.dg[d][b][c]);
+          dst[a][b][c] = gamma;
+        }
+    return 0;
+  }
+
+private:
+  g::Evaluation evaluate(const double x[4]) const {
+    auto result = g::evaluate(p_, x[1], x[2]);
+    if (const auto *error = std::get_if<g::Error>(&result))
+      GYOTO_ERROR(error->message.c_str());
+    return std::get<g::Evaluation>(result);
+  }
+  g::Parameters p_;
+};
 
 struct Ray {
   const char *label;
@@ -233,12 +289,12 @@ u::Json rays() {
                         native.final.state[2], native.final.state[3]};
     const double t_limit = mine.t - 10;
 
-    const auto coarse = gyoto_ray(ray.spin, launch, 2e-3, true, target,
-                                  !ray.captured, t_limit);
-    const auto fine = gyoto_ray(ray.spin, launch, 1e-3, true, target,
-                                !ray.captured, t_limit);
-    const auto specific = gyoto_ray(ray.spin, launch, 1e-3, false, target,
-                                    !ray.captured, t_limit);
+    const auto coarse = gyoto_ray(kerr_metric(ray.spin, true), launch, 2e-3,
+                                  target, !ray.captured, t_limit);
+    const auto fine = gyoto_ray(kerr_metric(ray.spin, true), launch, 1e-3,
+                                target, !ray.captured, t_limit);
+    const auto specific = gyoto_ray(kerr_metric(ray.spin, false), launch, 1e-3,
+                                    target, !ray.captured, t_limit);
     require(label + " GYOTO generic crosses the target radius",
             coarse.crossing && fine.crossing);
     require(label + " GYOTO KerrBL-specific crosses the target radius",
@@ -280,10 +336,74 @@ u::Json rays() {
   return rows;
 }
 
+struct ToyRay {
+  const char *label;
+  double theta, p_theta, p_phi;
+};
+u::Json toy_rays() {
+  g::Parameters p; // toy preset
+  const ToyRay fixtures[] = {
+      {"equatorial b=1.8, turns in core", std::numbers::pi / 2, 0, 1.8},
+      {"equatorial b=-3.6, turns in core", std::numbers::pi / 2, 0, -3.6},
+      {"equatorial b=2.9537, buried Kerr photon orbit", std::numbers::pi / 2,
+       0, 2.9537},
+      {"off-equatorial, shell only", 1.0, 3, 2},
+      {"off-equatorial, core r_min 0.875", 1.0, 1.0, .5},
+      {"off-equatorial prograde, core r_min 0.48", 1.0, .6, .5},
+      {"off-equatorial retrograde, core r_min 0.47", 1.0, .8, -.3}};
+  u::Json rows = u::Json::array();
+  for (const auto &ray : fixtures) {
+    const std::string label = std::string("toy ") + ray.label;
+    const auto launch =
+        native_launch(p, {ray.label, 0, ray.theta, ray.p_theta, ray.p_phi, false});
+    o::Settings c;
+    c.absolute_tolerance = c.relative_tolerance = 1e-12;
+    c.maximum_step = .02;
+    c.event_tolerance = 1e-12;
+    c.null_tolerance = 1e-8;
+    c.outer_radius = 20;
+    c.maximum_affine = 400;
+    const auto native = o::trace(p, launch, c);
+    require(label + " native escapes", native.outcome == o::Outcome::escaped);
+    const Crossing mine{native.final.affine, native.final.state[0],
+                        native.final.state[2], native.final.state[3]};
+    Gyoto::SmartPointer<Gyoto::Metric::Generic> metric(new ToyGravastar(p));
+    const auto coarse =
+        gyoto_ray(metric, launch, 5e-4, 20, true, mine.t - 10);
+    const auto fine =
+        gyoto_ray(metric, launch, 2.5e-4, 20, true, mine.t - 10);
+    require(label + " GYOTO crosses r=20", coarse.crossing && fine.crossing);
+    if (!coarse.crossing || !fine.crossing)
+      continue;
+    auto difference = [](const Crossing &x, const Crossing &y) {
+      return std::max({std::abs(x.s - y.s), std::abs(x.t - y.t),
+                       std::abs(x.theta - y.theta), std::abs(x.phi - y.phi)});
+    };
+    const double refinement = difference(*coarse.crossing, *fine.crossing);
+    const double native_error = difference(mine, *fine.crossing);
+    // RK4: the h=2.5e-4 error is about 1/15 of this change.
+    check(label + " GYOTO step-halving change", refinement, 1e-7);
+    check(label + " native vs GYOTO at r=20", native_error, 1e-8);
+    check(label + " GYOTO null drift (norm/tdot^2)", fine.maximum_norm, 1e-9);
+    rows.push_back({{"label", label},
+                    {"theta", ray.theta},
+                    {"p_theta", ray.p_theta},
+                    {"p_phi", ray.p_phi},
+                    {"native_s", mine.s},
+                    {"native_phi", mine.phi},
+                    {"gyoto_step_halving_change", refinement},
+                    {"native_minus_gyoto", native_error},
+                    {"gyoto_null_drift", fine.maximum_norm},
+                    {"gyoto_points", fine.points}});
+  }
+  return rows;
+}
+
 u::Json run() {
   tensors();
   flat_line();
   auto rows = rays();
+  auto toy = toy_rays();
   bool passed = true;
   for (const auto &entry : checks)
     passed = passed && entry.at("passed").get<bool>();
@@ -291,6 +411,7 @@ u::Json run() {
           {"passed", passed},
           {"checks", checks},
           {"kerr_rays", rows},
+          {"toy_rays", toy},
           {"complete_P2_acceptance", false},
           {"scope",
            "GYOTO 2.0.2 core built as C++20 from pinned sources: Kerr "

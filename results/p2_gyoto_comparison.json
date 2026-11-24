@@ -1,0 +1,963 @@
+{
+  "boost_archive_sha256": "a5800f405508f5df8114558ca9855d2640a2de8f0445f051fa1c7c3383045724",
+  "boost_version": "1.84.0",
+  "checks": [
+    {
+      "ceiling": 3e-13,
+      "measured": 1.5989478873279267e-16,
+      "name": "GYOTO Kerr metric components vs native (36 points)",
+      "passed": true
+    },
+    {
+      "ceiling": 3e-12,
+      "measured": 3.531755143878227e-16,
+      "name": "GYOTO Kerr Christoffel symbols vs native (36 points)",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-13,
+      "measured": 2.5449727795253588e-14,
+      "name": "GYOTO generic RK4 vs exact flat null line",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "equatorial prograde b=4.5 native outcome",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "equatorial prograde b=4.5 GYOTO generic crosses the target radius",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "equatorial prograde b=4.5 GYOTO KerrBL-specific crosses the target radius",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 1.3997691894473974e-12,
+      "name": "equatorial prograde b=4.5 GYOTO generic step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 3.035302867996536e-14,
+      "name": "equatorial prograde b=4.5 GYOTO generic null drift (norm/tdot^2)",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 5.4569682106375694e-12,
+      "name": "equatorial prograde b=4.5 native vs GYOTO generic at crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 8.810729923425242e-13,
+      "name": "equatorial prograde b=4.5 GYOTO KerrBL-specific vs generic at crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "equatorial retrograde b=-8 native outcome",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "equatorial retrograde b=-8 GYOTO generic crosses the target radius",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "equatorial retrograde b=-8 GYOTO KerrBL-specific crosses the target radius",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 1.8829382497642655e-12,
+      "name": "equatorial retrograde b=-8 GYOTO generic step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 4.9255044807731284e-14,
+      "name": "equatorial retrograde b=-8 GYOTO generic null drift (norm/tdot^2)",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 1.6271428648906294e-12,
+      "name": "equatorial retrograde b=-8 native vs GYOTO generic at crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 2.0321522242738865e-12,
+      "name": "equatorial retrograde b=-8 GYOTO KerrBL-specific vs generic at crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "near-critical prograde b=2.96 native outcome",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "near-critical prograde b=2.96 GYOTO generic crosses the target radius",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "near-critical prograde b=2.96 GYOTO KerrBL-specific crosses the target radius",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 4.494893346418394e-11,
+      "name": "near-critical prograde b=2.96 GYOTO generic step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 7.062754824586285e-14,
+      "name": "near-critical prograde b=2.96 GYOTO generic null drift (norm/tdot^2)",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 7.791811640345259e-11,
+      "name": "near-critical prograde b=2.96 native vs GYOTO generic at crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 3.5711877899302635e-11,
+      "name": "near-critical prograde b=2.96 GYOTO KerrBL-specific vs generic at crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "off-equatorial north native outcome",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "off-equatorial north GYOTO generic crosses the target radius",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "off-equatorial north GYOTO KerrBL-specific crosses the target radius",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 1.7763568394002505e-13,
+      "name": "off-equatorial north GYOTO generic step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 3.1805288098485594e-14,
+      "name": "off-equatorial north GYOTO generic null drift (norm/tdot^2)",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 4.860112312599085e-12,
+      "name": "off-equatorial north native vs GYOTO generic at crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 6.465938895416912e-13,
+      "name": "off-equatorial north GYOTO KerrBL-specific vs generic at crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "off-equatorial south, retrograde native outcome",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "off-equatorial south, retrograde GYOTO generic crosses the target radius",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "off-equatorial south, retrograde GYOTO KerrBL-specific crosses the target radius",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 1.2363443602225743e-12,
+      "name": "off-equatorial south, retrograde GYOTO generic step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 5.979086350932152e-14,
+      "name": "off-equatorial south, retrograde GYOTO generic null drift (norm/tdot^2)",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 5.023537141823908e-12,
+      "name": "off-equatorial south, retrograde native vs GYOTO generic at crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 4.476419235288631e-13,
+      "name": "off-equatorial south, retrograde GYOTO KerrBL-specific vs generic at crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "off-equatorial north, spin -0.875 native outcome",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "off-equatorial north, spin -0.875 GYOTO generic crosses the target radius",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "off-equatorial north, spin -0.875 GYOTO KerrBL-specific crosses the target radius",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 1.1368683772161603e-12,
+      "name": "off-equatorial north, spin -0.875 GYOTO generic step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 1.696709154227928e-13,
+      "name": "off-equatorial north, spin -0.875 GYOTO generic null drift (norm/tdot^2)",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 5.016431714466307e-12,
+      "name": "off-equatorial north, spin -0.875 native vs GYOTO generic at crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 2.5650592760939617e-12,
+      "name": "off-equatorial north, spin -0.875 GYOTO KerrBL-specific vs generic at crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "off-equatorial captured native outcome",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "off-equatorial captured GYOTO generic crosses the target radius",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "off-equatorial captured GYOTO KerrBL-specific crosses the target radius",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 1.5099033134902129e-12,
+      "name": "off-equatorial captured GYOTO generic step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 1.1938088898856579e-14,
+      "name": "off-equatorial captured GYOTO generic null drift (norm/tdot^2)",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 1.1262102361797588e-12,
+      "name": "off-equatorial captured native vs GYOTO generic at crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 4.902744876744691e-13,
+      "name": "off-equatorial captured GYOTO KerrBL-specific vs generic at crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "captured, equatorial b=1 native outcome",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "captured, equatorial b=1 GYOTO generic crosses the target radius",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "captured, equatorial b=1 GYOTO KerrBL-specific crosses the target radius",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 2.4158453015843406e-13,
+      "name": "captured, equatorial b=1 GYOTO generic step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 9.374560093467217e-15,
+      "name": "captured, equatorial b=1 GYOTO generic null drift (norm/tdot^2)",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 1.9184653865522705e-13,
+      "name": "captured, equatorial b=1 native vs GYOTO generic at crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 5e-10,
+      "measured": 5.062616992290714e-14,
+      "name": "captured, equatorial b=1 GYOTO KerrBL-specific vs generic at crossing",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy equatorial b=1.8, turns in core native escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy equatorial b=1.8, turns in core GYOTO crosses r=20",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-07,
+      "measured": 1.0252421134282486e-10,
+      "name": "toy equatorial b=1.8, turns in core GYOTO step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 4.015063836959598e-10,
+      "name": "toy equatorial b=1.8, turns in core native vs GYOTO at r=20",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 9.718844687408104e-13,
+      "name": "toy equatorial b=1.8, turns in core GYOTO null drift (norm/tdot^2)",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy equatorial b=-3.6, turns in core native escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy equatorial b=-3.6, turns in core GYOTO crosses r=20",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-07,
+      "measured": 5.241887635065723e-08,
+      "name": "toy equatorial b=-3.6, turns in core GYOTO step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 1.6507044620084343e-09,
+      "name": "toy equatorial b=-3.6, turns in core native vs GYOTO at r=20",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 1.4159168354873197e-10,
+      "name": "toy equatorial b=-3.6, turns in core GYOTO null drift (norm/tdot^2)",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy equatorial b=2.9537, buried Kerr photon orbit native escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy equatorial b=2.9537, buried Kerr photon orbit GYOTO crosses r=20",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-07,
+      "measured": 7.950973213155521e-12,
+      "name": "toy equatorial b=2.9537, buried Kerr photon orbit GYOTO step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 7.249312261592422e-10,
+      "name": "toy equatorial b=2.9537, buried Kerr photon orbit native vs GYOTO at r=20",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 2.7152817717469384e-13,
+      "name": "toy equatorial b=2.9537, buried Kerr photon orbit GYOTO null drift (norm/tdot^2)",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy off-equatorial, shell only native escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy off-equatorial, shell only GYOTO crosses r=20",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-07,
+      "measured": 2.6790303309098817e-10,
+      "name": "toy off-equatorial, shell only GYOTO step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 2.667235321496264e-10,
+      "name": "toy off-equatorial, shell only native vs GYOTO at r=20",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 1.0584667600435468e-13,
+      "name": "toy off-equatorial, shell only GYOTO null drift (norm/tdot^2)",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy off-equatorial, core r_min 0.875 native escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy off-equatorial, core r_min 0.875 GYOTO crosses r=20",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-07,
+      "measured": 5.524043444893323e-10,
+      "name": "toy off-equatorial, core r_min 0.875 GYOTO step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 2.717811753427668e-09,
+      "name": "toy off-equatorial, core r_min 0.875 native vs GYOTO at r=20",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 6.217657496478234e-12,
+      "name": "toy off-equatorial, core r_min 0.875 GYOTO null drift (norm/tdot^2)",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy off-equatorial prograde, core r_min 0.48 native escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy off-equatorial prograde, core r_min 0.48 GYOTO crosses r=20",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-07,
+      "measured": 4.290363619929849e-10,
+      "name": "toy off-equatorial prograde, core r_min 0.48 GYOTO step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 2.412882338376221e-09,
+      "name": "toy off-equatorial prograde, core r_min 0.48 native vs GYOTO at r=20",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 5.6405073604399086e-12,
+      "name": "toy off-equatorial prograde, core r_min 0.48 GYOTO null drift (norm/tdot^2)",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy off-equatorial retrograde, core r_min 0.47 native escapes",
+      "passed": true
+    },
+    {
+      "ceiling": 0.0,
+      "measured": 0.0,
+      "name": "toy off-equatorial retrograde, core r_min 0.47 GYOTO crosses r=20",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-07,
+      "measured": 3.977348228545452e-09,
+      "name": "toy off-equatorial retrograde, core r_min 0.47 GYOTO step-halving change",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-08,
+      "measured": 5.552678317144455e-10,
+      "name": "toy off-equatorial retrograde, core r_min 0.47 native vs GYOTO at r=20",
+      "passed": true
+    },
+    {
+      "ceiling": 1e-09,
+      "measured": 3.532279156694867e-11,
+      "name": "toy off-equatorial retrograde, core r_min 0.47 GYOTO null drift (norm/tdot^2)",
+      "passed": true
+    }
+  ],
+  "compiler": "16.2.1 20260810",
+  "complete_P2_acceptance": false,
+  "computational_source_sha256": "c0f9000b545b49fbc40e84e4cef12a00cad0523320c230dc201d1664baad88d8",
+  "cplusplus": 202002,
+  "eigen_revision": "3147391d946bb4b6c68edd901f2add6ac1f31f8c",
+  "gyoto_revision": "d7dfa50402c40a2f2bf1aef33fc7e98283f35b3a",
+  "kerr_rays": [
+    {
+      "gyoto_generic_h1e-3": {
+        "phi": -4.1675273414999126,
+        "s": 31.111938146046953,
+        "t": -43.53238087082769,
+        "theta": 1.5707963267948966
+      },
+      "gyoto_generic_h2e-3": {
+        "phi": -4.167527341499939,
+        "s": 31.11193814604727,
+        "t": -43.53238087082909,
+        "theta": 1.5707963267948966
+      },
+      "gyoto_points": 40292,
+      "gyoto_specific_h1e-3": {
+        "phi": -4.16752734149986,
+        "s": 31.11193814604735,
+        "t": -43.53238087082857,
+        "theta": 1.5707963267948966
+      },
+      "gyoto_step_halving_change": 1.3997691894473974e-12,
+      "label": "equatorial prograde b=4.5",
+      "native": {
+        "phi": -4.16752734149988,
+        "s": 31.111938146051255,
+        "t": -43.532380870833144,
+        "theta": 1.5707963267948966
+      },
+      "native_minus_gyoto": 5.4569682106375694e-12,
+      "native_outcome": "escaped",
+      "p_phi": 4.5,
+      "p_theta": 0.0,
+      "specific_minus_generic": 8.810729923425242e-13,
+      "spin": 0.875,
+      "target_radius": 20.0,
+      "theta": 1.5707963267948966
+    },
+    {
+      "gyoto_generic_h1e-3": {
+        "phi": 3.093973653301702,
+        "s": 30.104659707600668,
+        "t": -40.021966220868514,
+        "theta": 1.5707963267948966
+      },
+      "gyoto_generic_h2e-3": {
+        "phi": 3.09397365330144,
+        "s": 30.10465970759964,
+        "t": -40.02196622086663,
+        "theta": 1.5707963267948966
+      },
+      "gyoto_points": 39265,
+      "gyoto_specific_h1e-3": {
+        "phi": 3.09397365330148,
+        "s": 30.104659707599268,
+        "t": -40.02196622086648,
+        "theta": 1.5707963267948966
+      },
+      "gyoto_step_halving_change": 1.8829382497642655e-12,
+      "label": "equatorial retrograde b=-8",
+      "native": {
+        "phi": 3.0939736533014672,
+        "s": 30.104659707600224,
+        "t": -40.02196622086689,
+        "theta": 1.5707963267948966
+      },
+      "native_minus_gyoto": 1.6271428648906294e-12,
+      "native_outcome": "escaped",
+      "p_phi": -8.0,
+      "p_theta": 0.0,
+      "specific_minus_generic": 2.0321522242738865e-12,
+      "spin": 0.875,
+      "target_radius": 20.0,
+      "theta": 1.5707963267948966
+    },
+    {
+      "gyoto_generic_h1e-3": {
+        "phi": -15.725173248361026,
+        "s": 36.17125708594149,
+        "t": -80.39293991783939,
+        "theta": 1.5707963267948966
+      },
+      "gyoto_generic_h2e-3": {
+        "phi": -15.725173248375718,
+        "s": 36.171257085949605,
+        "t": -80.39293991788433,
+        "theta": 1.5707963267948966
+      },
+      "gyoto_points": 45351,
+      "gyoto_specific_h1e-3": {
+        "phi": -15.725173248348321,
+        "s": 36.17125708593874,
+        "t": -80.39293991780367,
+        "theta": 1.5707963267948966
+      },
+      "gyoto_step_halving_change": 4.494893346418394e-11,
+      "label": "near-critical prograde b=2.96",
+      "native": {
+        "phi": -15.72517324833139,
+        "s": 36.171257085938755,
+        "t": -80.39293991776147,
+        "theta": 1.5707963267948966
+      },
+      "native_minus_gyoto": 7.791811640345259e-11,
+      "native_outcome": "escaped",
+      "p_phi": 2.96,
+      "p_theta": 0.0,
+      "specific_minus_generic": 3.5711877899302635e-11,
+      "spin": 0.875,
+      "target_radius": 20.0,
+      "theta": 1.5707963267948966
+    },
+    {
+      "gyoto_generic_h1e-3": {
+        "phi": -3.409683926407313,
+        "s": 30.115781118557603,
+        "t": -39.92151398408256,
+        "theta": 2.2335599152636294
+      },
+      "gyoto_generic_h2e-3": {
+        "phi": -3.409683926407218,
+        "s": 30.115781118557482,
+        "t": -39.92151398408238,
+        "theta": 2.2335599152634993
+      },
+      "gyoto_points": 39293,
+      "gyoto_specific_h1e-3": {
+        "phi": -3.4096839264071948,
+        "s": 30.115781118557532,
+        "t": -39.92151398408191,
+        "theta": 2.2335599152635637
+      },
+      "gyoto_step_halving_change": 1.7763568394002505e-13,
+      "label": "off-equatorial north",
+      "native": {
+        "phi": -3.4096839264072973,
+        "s": 30.115781118562396,
+        "t": -39.92151398408742,
+        "theta": 2.233559915263533
+      },
+      "native_minus_gyoto": 4.860112312599085e-12,
+      "native_outcome": "escaped",
+      "p_phi": 3.0,
+      "p_theta": 5.0,
+      "specific_minus_generic": 6.465938895416912e-13,
+      "spin": 0.875,
+      "target_radius": 20.0,
+      "theta": 1.0
+    },
+    {
+      "gyoto_generic_h1e-3": {
+        "phi": 3.4257971467670014,
+        "s": 31.045733172112993,
+        "t": -42.1518129689875,
+        "theta": 0.6731356868886557
+      },
+      "gyoto_generic_h2e-3": {
+        "phi": 3.425797146766844,
+        "s": 31.045733172112055,
+        "t": -42.15181296898626,
+        "theta": 0.6731356868887081
+      },
+      "gyoto_points": 40213,
+      "gyoto_specific_h1e-3": {
+        "phi": 3.425797146767045,
+        "s": 31.045733172112545,
+        "t": -42.1518129689878,
+        "theta": 0.6731356868886669
+      },
+      "gyoto_step_halving_change": 1.2363443602225743e-12,
+      "label": "off-equatorial south, retrograde",
+      "native": {
+        "phi": 3.425797146767138,
+        "s": 31.045733172117064,
+        "t": -42.15181296899252,
+        "theta": 0.6731356868886866
+      },
+      "native_minus_gyoto": 5.023537141823908e-12,
+      "native_outcome": "escaped",
+      "p_phi": -4.0,
+      "p_theta": -5.0,
+      "specific_minus_generic": 4.476419235288631e-13,
+      "spin": 0.875,
+      "target_radius": 20.0,
+      "theta": 2.2
+    },
+    {
+      "gyoto_generic_h1e-3": {
+        "phi": -4.969950959001402,
+        "s": 33.793800504838295,
+        "t": -49.43092153660607,
+        "theta": 2.2132017124844214
+      },
+      "gyoto_generic_h2e-3": {
+        "phi": -4.969950959001317,
+        "s": 33.79380050483716,
+        "t": -49.4309215366051,
+        "theta": 2.213201712484377
+      },
+      "gyoto_points": 42964,
+      "gyoto_specific_h1e-3": {
+        "phi": -4.969950959001294,
+        "s": 33.79380050483727,
+        "t": -49.430921536603506,
+        "theta": 2.213201712484747
+      },
+      "gyoto_step_halving_change": 1.1368683772161603e-12,
+      "label": "off-equatorial north, spin -0.875",
+      "native": {
+        "phi": -4.969950959001338,
+        "s": 33.79380050484259,
+        "t": -49.43092153661109,
+        "theta": 2.2132017124843664
+      },
+      "native_minus_gyoto": 5.016431714466307e-12,
+      "native_outcome": "escaped",
+      "p_phi": 3.0,
+      "p_theta": 5.0,
+      "specific_minus_generic": 2.5650592760939617e-12,
+      "spin": -0.875,
+      "target_radius": 20.0,
+      "theta": 1.0
+    },
+    {
+      "gyoto_generic_h1e-3": {
+        "phi": -2.812438313869452,
+        "s": 10.046308004498323,
+        "t": -17.085296312825175,
+        "theta": 1.066937975052848
+      },
+      "gyoto_generic_h2e-3": {
+        "phi": -2.8124383138697433,
+        "s": 10.046308004498975,
+        "t": -17.085296312826685,
+        "theta": 1.0669379750531203
+      },
+      "gyoto_points": 12659,
+      "gyoto_specific_h1e-3": {
+        "phi": -2.8124383138695555,
+        "s": 10.046308004498513,
+        "t": -17.085296312825665,
+        "theta": 1.066937975052909
+      },
+      "gyoto_step_halving_change": 1.5099033134902129e-12,
+      "label": "off-equatorial captured",
+      "native": {
+        "phi": -2.812438313869622,
+        "s": 10.046308004498766,
+        "t": -17.0852963128263,
+        "theta": 1.066937975052971
+      },
+      "native_minus_gyoto": 1.1262102361797588e-12,
+      "native_outcome": "capture_surface",
+      "p_phi": 2.0,
+      "p_theta": 3.0,
+      "specific_minus_generic": 4.902744876744691e-13,
+      "spin": 0.875,
+      "target_radius": 2.5,
+      "theta": 1.0
+    },
+    {
+      "gyoto_generic_h1e-3": {
+        "phi": -0.5455870810122206,
+        "s": 7.534390038405286,
+        "t": -12.386527333393385,
+        "theta": 1.5707963267948966
+      },
+      "gyoto_generic_h2e-3": {
+        "phi": -0.5455870810120895,
+        "s": 7.534390038405415,
+        "t": -12.386527333393143,
+        "theta": 1.5707963267948966
+      },
+      "gyoto_points": 8538,
+      "gyoto_specific_h1e-3": {
+        "phi": -0.5455870810122492,
+        "s": 7.534390038405337,
+        "t": -12.386527333393417,
+        "theta": 1.5707963267948966
+      },
+      "gyoto_step_halving_change": 2.4158453015843406e-13,
+      "label": "captured, equatorial b=1",
+      "native": {
+        "phi": -0.5455870810123057,
+        "s": 7.534390038405094,
+        "t": -12.386527333393401,
+        "theta": 1.5707963267948966
+      },
+      "native_minus_gyoto": 1.9184653865522705e-13,
+      "native_outcome": "capture_surface",
+      "p_phi": 1.0,
+      "p_theta": 0.0,
+      "specific_minus_generic": 5.062616992290714e-14,
+      "spin": 0.875,
+      "target_radius": 2.5,
+      "theta": 1.5707963267948966
+    }
+  ],
+  "passed": true,
+  "schema_version": 1,
+  "scope": "GYOTO 2.0.2 core built as C++20 from pinned sources: Kerr tensors, flat RK4, and Kerr null rays against GYOTO's own fixed-step Legacy integrators. No toy-gravastar adapter yet.",
+  "toy_rays": [
+    {
+      "gyoto_null_drift": 9.718844687408104e-13,
+      "gyoto_points": 153740,
+      "gyoto_step_halving_change": 1.0252421134282486e-10,
+      "label": "toy equatorial b=1.8, turns in core",
+      "native_minus_gyoto": 4.015063836959598e-10,
+      "native_phi": -5.40854258467558,
+      "native_s": 29.25659596707343,
+      "p_phi": 1.8,
+      "p_theta": 0.0,
+      "theta": 1.5707963267948966
+    },
+    {
+      "gyoto_null_drift": 1.4159168354873197e-10,
+      "gyoto_points": 147034,
+      "gyoto_step_halving_change": 5.241887635065723e-08,
+      "label": "toy equatorial b=-3.6, turns in core",
+      "native_minus_gyoto": 1.6507044620084343e-09,
+      "native_phi": 0.8908465927510426,
+      "native_s": 27.58756801988099,
+      "p_phi": -3.6,
+      "p_theta": 0.0,
+      "theta": 1.5707963267948966
+    },
+    {
+      "gyoto_null_drift": 2.7152817717469384e-13,
+      "gyoto_points": 168263,
+      "gyoto_step_halving_change": 7.950973213155521e-12,
+      "label": "toy equatorial b=2.9537, buried Kerr photon orbit",
+      "native_minus_gyoto": 7.249312261592422e-10,
+      "native_phi": -9.135802400024525,
+      "native_s": 32.88668651271691,
+      "p_phi": 2.9537,
+      "p_theta": 0.0,
+      "theta": 1.5707963267948966
+    },
+    {
+      "gyoto_null_drift": 1.0584667600435468e-13,
+      "gyoto_points": 199115,
+      "gyoto_step_halving_change": 2.6790303309098817e-10,
+      "label": "toy off-equatorial, shell only",
+      "native_minus_gyoto": 2.667235321496264e-10,
+      "native_phi": -19.96998932502657,
+      "native_s": 40.601096919457234,
+      "p_phi": 2.0,
+      "p_theta": 3.0,
+      "theta": 1.0
+    },
+    {
+      "gyoto_null_drift": 6.217657496478234e-12,
+      "gyoto_points": 153697,
+      "gyoto_step_halving_change": 5.524043444893323e-10,
+      "label": "toy off-equatorial, core r_min 0.875",
+      "native_minus_gyoto": 2.717811753427668e-09,
+      "native_phi": -5.780733819211263,
+      "native_s": 29.24700072075034,
+      "p_phi": 0.5,
+      "p_theta": 1.0,
+      "theta": 1.0
+    },
+    {
+      "gyoto_null_drift": 5.6405073604399086e-12,
+      "gyoto_points": 154591,
+      "gyoto_step_halving_change": 4.290363619929849e-10,
+      "label": "toy off-equatorial prograde, core r_min 0.48",
+      "native_minus_gyoto": 2.412882338376221e-09,
+      "native_phi": -5.782714357450852,
+      "native_s": 29.47030080928652,
+      "p_phi": 0.5,
+      "p_theta": 0.6,
+      "theta": 1.0
+    },
+    {
+      "gyoto_null_drift": 3.532279156694867e-11,
+      "gyoto_points": 152263,
+      "gyoto_step_halving_change": 3.977348228545452e-09,
+      "label": "toy off-equatorial retrograde, core r_min 0.47",
+      "native_minus_gyoto": 5.552678317144455e-10,
+      "native_phi": 0.3168483388827285,
+      "native_s": 28.88926618977484,
+      "p_phi": -0.3,
+      "p_theta": 0.8,
+      "theta": 1.0
+    }
+  ]
+}
