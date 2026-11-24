@@ -8,6 +8,7 @@
 #include <fstream>
 #include <iomanip>
 #include <numeric>
+#include <set>
 #include <sstream>
 #include <stdexcept>
 #include <unistd.h>
@@ -246,6 +247,7 @@ ResumeReport RecordingSession::open() {
                            .size()
                      : 0;
         Json reconciled = Json::object();
+        std::set<std::string> on_disk; // frame keys with a file, kept or not
         for (const auto &entry : fs::directory_iterator(dir_ / "frames")) {
             if (!entry.is_regular_file())
                 continue;
@@ -257,6 +259,7 @@ ResumeReport RecordingSession::open() {
                 continue;
             }
             const auto k = key(std::uint64_t(index));
+            on_disk.insert(k);
             const auto bytes = tools::read_file(entry.path());
             const auto sha = tools::sha256(bytes);
             const auto radiance_path = dir_ / "radiance" / frame_name(std::uint64_t(index), ".npy");
@@ -291,8 +294,10 @@ ResumeReport RecordingSession::open() {
             reconciled[k] = record;
             ++report_.adopted;
         }
+        // Recorded frames whose file is gone (quarantined ones are counted
+        // as quarantined, not missing).
         for (const auto &[k, value] : frames_.items())
-            if (!reconciled.contains(k))
+            if (!on_disk.contains(k))
                 ++report_.missing;
         if (radiance)
             for (const auto &entry : fs::directory_iterator(dir_ / "radiance")) {
