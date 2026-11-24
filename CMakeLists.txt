@@ -267,6 +267,15 @@ if(GRAVASTAR_DESKTOP)
                     "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_stereographic.glsl"
             VERBATIM)
     endforeach()
+    set(GRAVASTAR_TRACE64_SPV "${GRAVASTAR_SPV_DIR}/gravastar_trace64.spv")
+    add_custom_command(
+        OUTPUT "${GRAVASTAR_TRACE64_SPV}"
+        COMMAND "${GLSLC_EXECUTABLE}" -I "${CMAKE_CURRENT_SOURCE_DIR}/shaders" -O -DGRAVASTAR_FP64
+            "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_trace.comp" -o "${GRAVASTAR_TRACE64_SPV}"
+        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_trace.comp"
+                "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_stereographic.glsl"
+        VERBATIM)
+    add_custom_target(gravastar_trace_shader DEPENDS "${GRAVASTAR_TRACE64_SPV}")
     add_custom_target(gravastar_precision_shaders
         DEPENDS "${GRAVASTAR_PRECISION32_SPV}" "${GRAVASTAR_PRECISION64_SPV}"
                 "${GRAVASTAR_PRECISIONMIXED_SPV}")
@@ -342,6 +351,22 @@ if(GRAVASTAR_DESKTOP)
             GRAVASTAR_PRECISION64_SPV="${GRAVASTAR_PRECISION64_SPV}"
             GRAVASTAR_PRECISIONMIXED_SPV="${GRAVASTAR_PRECISIONMIXED_SPV}")
         add_dependencies(gravastar_gpu_precision gravastar_precision_shaders)
+        add_executable(gravastar_gpu_trace src/experiments/gpu_trace.cpp)
+        target_link_libraries(gravastar_gpu_trace PRIVATE gravastar_vulkan gravastar_optics
+            nlohmann_json::nlohmann_json)
+        target_compile_definitions(gravastar_gpu_trace PRIVATE
+            GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}"
+            GRAVASTAR_TRACE64_SPV="${GRAVASTAR_TRACE64_SPV}")
+        add_dependencies(gravastar_gpu_trace gravastar_trace_shader)
+        add_test(NAME gpu_trace_vs_cpu COMMAND gravastar_gpu_trace --compare-cpu --check
+            --summary --config benchmarks/optics_keplerian_stars_v1.json --resolution-scale 2
+            --output results/local/gpu_trace_ctest.json)
+        # Kerr runs the same kernel with zero shell radii; a family mix-up showed
+        # up only there (3977 mismatched outcomes before the fix).
+        add_test(NAME gpu_trace_vs_cpu_kerr COMMAND gravastar_gpu_trace --compare-cpu --check
+            --summary --config benchmarks/optics_keplerian_kerr_stars_v1.json --resolution-scale 2
+            --output results/local/gpu_trace_kerr_ctest.json)
+        set_tests_properties(gpu_trace_vs_cpu gpu_trace_vs_cpu_kerr PROPERTIES TIMEOUT 300 LABELS desktop)
         add_test(NAME gpu_precision COMMAND gravastar_gpu_precision --check
             --width 32 --height 24 --output results/local/gpu_precision_ctest.json)
         set_tests_properties(gpu_precision PROPERTIES TIMEOUT 300 LABELS desktop)
@@ -354,7 +379,8 @@ if(GRAVASTAR_DESKTOP)
             # allocated inside the run-time-loaded GPU driver or libdbus, not in
             # project code. Address and undefined-behavior checks stay on.
             set_tests_properties(vulkan_device_audit vulkan_studio_smoke vulkan_metric_fp32 vulkan_ray_fp32
-                gpu_precision PROPERTIES ENVIRONMENT "ASAN_OPTIONS=detect_leaks=0")
+                gpu_precision gpu_trace_vs_cpu gpu_trace_vs_cpu_kerr
+                PROPERTIES ENVIRONMENT "ASAN_OPTIONS=detect_leaks=0")
         endif()
     endif()
 endif()
