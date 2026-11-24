@@ -114,6 +114,20 @@ void supported_domain() {
   }
   require("scene annulus [3, 6] supported for the toy preset",
           o::keplerian_annulus_supported(g::Parameters{}, 3, 6));
+  // Wide annuli: with 64 samples the first spacing is far larger than the
+  // distance to the ISCO, so a chord test between samples cannot see it.
+  // (Ultrareview finding: [5.6, 100] in Schwarzschild was accepted.)
+  require("Schwarzschild [5.6, 100] reaching inside ISCO 6 is rejected",
+          !o::keplerian_annulus_supported(kerr(0), 5.6, 100));
+  require("Schwarzschild [6.01, 100] outside ISCO 6 is supported",
+          o::keplerian_annulus_supported(kerr(0), 6.01, 100));
+  for (double a : {.875, -.875}) {
+    const double r = isco(a);
+    require("Kerr a=" + u::Json(a).dump() + " wide annulus from 0.99 ISCO rejected",
+            !o::keplerian_annulus_supported(kerr(a), .99 * r, r + 60));
+    require("Kerr a=" + u::Json(a).dump() + " wide annulus from 1.001 ISCO supported",
+            o::keplerian_annulus_supported(kerr(a), 1.001 * r, r + 60));
+  }
 }
 
 void redshift() {

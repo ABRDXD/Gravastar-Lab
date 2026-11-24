@@ -665,19 +665,28 @@ bool keplerian_annulus_supported(const Parameters &p, double inner,
                                  double outer, int samples) {
   if (!(inner > 0 && outer > inner && samples >= 2))
     return false;
+  // Specific angular momentum u_phi of the orbit at r, if it is timelike.
+  auto angular_momentum = [&](double r) -> std::optional<double> {
+    const auto g = metric(p, {0, r, std::numbers::pi / 2, 0});
+    const auto omega = keplerian_omega(g);
+    if (!omega)
+      return {};
+    const auto u = circular_frame(g, *omega).basis[0];
+    return g.metric[3][0] * u[0] + g.metric[3][3] * u[3];
+  };
+  // Stability is dL/dr > 0. It is tested locally at every sample (a central
+  // difference over +-1e-5 r), not only between samples: a chord between
+  // coarse samples can rise even when the inner edge lies inside the ISCO.
   double previous = -std::numeric_limits<double>::infinity();
   for (int i = 0; i < samples; ++i) {
     const double r = inner + (outer - inner) * i / (samples - 1);
+    const double delta = 1e-5 * r;
     try {
-      const auto g = metric(p, {0, r, std::numbers::pi / 2, 0});
-      const auto omega = keplerian_omega(g);
-      if (!omega)
+      const auto lz = angular_momentum(r), below = angular_momentum(r - delta),
+                 above = angular_momentum(r + delta);
+      if (!lz || !below || !above || !(*above > *below) || !(*lz > previous))
         return false;
-      const auto u = circular_frame(g, *omega).basis[0];
-      const double lz = g.metric[3][0] * u[0] + g.metric[3][3] * u[3];
-      if (!(lz > previous))
-        return false;
-      previous = lz;
+      previous = *lz;
     } catch (const std::exception &) {
       return false;
     }

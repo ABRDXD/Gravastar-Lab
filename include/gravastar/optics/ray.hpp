@@ -111,7 +111,9 @@ enum class DiskMotion { zamo, keplerian_prograde };
 std::optional<double> keplerian_omega(const geometry::Evaluation &);
 // True when every sampled radius of [inner, outer] on the equator has a
 // timelike prograde circular geodesic whose angular momentum grows outward
-// (stable). Samples include both ends.
+// (stable), tested by a local derivative at each sample and between
+// samples. Samples include both ends. An unstable band narrower than the
+// sample spacing strictly inside the annulus could still be missed.
 bool keplerian_annulus_supported(const Parameters &, double inner, double outer,
                                  int samples = 64);
 Emission disk_emission(const Parameters &, const State &hit,
