@@ -24,6 +24,8 @@ compile or link either component.
 | Dear ImGui | 1.93.0, upstream `ocornut/imgui` tag `v1.93.0`, commit `c1aaac65e896a45f81f47a4d68f9959e0f86c859`; `third_party/imgui/` (core, `imgui_demo.cpp`, `backends/imgui_impl_{glfw,vulkan}`) | Vendored C++ source, built as `gravastar_imgui` for the studio only. Demo windows compiled out (`IMGUI_DISABLE_DEMO_WINDOWS`); Vulkan entry points loaded at run time (`IMGUI_IMPL_VULKAN_NO_PROTOTYPES`). Unmodified. | MIT, `third_party/imgui/LICENSE.txt` (SHA-256 `173506a2d6f7fb67990d257fb2507f188690eca39060c39469ae7bef43aae2a3`). GPL-compatible. |
 | ImPlot | 1.1, upstream `epezent/implot` tag `v1.1`, commit `819f200639455a58b6b3d4156b70e4271aeb2d00`; `third_party/implot/` (core, no demo) | Vendored C++ source in `gravastar_imgui`. Unmodified. | MIT, `third_party/implot/LICENSE` (SHA-256 `38bd30c2111fe7e3d8fb86d8607491239659eff1df1b1004b9a8349e20a91967`). GPL-compatible. |
 
+| LodePNG | upstream `lvandeve/lodepng` (no tags) commit `7b2893e35891c0c85bee5595caafaf3c2044b409`, `LODEPNG_VERSION_STRING` `20261102`; `third_party/lodepng/` (`lodepng.cpp`, `lodepng.h`) | Vendored C++ source, built as `gravastar_png` in every configuration for recording frames. Unmodified. Encoder adds no version text chunk (`add_id = 0`). | zlib licence, `third_party/lodepng/LICENSE` (SHA-256 `bdafa318b8e637d600ca1b60545e894881977a16a16b74809c95e805701621e3`). GPL-compatible. Per-file SHA-256: `third_party/LODEPNG_SHA256.txt`. |
+
 ImGui and ImPlot were added on 2026-11-24 by a shallow clone of the tags
 above; the 21 copied files are byte-identical to those tags. Their per-file
 SHA-256 list is `third_party/IMGUI_IMPLOT_SHA256.txt`.

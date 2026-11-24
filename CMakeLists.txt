@@ -55,11 +55,19 @@ target_link_libraries(gravastar_validate PRIVATE gravastar_geometry nlohmann_jso
 target_compile_definitions(gravastar_validate PRIVATE GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}")
 # Deterministic timeline, resumable frame sequence and FFmpeg encoding. The
 # recorder takes frames from a caller-supplied source and links no renderer.
-add_library(gravastar_recording src/recording/recorder.cpp)
+# LodePNG (zlib licence, vendored and pinned, THIRD_PARTY.md) for PNG frames.
+add_library(gravastar_png STATIC third_party/lodepng/lodepng.cpp)
+target_include_directories(gravastar_png SYSTEM PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/third_party/lodepng")
+target_compile_features(gravastar_png PUBLIC cxx_std_20)
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(gravastar_png PRIVATE -w)
+endif()
+
+add_library(gravastar_recording src/recording/recorder.cpp src/recording/image_io.cpp)
 target_include_directories(gravastar_recording PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 target_compile_features(gravastar_recording PUBLIC cxx_std_20)
-target_link_libraries(gravastar_recording PUBLIC nlohmann_json::nlohmann_json)
+target_link_libraries(gravastar_recording PUBLIC nlohmann_json::nlohmann_json PRIVATE gravastar_png)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(gravastar_recording PRIVATE -Wall -Wextra -Wpedantic)
     if(GRAVASTAR_SANITIZERS)
@@ -460,6 +468,13 @@ if(BUILD_TESTING)
     else()
         message(STATUS "libquadmath not available: standalone quad references skipped")
     endif()
+endif()
+
+if(BUILD_TESTING)
+    add_executable(gravastar_image_io_tests tests/image_io_tests.cpp)
+    target_link_libraries(gravastar_image_io_tests PRIVATE gravastar_recording)
+    add_test(NAME recording_image_io COMMAND gravastar_image_io_tests)
+    set_tests_properties(recording_image_io PROPERTIES TIMEOUT 60 LABELS recording)
 endif()
 
 # --- Recording lifecycle test (needs external ffmpeg and ffprobe) ---
