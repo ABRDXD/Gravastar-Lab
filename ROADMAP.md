@@ -332,6 +332,15 @@ findings were checked against the code; each was fixed on
    inspection (ray path, charts crossed, events), recording.
 5. Gate: smoke test covering resize, minimise, quality change, long job
    cancel.
+   **Steps 1–5 done 2026-11-24** (docs/STUDIO.md). ImGui 1.93.0 / ImPlot 1.1
+   vendored and pinned; overlay drawn with Vulkan 1.3 dynamic rendering; the
+   window shows the real FP64 GPU render, refined coarse to fine on a worker
+   thread and restarted on any change; orbit camera with pole clamping,
+   reset and bookmarks; scene, emission, science-status, pixel-inspection
+   and recording panels. `vulkan_studio_render_smoke` covers quality change,
+   long-job cancel (52 ms), resize, minimise, camera change and a
+   screenshot. Limits: the compositor ignores minimise, so that check is not
+   exercised; no validation layers installed; no FP32 preview tracer.
 
 ### Phase F: P5 recording on the real renderer
 

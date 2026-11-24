@@ -669,8 +669,11 @@ questions whose answers can be found in the references or local environment.
       measurement, no shared charts or outcomes with the CPU tracer.
       See docs/RECONCILE_STATUS.md.
 - [ ] Implement and verify P4 desktop studio.
-      GLFW window and swapchain showing a calibration pattern, with a smoke
-      test. No ImGui/ImPlot, camera, panels or real render.
+      Phase E (docs/STUDIO.md): ImGui/ImPlot studio showing the real FP64
+      GPU render with progressive refinement, orbit camera, scene/emission/
+      science/inspection panels and a real-render smoke test. Open: an FP32
+      preview path for fluid interaction, validation-layer runs, persistent
+      bookmarks, and recording from the studio (P5).
 - [ ] Implement and verify P5 deterministic recording and encoding.
       Recorder takes frames from a caller-supplied source; tested only on a
       synthetic 64x64, 30-frame job (cancel, resume, FFmpeg, ffprobe exit

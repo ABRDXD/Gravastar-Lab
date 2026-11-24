@@ -57,10 +57,12 @@ ctest --preset desktop-release
 ```
 
 Requires a Vulkan 1.3 driver and `glslc`. Vendored Vulkan headers and GLFW are
-listed in [THIRD_PARTY.md](THIRD_PARTY.md). This adds four tests: a device
-audit, two **FP32** CPU/GPU comparisons (metric within 1.7e-5; ray turning
-radius within 5.3e-5 of the exact value) and a window smoke test that shows a
-calibration pattern. If `ffmpeg` and `ffprobe` are installed, every build also
+listed in [THIRD_PARTY.md](THIRD_PARTY.md). It also builds the FP64 GPU tracer
+(`gravastar_gpu_trace`, [GPU tracer](docs/GPU_TRACER.md)) and the desktop
+studio (`gravastar_studio`, [studio](docs/STUDIO.md)), which shows a scene
+rendered on the GPU with an orbit camera and inspection panels. Its tests
+include a device audit, FP32 kernel comparisons, the GPU-vs-CPU per-pixel
+checks and two studio smoke tests. If `ffmpeg` and `ffprobe` are installed, every build also
 runs the recorder test. The recorder is tested only on a synthetic 64x64,
 30-frame job. Measured counts for every build are in
 [the reconciliation record](docs/RECONCILE_STATUS.md).
