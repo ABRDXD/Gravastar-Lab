@@ -323,17 +323,24 @@ Frame circular_frame(const geometry::Evaluation &g,
                 -ut / std::sqrt(determinant)};
   return f;
 }
-State launch(const Parameters &p, const Vector &x,
-             const std::array<double, 3> &n, std::optional<double> omega) {
+Observer observer(const Parameters &p, const Vector &x,
+                  std::optional<double> omega) {
   State y{};
   std::copy(x.begin(), x.end(), y.begin());
   if (!finite(y))
     throw std::invalid_argument("nonfinite observer position");
+  Observer o{x, metric(p, y), {}};
+  o.frame = circular_frame(o.metric, omega);
+  return o;
+}
+State launch(const Observer &o, const std::array<double, 3> &n) {
+  State y{};
+  std::copy(o.position.begin(), o.position.end(), y.begin());
   double length = std::hypot(n[0], n[1], n[2]);
   if (!std::isfinite(length) || length == 0)
     throw std::invalid_argument("invalid sight vector");
-  auto g = metric(p, y);
-  auto f = circular_frame(g, omega);
+  const auto &g = o.metric;
+  const auto &f = o.frame;
   Vector v = f.basis[0];
   for (int i = 0; i < 4; ++i)
     for (int j = 0; j < 3; ++j)
@@ -342,6 +349,20 @@ State launch(const Parameters &p, const Vector &x,
     for (int j = 0; j < 4; ++j)
       y[i + 4] += g.metric[i][j] * v[j];
   return y;
+}
+State launch(const Parameters &p, const Vector &x,
+             const std::array<double, 3> &n, std::optional<double> omega) {
+  // Validate the sight vector before the observer, as before the split.
+  {
+    State y{};
+    std::copy(x.begin(), x.end(), y.begin());
+    if (!finite(y))
+      throw std::invalid_argument("nonfinite observer position");
+    double length = std::hypot(n[0], n[1], n[2]);
+    if (!std::isfinite(length) || length == 0)
+      throw std::invalid_argument("invalid sight vector");
+  }
+  return launch(observer(p, x, omega), n);
 }
 State rhs(const Parameters &p, const State &y) {
   if (!finite(y))

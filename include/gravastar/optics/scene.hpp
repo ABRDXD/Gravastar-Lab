@@ -126,6 +126,16 @@ inline Scene with_tolerance(Scene s, double tolerance) {
   s.settings.null_tolerance = std::max(s.settings.null_tolerance, 1e3 * tolerance);
   return s;
 }
+inline Observer scene_observer(const Scene &s) {
+  return observer(s.geometry, s.position, s.omega);
+}
+// With the camera's observer computed once per image (same result as below).
+inline State scene_pixel(const Scene &s, const Observer &camera, int x, int y) {
+  double tangent = std::tan(s.fov / 2);
+  double right = (2 * (x + .5) / s.width - 1) * tangent * s.width / s.height;
+  double up = (1 - 2 * (y + .5) / s.height) * tangent;
+  return launch(camera, {-1, -up, right});
+}
 inline State scene_pixel(const Scene &s, int x, int y) {
   double tangent = std::tan(s.fov / 2);
   double right = (2 * (x + .5) / s.width - 1) * tangent * s.width / s.height;
@@ -145,10 +155,13 @@ struct RaySample {
   std::optional<double> background, background_redshift;
   std::optional<std::array<double, 3>> background_direction;
 };
-inline RaySample ray_sample(const Scene &s, const State &initial, const Trace &trace) {
+// `camera` is the frame at the ray's start (scene_observer(s).frame for
+// camera rays); the overload below computes it from `initial`.
+inline RaySample ray_sample(const Scene &s, const Frame &camera, const State &initial,
+                            const Trace &trace) {
   RaySample out;
   if (trace.outcome == Outcome::emitted) {
-    auto frame = circular_frame(metric(s.geometry, initial), s.omega);
+    const auto &frame = camera;
     // Disk hits are at q=1, where conversion to the original emission chart
     // is regular. The camera and physical ZAMO emission prescription are
     // shared.
@@ -166,7 +179,7 @@ inline RaySample ray_sample(const Scene &s, const State &initial, const Trace &t
     out.intensity = 0;
     out.alpha = 0;
     if (s.background) {
-      auto frame = circular_frame(metric(s.geometry, initial), s.omega);
+      const auto &frame = camera;
       const auto b = background_emission(
           s.geometry, trace.final, frequency(initial, frame.basis[0]),
           *s.background);
@@ -179,6 +192,12 @@ inline RaySample ray_sample(const Scene &s, const State &initial, const Trace &t
     out.alpha = 1;
   }
   return out;
+}
+inline RaySample ray_sample(const Scene &s, const State &initial, const Trace &trace) {
+  if (trace.outcome != Outcome::emitted &&
+      !(trace.outcome == Outcome::escaped && s.background))
+    return ray_sample(s, Frame{}, initial, trace); // the frame is not used
+  return ray_sample(s, circular_frame(metric(s.geometry, initial), s.omega), initial, trace);
 }
 inline tools::Json ray_report(const Scene &s, const State &initial,
                               const Trace &trace) {

@@ -203,6 +203,7 @@ struct Renderer {
 
 struct FrameStats {
     double seconds{}, gpu_milliseconds{}, fallback_seconds{};
+    double launch_seconds{}, trace_seconds{}, sample_seconds{}; // wall time per stage
     std::array<std::size_t, 7> fallback{};
     std::map<std::string, std::size_t> outcomes;
     std::size_t near_tangent{};
@@ -211,6 +212,8 @@ struct FrameStats {
         for (std::size_t i = 1; i < fallback.size(); ++i)
             f[gr::GpuTracer::reasons[i]] = fallback[i];
         return {{"seconds", seconds},         {"gpu_milliseconds", gpu_milliseconds},
+                {"stage_seconds", {{"launch", launch_seconds}, {"trace", trace_seconds},
+                                   {"sample", sample_seconds}}},
                 {"cpu_fallback_seconds", fallback_seconds}, {"cpu_fallback", f},
                 {"outcomes", outcomes},       {"near_tangent", near_tangent}};
     }
@@ -235,6 +238,7 @@ Rendered render(Renderer &renderer, const rec::TimelineConfig &timeline, Camera 
     s.position[2] = camera.theta;
     s.position[3] = camera.phi;
     const auto patch = camera.theta <= std::numbers::pi / 2 ? o::Chart::north : o::Chart::south;
+    const auto observer = o::scene_observer(s); // shared by every pixel
     const std::size_t n = std::size_t(s.width) * s.height;
     const auto channels = std::size_t(timeline.radiance_channels);
     Rendered out;
@@ -247,12 +251,18 @@ Rendered render(Renderer &renderer, const rec::TimelineConfig &timeline, Camera 
             throw rec::RecordingCancelled();
         const std::size_t count = std::min(chunk, n - first);
         std::vector<o::State> initial(count), start(count);
+        auto stage = Clock::now();
         parallel_for(count, [&](std::size_t i) {
             const auto p = first + i;
-            initial[i] = o::scene_pixel(s, int(p % std::size_t(s.width)), int(p / std::size_t(s.width)));
+            initial[i] = o::scene_pixel(s, observer, int(p % std::size_t(s.width)),
+                                        int(p / std::size_t(s.width)));
             start[i] = o::transform_state(initial[i], o::Chart::boyer_lindquist, patch);
         });
+        out.stats.launch_seconds += seconds_since(stage);
+        stage = Clock::now();
         const auto traced = renderer.tracer.trace(s, start, patch, renderer.batch, &interrupted);
+        out.stats.trace_seconds += seconds_since(stage);
+        stage = Clock::now();
         if (traced.cancelled)
             throw rec::RecordingCancelled();
         out.stats.gpu_milliseconds += traced.gpu_milliseconds;
@@ -262,7 +272,7 @@ Rendered render(Renderer &renderer, const rec::TimelineConfig &timeline, Camera 
         parallel_for(count, [&](std::size_t i) {
             const auto p = first + i;
             const auto &t = traced.rays[i].trace;
-            const auto sample = o::ray_sample(s, initial[i], t);
+            const auto sample = o::ray_sample(s, observer.frame, initial[i], t);
             const auto c = o::sample_color(t.outcome, sample);
             std::copy(c.begin(), c.end(), out.frame.display.rgb.begin() + std::ptrdiff_t(3 * p));
             out.outcome[p] = std::uint8_t(t.outcome);
@@ -278,6 +288,7 @@ Rendered render(Renderer &renderer, const rec::TimelineConfig &timeline, Camera 
             ++out.stats.outcomes[std::string(o::outcome_name(t.outcome))];
             out.stats.near_tangent += !t.tangencies.empty();
         }
+        out.stats.sample_seconds += seconds_since(stage);
     }
     out.stats.seconds = seconds_since(begin);
     return out;

@@ -21,6 +21,16 @@ Frame circular_frame(const geometry::Evaluation &,
 State launch(const Parameters &, const Vector &position,
              const std::array<double, 3> &sight,
              std::optional<double> omega = {});
+// The camera's metric and frame, which every pixel of an image shares.
+// launch(observer(p, x, omega), n) equals launch(p, x, n, omega) exactly.
+struct Observer {
+  Vector position{};
+  geometry::Evaluation metric;
+  Frame frame;
+};
+Observer observer(const Parameters &, const Vector &position,
+                  std::optional<double> omega = {});
+State launch(const Observer &, const std::array<double, 3> &sight);
 State rhs(const Parameters &,
           const State &); // increasing parameter goes into past
 double null_residual(const geometry::Evaluation &, const State &);
