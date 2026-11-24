@@ -529,6 +529,7 @@ static Trace trace_impl(const Parameters &p, const State &initial,
       std::optional<Outcome> terminal;
       Transition transition = Transition::none;
       std::size_t publish_count = 0;
+      std::string clip_surface;
       try {
         const auto &active =
             chart == Chart::core_cartesian ? core_surfaces : surfaces;
@@ -581,6 +582,7 @@ static Trace trace_impl(const Parameters &p, const State &initial,
             terminal = surface.terminal;
             transition = surface.transition;
             next = hit;
+            clip_surface = surface.name;
             if (transition != Transition::none)
               change_core(next, transition);
             break;
@@ -596,9 +598,12 @@ static Trace trace_impl(const Parameters &p, const State &initial,
         continue;
       }
       // Tangencies beyond a clipping terminal or transition event belong to
-      // the discarded trial tail.
+      // the discarded trial tail, except on the clipping surface itself: a
+      // shallow dip ends the trial at its first root, before the dip's
+      // stationary point, and that is exactly the uncertain decision.
       for (const auto &tangency : near)
-        if (tangency.point.affine <= next.affine)
+        if (tangency.point.affine <= next.affine ||
+            tangency.surface == clip_surface)
           out.tangencies.push_back(tangency);
       for (std::size_t i = 0; i < publish_count; ++i) {
         const auto &[surface, hit] = hits[i];
