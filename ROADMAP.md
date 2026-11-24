@@ -268,6 +268,15 @@ below it as history.
    emission. Details in docs/GYOTO_FEASIBILITY.md.
 4. **[MAX]** Thin-disk and star-background emission with redshift, linear radiance
    only. Image convergence study in step tolerance and samples.
+   **Done 2026-11-24** (docs/EMISSION.md). Prograde Keplerian disk motion with
+   a checked stable timelike domain (matches Kerr closed forms to 1.7e-15);
+   a separate static-star background channel (redshift exact against
+   analytic g_tt). Tolerance study: at the scene tolerance 1e-10, images are
+   within 3.2e-7 per pixel of 1e-13, with no classification change; looser
+   than 1e-10 the toy rays fail their null check. Samples dominate: disk
+   L1 0.20, 0.062, 0.024 over 1 to 64 samples per pixel; the 0.02-rad star
+   background is not converged at 64 (L1 0.29 toy, 0.82 Kerr). Wider stars
+   converge.
 
 ### Phase D: redo P3 GPU optics on the P2 contracts
 

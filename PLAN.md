@@ -649,7 +649,10 @@ questions whose answers can be found in the references or local environment.
       scenes end every sampled ray in a named outcome with none censored or
       flagged. An optional pinned GYOTO 2.0.2 build now compares Kerr rays
       (agreement 7.8e-11) and, through an adapter, toy rays (2.7e-9); see
-      docs/GYOTO_FEASIBILITY.md. Emission/image comparison, arbitrary hidden
+      docs/GYOTO_FEASIBILITY.md. Keplerian disk motion, a separate star
+      background channel and tolerance/sample convergence studies are in
+      docs/EMISSION.md; the star background is not sample-converged at 64
+      samples per pixel. GYOTO emission/image comparison, arbitrary hidden
       extrema/tangencies and general domain acceptance remain incomplete. See docs/GYOTO_FEASIBILITY.md,
       docs/CORE_CONTINUATION.md and docs/P2_STATUS.md.
 - [ ] Implement and compare P3 Vulkan optics.

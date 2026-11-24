@@ -91,6 +91,10 @@ gravastar has no artificial capture surface.
 
 ## Emission and image data
 
+Disk motion may also be `keplerian_prograde`, and escaped rays may carry a
+separate static-star background channel; both, and the image convergence
+study, are specified in `EMISSION.md`.
+
 Use a phenomenological, opaque, equatorial annulus with prescribed ZAMO motion,
 isotropic emitted bolometric intensity `(r_inner/r)^3`, and no volumetric
 transfer or scattering. It is not a self-consistent orbital disk. With
