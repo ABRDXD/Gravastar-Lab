@@ -415,7 +415,8 @@ EncodeReport RecordingSession::encode(const std::string &ffmpeg, const std::stri
     try {
         code = tools::run_capture(
             {ffprobe, "-v", "error", "-count_frames", "-select_streams", "v:0", "-show_entries",
-             "stream=codec_name,pix_fmt,width,height,r_frame_rate,nb_read_frames,duration", "-of",
+             "stream=codec_name,pix_fmt,width,height,r_frame_rate,nb_read_frames,duration:frame=pts",
+             "-of",
              "json", partial.string()},
             probe_path.string(), (dir_ / "logs" / "ffprobe.err.log").string());
     } catch (const std::exception &e) {
@@ -429,6 +430,14 @@ EncodeReport RecordingSession::encode(const std::string &ffmpeg, const std::stri
     try {
         const auto parsed = Json::parse(tools::read_file(probe_path));
         out.probe = parsed.at("streams").at(0);
+        // Presentation timestamps of the decoded frames must strictly increase.
+        const auto &decoded = parsed.at("frames");
+        bool monotonic = true;
+        for (std::size_t i = 1; i < decoded.size(); ++i)
+            monotonic = monotonic && decoded[i].at("pts").get<long long>() >
+                                         decoded[i - 1].at("pts").get<long long>();
+        out.probe["decoded_timestamps"] = decoded.size();
+        out.probe["timestamps_monotonic"] = monotonic;
     } catch (const std::exception &e) {
         fs::remove(partial);
         return fail(std::string("unreadable ffprobe output: ") + e.what());
@@ -443,6 +452,9 @@ EncodeReport RecordingSession::encode(const std::string &ffmpeg, const std::stri
         problem = "frame rate " + p.value("r_frame_rate", std::string());
     else if (p.value("nb_read_frames", std::string()) != std::to_string(config_.frame_count))
         problem = "decoded frame count " + p.value("nb_read_frames", std::string());
+    else if (p.value("decoded_timestamps", 0u) != config_.frame_count ||
+             !p.value("timestamps_monotonic", false))
+        problem = "frame timestamps missing or not strictly increasing";
     else if (std::abs(std::stod(p.value("duration", std::string("0"))) - expected) > frame)
         problem = "duration " + p.value("duration", std::string());
     if (!problem.empty()) {

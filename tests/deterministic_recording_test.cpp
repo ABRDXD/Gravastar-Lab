@@ -95,8 +95,9 @@ int main() {
             check(e.success, "encode succeeds: " + e.failure);
             check(e.probe.value("width", 0) == 64 && e.probe.value("height", 0) == 64 &&
                       e.probe.value("r_frame_rate", std::string()) == "30/1" &&
-                      e.probe.value("nb_read_frames", std::string()) == "30",
-                  "ffprobe sees 64x64, 30/1, 30 frames");
+                      e.probe.value("nb_read_frames", std::string()) == "30" &&
+                      e.probe.value("timestamps_monotonic", false),
+                  "ffprobe sees 64x64, 30/1, 30 frames with increasing timestamps");
             check(fs::exists(dir / "video.mp4") && !fs::exists(dir / "video.partial.mp4"),
                   "verified video renamed into place");
         }
