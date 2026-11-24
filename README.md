@@ -96,13 +96,13 @@ build/headless-release/gravastar_sampling --scene benchmarks/optics_v1.json --ou
 build/headless-release/gravastar_sampling --scene benchmarks/optics_kerr_v1.json --output results/p2_kerr_sampling.json
 ```
 
-`gravastar_convergence --scene benchmarks/optics_keplerian_stars_v1.json`
-repeats one scene at decreasing integration tolerances. Disk motion and the
-optional star background are described in [emission](docs/EMISSION.md).
-
 It aggregates successively denser ray grids onto the original pixels and keeps
 unresolved coverage explicit. See the [sampling contract](docs/SAMPLING.md).
 Passing common-mask pilot criteria does not imply whole-image acceptance.
+
+`gravastar_convergence --scene benchmarks/optics_keplerian_stars_v1.json`
+repeats one scene at decreasing integration tolerances. Disk motion and the
+optional star background are described in [emission](docs/EMISSION.md).
 
 Original code is licensed GPL-3.0-or-later. See [LICENSE](LICENSE), [NOTICE](NOTICE), and
 [THIRD_PARTY.md](THIRD_PARTY.md). No KerrLab renderer or uncertain-license code
