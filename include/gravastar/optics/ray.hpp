@@ -42,6 +42,13 @@ struct Settings {
   // radii must lie strictly inside r_in; the legacy inner cutoff is replaced.
   bool continue_core{false};
   double core_entry_radius{.75}, core_exit_radius{1.0};
+  // A resolved stationary point of a surface function closer to the surface
+  // than tangency_factor * max(absolute_tolerance, relative_tolerance*level)
+  // is recorded as a near tangency: whether the ray crossed there is below
+  // the trace's resolution. 0 disables. The measured position error at a
+  // shell join is ~10x the tolerance (docs/EVENT_COVERAGE.md), so the
+  // default leaves a ~100x margin.
+  double tangency_factor{1000};
 };
 enum class Outcome {
   escaped,
@@ -64,6 +71,13 @@ struct Crossing {
   std::string surface;
   Point point;
 };
+struct Tangency {
+  std::string surface;
+  Point point;           // the resolved stationary point
+  double value{};        // signed surface function there (<0 inside for r)
+  double margin{};       // threshold it fell below
+  bool terminal{};       // the surface ends the ray: the outcome may differ
+};
 struct Trace {
   Outcome outcome{Outcome::invalid_input};
   std::string detail;
@@ -73,6 +87,10 @@ struct Trace {
   double maximum_null_error{}, energy_error{}, angular_momentum_error{};
   std::vector<Point> trajectory;
   std::vector<Crossing> crossings;
+  // Near tangencies up to the final point. For nonterminal surfaces (shell
+  // joins) only the published crossing list is uncertain; the integrated
+  // path does not depend on it. For terminal ones the outcome is uncertain.
+  std::vector<Tangency> tangencies;
 };
 Trace trace(const Parameters &, const State &, const Settings & = {});
 // Opt-in regular angular integration. Initial state is in the named north or

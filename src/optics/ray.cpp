@@ -114,6 +114,14 @@ double surface_rate(const Parameters &p, const State &y, const State &dy,
   return surface.axis == -1 ? 2 * (y[2] * dy[2] + y[3] * dy[3])
                             : dy[surface.axis];
 }
+// Near-tangency threshold for one surface. Radial and polar surfaces use
+// their level; the angular disk q=1 and the normalized core ellipsoid are
+// already of order one.
+double tangency_margin(const Surface &surface, const Settings &c) {
+  const double level = surface.axis < 0 ? 1 : std::abs(surface.value);
+  return c.tangency_factor *
+         std::max(c.absolute_tolerance, c.relative_tolerance * level);
+}
 struct EventNode {
   double offset;
   State state;
@@ -185,6 +193,8 @@ void validate(const Parameters &p, const State &y, const Settings &c,
         c.maximum_affine, c.inner_radius, c.outer_radius, c.polar_margin})
     if (!std::isfinite(x) || x <= 0)
       throw std::invalid_argument("settings must be finite and positive");
+  if (!std::isfinite(c.tangency_factor) || c.tangency_factor < 0)
+    throw std::invalid_argument("tangency factor must be finite and >= 0");
   if (c.minimum_step > c.initial_step || c.initial_step > c.maximum_step ||
       c.inner_radius >= c.outer_radius ||
       c.polar_margin >= std::numbers::pi / 2 || c.maximum_attempts == 0 ||
@@ -515,6 +525,7 @@ static Trace trace_impl(const Parameters &p, const State &initial,
       }
       Point next{s + h, trial.next, residual(p, trial.next, chart), chart};
       std::vector<std::pair<Surface, Point>> hits;
+      std::vector<Tangency> near;
       std::optional<Outcome> terminal;
       Transition transition = Transition::none;
       std::size_t publish_count = 0;
@@ -528,9 +539,25 @@ static Trace trace_impl(const Parameters &p, const State &initial,
           const double last_rate =
               surface_rate(p, trial.next, trial.end_rate, surface);
           if ((first_rate < 0 && last_rate > 0) ||
-              (first_rate > 0 && last_rate < 0))
+              (first_rate > 0 && last_rate < 0)) {
             nodes.push_back(stationary_point(p, y, trial, h, surface, c,
                                              out.rhs_calls, chart));
+            const auto &turn = nodes.back();
+            const double value = surface_value(p, turn.state, surface);
+            const double margin = tangency_margin(surface, c);
+            // A disk tangency outside the annulus cannot change the outcome.
+            const bool on_disk =
+                surface.terminal != Outcome::emitted ||
+                (turn.state[1] >= c.disk_inner && turn.state[1] <= c.disk_outer);
+            if (std::abs(value) < margin && on_disk)
+              near.push_back({surface.name,
+                              {s + turn.offset, turn.state,
+                               residual(p, turn.state, chart), chart},
+                              value,
+                              margin,
+                              // Core entry/exit only changes coordinates.
+                              surface.terminal.has_value()});
+          }
           nodes.push_back({h, trial.next});
           for (std::size_t n = 1; n < nodes.size(); ++n) {
             if (!brackets(surface_value(p, nodes[n - 1].state, surface),
@@ -568,6 +595,11 @@ static Trace trace_impl(const Parameters &p, const State &initial,
         h = std::max(c.minimum_step, h / 2);
         continue;
       }
+      // Tangencies beyond a clipping terminal or transition event belong to
+      // the discarded trial tail.
+      for (const auto &tangency : near)
+        if (tangency.point.affine <= next.affine)
+          out.tangencies.push_back(tangency);
       for (std::size_t i = 0; i < publish_count; ++i) {
         const auto &[surface, hit] = hits[i];
         monitor(hit);

@@ -221,6 +221,7 @@ u::Json pole_and_core_family(const g::Parameters &p) {
       const std::string tag = label + " " + level.name;
       const auto t = o::trace_angular(p, initial, o::Chart::north, *settings);
       require(tag + " escapes", t.outcome == o::Outcome::escaped);
+      require(tag + " no near tangency flagged", t.tangencies.empty());
       check(tag + " null residual", t.maximum_null_error,
             settings->null_tolerance);
       check(tag + " energy and axial momentum drift",
@@ -401,9 +402,37 @@ u::Json graze_family(const g::Parameters &p) {
           const bool required = std::abs(double(depth)) >= level.resolved_depth;
           if (required)
             require(name + " join crossings match reference", resolved);
+          // Near-tangency flag: a wrong classification must never be silent.
+          // Within half the margin the flag is required; beyond twice the
+          // margin it must be absent. Between, either is accepted.
+          std::size_t flags = 0;
+          double margin = 0;
+          for (const auto &n : t.tangencies)
+            if (n.surface == graze.surface) {
+              ++flags;
+              margin = n.margin;
+            }
+          const double expected_margin =
+              level.settings.tangency_factor *
+              std::max(level.settings.absolute_tolerance,
+                       level.settings.relative_tolerance * graze.radius);
+          if (!resolved)
+            require(name + " misclassified graze is flagged", flags == 1);
+          if (std::abs(double(depth)) < expected_margin / 2)
+            require(name + " graze inside half the margin is flagged",
+                    flags == 1 && margin == expected_margin);
+          if (std::abs(double(depth)) > 2 * expected_margin)
+            require(name + " graze beyond twice the margin is not flagged",
+                    flags == 0);
+          bool other = false;
+          for (const auto &n : t.tangencies)
+            other = other || n.surface != graze.surface;
+          require(name + " no tangency flagged on other surfaces", !other);
           const double measured_chord =
               at.size() == 2 ? at[1] - at[0] : 0;
           entry[level.name] = {{"join_crossings", at.size()},
+                               {"near_tangency_flags", flags},
+                               {"tangency_margin", expected_margin},
                                {"chord", measured_chord},
                                {"accepted_steps", t.accepted},
                                {"matches_reference", resolved},
@@ -506,6 +535,7 @@ u::Json buried_photon_sphere(const g::Parameters &toy) {
         outer += x.surface == "outer_shell_join";
       }
       require("toy " + tag + " escapes", t.outcome == o::Outcome::escaped);
+      require("toy " + tag + " no near tangency flagged", t.tangencies.empty());
       require("toy " + tag + " turns in the shell",
               outer == 2 && inner == 0 && r_t > q.r_in && r_t < q.r_out);
       const auto fit = fitted_turn(t);
