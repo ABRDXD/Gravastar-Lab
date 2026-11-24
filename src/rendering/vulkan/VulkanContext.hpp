@@ -374,8 +374,13 @@ struct VulkanContext {
             requested.pNext = &requested_maintenance;
         const std::array<const char *, 2> window_extensions{
             VK_KHR_SWAPCHAIN_EXTENSION_NAME, VK_KHR_SWAPCHAIN_MAINTENANCE_1_EXTENSION_NAME};
+        // Double-precision shaders (Phase D precision study) need the core
+        // shaderFloat64 feature enabled at device creation, when present.
+        VkPhysicalDeviceFeatures enabled_features{};
+        enabled_features.shaderFloat64 = infos[selected].float64 ? VK_TRUE : VK_FALSE;
         auto device_info = structure<VkDeviceCreateInfo>(VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO);
         device_info.pNext = &requested;
+        device_info.pEnabledFeatures = &enabled_features;
         device_info.queueCreateInfoCount = 1;
         device_info.pQueueCreateInfos = &queue_info;
         if (source) {

@@ -246,6 +246,31 @@ if(GRAVASTAR_DESKTOP)
         VERBATIM)
     add_custom_target(gravastar_geodesic_shader DEPENDS "${GRAVASTAR_GEODESIC_SPV}")
 
+    # Phase D precision study kernel, built as FP32, FP64 and mixed.
+    set(GRAVASTAR_PRECISION32_SPV "${GRAVASTAR_SPV_DIR}/gravastar_precision32.spv")
+    set(GRAVASTAR_PRECISION64_SPV "${GRAVASTAR_SPV_DIR}/gravastar_precision64.spv")
+    set(GRAVASTAR_PRECISIONMIXED_SPV "${GRAVASTAR_SPV_DIR}/gravastar_precision_mixed.spv")
+    foreach(variant 32 64 MIXED)
+        if(variant STREQUAL "64")
+            set(define -DGRAVASTAR_FP64)
+        elseif(variant STREQUAL "MIXED")
+            set(define -DGRAVASTAR_MIXED)
+        else()
+            set(define)
+        endif()
+        add_custom_command(
+            OUTPUT "${GRAVASTAR_PRECISION${variant}_SPV}"
+            COMMAND "${GLSLC_EXECUTABLE}" -I "${CMAKE_CURRENT_SOURCE_DIR}/shaders" -O ${define}
+                "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_precision.comp"
+                -o "${GRAVASTAR_PRECISION${variant}_SPV}"
+            DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_precision.comp"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_stereographic.glsl"
+            VERBATIM)
+    endforeach()
+    add_custom_target(gravastar_precision_shaders
+        DEPENDS "${GRAVASTAR_PRECISION32_SPV}" "${GRAVASTAR_PRECISION64_SPV}"
+                "${GRAVASTAR_PRECISIONMIXED_SPV}")
+
     add_library(gravastar_vulkan
         src/rendering/vulkan/ComputeContext.cpp
         src/rendering/vulkan/WindowRenderer.cpp)
@@ -307,6 +332,16 @@ if(GRAVASTAR_DESKTOP)
             GRAVASTAR_GPU_TURNING_TOLERANCE=1e-4)
         add_dependencies(gravastar_vulkan_ray_test gravastar_geodesic_shader)
         add_test(NAME vulkan_ray_fp32 COMMAND gravastar_vulkan_ray_test)
+        add_executable(gravastar_gpu_precision src/experiments/gpu_precision.cpp)
+        target_include_directories(gravastar_gpu_precision PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/tests")
+        target_link_libraries(gravastar_gpu_precision PRIVATE gravastar_vulkan gravastar_optics
+            nlohmann_json::nlohmann_json)
+        target_compile_definitions(gravastar_gpu_precision PRIVATE
+            GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}"
+            GRAVASTAR_PRECISION32_SPV="${GRAVASTAR_PRECISION32_SPV}"
+            GRAVASTAR_PRECISION64_SPV="${GRAVASTAR_PRECISION64_SPV}"
+            GRAVASTAR_PRECISIONMIXED_SPV="${GRAVASTAR_PRECISIONMIXED_SPV}")
+        add_dependencies(gravastar_gpu_precision gravastar_precision_shaders)
         # Needs a Wayland or X11 session.
         add_test(NAME vulkan_studio_smoke COMMAND gravastar_studio --smoke)
         set_tests_properties(vulkan_device_audit vulkan_studio_smoke vulkan_metric_fp32 vulkan_ray_fp32
