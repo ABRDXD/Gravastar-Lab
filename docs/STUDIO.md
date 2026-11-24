@@ -28,7 +28,7 @@ takes about 6.5 s of GPU time on the RTX 3050.
 | Science status | Family and parameters, core continuation, capture proxy, tolerances; and what the image is not: stability not assessed, prescribed disk motion, artistic star field, diagnostic colours |
 | Emission | Disk on/off, ZAMO or Keplerian prograde (refused outside the stable timelike orbits), star background channel on/off |
 | Pixel inspection | Right-click a pixel: the CPU tracer re-traces it with its trajectory; outcome, disk intensity and redshift or background, steps, null and invariant drifts, every event and near tangency, r along the ray, and the path in the x-z plane |
-| Recording | Says that Phase F has not connected the recorder to this renderer yet |
+| Recording | Points to `gravastar_record` (`RECORDING.md`); the studio itself does not record |
 
 **Camera.** Drag on the image to orbit, scroll to zoom, or edit r, theta and
 phi. The camera is the scene's ZAMO observer moved to the new position.
@@ -72,5 +72,6 @@ Vulkan use has not been checked by them.
 No FP32 preview tracer, so interaction is limited by FP64 speed (the first
 blocky pass is fast; a full 384-row image takes about 25 s). No time
 dependence, hotspots or polarization. Bookmarks are not saved between
-sessions. Recording from the studio is Phase F. Panels can cover much of a
+sessions. Recording is done by `gravastar_record`, not from inside the
+studio (no camera-track editor yet). Panels can cover much of a
 small window; they can be collapsed or moved.

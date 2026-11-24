@@ -1,0 +1,166 @@
+{
+  "camera": [
+    8.0,
+    1.0471975511965976,
+    0.0
+  ],
+  "frame": 0,
+  "height": 1080,
+  "recording_spec": {
+    "camera_track": {
+      "interpolation": "piecewise_linear_r_theta_phi",
+      "keys": [
+        {
+          "frame": 0,
+          "phi": 0.0,
+          "r": 8.0,
+          "theta": 1.0471975511965976
+        },
+        {
+          "frame": 300,
+          "phi": 3.141592653589793,
+          "r": 6.5,
+          "theta": 1.3962634015954636
+        },
+        {
+          "frame": 599,
+          "phi": 6.272713331667621,
+          "r": 8.0,
+          "theta": 1.0471975511965976
+        }
+      ],
+      "mode": "stationary_snapshots"
+    },
+    "description": "Phase F acceptance run: 1920x1080, 60 fps, 600 frames (10 s) of the Keplerian disk with the static star background. The camera swings once around the axis, dipping from 60 to 80 degrees inclination and in from r = 8 to 6.5 at mid-run.",
+    "radiance": false,
+    "renderer": {
+      "precision": "fp32",
+      "samples_per_pixel": 1,
+      "tolerance": 1e-06
+    },
+    "scene": "optics_keplerian_stars_v1.json",
+    "schema_version": 1,
+    "timeline": {
+      "fps": [
+        60,
+        1
+      ],
+      "frame_count": 600,
+      "height": 1080,
+      "width": 1920
+    }
+  },
+  "reference": "FP64 GPU tracer at the scene's own tolerance",
+  "schema_version": 1,
+  "variants": [
+    {
+      "estimated_job_hours": 41.771593079166664,
+      "frame_seconds": 250.629558475,
+      "precision": "FP64",
+      "stats": {
+        "cpu_fallback": {
+          "affine_budget": 1,
+          "core_entry": 72544,
+          "near_tangency": 123,
+          "null_drift": 0,
+          "numerical_failure": 0,
+          "step_budget": 0
+        },
+        "cpu_fallback_seconds": 43.30664304700001,
+        "gpu_milliseconds": 161324.72384000002,
+        "near_tangent": 0,
+        "outcomes": {
+          "affine_limit": 1,
+          "emitted": 1170051,
+          "escaped": 903548
+        },
+        "seconds": 250.629558475
+      },
+      "tolerance": "scene",
+      "variant": "fp64_scene_tolerance",
+      "versus_reference": {
+        "largest_channel_difference": 0,
+        "outcome_changes": 0,
+        "pixels": 2073600,
+        "pixels_differing": 0,
+        "pixels_differing_more_than_2_levels": 0,
+        "pixels_differing_more_than_32_levels": 0,
+        "pixels_differing_more_than_8_levels": 0,
+        "psnr_db": "identical"
+      }
+    },
+    {
+      "estimated_job_hours": 21.807249941166663,
+      "frame_seconds": 130.843499647,
+      "precision": "FP64",
+      "stats": {
+        "cpu_fallback": {
+          "affine_budget": 41,
+          "core_entry": 72414,
+          "near_tangency": 1556,
+          "null_drift": 0,
+          "numerical_failure": 2,
+          "step_budget": 0
+        },
+        "cpu_fallback_seconds": 26.412851412000002,
+        "gpu_milliseconds": 74215.48399999998,
+        "near_tangent": 266,
+        "outcomes": {
+          "affine_limit": 1,
+          "emitted": 1169996,
+          "escaped": 903603
+        },
+        "seconds": 130.843499647
+      },
+      "tolerance": 1e-06,
+      "variant": "fp64_tolerance",
+      "versus_reference": {
+        "largest_channel_difference": 187,
+        "outcome_changes": 75,
+        "pixels": 2073600,
+        "pixels_differing": 49778,
+        "pixels_differing_more_than_2_levels": 108,
+        "pixels_differing_more_than_32_levels": 65,
+        "pixels_differing_more_than_8_levels": 87,
+        "psnr_db": 52.84177375605951
+      }
+    },
+    {
+      "estimated_job_hours": 5.639532351833334,
+      "frame_seconds": 33.837194111,
+      "precision": "FP32",
+      "stats": {
+        "cpu_fallback": {
+          "affine_budget": 73,
+          "core_entry": 72404,
+          "near_tangency": 1570,
+          "null_drift": 64,
+          "numerical_failure": 0,
+          "step_budget": 0
+        },
+        "cpu_fallback_seconds": 13.771231556,
+        "gpu_milliseconds": 2611.572672,
+        "near_tangent": 266,
+        "outcomes": {
+          "affine_limit": 1,
+          "emitted": 1169974,
+          "escaped": 903625
+        },
+        "seconds": 33.837194111
+      },
+      "tolerance": 1e-06,
+      "variant": "fp32_tolerance",
+      "versus_reference": {
+        "largest_channel_difference": 191,
+        "outcome_changes": 115,
+        "pixels": 2073600,
+        "pixels_differing": 107924,
+        "pixels_differing_more_than_2_levels": 599,
+        "pixels_differing_more_than_32_levels": 92,
+        "pixels_differing_more_than_8_levels": 153,
+        "psnr_db": 52.343417290061815
+      }
+    }
+  ],
+  "width": 1920
+}

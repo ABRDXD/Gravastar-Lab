@@ -193,9 +193,9 @@ void inspection_panel(const Inspection &in) {
 void recording_panel() {
     place(Side::left, 712, 360, 120);
     ImGui::Begin("Recording");
-    ImGui::TextWrapped("Not connected to this renderer yet (Phase F: PNG frames, resumable jobs, "
-                       "the 1920x1080 600-frame acceptance run). The recorder exists and is tested "
-                       "only on synthetic 64x64 frames.");
+    ImGui::TextWrapped("Recording runs outside the studio: gravastar_record renders a camera "
+                       "track on this GPU tracer into a resumable job (PNG frames, checksums, "
+                       "verified video). See docs/RECORDING.md.");
     ImGui::End();
 }
 } // namespace gravastar::studio
