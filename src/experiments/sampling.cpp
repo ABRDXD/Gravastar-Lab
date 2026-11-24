@@ -63,8 +63,11 @@ s::Grid grid(const J &report, int width, int height, int scale) {
                  ? std::nullopt
                  : std::optional(pixel.at(key).get<double>());
     };
-    samples.push_back(
-        {classification, optional("linear_intensity"), optional("alpha")});
+    samples.push_back({classification, optional("linear_intensity"),
+                       optional("alpha"),
+                       pixel.contains("background_intensity")
+                           ? optional("background_intensity")
+                           : std::nullopt});
   }
   return s::aggregate(width, height, scale, samples);
 }
@@ -176,6 +179,7 @@ int main(int argc, char **argv) {
       for (const auto &p : levels.back().pixels) {
         pixels.push_back({{"intensity", number(p.intensity)},
                           {"alpha", number(p.alpha)},
+                          {"background", number(p.background)},
                           {"class_fractions", p.fractions},
                           {"known_contribution", p.known_contribution}});
         unresolved_pixels += !p.intensity;
@@ -223,7 +227,9 @@ int main(int argc, char **argv) {
            {"mean_classification_tv", d.mean_classification_tv},
            {"maximum_classification_tv", d.maximum_classification_tv},
            {"mean_unresolved_fraction_change",
-            d.mean_unresolved_fraction_change}});
+            d.mean_unresolved_fraction_change},
+           {"background_pixels", d.background_pixels},
+           {"relative_l1_background", number(d.relative_l1_background)}});
     }
     const auto &last = differences.back();
     const double coverage =

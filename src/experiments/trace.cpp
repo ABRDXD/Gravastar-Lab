@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
+#include "gravastar/optics/background.hpp"
 #include "gravastar/optics/chart.hpp"
 #include "gravastar/optics/ray.hpp"
 #include "gravastar/tools/artifacts.hpp"
@@ -19,6 +20,7 @@ struct Scene {
   o::Vector position;
   std::optional<double> omega;
   o::DiskMotion disk_motion{o::DiskMotion::zamo};
+  std::optional<o::StarField> background; // separate channel when present
   double fov;
   int width, height;
   bool angular{};
@@ -79,6 +81,20 @@ Scene scene(const J &j) {
       !o::keplerian_annulus_supported(s.geometry, c.disk_inner, c.disk_outer))
     throw std::invalid_argument(
         "Keplerian disk annulus leaves the stable timelike circular orbits");
+  if (j.contains("background") && !j.at("background").is_null()) {
+    const auto &b = j.at("background");
+    if (b.at("model") != "static_star_sphere_v1")
+      throw std::invalid_argument("unsupported background model");
+    o::StarField f;
+    f.seed = b.at("seed").get<std::uint64_t>();
+    f.count = b.at("stars").get<int>();
+    f.width = b.at("width").get<double>();
+    f.range = b.at("range").get<double>();
+    if (f.count < 1 || f.count > 100000 || !(f.width > 0 && f.width < 1) ||
+        !(f.range >= 1 && f.range <= 1e6))
+      throw std::invalid_argument("invalid star field parameters");
+    s.background = f;
+  }
   const auto &camera = j.at("camera");
   s.position = camera.at("position").get<o::Vector>();
   if (!camera.at("omega").is_null())
@@ -126,7 +142,10 @@ J ray(const Scene &s, const o::State &initial, const o::Trace &trace) {
            {"angular_momentum_error", trace.angular_momentum_error},
            {"linear_intensity", nullptr},
            {"redshift", nullptr},
-           {"alpha", nullptr}};
+           {"alpha", nullptr},
+           {"background_intensity", nullptr},
+           {"background_redshift", nullptr},
+           {"background_direction", nullptr}};
   if (trace.outcome == o::Outcome::emitted) {
     auto frame = o::circular_frame(o::metric(s.geometry, initial), s.omega);
     // Disk hits are at q=1, where conversion to the original emission chart
@@ -145,6 +164,15 @@ J ray(const Scene &s, const o::State &initial, const o::Trace &trace) {
   } else if (trace.outcome == o::Outcome::escaped) {
     result["linear_intensity"] = 0;
     result["alpha"] = 0;
+    if (s.background) {
+      auto frame = o::circular_frame(o::metric(s.geometry, initial), s.omega);
+      const auto b = o::background_emission(
+          s.geometry, trace.final, o::frequency(initial, frame.basis[0]),
+          *s.background);
+      result["background_intensity"] = b.linear_intensity;
+      result["background_redshift"] = b.redshift;
+      result["background_direction"] = b.direction;
+    }
   } else if (trace.outcome == o::Outcome::capture_surface) {
     result["linear_intensity"] = 0;
     result["alpha"] = 1;
@@ -177,8 +205,15 @@ std::array<unsigned char, 3> color(const J &p) {
         std::lround(255 * std::pow(intensity / (1 + intensity), 1 / 2.2)));
     return {v, v, v};
   }
-  if (outcome == "escaped")
-    return {16, 24, 48};
+  if (outcome == "escaped") {
+    if (p.at("background_intensity").is_null())
+      return {16, 24, 48};
+    const double b = p.at("background_intensity");
+    const double v = std::pow(b / (1 + b), 1 / 2.2);
+    return {static_cast<unsigned char>(std::lround(16 + 200 * v)),
+            static_cast<unsigned char>(std::lround(24 + 210 * v)),
+            static_cast<unsigned char>(std::lround(48 + 207 * v))};
+  }
   if (outcome == "capture_surface")
     return {0, 0, 0};
   if (outcome == "domain_limit")
@@ -347,6 +382,10 @@ int main(int argc, char **argv) {
     report["all_pixels_resolved"] = unresolved == 0;
     report["unresolved_pixels"] = unresolved;
     report["classifications"] = counts;
+    report["background_channel"] =
+        s.background ? "static_star_sphere_v1: separate from linear_intensity; "
+                       "star field is artistic, the frequency shift is physics"
+                     : "disabled";
     report["tangency_factor"] = s.settings.tangency_factor;
     report["near_tangent_pixels"] = near_tangent;
     report["outcome_uncertain_pixels"] = outcome_uncertain;
@@ -355,7 +394,8 @@ int main(int argc, char **argv) {
             .count();
     report["diagnostic_colors"] = {
         {"disk", "gray: gamma 1/2.2 after I/(1+I)"},
-        {"escape", "dark blue; alpha zero in linear data"},
+        {"escape", "dark blue, brightened by the separate background channel "
+                   "when enabled; alpha zero and linear_intensity zero"},
         {"capture_surface", "black"},
         {"domain_limit", "magenta"},
         {"budget_limit", "amber"},
