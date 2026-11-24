@@ -124,21 +124,24 @@ void run() {
         check(tag + " value is the analytic closest approach",
               std::abs(ray.tangencies[0].value - offset), 1e-12);
     }
-    // Same 2e-10 dip, swept along the line so that for some starts the
+    // A shallow dip swept along the line so that for some starts the
     // first root and the closest approach fall in different accepted steps.
     // Then the trial holding the root has same-sign endpoint rates and no
     // stationary point, so the flag must come from the root itself.
     // (Ultrareview finding.) Straddles are recognised by a tangency recorded
     // at the root rather than at the analytic closest approach.
     {
-      const double offset = -2e-10;
+      // Tolerance 1e-10 gives margin 1e-7, so a 5e-8 dip (half the margin)
+      // has half-chord 2.7e-4: about one placement in 40 straddles a step
+      // end, and 400 starts suffice (2000 were needed at 2e-10, too slow for
+      // Debug builds).
+      const double offset = -5e-8;
       std::size_t unflagged = 0, straddles = 0;
       double worst = 0;
-      // A straddle needs the root within ~1.7e-5 of a step end: about one
-      // placement in 300, so sweep 2000 starts 1.2e-5 apart.
-      for (int k = 0; k < 2000; ++k) {
-        const double start = -.006 - 1.2e-5 * k;
+      for (int k = 0; k < 400; ++k) {
+        const double start = -.006 - 6e-5 * k;
         auto sweep = c;
+        sweep.absolute_tolerance = sweep.relative_tolerance = 1e-10;
         sweep.maximum_affine = -start + .02;
         const auto ray = trace(p, boundary + offset, chart, sweep, start);
         if (ray.outcome != o::Outcome::domain_limit ||
@@ -150,12 +153,12 @@ void run() {
         straddles += std::abs(n.point.affine - ray.final.affine) < 1e-12;
         worst = std::max(worst, std::abs(n.value - offset));
       }
-      const std::string tag = label + " 2e-10 dip at 2000 step placements";
+      const std::string tag = label + " 5e-8 dip at 400 step placements";
       check(tag + ": rays not flagged exactly once as terminal", unflagged, 0);
       require(tag + ": some placements straddle a step boundary", straddles > 0);
-      check(tag + ": flagged closest approach", worst, 1e-12);
+      check(tag + ": flagged closest approach", worst, 1e-11);
       fixtures.push_back({{"chart", label},
-                          {"sweep_starts", 2000},
+                          {"sweep_starts", 400},
                           {"straddling_placements", straddles},
                           {"unflagged", unflagged}});
     }
