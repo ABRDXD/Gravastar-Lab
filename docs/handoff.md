@@ -3,7 +3,7 @@
 ## Current: branch `integration/reconcile` (2026-11-24)
 
 The two lines of work are combined on `integration/reconcile`, built from
-`codex/p2-reference-optics`, licensed GPL-3.0-or-later. Not pushed; `main` is
+`codex/p2-reference-optics`, licensed GPL-3.0-or-later. Pushed to origin; `main` is
 unchanged. Phases A (reconcile), B (docs match measured results) and C of
 [ROADMAP.md](../ROADMAP.md) are done. Measured build and test results are in
 [RECONCILE_STATUS.md](RECONCILE_STATUS.md).
