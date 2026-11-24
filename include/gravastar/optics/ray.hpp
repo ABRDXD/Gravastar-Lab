@@ -1,0 +1,120 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+#pragma once
+#include "gravastar/geometry/geometry.hpp"
+#include <optional>
+#include <vector>
+
+namespace gravastar::optics {
+using Vector = std::array<double, 4>;
+using State = std::array<double, 8>; // x^mu, future-directed p_mu
+using Parameters = geometry::Parameters;
+enum class Chart { boyer_lindquist, north, south, core_cartesian };
+std::string_view chart_name(Chart);
+struct Frame {
+  std::array<Vector, 4> basis{}; // u, e_r, e_theta, e_phi
+  double omega{}; // Angular speed in the original BL convention, even after a
+                  // frame coordinate transformation; not a Cartesian component.
+};
+geometry::Evaluation metric(const Parameters &, const State &);
+Frame circular_frame(const geometry::Evaluation &,
+                     std::optional<double> omega = {});
+State launch(const Parameters &, const Vector &position,
+             const std::array<double, 3> &sight,
+             std::optional<double> omega = {});
+State rhs(const Parameters &,
+          const State &); // increasing parameter goes into past
+double null_residual(const geometry::Evaluation &, const State &);
+double frequency(const State &, const Vector &observer);
+
+struct Settings {
+  double absolute_tolerance{1e-10}, relative_tolerance{1e-10};
+  double initial_step{.01}, minimum_step{1e-10}, maximum_step{.1};
+  double event_tolerance{1e-9}, null_tolerance{1e-6}, maximum_affine{40};
+  double inner_radius{.25}, outer_radius{10}, polar_margin{.05};
+  std::size_t maximum_attempts{100000};
+  std::optional<double> capture_radius;
+  bool disk{false}, save_trajectory{true};
+  double disk_inner{3}, disk_outer{6};
+  // Used only by trace_angular: switch accepted endpoints at q>=this value.
+  // Hysteresis (q -> 1/q) requires >1; <=2 leaves room for RK trial stages.
+  double angular_switch_q{1.5};
+  // Opt-in single-sheet Cartesian completion of the exact core. Both overlap
+  // radii must lie strictly inside r_in; the legacy inner cutoff is replaced.
+  bool continue_core{false};
+  double core_entry_radius{.75}, core_exit_radius{1.0};
+  // A resolved stationary point of a surface function closer to the surface
+  // than tangency_factor * max(absolute_tolerance, relative_tolerance*level)
+  // is recorded as a near tangency: whether the ray crossed there is below
+  // the trace's resolution. 0 disables. The measured position error at a
+  // shell join is ~10x the tolerance (docs/EVENT_COVERAGE.md), so the
+  // default leaves a ~100x margin.
+  double tangency_factor{1000};
+};
+enum class Outcome {
+  escaped,
+  emitted,
+  capture_surface,
+  domain_limit,
+  affine_limit,
+  step_limit,
+  invalid_input,
+  numerical_failure
+};
+std::string_view outcome_name(Outcome);
+struct Point {
+  double affine{};
+  State state{};
+  double null_error{};
+  Chart chart{Chart::boyer_lindquist};
+};
+struct Crossing {
+  std::string surface;
+  Point point;
+};
+struct Tangency {
+  std::string surface;
+  Point point;           // the resolved stationary point
+  double value{};        // signed surface function there (<0 inside for r)
+  double margin{};       // threshold it fell below
+  bool terminal{};       // the surface ends the ray: the outcome may differ
+};
+struct Trace {
+  Outcome outcome{Outcome::invalid_input};
+  std::string detail;
+  Point final;
+  std::size_t accepted{}, rejected{}, rhs_calls{};
+  std::size_t chart_switches{};
+  double maximum_null_error{}, energy_error{}, angular_momentum_error{};
+  std::vector<Point> trajectory;
+  std::vector<Crossing> crossings;
+  // Near tangencies up to the final point. For nonterminal surfaces (shell
+  // joins) only the published crossing list is uncertain; the integrated
+  // path does not depend on it. For terminal ones the outcome is uncertain.
+  std::vector<Tangency> tangencies;
+};
+Trace trace(const Parameters &, const State &, const Settings & = {});
+// Opt-in regular angular integration. Initial state is in the named north or
+// south patch, or core_cartesian when continue_core is enabled. Every output
+// point retains its chart; the original bounded BL trace remains available.
+Trace trace_angular(const Parameters &, const State &, Chart,
+                    const Settings & = {});
+struct Emission {
+  double redshift{}, emitted_frequency{}, linear_intensity{};
+};
+// Prescribed disk motion. ZAMO is the original phenomenological choice.
+// keplerian_prograde follows the equatorial circular geodesic rotating toward
+// +phi: prescribed motion, not a self-consistent matter solution.
+enum class DiskMotion { zamo, keplerian_prograde };
+// Angular speed of that geodesic at an equatorial evaluation: the larger root
+// of d_r g_tt + 2 W d_r g_tphi + W^2 d_r g_phiphi = 0. Empty when there is no
+// real root or the orbit is not timelike. Needs equatorial reflection symmetry.
+std::optional<double> keplerian_omega(const geometry::Evaluation &);
+// True when every sampled radius of [inner, outer] on the equator has a
+// timelike prograde circular geodesic whose angular momentum grows outward
+// (stable). Samples include both ends.
+bool keplerian_annulus_supported(const Parameters &, double inner, double outer,
+                                 int samples = 64);
+Emission disk_emission(const Parameters &, const State &hit,
+                       double observer_frequency, double disk_inner,
+                       DiskMotion = DiskMotion::zamo);
+} // namespace gravastar::optics

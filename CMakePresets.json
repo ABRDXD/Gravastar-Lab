@@ -1,0 +1,46 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {"major": 3, "minor": 25, "patch": 0},
+  "configurePresets": [
+    {
+      "name": "headless-debug",
+      "displayName": "Headless C++20 debug",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/headless-debug",
+      "cacheVariables": {"CMAKE_BUILD_TYPE": "Debug", "BUILD_TESTING": "ON"}
+    },
+    {
+      "name": "headless-release",
+      "displayName": "Headless C++20 release",
+      "inherits": "headless-debug",
+      "binaryDir": "${sourceDir}/build/headless-release",
+      "cacheVariables": {"CMAKE_BUILD_TYPE": "Release"}
+    },
+    {
+      "name": "sanitizers",
+      "displayName": "Headless address and undefined-behavior sanitizers",
+      "inherits": "headless-debug",
+      "binaryDir": "${sourceDir}/build/sanitizers",
+      "cacheVariables": {"GRAVASTAR_SANITIZERS": "ON"}
+    },
+    {
+      "name": "desktop-release",
+      "displayName": "Release with Vulkan compute and desktop studio",
+      "inherits": "headless-release",
+      "binaryDir": "${sourceDir}/build/desktop-release",
+      "cacheVariables": {"GRAVASTAR_DESKTOP": "ON"}
+    }
+  ],
+  "buildPresets": [
+    {"name": "headless-debug", "configurePreset": "headless-debug"},
+    {"name": "headless-release", "configurePreset": "headless-release"},
+    {"name": "sanitizers", "configurePreset": "sanitizers"},
+    {"name": "desktop-release", "configurePreset": "desktop-release"}
+  ],
+  "testPresets": [
+    {"name": "headless-debug", "configurePreset": "headless-debug", "output": {"outputOnFailure": true}},
+    {"name": "headless-release", "configurePreset": "headless-release", "output": {"outputOnFailure": true}},
+    {"name": "sanitizers", "configurePreset": "sanitizers", "output": {"outputOnFailure": true}},
+    {"name": "desktop-release", "configurePreset": "desktop-release", "output": {"outputOnFailure": true}}
+  ]
+}
