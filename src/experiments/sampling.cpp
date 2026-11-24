@@ -190,6 +190,8 @@ int main(int argc, char **argv) {
            {"raw_report", fs::relative(path, root).generic_string()},
            {"raw_report_sha256", u::sha256(bytes)},
            {"classifications", raw.at("classifications")},
+           {"near_tangent_rays", raw.at("near_tangent_pixels")},
+           {"outcome_uncertain_rays", raw.at("outcome_uncertain_pixels")},
            {"class_fractions", fractions},
            {"unresolved_base_pixels", unresolved_pixels},
            {"known_image_plane_mean_contribution", known_mean},
@@ -197,7 +199,9 @@ int main(int argc, char **argv) {
            {"pixels", pixels}});
       std::cout << "sampling scale " << scale
                 << ": unresolved base pixels=" << unresolved_pixels
-                << std::endl;
+                << "; near-tangent rays=" << raw.at("near_tangent_pixels")
+                << " (outcome uncertain " << raw.at("outcome_uncertain_pixels")
+                << ")" << std::endl;
     }
     const auto differences = s::compare(levels);
     J comparisons = J::array(), mask = J::array();

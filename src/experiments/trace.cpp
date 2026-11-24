@@ -2,6 +2,7 @@
 #include "gravastar/optics/chart.hpp"
 #include "gravastar/optics/ray.hpp"
 #include "gravastar/tools/artifacts.hpp"
+#include <algorithm>
 #include <chrono>
 #include <cmath>
 #include <iostream>
@@ -56,6 +57,7 @@ Scene scene(const J &j) {
   c.event_tolerance = i.at("event_tolerance");
   c.null_tolerance = i.at("null_tolerance");
   c.maximum_affine = i.at("maximum_affine");
+  c.tangency_factor = i.value("tangency_factor", 1000.0);
   if (!i.at("maximum_attempts").is_number_integer() ||
       i.at("maximum_attempts") < 1 || i.at("maximum_attempts") > 10000000)
     throw std::invalid_argument(
@@ -142,6 +144,15 @@ J ray(const Scene &s, const o::State &initial, const o::Trace &trace) {
   for (const auto &c : trace.crossings)
     result["crossings"].push_back(
         {{"surface", c.surface}, {"point", point(c.point)}});
+  // Surface approaches closer than the trace resolves. "terminal": the
+  // outcome itself may differ; otherwise only the crossing list may.
+  result["near_tangencies"] = J::array();
+  for (const auto &n : trace.tangencies)
+    result["near_tangencies"].push_back({{"surface", n.surface},
+                                         {"point", point(n.point)},
+                                         {"surface_value", n.value},
+                                         {"margin", n.margin},
+                                         {"terminal", n.terminal}});
   if (s.settings.save_trajectory) {
     result["trajectory"] = J::array();
     for (const auto &p : trace.trajectory)
@@ -275,7 +286,7 @@ int main(int argc, char **argv) {
         {"pixels", J::array()}};
     J counts = J::object();
     bool execution = true;
-    std::size_t unresolved = 0;
+    std::size_t unresolved = 0, near_tangent = 0, outcome_uncertain = 0;
     std::string ppm = "P6\n" + std::to_string(s.width) + " " +
                       std::to_string(s.height) + "\n255\n";
     auto append = [&](int col, int row) {
@@ -301,6 +312,10 @@ int main(int argc, char **argv) {
       unresolved += traced.outcome != o::Outcome::escaped &&
                     traced.outcome != o::Outcome::emitted &&
                     traced.outcome != o::Outcome::capture_surface;
+      near_tangent += !traced.tangencies.empty();
+      outcome_uncertain +=
+          std::any_of(traced.tangencies.begin(), traced.tangencies.end(),
+                      [](const auto &n) { return n.terminal; });
       if (command == "image")
         for (auto byte : color(value))
           ppm.push_back(static_cast<char>(byte));
@@ -323,6 +338,9 @@ int main(int argc, char **argv) {
     report["all_pixels_resolved"] = unresolved == 0;
     report["unresolved_pixels"] = unresolved;
     report["classifications"] = counts;
+    report["tangency_factor"] = s.settings.tangency_factor;
+    report["near_tangent_pixels"] = near_tangent;
+    report["outcome_uncertain_pixels"] = outcome_uncertain;
     report["elapsed_seconds"] =
         std::chrono::duration<double>(std::chrono::steady_clock::now() - start)
             .count();
@@ -346,7 +364,9 @@ int main(int argc, char **argv) {
         u::atomic_bytes(image, ppm);
       }
     }
-    std::cout << counts.dump() << "; unresolved=" << unresolved << "; "
+    std::cout << counts.dump() << "; unresolved=" << unresolved
+              << "; near-tangent=" << near_tangent
+              << " (outcome uncertain " << outcome_uncertain << "); "
               << output << '\n';
     return execution && unchanged ? 0 : 1;
   } catch (const std::exception &e) {
