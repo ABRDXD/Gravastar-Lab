@@ -6,7 +6,9 @@
 
 The original project warning is preserved above. Current implemented scope is
 the headless stationary geometry benchmark and bounded native CPU reference
-optics. Vulkan rendering and desktop integration remain future work.
+optics. An optional desktop build (below) adds a Vulkan device layer, FP32 GPU
+comparison kernels and a test-pattern window. There is no GPU image renderer,
+no interactive studio and no full-resolution recording yet.
 
 GravastarLab implements the transition construction of
 [Ilijić and DeBenedictis, arXiv:2309.00551v2](https://arxiv.org/html/2309.00551v2).
@@ -46,7 +48,25 @@ The compiled `gravastar_tools workflow` repeats configuration, build, CTest and
 scientific validation; `gravastar_tools manifest` generates a SHA-256 inventory.
 Generated files stay under `results/`. Failed runs preserve accepted reports.
 
-Read [status and handoff](docs/STATUS.md), [model contract](docs/MODEL.md),
+## Optional desktop build
+
+```text
+cmake --preset desktop-release
+cmake --build --preset desktop-release --parallel 4
+ctest --preset desktop-release
+```
+
+Requires a Vulkan 1.3 driver and `glslc`. Vendored Vulkan headers and GLFW are
+listed in [THIRD_PARTY.md](THIRD_PARTY.md). This adds four tests: a device
+audit, two **FP32** CPU/GPU comparisons (metric within 1.7e-5; ray turning
+radius within 5.3e-5 of the exact value) and a window smoke test that shows a
+calibration pattern. If `ffmpeg` and `ffprobe` are installed, every build also
+runs the recorder test. The recorder is tested only on a synthetic 64x64,
+30-frame job. Measured counts for every build are in
+[the reconciliation record](docs/RECONCILE_STATUS.md).
+
+Read [the current handoff](docs/handoff.md),
+[P1 status record](docs/STATUS.md), [model contract](docs/MODEL.md),
 [architecture](docs/ARCHITECTURE.md), [migration evidence](docs/MIGRATION.md),
 [source audit](docs/SOURCE_AUDIT.md), and [the plan](PLAN.md).
 

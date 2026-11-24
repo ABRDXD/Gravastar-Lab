@@ -647,8 +647,19 @@ questions whose answers can be found in the references or local environment.
       domain acceptance remain incomplete. See docs/GYOTO_FEASIBILITY.md,
       docs/CORE_CONTINUATION.md and docs/P2_STATUS.md.
 - [ ] Implement and compare P3 Vulkan optics.
+      Optional desktop build only: Vulkan device layer and FP32 metric and
+      fixed-step ray kernels compared with the CPU (metric 1.74e-5; turning
+      radius 2.4e-6 to 5.3e-5 vs exact). No GPU image renderer, no FP64
+      measurement, no shared charts or outcomes with the CPU tracer.
+      See docs/RECONCILE_STATUS.md.
 - [ ] Implement and verify P4 desktop studio.
+      GLFW window and swapchain showing a calibration pattern, with a smoke
+      test. No ImGui/ImPlot, camera, panels or real render.
 - [ ] Implement and verify P5 deterministic recording and encoding.
+      Recorder takes frames from a caller-supplied source; tested only on a
+      synthetic 64x64, 30-frame job (cancel, resume, FFmpeg, ffprobe exit
+      code). PPM frames, no hashes, lock or settings check on resume; the
+      1920x1080 600-frame run has not been attempted.
 - [ ] Complete P6 documentation and Linux release acceptance.
 - [ ] Define and carry out R1 stability research.
 - [ ] Define and carry out R2 full evolution work.

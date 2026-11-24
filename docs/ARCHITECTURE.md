@@ -94,5 +94,13 @@ an interrupted multi-file write requires checking the associated source digest.
 Failed numerical runs use `.failed.json` and preserve accepted images/reports.
 
 Chart transitions, central continuation, GYOTO integration, GPU/desktop work,
-recording and stability research remain outside this checkpoint. See
+recording and stability research remain outside this checkpoint.
+
+Since the 2026-11-23 reconciliation, `GRAVASTAR_DESKTOP=ON` (preset
+`desktop-release`) also builds `gravastar_vulkan` (device layer and FP32
+comparison kernels in `shaders/`), `gravastar_platform` (GLFW window) and
+`gravastar_studio` (calibration pattern only). `gravastar_recording` is built
+in every configuration and receives frames through a `FrameSource`; it does
+not render. None of these call the optics tracer yet. See
+`RECONCILE_STATUS.md`. See
 `OPTICS.md` for the bounded chart, capture proxy and emission conventions.

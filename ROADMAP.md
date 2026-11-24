@@ -213,6 +213,23 @@ only; `main` has not been moved.
 4. Mark the 9th-grade guides whose source files change in Phase A as
    "describes the pre-merge code" until they are refreshed (Phase G).
 
+**Phase B done (2026-11-24) on `integration/reconcile`:**
+1. PLAN.md already marked P2 to P6 as not done (inherited from the p2
+   branch). Added a short note of what exists under P3, P4 and P5.
+2. The astra `docs/VALIDATION.md` was not brought across, nor were the cyan
+   core renderer or the fixed-step stepper it described. The measured GPU
+   numbers live in `docs/RECONCILE_STATUS.md`, labelled FP32. No new
+   VALIDATION.md was written, to avoid a second copy of the same numbers.
+3. README.md had no test counts on this branch. It now describes the
+   optional desktop build and its limits. README.txt pointed at a Python
+   script that no longer exists (`tools/validate.py`) and asked for Python;
+   both fixed, and its Phase 3 status now says "started".
+4. The 9th-grade guides were not brought across, so there is nothing to
+   mark. They will be written against the merged code in Phase G.
+Also: `docs/ARCHITECTURE.md` lists the desktop and recording modules, and
+`docs/handoff.md` starts with the current state; the old P2 handoff stays
+below it as history.
+
 ### Phase C: finish P2 reference optics
 
 1. **[MAX]** Broaden ray families: hidden extrema, near tangencies at both joins,

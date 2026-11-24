@@ -152,7 +152,7 @@ Unfortunately. (╥_╥)
 
 
 Phase 3: Vulkan-powered GPU suffering
-Status: Planned.
+Status: Started. Only FP32 comparison kernels exist so far; no GPU renderer.
 
 Primary development hardware:
 NVIDIA GeForce RTX 3050 Laptop GPU, 6 GB VRAM.
@@ -167,7 +167,7 @@ Planned features:
 [ ] Adjustable resolution.
 [ ] Ray-tracing quality presets.
 [ ] GPU profiling.
-[ ] CPU/GPU numerical comparisons.
+[~] CPU/GPU numerical comparisons (FP32 metric and ray tests only).
 [ ] Physically motivated emission models.
 [ ] Scientific and cinematic render modes.
 
@@ -265,8 +265,10 @@ GravastarLab/
 ├── NOTICE
 └── LICENSE
 
-The repository contains the current foundation. The larger rendering,
-interactive desktop, and recording systems remain planned.
+The repository contains the current foundation. An optional desktop build
+adds Vulkan comparison tests, a test-pattern window and a recorder tested on
+tiny synthetic jobs. The real renderer, interactive desktop and full-size
+recording remain planned.
 
 Read PLAN.md for the full technical roadmap.
 It's considerably more serious than this README.
@@ -280,7 +282,6 @@ You'll need:
 - A C++20 compiler, preferably GCC 13+ or Clang 16+.
 - CMake 3.25 or newer.
 - Ninja.
-- Python 3.10 or newer for the headless validation workflow.
 - A functioning computer.
 - Patience.
 
@@ -295,7 +296,7 @@ Run the tests:
   ctest --preset headless-release
 
 Run extended validation:
-  python3 tools/validate.py --preset headless-release
+  build/headless-release/gravastar_tools workflow --preset headless-release
 
 Debug build:
   cmake --preset headless-debug

@@ -1,4 +1,20 @@
-# Handoff: P2 GYOTO CMake build investigation underway
+# Handoff
+
+## Current: branch `integration/reconcile` (2026-11-24)
+
+The two lines of work are combined on `integration/reconcile`, built from
+`codex/p2-reference-optics`, licensed GPL-3.0-or-later. Not pushed; `main` is
+unchanged. Phase A (reconcile) and Phase B (docs match measured results) of
+[ROADMAP.md](../ROADMAP.md) are done. Measured build and test results are in
+[RECONCILE_STATUS.md](RECONCILE_STATUS.md).
+
+Next is Phase C, finishing P2 reference optics. Every Phase C step is marked
+[MAX] in the roadmap: stop and ask the owner to raise effort before starting.
+
+The section below is the pre-merge P2 handoff, kept as history. Its worktree
+path and push cadence no longer apply.
+
+## History: P2 GYOTO CMake build investigation (2026-10-27)
 
 Updated 2026-10-27. Implementation is authorized. Active isolated worktree:
 `/home/abrsdxd/Projects/GravastarLab-Cpp20`, branch
