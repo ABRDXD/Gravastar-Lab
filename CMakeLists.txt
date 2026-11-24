@@ -297,6 +297,29 @@ if(GRAVASTAR_DESKTOP)
     set(GLFW_LIBRARY_TYPE STATIC CACHE STRING "" FORCE)
     add_subdirectory(third_party/glfw "${CMAKE_CURRENT_BINARY_DIR}/third_party/glfw" EXCLUDE_FROM_ALL)
 
+    # Dear ImGui 1.93.0 and ImPlot 1.1, vendored and pinned (THIRD_PARTY.md).
+    # Upstream code keeps its own warnings out of our warning-free policy.
+    add_library(gravastar_imgui STATIC
+        third_party/imgui/imgui.cpp third_party/imgui/imgui_draw.cpp
+        third_party/imgui/imgui_tables.cpp third_party/imgui/imgui_widgets.cpp
+        third_party/imgui/imgui_demo.cpp
+        third_party/imgui/backends/imgui_impl_glfw.cpp
+        third_party/imgui/backends/imgui_impl_vulkan.cpp
+        third_party/implot/implot.cpp third_party/implot/implot_items.cpp)
+    target_include_directories(gravastar_imgui SYSTEM PUBLIC
+        "${CMAKE_CURRENT_SOURCE_DIR}/third_party/imgui"
+        "${CMAKE_CURRENT_SOURCE_DIR}/third_party/imgui/backends"
+        "${CMAKE_CURRENT_SOURCE_DIR}/third_party/implot"
+        "${CMAKE_CURRENT_SOURCE_DIR}/third_party/include")
+    # Demo windows compiled out; Vulkan entry points are loaded at run time
+    # through the project's own loader, never linked.
+    target_compile_definitions(gravastar_imgui PUBLIC
+        IMGUI_DISABLE_DEMO_WINDOWS IMGUI_IMPL_VULKAN_NO_PROTOTYPES)
+    target_link_libraries(gravastar_imgui PUBLIC glfw)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(gravastar_imgui PRIVATE -w)
+    endif()
+
     add_library(gravastar_platform src/platform/Window.cpp)
     target_include_directories(gravastar_platform PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

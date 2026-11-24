@@ -21,6 +21,13 @@ compile or link either component.
 | GLFW | 3.4.0 (`GLFW_VERSION_*` in `glfw3.h`), `third_party/glfw/` | Vendored C source, built as a static library for the studio only | zlib license, `third_party/glfw/LICENSE.md` (SHA-256 `149704059b5d0bf551637e50042dd4de9c2cae921021f6636298911e3a5f9462`). GPL-compatible. |
 | shaderc / glslc | system executable | External shader build tool, required only when `GRAVASTAR_DESKTOP=ON`; SPIR-V outputs stay in the build tree | Not bundled |
 
+| Dear ImGui | 1.93.0, upstream `ocornut/imgui` tag `v1.93.0`, commit `c1aaac65e896a45f81f47a4d68f9959e0f86c859`; `third_party/imgui/` (core, `imgui_demo.cpp`, `backends/imgui_impl_{glfw,vulkan}`) | Vendored C++ source, built as `gravastar_imgui` for the studio only. Demo windows compiled out (`IMGUI_DISABLE_DEMO_WINDOWS`); Vulkan entry points loaded at run time (`IMGUI_IMPL_VULKAN_NO_PROTOTYPES`). Unmodified. | MIT, `third_party/imgui/LICENSE.txt` (SHA-256 `173506a2d6f7fb67990d257fb2507f188690eca39060c39469ae7bef43aae2a3`). GPL-compatible. |
+| ImPlot | 1.1, upstream `epezent/implot` tag `v1.1`, commit `819f200639455a58b6b3d4156b70e4271aeb2d00`; `third_party/implot/` (core, no demo) | Vendored C++ source in `gravastar_imgui`. Unmodified. | MIT, `third_party/implot/LICENSE` (SHA-256 `38bd30c2111fe7e3d8fb86d8607491239659eff1df1b1004b9a8349e20a91967`). GPL-compatible. |
+
+ImGui and ImPlot were added on 2026-11-24 by a shallow clone of the tags
+above; the 21 copied files are byte-identical to those tags. Their per-file
+SHA-256 list is `third_party/IMGUI_IMPLOT_SHA256.txt`.
+
 **Open provenance item:** the original vendoring commits (`4db1675`, `694f2c4`)
 did not record an upstream tag, commit or archive hash. The versions above come
 from the files themselves. Before release, compare both trees byte for byte
