@@ -126,6 +126,48 @@ inline tools::Json point_report(const Point &p) {
           {"chart", chart_name(p.chart)},
           {"null_residual", p.null_error}};
 }
+// Radiance data of one traced ray, without the JSON report around it: what
+// the image needs. Fields are empty where the outcome has no such value.
+struct RaySample {
+  std::optional<double> intensity, redshift, alpha;
+  std::optional<double> background, background_redshift;
+  std::optional<std::array<double, 3>> background_direction;
+};
+inline RaySample ray_sample(const Scene &s, const State &initial, const Trace &trace) {
+  RaySample out;
+  if (trace.outcome == Outcome::emitted) {
+    auto frame = circular_frame(metric(s.geometry, initial), s.omega);
+    // Disk hits are at q=1, where conversion to the original emission chart
+    // is regular. The camera and physical ZAMO emission prescription are
+    // shared.
+    auto hit = trace.final.chart == Chart::boyer_lindquist
+                   ? trace.final.state
+                   : transform_state(trace.final.state, trace.final.chart,
+                                        Chart::boyer_lindquist);
+    auto emission =
+        disk_emission(s.geometry, hit, frequency(initial, frame.basis[0]),
+                         s.settings.disk_inner, s.disk_motion);
+    out.intensity = emission.linear_intensity;
+    out.redshift = emission.redshift;
+    out.alpha = 1;
+  } else if (trace.outcome == Outcome::escaped) {
+    out.intensity = 0;
+    out.alpha = 0;
+    if (s.background) {
+      auto frame = circular_frame(metric(s.geometry, initial), s.omega);
+      const auto b = background_emission(
+          s.geometry, trace.final, frequency(initial, frame.basis[0]),
+          *s.background);
+      out.background = b.linear_intensity;
+      out.background_redshift = b.redshift;
+      out.background_direction = b.direction;
+    }
+  } else if (trace.outcome == Outcome::capture_surface) {
+    out.intensity = 0;
+    out.alpha = 1;
+  }
+  return out;
+}
 inline tools::Json ray_report(const Scene &s, const State &initial,
                               const Trace &trace) {
   tools::Json result{{"outcome", outcome_name(trace.outcome)},
@@ -146,37 +188,17 @@ inline tools::Json ray_report(const Scene &s, const State &initial,
            {"background_intensity", nullptr},
            {"background_redshift", nullptr},
            {"background_direction", nullptr}};
-  if (trace.outcome == Outcome::emitted) {
-    auto frame = circular_frame(metric(s.geometry, initial), s.omega);
-    // Disk hits are at q=1, where conversion to the original emission chart
-    // is regular. The camera and physical ZAMO emission prescription are
-    // shared.
-    auto hit = trace.final.chart == Chart::boyer_lindquist
-                   ? trace.final.state
-                   : transform_state(trace.final.state, trace.final.chart,
-                                        Chart::boyer_lindquist);
-    auto emission =
-        disk_emission(s.geometry, hit, frequency(initial, frame.basis[0]),
-                         s.settings.disk_inner, s.disk_motion);
-    result["linear_intensity"] = emission.linear_intensity;
-    result["redshift"] = emission.redshift;
-    result["alpha"] = 1;
-  } else if (trace.outcome == Outcome::escaped) {
-    result["linear_intensity"] = 0;
-    result["alpha"] = 0;
-    if (s.background) {
-      auto frame = circular_frame(metric(s.geometry, initial), s.omega);
-      const auto b = background_emission(
-          s.geometry, trace.final, frequency(initial, frame.basis[0]),
-          *s.background);
-      result["background_intensity"] = b.linear_intensity;
-      result["background_redshift"] = b.redshift;
-      result["background_direction"] = b.direction;
-    }
-  } else if (trace.outcome == Outcome::capture_surface) {
-    result["linear_intensity"] = 0;
-    result["alpha"] = 1;
-  }
+  const auto sample = ray_sample(s, initial, trace);
+  auto set = [&](const char *key, const auto &value) {
+    if (value)
+      result[key] = *value;
+  };
+  set("linear_intensity", sample.intensity);
+  set("redshift", sample.redshift);
+  set("alpha", sample.alpha);
+  set("background_intensity", sample.background);
+  set("background_redshift", sample.background_redshift);
+  set("background_direction", sample.background_direction);
   result["crossings"] = tools::Json::array();
   for (const auto &c : trace.crossings)
     result["crossings"].push_back(
@@ -197,30 +219,47 @@ inline tools::Json ray_report(const Scene &s, const State &initial,
   }
   return result;
 }
-inline std::array<unsigned char, 3> diagnostic_color(const tools::Json &p) {
-  auto outcome = p.at("outcome").get<std::string>();
-  if (outcome == "emitted") {
-    double intensity = p.at("linear_intensity");
+// Diagnostic display colour (gamma 1/2.2 after I/(1+I)); not linear data.
+inline std::array<unsigned char, 3> sample_color(Outcome outcome, const RaySample &s) {
+  if (outcome == Outcome::emitted) {
+    const double intensity = *s.intensity;
     auto v = static_cast<unsigned char>(
         std::lround(255 * std::pow(intensity / (1 + intensity), 1 / 2.2)));
     return {v, v, v};
   }
-  if (outcome == "escaped") {
-    if (p.at("background_intensity").is_null())
+  if (outcome == Outcome::escaped) {
+    if (!s.background)
       return {16, 24, 48};
-    const double b = p.at("background_intensity");
+    const double b = *s.background;
     const double v = std::pow(b / (1 + b), 1 / 2.2);
     return {static_cast<unsigned char>(std::lround(16 + 200 * v)),
             static_cast<unsigned char>(std::lround(24 + 210 * v)),
             static_cast<unsigned char>(std::lround(48 + 207 * v))};
   }
-  if (outcome == "capture_surface")
+  if (outcome == Outcome::capture_surface)
     return {0, 0, 0};
-  if (outcome == "domain_limit")
+  if (outcome == Outcome::domain_limit)
     return {255, 0, 255};
-  if (outcome == "affine_limit" || outcome == "step_limit")
+  if (outcome == Outcome::affine_limit || outcome == Outcome::step_limit)
     return {255, 192, 0};
   return {255, 0, 0};
+}
+inline std::array<unsigned char, 3> diagnostic_color(const tools::Json &p) {
+  const auto name = p.at("outcome").get<std::string>();
+  Outcome outcome = Outcome::numerical_failure;
+  for (auto o : {Outcome::escaped, Outcome::emitted, Outcome::capture_surface,
+                 Outcome::domain_limit, Outcome::affine_limit, Outcome::step_limit,
+                 Outcome::invalid_input, Outcome::numerical_failure})
+    if (outcome_name(o) == name)
+      outcome = o;
+  RaySample s;
+  auto get = [&](const char *key, std::optional<double> &value) {
+    if (p.contains(key) && !p.at(key).is_null())
+      value = p.at(key).get<double>();
+  };
+  get("linear_intensity", s.intensity);
+  get("background_intensity", s.background);
+  return sample_color(outcome, s);
 }
 } // namespace gravastar::optics
 
