@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "description": "CTest smoke job for gravastar_record: 64x36, 60 fps, 8 frames, with radiance, on the same scene and camera path shape as the acceptance run.",
+  "scene": "optics_keplerian_stars_v1.json",
+  "timeline": {"width": 64, "height": 36, "fps": [60, 1], "frame_count": 8},
+  "renderer": {"precision": "fp32", "tolerance": 1e-6, "samples_per_pixel": 1},
+  "radiance": true,
+  "camera_track": {
+    "mode": "stationary_snapshots",
+    "interpolation": "piecewise_linear_r_theta_phi",
+    "keys": [
+      {"frame": 0, "r": 8.0, "theta": 1.0471975511965976, "phi": 0.0},
+      {"frame": 4, "r": 6.5, "theta": 1.3962634015954636, "phi": 3.141592653589793},
+      {"frame": 7, "r": 8.0, "theta": 1.0471975511965976, "phi": 5.497787143782138}
+    ]
+  }
+}

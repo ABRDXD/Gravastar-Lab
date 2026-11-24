@@ -7,6 +7,7 @@
 #include "gravastar/optics/chart.hpp"
 #include "gravastar/optics/ray.hpp"
 #include "gravastar/tools/artifacts.hpp"
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <numbers>
@@ -112,6 +113,17 @@ inline Scene parse_scene(const tools::Json &j) {
       s.width > 128 || s.height > 128)
     throw std::invalid_argument(
         "invalid camera field of view or image size (maximum 128x128)");
+  return s;
+}
+// One integration tolerance for preview and recording paths: absolute and
+// relative tolerance, the event tolerance ten times looser, and a null-drift
+// safety net that sits above what that tolerance allows.
+inline Scene with_tolerance(Scene s, double tolerance) {
+  if (!(tolerance > 0 && tolerance <= 1e-3))
+    throw std::invalid_argument("tolerance must be in (0, 1e-3]");
+  s.settings.absolute_tolerance = s.settings.relative_tolerance = tolerance;
+  s.settings.event_tolerance = 10 * tolerance;
+  s.settings.null_tolerance = std::max(s.settings.null_tolerance, 1e3 * tolerance);
   return s;
 }
 inline State scene_pixel(const Scene &s, int x, int y) {

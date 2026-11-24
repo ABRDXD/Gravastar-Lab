@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "description": "Phase F acceptance run: 1920x1080, 60 fps, 600 frames (10 s) of the Keplerian disk with the static star background. The camera swings once around the axis, dipping from 60 to 80 degrees inclination and in from r = 8 to 6.5 at mid-run.",
+  "scene": "optics_keplerian_stars_v1.json",
+  "timeline": {"width": 1920, "height": 1080, "fps": [60, 1], "frame_count": 600},
+  "renderer": {"precision": "fp32", "tolerance": 1e-6, "samples_per_pixel": 1},
+  "radiance": false,
+  "camera_track": {
+    "mode": "stationary_snapshots",
+    "interpolation": "piecewise_linear_r_theta_phi",
+    "keys": [
+      {"frame": 0, "r": 8.0, "theta": 1.0471975511965976, "phi": 0.0},
+      {"frame": 300, "r": 6.5, "theta": 1.3962634015954636, "phi": 3.141592653589793},
+      {"frame": 599, "r": 8.0, "theta": 1.0471975511965976, "phi": 6.272713331667621}
+    ]
+  }
+}

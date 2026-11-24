@@ -416,6 +416,33 @@ if(GRAVASTAR_DESKTOP)
             GRAVASTAR_TRACE64_SPV="${GRAVASTAR_TRACE64_SPV}"
             GRAVASTAR_TRACE32_SPV="${GRAVASTAR_TRACE32_SPV}")
         add_dependencies(gravastar_gpu_trace gravastar_trace_shader)
+        # Recording on the real renderer (docs/RECORDING.md). The smoke job is
+        # recorded in two parts, encoded, then frames are re-rendered from
+        # scratch and must match the resumed job byte for byte.
+        add_executable(gravastar_record tools/gravastar_record.cpp)
+        target_link_libraries(gravastar_record PRIVATE gravastar_gpu_optics gravastar_recording)
+        target_compile_definitions(gravastar_record PRIVATE
+            GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}"
+            GRAVASTAR_TRACE64_SPV="${GRAVASTAR_TRACE64_SPV}"
+            GRAVASTAR_TRACE32_SPV="${GRAVASTAR_TRACE32_SPV}")
+        add_dependencies(gravastar_record gravastar_trace_shader)
+        set(GRAVASTAR_RECORD_SMOKE "${CMAKE_CURRENT_BINARY_DIR}/recording-smoke")
+        add_test(NAME recording_gpu_clean COMMAND "${CMAKE_COMMAND}" -E rm -rf "${GRAVASTAR_RECORD_SMOKE}")
+        add_test(NAME recording_gpu_part1 COMMAND gravastar_record
+            --spec benchmarks/recording_smoke_v1.json --job "${GRAVASTAR_RECORD_SMOKE}" --max-frames 3)
+        add_test(NAME recording_gpu_part2 COMMAND gravastar_record
+            --spec benchmarks/recording_smoke_v1.json --job "${GRAVASTAR_RECORD_SMOKE}" --encode)
+        add_test(NAME recording_gpu_verify COMMAND gravastar_record
+            --spec benchmarks/recording_smoke_v1.json --job "${GRAVASTAR_RECORD_SMOKE}"
+            --verify 0,2,3,7 --check)
+        set_tests_properties(recording_gpu_clean PROPERTIES FIXTURES_SETUP record_clean LABELS recording)
+        set_tests_properties(recording_gpu_part1 PROPERTIES FIXTURES_REQUIRED record_clean
+            FIXTURES_SETUP record_part1 LABELS recording)
+        set_tests_properties(recording_gpu_part2 PROPERTIES FIXTURES_REQUIRED "record_clean;record_part1"
+            FIXTURES_SETUP record_part2 PASS_REGULAR_EXPRESSION "video .*: 64x36, 60/1 fps, 8 frames"
+            LABELS recording)
+        set_tests_properties(recording_gpu_verify PROPERTIES
+            FIXTURES_REQUIRED "record_clean;record_part1;record_part2" LABELS recording)
         add_test(NAME gpu_trace_vs_cpu COMMAND gravastar_gpu_trace --compare-cpu --check
             --summary --config benchmarks/optics_keplerian_stars_v1.json --resolution-scale 2
             --output results/local/gpu_trace_ctest.json)

@@ -90,12 +90,8 @@ int main(int argc, char **argv) {
     // The reference (CPU comparison) keeps the scene's own settings; the GPU
     // path and its CPU fallback may use a looser tolerance (FP32 needs ~1e-6).
     const auto reference_settings = s.settings;
-    if (tolerance) {
-      s.settings.absolute_tolerance = s.settings.relative_tolerance = *tolerance;
-      s.settings.event_tolerance = 10 * *tolerance;
-      // The null-drift safety net must sit above what this tolerance allows.
-      s.settings.null_tolerance = std::max(s.settings.null_tolerance, 1e3 * *tolerance);
-    }
+    if (tolerance)
+      s = o::with_tolerance(s, *tolerance);
     gravastar::rendering::GpuTracer tracer(
         fp32 ? GRAVASTAR_TRACE32_SPV : GRAVASTAR_TRACE64_SPV, options,
         fp32 ? gravastar::rendering::GpuTracer::Precision::fp32
