@@ -26,7 +26,17 @@ ASan/UBSan desktop 35/35 with no diagnostics (470 s), GCC Debug 31/31
 (634 s, -j2), optional GYOTO 1/1 (79 s). No compiler warnings in project
 code; GYOTO's upstream `Metric.C:502` warns once.
 
-Next is Phase D (GPU optics on the P2 contracts). Steps D1 and D2 are [MAX].
+Phase C was reviewed by the owner's ultrareview (PR #7); all nine findings
+were fixed (ROADMAP.md, "Ultrareview of Phase C").
+
+Phase D (GPU optics) is done for this stage, 2026-11-24: FP32/FP64 measured
+(docs/GPU_PRECISION.md); an FP64 GPU tracer on the CPU contracts with CPU
+fallback matches the CPU per pixel with 0 outcome mismatches on both
+reference scenes (docs/GPU_TRACER.md). Gate: GCC Release 33/33, GCC
+desktop 40/40, Clang desktop 38/38, ASan/UBSan 40/40 with no diagnostics,
+GCC Debug 33/33; no compiler warnings.
+
+Next is Phase E (desktop studio).
 Push with the timeout-safe SSH command in the owner's memory notes; a plain
 `git push` hung once on 2026-11-24.
 
