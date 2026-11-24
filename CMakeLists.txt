@@ -413,14 +413,18 @@ if(GRAVASTAR_DESKTOP)
         set_tests_properties(gpu_precision PROPERTIES TIMEOUT 300 LABELS desktop)
         # Needs a Wayland or X11 session.
         add_test(NAME vulkan_studio_smoke COMMAND gravastar_studio --smoke)
-        set_tests_properties(vulkan_device_audit vulkan_studio_smoke vulkan_metric_fp32 vulkan_ray_fp32
-            PROPERTIES LABELS desktop)
+        # Real render path: quality change, long-job cancel, resize, minimize,
+        # camera change, finished-image screenshot (Phase E step 5).
+        add_test(NAME vulkan_studio_render_smoke COMMAND gravastar_studio --render-smoke)
+        set_tests_properties(vulkan_studio_render_smoke PROPERTIES TIMEOUT 300)
+        set_tests_properties(vulkan_device_audit vulkan_studio_smoke vulkan_studio_render_smoke
+            vulkan_metric_fp32 vulkan_ray_fp32 PROPERTIES LABELS desktop)
         if(GRAVASTAR_SANITIZERS)
             # Measured 2026-11-23: every LeakSanitizer report in these tests is
             # allocated inside the run-time-loaded GPU driver or libdbus, not in
             # project code. Address and undefined-behavior checks stay on.
-            set_tests_properties(vulkan_device_audit vulkan_studio_smoke vulkan_metric_fp32 vulkan_ray_fp32
-                gpu_precision gpu_trace_vs_cpu gpu_trace_vs_cpu_kerr
+            set_tests_properties(vulkan_device_audit vulkan_studio_smoke vulkan_studio_render_smoke
+                vulkan_metric_fp32 vulkan_ray_fp32 gpu_precision gpu_trace_vs_cpu gpu_trace_vs_cpu_kerr
                 PROPERTIES ENVIRONMENT "ASAN_OPTIONS=detect_leaks=0")
         endif()
     endif()

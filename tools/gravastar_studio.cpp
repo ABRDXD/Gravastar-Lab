@@ -65,7 +65,7 @@ std::vector<std::uint32_t> read_shader(const std::filesystem::path &path) {
 int main(int argc, char **argv) {
     try {
         gravastar::rendering::vulkan::ComputeOptions options;
-        bool smoke{};
+        bool smoke{}, render_smoke{};
         int width = 1001, height = 613, frames = 0;
         std::filesystem::path capture, shader_path, screenshot;
         std::filesystem::path scene_path = "benchmarks/optics_keplerian_stars_v1.json";
@@ -83,11 +83,17 @@ int main(int argc, char **argv) {
                              "--screenshot image.ppm: last presented frame, panels included\n"
                              "--smoke: calibration pattern only; 24 frames, resize/minimize/restore "
                              "and exact compute-image captures\n"
+                             "--render-smoke: real render; quality change, long-job cancel, resize, "
+                             "minimize/restore, camera change, finished image screenshot\n"
                              "Escape closes the window. Minimized windows suspend GPU dispatch.\n";
                 return 0;
             }
             if (arg == "--smoke") {
                 smoke = true;
+                continue;
+            }
+            if (arg == "--render-smoke") {
+                render_smoke = true;
                 continue;
             }
             if (++i == argc)
@@ -241,10 +247,95 @@ int main(int argc, char **argv) {
         bool resized{}, minimize_requested{}, minimize_observed{}, restored{}, second_resize{},
             initial_capture{}, resized_capture{};
         std::uint64_t title_frame = UINT64_MAX, frames_before_minimize{};
+        // --render-smoke: scripted lifecycle of the real render path.
+        enum class Step { first_image, long_job, cancelled, resized, minimized, restored,
+                          finishing, screenshot_taken, done };
+        Step step = Step::first_image;
+        auto step_time = start;
+        double cancel_seconds = -1;
+        std::uint64_t recreations_before = 0, presented_at_minimize = 0;
+        bool minimize_seen = false, frames_while_minimized = false;
+        const std::filesystem::path render_shot = "out/window-render-smoke/final.ppm";
         while (!window.should_close()) {
             window.poll();
             auto statistics = renderer.statistics();
             const auto now = std::chrono::steady_clock::now();
+            if (render_smoke && render) {
+                const auto st = render->status();
+                const auto since = now - step_time;
+                if (now - start > std::chrono::seconds(240))
+                    throw std::runtime_error("Render smoke exceeded its 240-second deadline at step " +
+                                             std::to_string(int(step)));
+                if (!st.error.empty())
+                    throw std::runtime_error("Render smoke: worker error: " + st.error);
+                auto next = [&](Step s) {
+                    step = s;
+                    step_time = now;
+                };
+                switch (step) {
+                case Step::first_image:
+                    if (view_width > 0 && st.rays_done > 0) {
+                        quality = 3; // 384 rows: a long FP64 job
+                        restart();
+                        next(Step::long_job);
+                    }
+                    break;
+                case Step::long_job:
+                    if (st.generation >= 2 && st.rays_done >= 4096) {
+                        quality = 0; // cancel mid-job
+                        restart();
+                        next(Step::cancelled);
+                    }
+                    break;
+                case Step::cancelled:
+                    if (st.generation >= 3) {
+                        cancel_seconds = std::chrono::duration<double>(since).count();
+                        recreations_before = statistics.recreations;
+                        window.resize(817, 479);
+                        next(Step::resized);
+                    }
+                    break;
+                case Step::resized:
+                    if (statistics.recreations > recreations_before) {
+                        presented_at_minimize = statistics.presented;
+                        window.minimize();
+                        next(Step::minimized);
+                    }
+                    break;
+                case Step::minimized:
+                    if (window.minimized())
+                        minimize_seen = true;
+                    if (since > std::chrono::milliseconds(300)) {
+                        frames_while_minimized =
+                            minimize_seen && statistics.presented != presented_at_minimize;
+                        window.restore();
+                        next(Step::restored);
+                    }
+                    break;
+                case Step::restored:
+                    if (!window.minimized()) {
+                        camera.phi += 0.3;
+                        clamp_camera();
+                        restart();
+                        next(Step::finishing);
+                    }
+                    break;
+                case Step::finishing:
+                    if (st.generation >= 4 && st.finished) {
+                        renderer.screenshot(render_shot);
+                        next(Step::screenshot_taken);
+                    }
+                    break;
+                case Step::screenshot_taken:
+                    if (statistics.presented > 0 && since > std::chrono::milliseconds(100))
+                        next(Step::done);
+                    break;
+                case Step::done:
+                    break;
+                }
+                if (step == Step::done)
+                    break;
+            }
             if (smoke && now - start > std::chrono::seconds(45))
                 throw std::runtime_error(
                     "Window smoke test exceeded 45-second work deadline: presented=" +
@@ -498,6 +589,46 @@ int main(int argc, char **argv) {
         if (result.validation_errors)
             return 1;
 
+        if (render_smoke) {
+            if (step != Step::done)
+                throw std::runtime_error("Render smoke cancelled before it finished (step " +
+                                         std::to_string(int(step)) + ")");
+            const auto st = render->status();
+            // The screenshot must be a real picture, not one colour.
+            std::ifstream shot(render_shot, std::ios::binary);
+            std::string magic;
+            int sw = 0, sh = 0, maxval = 0;
+            shot >> magic >> sw >> sh >> maxval;
+            shot.get();
+            std::vector<unsigned char> rgb(std::size_t(std::max(0, sw)) * std::max(0, sh) * 3);
+            shot.read(reinterpret_cast<char *>(rgb.data()), static_cast<std::streamsize>(rgb.size()));
+            std::vector<std::uint32_t> colours;
+            for (std::size_t i = 0; i + 2 < rgb.size(); i += 3)
+                colours.push_back(std::uint32_t(rgb[i]) << 16 | std::uint32_t(rgb[i + 1]) << 8 |
+                                  rgb[i + 2]);
+            std::sort(colours.begin(), colours.end());
+            const auto unique =
+                std::distance(colours.begin(), std::unique(colours.begin(), colours.end()));
+            std::cout << "render_smoke cancel_seconds=" << cancel_seconds
+                      << " generations=" << st.generation << " final_rays=" << st.rays_done
+                      << " screenshot=" << sw << 'x' << sh << " colours=" << unique
+                      << " minimize_observed=" << minimize_seen
+                      << " frames_while_minimized=" << frames_while_minimized << '\n';
+            if (!minimize_seen)
+                std::cout << "NOTE: the compositor did not minimize the window, so the "
+                             "no-frames-while-minimized check was not exercised\n";
+            if (!shot || magic != "P6" || unique < 50)
+                throw std::runtime_error("Render smoke screenshot is missing or uniform");
+            if (cancel_seconds < 0 || cancel_seconds > 3)
+                throw std::runtime_error("Long-job cancel took longer than 3 s");
+            if (frames_while_minimized)
+                throw std::runtime_error("Frames were presented while minimized");
+            if (!st.finished || st.generation != 4 || result.overlay_frames == 0)
+                throw std::runtime_error("Render smoke lifecycle incomplete");
+            std::cout << "PASS: real render, quality change, long-job cancel, resize, minimize, "
+                         "camera change and screenshot\n";
+            return 0;
+        }
         if (smoke &&
             (!resized || !resized_capture || !second_resize ||
              result.recreations < 2 || result.presented < 24 ||
