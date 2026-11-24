@@ -3,6 +3,7 @@
 #include "gravastar/optics/ray.hpp"
 #include <array>
 #include <cstdint>
+#include <vector>
 
 namespace gravastar::optics {
 // Phenomenological celestial background for escaped rays: a shell of static
@@ -16,8 +17,20 @@ struct StarField {
   double width{.02};    // Gaussian angular width (rad)
   double range{100};    // brightest / faintest emitted intensity
 };
+// The field's stars, built once: positions and brightness depend only on the
+// StarField, never on the direction being sampled.
+struct StarCatalogue {
+  struct Star {
+    double rho, cos_phi, sin_phi, z, brightness;
+  };
+  StarField field;
+  std::vector<Star> stars;
+};
+StarCatalogue make_catalogue(const StarField &);
 // Emitted bolometric intensity in unit direction n (|n| = 1 required).
 // Smooth in n: I(n) = sum_i b_i exp(-(1 - n.s_i) / width^2).
+double star_intensity(const StarCatalogue &, const std::array<double, 3> &n);
+// Convenience: builds the catalogue for one evaluation (slow in loops).
 double star_intensity(const StarField &, const std::array<double, 3> &n);
 // Unit direction of a point's angular position: BL (theta, phi) or the
 // north/south stereographic patch formula. Not defined in the core patch.
@@ -31,5 +44,5 @@ struct BackgroundSample {
 // Observed bolometric intensity (nu_obs / nu_e)^4 I_e.
 BackgroundSample background_emission(const Parameters &, const Point &escape,
                                      double observer_frequency,
-                                     const StarField &);
+                                     const StarCatalogue &);
 } // namespace gravastar::optics

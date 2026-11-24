@@ -17,15 +17,13 @@ std::uint64_t splitmix(std::uint64_t x) {
 double unit(std::uint64_t x) { return double(x >> 11) * 0x1.0p-53; }
 } // namespace
 
-double star_intensity(const StarField &f, const std::array<double, 3> &n) {
+StarCatalogue make_catalogue(const StarField &f) {
   if (f.count < 1 || !(f.width > 0) || !(f.range >= 1))
     throw std::invalid_argument("invalid star field");
-  const double length = std::hypot(n[0], n[1], n[2]);
-  if (!(std::abs(length - 1) < 1e-9))
-    throw std::invalid_argument("star field direction must be a unit vector");
-  const double w2 = f.width * f.width, cutoff = 40 * w2; // exp(-40)
+  StarCatalogue out;
+  out.field = f;
+  out.stars.reserve(f.count);
   const double golden = std::numbers::pi * (3 - std::sqrt(5.0));
-  double sum = 0;
   for (int i = 0; i < f.count; ++i) {
     // Fibonacci lattice with hashed jitter of about one lattice spacing.
     const std::uint64_t h = splitmix(f.seed * 0x100000001b3ULL + i);
@@ -33,16 +31,35 @@ double star_intensity(const StarField &f, const std::array<double, 3> &n) {
     const double spacing = 2.0 / f.count;
     const double z = std::clamp(z0 + (unit(h) - .5) * spacing, -1.0, 1.0);
     const double phi = golden * i + (unit(splitmix(h)) - .5) * golden;
-    const double rho = std::sqrt(std::max(0.0, 1 - z * z));
-    const double dot = n[0] * rho * std::cos(phi) + n[1] * rho * std::sin(phi) +
-                       n[2] * z;
+    out.stars.push_back({std::sqrt(std::max(0.0, 1 - z * z)), std::cos(phi),
+                         std::sin(phi), z,
+                         std::pow(f.range, -unit(splitmix(h ^ 0x5bd1e995)))});
+  }
+  return out;
+}
+
+double star_intensity(const StarCatalogue &catalogue,
+                      const std::array<double, 3> &n) {
+  const double length = std::hypot(n[0], n[1], n[2]);
+  if (!(std::abs(length - 1) < 1e-9))
+    throw std::invalid_argument("star field direction must be a unit vector");
+  const double w = catalogue.field.width, w2 = w * w, cutoff = 40 * w2;
+  double sum = 0;
+  // Same expression order as the original per-call construction, so values
+  // are bit-identical to it.
+  for (const auto &s : catalogue.stars) {
+    const double dot = n[0] * s.rho * s.cos_phi + n[1] * s.rho * s.sin_phi +
+                       n[2] * s.z;
     const double x = 1 - dot;
-    if (x > cutoff)
+    if (x > cutoff) // exp(-40)
       continue;
-    const double brightness = std::pow(f.range, -unit(splitmix(h ^ 0x5bd1e995)));
-    sum += brightness * std::exp(-x / w2);
+    sum += s.brightness * std::exp(-x / w2);
   }
   return sum;
+}
+
+double star_intensity(const StarField &f, const std::array<double, 3> &n) {
+  return star_intensity(make_catalogue(f), n);
 }
 
 std::array<double, 3> sky_direction(const Point &point) {
@@ -58,7 +75,8 @@ std::array<double, 3> sky_direction(const Point &point) {
 }
 
 BackgroundSample background_emission(const Parameters &p, const Point &escape,
-                                     double nu_observer, const StarField &f) {
+                                     double nu_observer,
+                                     const StarCatalogue &stars) {
   if (!std::isfinite(nu_observer) || nu_observer <= 0)
     throw std::invalid_argument("invalid observer frequency");
   // d/dt is the same vector in BL and in the angular patches, so g_tt is.
@@ -75,7 +93,7 @@ BackgroundSample background_emission(const Parameters &p, const Point &escape,
   out.emitted_frequency = nu;
   out.redshift = nu_observer / nu;
   out.linear_intensity =
-      std::pow(out.redshift, 4) * star_intensity(f, out.direction);
+      std::pow(out.redshift, 4) * star_intensity(stars, out.direction);
   if (!std::isfinite(out.linear_intensity))
     throw std::runtime_error("nonfinite background intensity");
   return out;

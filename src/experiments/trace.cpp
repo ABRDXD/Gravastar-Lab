@@ -20,7 +20,7 @@ struct Scene {
   o::Vector position;
   std::optional<double> omega;
   o::DiskMotion disk_motion{o::DiskMotion::zamo};
-  std::optional<o::StarField> background; // separate channel when present
+  std::optional<o::StarCatalogue> background; // separate channel when present
   double fov;
   int width, height;
   bool angular{};
@@ -93,7 +93,7 @@ Scene scene(const J &j) {
     if (f.count < 1 || f.count > 100000 || !(f.width > 0 && f.width < 1) ||
         !(f.range >= 1 && f.range <= 1e6))
       throw std::invalid_argument("invalid star field parameters");
-    s.background = f;
+    s.background = o::make_catalogue(f);
   }
   const auto &camera = j.at("camera");
   s.position = camera.at("position").get<o::Vector>();

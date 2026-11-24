@@ -109,10 +109,30 @@ void star_field() {
   require("default field deterministic", deterministic);
   require("default field is nonnegative", minimum >= 0);
   require("a different seed gives a different sky", difference > 1e-3);
+  // Regression values computed by the original per-call implementation
+  // (background.cpp at 93e0be5, before the catalogue was precomputed). The
+  // prebuilt catalogue must reproduce them bit for bit.
+  struct Probe {
+    double theta, phi, value;
+  };
+  const Probe probes[] = {{.3, .2, 0x1.2ae92ed01e69ep-8},
+                          {1.1, 2, 0x1.017e0779c9c31p-14},
+                          {1.5707963267948966, -.7, 0x1.705b35fb396cfp-8},
+                          {2.4, 4, 0x1.6852f55a9dec3p-3},
+                          {.05, 1, 0x1.b8bb5839cbd03p-14}};
+  const auto catalogue = o::make_catalogue(field);
+  bool identical = true;
+  for (const auto &probe : probes)
+    identical = identical &&
+                o::star_intensity(catalogue, direction(probe.theta, probe.phi)) ==
+                    probe.value;
+  require("catalogue reproduces the original star intensities bit for bit",
+          identical);
 }
 
 void redshift() {
   o::StarField field;
+  const auto stars = o::make_catalogue(field);
   // Schwarzschild: the camera's ZAMO is static, so every escaping ray has the
   // same shift.
   g::Parameters s;
@@ -139,7 +159,7 @@ void redshift() {
         ++escaped;
         const double nu_obs =
             o::frequency(launch, o::circular_frame(o::metric(p, launch)).basis[0]);
-        const auto b = o::background_emission(p, t.final, nu_obs, field);
+        const auto b = o::background_emission(p, t.final, nu_obs, stars);
         const double r = t.final.state[1], th = t.final.state[2];
         const double sigma = r * r + spin * spin * std::cos(th) * std::cos(th);
         const double nu_e = -t.final.state[4] / std::sqrt(1 - 2 * r / sigma);
@@ -162,7 +182,7 @@ void redshift() {
                              o::transform_state(t.final.state,
                                                 o::Chart::boyer_lindquist, patch),
                              0, patch};
-        const auto bn = o::background_emission(p, other, nu_obs, field);
+        const auto bn = o::background_emission(p, other, nu_obs, stars);
         for (int k = 0; k < 3; ++k)
           chart_error = std::max(chart_error,
                                  std::abs(bn.direction[k] - b.direction[k]));
