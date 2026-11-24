@@ -251,6 +251,12 @@ below it as history.
    the reference scene ends in a named outcome, with censored rays counted.
    Also flag near-tangent crossings whose classification is below the
    measured resolution (step 1 finding), instead of guessing silently.
+   **Done 2026-11-24.** Near tangencies are recorded per ray, marked
+   terminal when the outcome could flip, and counted per image and sampling
+   level. Every step-1 misclassified graze is flagged; no ordinary ray is.
+   Gate: both reference scenes (toy core-continued, Kerr) end all 16320 rays
+   per scene in a named physical outcome with zero censored and zero
+   near-tangent rays at every level. Details in docs/EVENT_COVERAGE.md.
 3. **[MAX]** GYOTO: try the CMake-only build of the pinned 2.0.2 subset as a separate
    optional GPL tool. Compare Kerr rays first, then the gravastar adapter.
    If it cannot be built, record that and leave the GYOTO gate open.

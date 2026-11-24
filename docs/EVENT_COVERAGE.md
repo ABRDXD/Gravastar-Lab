@@ -160,9 +160,8 @@ chord = 2 sqrt(2 delta / |r''|), with r'' from the reference Hamiltonian.
   the depth the trace reached. Its error is 8e-12 (fine) and 1.2e-9 (coarse)
   at the inner join, and below 1e-14 at the outer join, which the ray reaches
   before crossing the shell.
-- **Open:** a graze below that resolution is misclassified silently. The
-  trace carries no flag saying the classification is uncertain. Phase C step
-  2 (explicit outcomes) should add one.
+- A graze below that resolution was misclassified silently. Phase C step 2
+  adds the near-tangency flag below; every such case is now flagged.
 
 **Buried Kerr photon orbit.** The Kerr prograde equatorial photon orbit of the
 exterior parameters is at r = 1.6287816594, b = 2.9537119158: inside the shell.
@@ -187,6 +186,42 @@ the retrograde exterior photon orbit at b = -6.79 beyond the existing
 against this reference (its BL chart ends at r=0; the flat and de Sitter
 analytic disk checks remain the evidence there). Sampled fixtures are not
 a certificate for arbitrary rays.
+
+## Near-tangency flag and outcome gate (2026-11-24, Phase C step 2)
+
+The tracer records a near tangency when a resolved stationary point of a
+surface function lies within `tangency_factor * max(atol, rtol*level)` of the
+surface (contract in `OPTICS.md`). The default factor 1000 is ~100x the
+position error measured above (~10x the tolerance at the inner join).
+
+- Graze family, both settings, all three graze values: every misclassified
+  case is flagged; every case within half the margin is flagged; no case
+  beyond twice the margin is; nothing is flagged on another surface. Margins
+  are 1.8e-7 / 1.5e-7 (tol 1e-10) and 1.8e-9 / 1.5e-9 (tol 1e-12) at the
+  outer / inner join.
+- The pole/core rays at all four step settings and the photon-orbit rays
+  have no flags.
+- Flat-space analytic lines 2e-10 outside and inside a terminal sphere are
+  flagged once, terminal, with surface value equal to the exact closest
+  approach to 1e-12. For the hit, the stationary point lies beyond the
+  clipping first root; an early version dropped it there, and the fix keeps
+  tangencies on the clipping surface. A 2e-10 join graze is flagged as
+  nonterminal with no crossings. `event_optics` now has 87 checks.
+
+**Outcome gate.** Sampling at 16x12, 32x24, 64x48 and 128x96 (16320 rays per
+scene), with the default flag:
+
+| Scene | Outcomes at 128x96 | Censored | Near-tangent |
+| --- | --- | ---: | ---: |
+| `optics_core_long_v1` (toy, core continuation, budget 80) | 5453 emitted, 6835 escaped | 0 | 0 |
+| `optics_angular_kerr_v1` (Kerr, capture proxy r=1.55) | 4665 emitted, 612 escaped, 7011 capture proxy | 0 | 0 |
+
+No level of either scene has a censored or near-tangent ray, and both pass
+the full-image refinement criteria. Counts equal the 2026-10-27 runs.
+Reports: `results/p2_outcomes_{toy,kerr}_sampling.json`. The scenes without
+core continuation (`optics_v1`, `optics_angular_v1`) still end 4 of 192 rays
+at the inner chart limit; those are named `domain_limit` and counted as
+unresolved, which is what core continuation replaces.
 
 ## Reports and remaining limits
 

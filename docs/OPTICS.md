@@ -68,6 +68,20 @@ transition. Maximum null, energy and angular-momentum diagnostics include all
 published crossings as well as ordinary recorded step endpoints. Numerical
 failure may retain a failed endpoint for diagnosis; it is not an accepted ray.
 
+Near tangencies are reported, not guessed. When the event search resolves a
+stationary point of a surface function closer to the surface than
+`tangency_factor * max(atol, rtol*level)` (level: the surface radius or polar
+angle, 1 for the angular disk q=1 and the normalized core ellipsoid; default
+factor 1000), the ray records it in `near_tangencies` with the signed surface
+value and the margin. `terminal` marks surfaces that end the ray (escape,
+disk annulus, capture proxy, chart limits): there the outcome itself is
+uncertain. For shell joins and core entry/exit only the crossing list is;
+the integrated path does not depend on it. A stationary point beyond a
+clipping event is still kept when it belongs to the clipping surface. Images
+count `near_tangent_pixels` and `outcome_uncertain_pixels`; sampling levels
+carry both. Only stationary points bracketed within one accepted step are
+seen; two extrema inside one step remain undetected.
+
 Outcomes distinguish escape, disk emission, a reference Kerr capture surface,
 chart-domain limit, affine-budget exhaustion, step-budget exhaustion, invalid
 input and numerical failure. A budget or domain limit is never absorption.
