@@ -1,117 +1,123 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
+// Recording job lifecycle on a synthetic 64x64, 30-frame job with radiance:
+// cancel, resume, finish, encode and verify; size, settings and lock checks.
+// The 600-frame fault-injection run is tests/recording_fault_tests.cpp.
 #include "gravastar/recording/recorder.hpp"
-#include "gravastar/tools/testing.hpp"
+#include <cmath>
 #include <iostream>
-#include <filesystem>
-#include <iomanip>
-#include <sstream>
 #include <stdexcept>
+#include <unistd.h>
 
-using namespace gravastar;
 using namespace gravastar::recording;
 namespace fs = std::filesystem;
+namespace {
+int failures = 0, checks = 0;
+void check(bool pass, const std::string &name) {
+    ++checks;
+    if (!pass) {
+        ++failures;
+        std::cerr << "FAIL " << name << '\n';
+    }
+}
+template <class F> bool throws(F action) {
+    try {
+        action();
+    } catch (const std::exception &) {
+        return true;
+    }
+    return false;
+}
+} // namespace
 
 int main() {
-    std::cout << "=== GravastarLab Deterministic Recording & Video Timeline Test ===\n";
-
-    fs::path test_dir = "results/test_recording_session";
-    fs::remove_all(test_dir);
-
-    TimelineConfig config;
-    config.width = 64;
-    config.height = 64;
-    config.fps = {30, 1};
-    config.duration_seconds = 1.0; // 30 frames total
-
-    // Synthetic deterministic pattern: no rendering, so this exercises only
-    // scheduling, persistence, resume and encoding.
-    const tools::Json scene = {{"source", "synthetic gradient test pattern"}};
-    const FrameSource pattern = [&](std::uint64_t index, double) {
-        std::string bytes = "P6\n" + std::to_string(config.width) + " " +
-                            std::to_string(config.height) + "\n255\n";
-        for (int y = 0; y < config.height; ++y)
-            for (int x = 0; x < config.width; ++x) {
-                bytes.push_back(static_cast<char>(x * 255 / (config.width - 1)));
-                bytes.push_back(static_cast<char>(y * 255 / (config.height - 1)));
-                bytes.push_back(static_cast<char>((index * 7) % 256));
-            }
-        return bytes;
-    };
-
-    GRAVASTAR_REQUIRE(config.frame_count() == 30, "Frame count calculation mismatch");
-
-    // Phase 1: Fault Injection - render only 10 frames and simulate cancellation
-    std::cout << "[Step 1] Initializing job and rendering 10 frames...\n";
-    {
-        RecordingSession session1(test_dir, config, scene, pattern);
-        session1.initialize();
-        GRAVASTAR_REQUIRE(session1.progress().completed_frames == 0, "Initial completed frames must be 0");
-
-        for (int i = 0; i < 10; ++i) {
-            bool cont = session1.render_frame();
-            GRAVASTAR_REQUIRE(cont == true, "Session must indicate continuation before frame 10");
+    try {
+        const fs::path dir = fs::temp_directory_path() / ("gravastar-recording-" + std::to_string(getpid()));
+        fs::remove_all(dir);
+        TimelineConfig config;
+        config.width = 64;
+        config.height = 64;
+        config.fps = {30, 1};
+        config.frame_count = 30;
+        config.radiance_channels = 2;
+        const gravastar::tools::Json scene{{"source", "synthetic gradient test pattern"}};
+        int calls = 0;
+        const FrameSource pattern = [&](std::uint64_t index, double time) {
+            ++calls;
+            Frame f;
+            f.display = {config.width, config.height, {}};
+            for (int y = 0; y < config.height; ++y)
+                for (int x = 0; x < config.width; ++x) {
+                    f.display.rgb.push_back(std::uint8_t(x * 255 / (config.width - 1)));
+                    f.display.rgb.push_back(std::uint8_t(y * 255 / (config.height - 1)));
+                    f.display.rgb.push_back(std::uint8_t((index * 7) % 256));
+                    f.radiance.push_back(std::sin(0.1 * x + time));
+                    f.radiance.push_back(double(index));
+                }
+            return f;
+        };
+        check(config.time_at_frame(15) == 0.5, "frame 15 at 30 fps is 0.5 s exactly");
+        check(config.duration().num == 1 && config.duration().den == 1, "30 frames at 30 fps last 1 s");
+        {
+            RecordingSession s(dir, config, scene, pattern);
+            const auto r = s.open();
+            check(r.new_job && s.completed() == 0, "new job starts empty");
+            for (int i = 0; i < 10; ++i)
+                s.render_next();
+            check(s.completed() == 10, "ten frames rendered");
+            // A second writer is refused while this one holds the lock.
+            RecordingSession other(dir, config, scene, pattern);
+            check(throws([&] { other.open(); }), "concurrent writer refused");
+            s.cancel();
+            check(!s.render_next() && s.cancelled(), "cancel stops at the frame boundary");
         }
-        GRAVASTAR_REQUIRE(session1.progress().completed_frames == 10, "Expected 10 completed frames");
-
-        session1.cancel();
-        bool stopped = session1.render_frame();
-        GRAVASTAR_REQUIRE(stopped == false, "Cancelled session must return false from render_frame");
-        GRAVASTAR_REQUIRE(session1.progress().status == "cancelled", "Session status must be cancelled");
-        std::cout << "Simulated interruption successfully at frame 10.\n";
-    }
-
-    // Verify disk state after interruption
-    for (int i = 0; i < 10; ++i) {
-        std::ostringstream ss;
-        ss << "frame_" << std::setfill('0') << std::setw(6) << i << ".ppm";
-        GRAVASTAR_REQUIRE(fs::exists(test_dir / "frames" / ss.str()), "Interrupted frame file must exist on disk");
-    }
-    GRAVASTAR_REQUIRE(!fs::exists(test_dir / "frames" / "frame_000010.ppm"), "Frame 10 must not exist after cancellation");
-
-    // Phase 2: Resumption from Checkpoint
-    std::cout << "[Step 2] Resuming job from existing checkpoint...\n";
-    {
-        RecordingSession session2(test_dir, config, scene, pattern);
-        session2.initialize();
-        std::cout << "Detected existing completed frames: " << session2.progress().completed_frames << "\n";
-        GRAVASTAR_REQUIRE(session2.progress().completed_frames == 10, "Resumed session must detect exactly 10 existing frames");
-
-        // Resume and render remaining 20 frames
-        session2.render_all();
-        std::cout << "Render finished. Total completed: " << session2.progress().completed_frames << "\n";
-        GRAVASTAR_REQUIRE(session2.progress().completed_frames == 30, "Resumed session must finish all 30 frames");
-        GRAVASTAR_REQUIRE(session2.progress().status == "completed", "Session status must be completed");
-
-        // Phase 3: Video Encoding with FFmpeg & Container Verification
-        std::cout << "[Step 3] Encoding to video.mp4 via FFmpeg and verifying...\n";
-        bool encoded = session2.encode_video();
-        GRAVASTAR_REQUIRE(encoded == true, "encode_video() must return true on success");
-        GRAVASTAR_REQUIRE(fs::exists(test_dir / "video.mp4"), "video.mp4 must exist after encoding");
-        GRAVASTAR_REQUIRE(fs::file_size(test_dir / "video.mp4") > 1000, "video.mp4 must not be an empty or truncated file");
-        GRAVASTAR_REQUIRE(fs::exists(test_dir / "manifest.json"), "manifest.json must exist");
-        GRAVASTAR_REQUIRE(!fs::exists(test_dir / "video.partial.mp4"), "video.partial.mp4 must be cleanly renamed");
-        std::cout << "Video export and verification succeeded!\n";
-    }
-
-    // A mis-sized frame from the source is rejected before anything is written.
-    {
-        const fs::path bad_dir = test_dir.string() + "_malformed";
-        fs::remove_all(bad_dir);
-        RecordingSession bad(bad_dir, config, scene,
-                             [](std::uint64_t, double) { return std::string("P6\n1 1\n255\nabc"); });
-        bad.initialize();
-        bool rejected = false;
-        try {
-            (void)bad.render_frame();
-        } catch (const std::runtime_error &) {
-            rejected = true;
+        check(fs::exists(dir / "frames" / "frame_000009.png") &&
+                  !fs::exists(dir / "frames" / "frame_000010.png") &&
+                  fs::exists(dir / "radiance" / "frame_000009.npy") && !fs::exists(dir / "job.lock"),
+              "ten frames and their radiance on disk, lock released");
+        {
+            TimelineConfig changed = config;
+            changed.fps = {25, 1};
+            RecordingSession s(dir, changed, scene, pattern);
+            check(throws([&] { s.open(); }), "resume with different settings refused");
         }
-        GRAVASTAR_REQUIRE(rejected, "Malformed frame must be rejected");
-        GRAVASTAR_REQUIRE(!fs::exists(bad_dir / "frames" / "frame_000000.ppm"),
-                          "Rejected frame must not be written");
-        fs::remove_all(bad_dir);
+        {
+            RecordingSession s(dir, config, {{"source", "something else"}}, pattern);
+            check(throws([&] { s.open(); }), "resume with a different scene refused");
+        }
+        calls = 0;
+        {
+            RecordingSession s(dir, config, scene, pattern);
+            const auto r = s.open();
+            check(!r.new_job && r.kept == 10 && r.quarantined == 0, "resume keeps the ten verified frames");
+            s.render_all();
+            check(s.complete() && calls == 20, "resume renders only the twenty missing frames");
+            const auto e = s.encode();
+            check(e.success, "encode succeeds: " + e.failure);
+            check(e.probe.value("width", 0) == 64 && e.probe.value("height", 0) == 64 &&
+                      e.probe.value("r_frame_rate", std::string()) == "30/1" &&
+                      e.probe.value("nb_read_frames", std::string()) == "30",
+                  "ffprobe sees 64x64, 30/1, 30 frames");
+            check(fs::exists(dir / "video.mp4") && !fs::exists(dir / "video.partial.mp4"),
+                  "verified video renamed into place");
+        }
+        {
+            const fs::path bad_dir = dir.string() + "-bad";
+            fs::remove_all(bad_dir);
+            RecordingSession bad(bad_dir, config, scene, [&](std::uint64_t, double) {
+                Frame f;
+                f.display = {1, 1, {1, 2, 3}};
+                return f;
+            });
+            bad.open();
+            check(throws([&] { bad.render_next(); }), "wrong-size frame rejected");
+            check(!fs::exists(bad_dir / "frames" / "frame_000000.png"), "rejected frame not written");
+            fs::remove_all(bad_dir);
+        }
+        fs::remove_all(dir);
+    } catch (const std::exception &e) {
+        std::cerr << "recording lifecycle: " << e.what() << '\n';
+        return 1;
     }
-
-    std::cout << "\nALL DETERMINISTIC RECORDING & RESUMPTION CHECKS PASSED!\n";
-    return 0;
+    std::cout << (failures ? "FAIL " : "PASS ") << checks << " recording lifecycle checks\n";
+    return failures ? 1 : 0;
 }
