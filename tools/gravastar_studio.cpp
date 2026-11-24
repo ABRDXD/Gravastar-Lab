@@ -8,9 +8,13 @@
 #include <imgui_impl_glfw.h>
 #include <implot.h>
 
+#include <algorithm>
 #include <charconv>
 #include <chrono>
+#include <cstdio>
+#include <cmath>
 #include <fstream>
+#include <numbers>
 #include <optional>
 #include <iostream>
 #include <stdexcept>
@@ -64,6 +68,7 @@ int main(int argc, char **argv) {
         int width = 1001, height = 613, frames = 0;
         std::filesystem::path capture, shader_path;
         std::filesystem::path scene_path = "benchmarks/optics_keplerian_stars_v1.json";
+        std::optional<std::array<double, 3>> start_camera;
         for (int i = 1; i < argc; ++i) {
             const std::string_view arg(argv[i]);
             if (arg == "--help") {
@@ -71,6 +76,7 @@ int main(int argc, char **argv) {
                              "--device N | --validation auto|on|off | --width N | --height N\n"
                              "--frames N (0=until closed) | --capture image.ppm | --shader PATH\n"
                              "--scene benchmarks/X.json: angular-patch scene to render (FP64 GPU)\n"
+                             "--camera r,theta,phi: start camera (clamped to the orbit limits)\n"
                              "--smoke: calibration pattern only; 24 frames, resize/minimize/restore "
                              "and exact compute-image captures\n"
                              "Escape closes the window. Minimized windows suspend GPU dispatch.\n";
@@ -97,6 +103,12 @@ int main(int argc, char **argv) {
                 shader_path = value;
             else if (arg == "--scene")
                 scene_path = value;
+            else if (arg == "--camera") {
+                std::array<double, 3> c{};
+                if (std::sscanf(std::string(value).c_str(), "%lf,%lf,%lf", &c[0], &c[1], &c[2]) != 3)
+                    throw std::invalid_argument("--camera expects r,theta,phi");
+                start_camera = c;
+            }
             else if (arg == "--validation") {
                 if (value == "auto")
                     options.validation = gravastar::rendering::vulkan::ValidationMode::automatic;
@@ -145,14 +157,39 @@ int main(int argc, char **argv) {
         constexpr std::array<int, 4> heights{96, 192, 288, 384};
         int quality = 1;
         std::optional<gravastar::studio::ProgressiveRender> render;
+        // Orbit camera in the scene's BL coordinates around the axis. Elevation
+        // stops 0.05 rad short of either pole (the launch frame's polar margin),
+        // so the view never flips; distance stays inside the escape sphere.
+        struct Camera {
+            double r{}, theta{}, phi{};
+        };
+        Camera camera, home;
+        std::vector<std::pair<std::string, Camera>> bookmarks;
+        double r_min = 2.5, r_max = 9.0;
+        if (scene) {
+            home = {scene->position[1], scene->position[2], scene->position[3]};
+            camera = home;
+            r_max = 0.9 * scene->settings.outer_radius;
+            if (start_camera)
+                camera = {(*start_camera)[0], (*start_camera)[1], (*start_camera)[2]};
+        }
+        auto clamp_camera = [&] {
+            camera.theta = std::clamp(camera.theta, 0.05, std::numbers::pi - 0.05);
+            camera.r = std::clamp(camera.r, r_min, r_max);
+            camera.phi = std::remainder(camera.phi, 2 * std::numbers::pi);
+        };
         auto restart = [&] {
             gravastar::studio::RenderJob job{*scene, scene_path.filename().string()};
             job.scene.height = heights[quality];
             job.scene.width = std::max(1, (heights[quality] * scene->width) / scene->height);
+            job.scene.position[1] = camera.r;
+            job.scene.position[2] = camera.theta;
+            job.scene.position[3] = camera.phi;
             render->start(std::move(job));
         };
         if (scene) {
             render.emplace(GRAVASTAR_TRACE64_SPV);
+            clamp_camera();
             restart();
         }
         std::vector<std::uint32_t> view;
@@ -233,6 +270,22 @@ int main(int argc, char **argv) {
                 }
                 ImGui::End();
                 if (render) {
+                    // Drag on the image to orbit, scroll to zoom (not over panels).
+                    const auto &io = ImGui::GetIO();
+                    bool moved = false;
+                    if (!io.WantCaptureMouse && ImGui::IsMouseDragging(ImGuiMouseButton_Left, 0)) {
+                        camera.phi -= 0.005 * io.MouseDelta.x;
+                        camera.theta -= 0.005 * io.MouseDelta.y;
+                        moved = io.MouseDelta.x != 0 || io.MouseDelta.y != 0;
+                    }
+                    if (!io.WantCaptureMouse && io.MouseWheel != 0) {
+                        camera.r *= std::pow(0.9, io.MouseWheel);
+                        moved = true;
+                    }
+                    if (moved) {
+                        clamp_camera();
+                        restart();
+                    }
                     const auto st = render->status();
                     ImGui::SetNextWindowPos(ImVec2(12, 260), ImGuiCond_FirstUseEver);
                     ImGui::Begin("Render");
@@ -244,6 +297,46 @@ int main(int argc, char **argv) {
                         restart();
                     if (ImGui::Button("Restart"))
                         restart();
+                    ImGui::SeparatorText("Camera (ZAMO observer)");
+                    ImGui::Text("r = %.3f   theta = %.4f   phi = %.4f", camera.r, camera.theta,
+                                camera.phi);
+                    float values[3] = {float(camera.r), float(camera.theta), float(camera.phi)};
+                    bool typed = ImGui::DragFloat("r", &values[0], 0.02F, float(r_min), float(r_max));
+                    typed |= ImGui::DragFloat("theta", &values[1], 0.002F, 0.05F,
+                                              float(std::numbers::pi - 0.05));
+                    typed |= ImGui::DragFloat("phi", &values[2], 0.005F, -float(std::numbers::pi),
+                                              float(std::numbers::pi));
+                    if (typed) {
+                        camera = {values[0], values[1], values[2]};
+                        clamp_camera();
+                        restart();
+                    }
+                    if (ImGui::Button("Reset camera")) {
+                        camera = home;
+                        restart();
+                    }
+                    ImGui::SameLine();
+                    if (ImGui::Button("Bookmark") && bookmarks.size() < 16)
+                        bookmarks.emplace_back("view " + std::to_string(bookmarks.size() + 1),
+                                               camera);
+                    for (std::size_t b = 0; b < bookmarks.size(); ++b) {
+                        ImGui::PushID(static_cast<int>(b));
+                        if (ImGui::SmallButton("Go")) {
+                            camera = bookmarks[b].second;
+                            restart();
+                        }
+                        ImGui::SameLine();
+                        if (ImGui::SmallButton("Delete")) {
+                            bookmarks.erase(bookmarks.begin() + static_cast<std::ptrdiff_t>(b));
+                            ImGui::PopID();
+                            break;
+                        }
+                        ImGui::SameLine();
+                        ImGui::Text("%s: r %.2f, theta %.3f, phi %.3f", bookmarks[b].first.c_str(),
+                                    bookmarks[b].second.r, bookmarks[b].second.theta,
+                                    bookmarks[b].second.phi);
+                        ImGui::PopID();
+                    }
                     const float progress =
                         st.rays_total ? float(st.rays_done) / float(st.rays_total) : 0.F;
                     ImGui::ProgressBar(progress);
