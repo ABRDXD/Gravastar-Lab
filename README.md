@@ -6,9 +6,9 @@
 
 The original project warning is preserved above. Current implemented scope is
 the headless stationary geometry benchmark and bounded native CPU reference
-optics. An optional desktop build (below) adds a Vulkan device layer, FP32 GPU
-comparison kernels and a test-pattern window. There is no GPU image renderer,
-no interactive studio and no full-resolution recording yet.
+optics. An optional desktop build (below) adds an FP64 GPU tracer that matches
+the CPU tracer per pixel, and a desktop studio that renders scenes with it.
+There is no full-resolution recording yet.
 
 GravastarLab implements the transition construction of
 [Ilijić and DeBenedictis, arXiv:2309.00551v2](https://arxiv.org/html/2309.00551v2).
