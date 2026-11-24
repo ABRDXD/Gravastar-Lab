@@ -2,6 +2,8 @@
 #include "gravastar/platform/Window.hpp"
 #include "gravastar/rendering/vulkan/WindowRenderer.hpp"
 
+#include "studio_render.hpp"
+
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <implot.h>
@@ -9,6 +11,7 @@
 #include <charconv>
 #include <chrono>
 #include <fstream>
+#include <optional>
 #include <iostream>
 #include <stdexcept>
 
@@ -59,15 +62,17 @@ int main(int argc, char **argv) {
         gravastar::rendering::vulkan::ComputeOptions options;
         bool smoke{};
         int width = 1001, height = 613, frames = 0;
-        std::filesystem::path capture, shader_path = GRAVASTAR_PRESENTATION_SHADER;
+        std::filesystem::path capture, shader_path;
+        std::filesystem::path scene_path = "benchmarks/optics_keplerian_stars_v1.json";
         for (int i = 1; i < argc; ++i) {
             const std::string_view arg(argv[i]);
             if (arg == "--help") {
-                std::cout << "GravastarLab Desktop Studio Vulkan Presentation (not a black-hole image)\n"
+                std::cout << "GravastarLab Desktop Studio\n"
                              "--device N | --validation auto|on|off | --width N | --height N\n"
                              "--frames N (0=until closed) | --capture image.ppm | --shader PATH\n"
-                             "--smoke: 24 frames, resize/minimize/restore and exact compute-image "
-                             "captures\n"
+                             "--scene benchmarks/X.json: angular-patch scene to render (FP64 GPU)\n"
+                             "--smoke: calibration pattern only; 24 frames, resize/minimize/restore "
+                             "and exact compute-image captures\n"
                              "Escape closes the window. Minimized windows suspend GPU dispatch.\n";
                 return 0;
             }
@@ -90,6 +95,8 @@ int main(int argc, char **argv) {
                 capture = value;
             else if (arg == "--shader")
                 shader_path = value;
+            else if (arg == "--scene")
+                scene_path = value;
             else if (arg == "--validation") {
                 if (value == "auto")
                     options.validation = gravastar::rendering::vulkan::ValidationMode::automatic;
@@ -107,7 +114,23 @@ int main(int argc, char **argv) {
             if (capture.empty())
                 capture = "out/window-smoke/final.ppm";
         }
+        // The calibration pattern keeps the exact-pixel smoke checks; normal
+        // runs show the progressive render through the view shader.
+        const bool render_scene = !smoke && shader_path.empty();
+        if (shader_path.empty())
+            shader_path = smoke ? GRAVASTAR_PRESENTATION_SHADER : GRAVASTAR_VIEW_SHADER;
         const auto shader = read_shader(shader_path);
+        std::optional<gravastar::optics::Scene> scene;
+        if (render_scene) {
+            if (scene_path.is_relative())
+                scene_path = std::filesystem::path(GRAVASTAR_SOURCE_ROOT) / scene_path;
+            std::ifstream file(scene_path);
+            if (!file)
+                throw std::runtime_error("Cannot open scene " + scene_path.string());
+            scene = gravastar::optics::parse_scene(gravastar::tools::Json::parse(file));
+            if (!scene->angular)
+                throw std::runtime_error("The studio renders angular-patch scenes only");
+        }
         gravastar::platform::Window window(
             width, height, "GravastarLab | Vulkan presentation diagnostic | Esc to close");
         Interface interface(window.native_handle());
@@ -118,6 +141,22 @@ int main(int argc, char **argv) {
         }
         std::array<float, 240> frame_ms{};
         std::size_t frame_slot = 0;
+        // Render heights at the scene's aspect ratio (FP64: ~120 us per ray).
+        constexpr std::array<int, 4> heights{96, 192, 288, 384};
+        int quality = 1;
+        std::optional<gravastar::studio::ProgressiveRender> render;
+        auto restart = [&] {
+            gravastar::studio::RenderJob job{*scene, scene_path.filename().string()};
+            job.scene.height = heights[quality];
+            job.scene.width = std::max(1, (heights[quality] * scene->width) / scene->height);
+            render->start(std::move(job));
+        };
+        if (scene) {
+            render.emplace(GRAVASTAR_TRACE64_SPV);
+            restart();
+        }
+        std::vector<std::uint32_t> view;
+        int view_width = 0, view_height = 0;
         std::cout << "device=" << renderer.device().name
                   << " queue=" << renderer.device().compute_family << " validation="
                   << (renderer.validation_enabled() ? "enabled" : "disabled/unavailable")
@@ -181,7 +220,8 @@ int main(int argc, char **argv) {
                 frame_ms[frame_slot++ % frame_ms.size()] = 1000.0F / ImGui::GetIO().Framerate;
                 ImGui::SetNextWindowPos(ImVec2(12, 12), ImGuiCond_FirstUseEver);
                 ImGui::Begin("GravastarLab studio");
-                ImGui::TextUnformatted("Calibration pattern: not a black-hole image.");
+                ImGui::TextUnformatted(render ? "Rendering the scene below."
+                                              : "Calibration pattern: not a black-hole image.");
                 ImGui::Text("Device: %s", renderer.device().name.c_str());
                 const auto now_stats = renderer.statistics();
                 ImGui::Text("Extent %u x %u, frames %llu", now_stats.width, now_stats.height,
@@ -192,8 +232,45 @@ int main(int argc, char **argv) {
                     ImPlot::EndPlot();
                 }
                 ImGui::End();
+                if (render) {
+                    const auto st = render->status();
+                    ImGui::SetNextWindowPos(ImVec2(12, 260), ImGuiCond_FirstUseEver);
+                    ImGui::Begin("Render");
+                    ImGui::Text("Scene: %s", scene_path.filename().string().c_str());
+                    ImGui::TextUnformatted("FP64 GPU tracer, CPU fallback (docs/GPU_TRACER.md).");
+                    ImGui::TextUnformatted("Colours: diagnostic mapping of linear data.");
+                    const char *labels[] = {"96 rows", "192 rows", "288 rows", "384 rows"};
+                    if (ImGui::Combo("Resolution", &quality, labels, 4))
+                        restart();
+                    if (ImGui::Button("Restart"))
+                        restart();
+                    const float progress =
+                        st.rays_total ? float(st.rays_done) / float(st.rays_total) : 0.F;
+                    ImGui::ProgressBar(progress);
+                    if (st.rays_done == 0 && st.error.empty())
+                        ImGui::TextUnformatted("Starting the GPU tracer (the first launch after a "
+                                               "build compiles its shader; this can take a while).");
+                    else if (st.finished)
+                        ImGui::Text("Finished: %zu rays in %.1f s", st.rays_done, st.seconds);
+                    else
+                        ImGui::Text("Refining: %d-pixel blocks, %zu rays, %.1f s", st.level,
+                                    st.rays_done, st.seconds);
+                    ImGui::Text("GPU time %.2f s", st.gpu_milliseconds / 1000);
+                    std::size_t fallback = 0;
+                    for (std::size_t r = 1; r < 7; ++r)
+                        fallback += st.fallback[r];
+                    ImGui::Text("Re-traced on CPU: %zu (core %zu, near tangency %zu)", fallback,
+                                st.fallback[1], st.fallback[2]);
+                    ImGui::Text("Near-tangent flags on CPU re-traces: %zu", st.near_tangent);
+                    if (!st.error.empty())
+                        ImGui::TextColored(ImVec4(1, .4F, .4F, 1), "Error: %s", st.error.c_str());
+                    ImGui::End();
+                }
                 ImGui::Render();
             }
+            if (render && render->fetch(view, view_width, view_height))
+                renderer.set_source(static_cast<std::uint32_t>(view_width),
+                                    static_cast<std::uint32_t>(view_height), view);
             const auto status = renderer.draw(extent[0], extent[1], 0);
             if (status != gravastar::rendering::vulkan::FrameStatus::presented) {
                 window.wait(0.01);
@@ -222,6 +299,14 @@ int main(int argc, char **argv) {
         }
         if (!capture.empty())
             renderer.capture(capture);
+        if (render) {
+            const auto st = render->status();
+            std::cout << "render generation=" << st.generation << " rays=" << st.rays_done << '/'
+                      << st.rays_total << " level=" << st.level << " finished=" << st.finished
+                      << " gpu_s=" << st.gpu_milliseconds / 1000 << " shown=" << view_width << 'x'
+                      << view_height << " error=" << (st.error.empty() ? "none" : st.error)
+                      << '\n';
+        }
         renderer.finish();
         const auto result = renderer.statistics();
         std::cout << "presented=" << result.presented << " recreations=" << result.recreations

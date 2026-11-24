@@ -340,12 +340,16 @@ if(GRAVASTAR_DESKTOP)
     target_compile_features(gravastar_platform PUBLIC cxx_std_20)
     target_link_libraries(gravastar_platform PUBLIC glfw)
 
-    add_executable(gravastar_studio tools/gravastar_studio.cpp)
-    target_link_libraries(gravastar_studio PRIVATE gravastar_vulkan gravastar_platform
+    add_executable(gravastar_studio tools/gravastar_studio.cpp tools/studio_render.cpp)
+    target_link_libraries(gravastar_studio PRIVATE gravastar_gpu_optics gravastar_platform
         gravastar_imgui)
     target_compile_definitions(gravastar_studio PRIVATE
-        GRAVASTAR_PRESENTATION_SHADER="${GRAVASTAR_PRESENTATION_SPV}")
-    add_dependencies(gravastar_studio gravastar_presentation_shader)
+        GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}"
+        GRAVASTAR_PRESENTATION_SHADER="${GRAVASTAR_PRESENTATION_SPV}"
+        GRAVASTAR_VIEW_SHADER="${GRAVASTAR_VIEW_SPV}"
+        GRAVASTAR_TRACE64_SPV="${GRAVASTAR_TRACE64_SPV}")
+    add_dependencies(gravastar_studio gravastar_presentation_shader gravastar_view_shader
+        gravastar_trace_shader)
 
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         foreach(target gravastar_vulkan gravastar_gpu_optics gravastar_platform gravastar_studio)
