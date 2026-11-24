@@ -138,7 +138,8 @@ int main() {
                                 {{C::escaped, 0., 0., 1.},
                                  {C::escaped, 0., 0., 3.},
                                  {C::emitted, .5, 1., std::nullopt},
-                                 {C::escaped, 0., 0., 0.}});
+                                 {C::escaped, 0., 0., 0.}},
+                                true);
     check(b.pixels[0].background && near(*b.pixels[0].background, 1),
           "background averages over all samples, disk contributes zero");
     check(near(*b.pixels[0].intensity, .125),
@@ -147,13 +148,26 @@ int main() {
                                       {{C::escaped, 0., 0., 1.},
                                        {C::escaped, 0., 0., std::nullopt},
                                        {C::emitted, .5, 1., std::nullopt},
-                                       {C::escaped, 0., 0., 0.}});
+                                       {C::escaped, 0., 0., 0.}},
+                                      true);
     check(!missing.pixels[0].background,
           "an escaped sample without background leaves the channel unknown");
     check(reject([&] {
-            s::aggregate(1, 1, 1, {{C::emitted, .5, 1., 2.}});
+            s::aggregate(1, 1, 1, {{C::emitted, .5, 1., 2.}}, true);
           }),
           "background on a disk sample is rejected");
+    // Disabled channel: a disk-only pixel must not report a background of
+    // zero, and a background value is an error. (Ultrareview finding.)
+    const auto hidden = s::aggregate(1, 1, 1, {{C::emitted, .5, 1., std::nullopt}}, true);
+    const auto off = s::aggregate(1, 1, 1, {{C::emitted, .5, 1., std::nullopt}});
+    check(hidden.pixels[0].background && *hidden.pixels[0].background == 0,
+          "enabled channel hidden by the disk is a known zero");
+    check(!off.pixels[0].background,
+          "disabled channel leaves the background unknown");
+    check(reject([&] {
+            s::aggregate(1, 1, 1, {{C::escaped, 0., 0., 1.}});
+          }),
+          "a background value with the channel disabled is rejected");
     std::cout << "PASS " << checks << " sampling arithmetic checks\n";
     return 0;
   } catch (const std::exception &e) {

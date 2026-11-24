@@ -69,7 +69,9 @@ s::Grid grid(const J &report, int width, int height, int scale) {
                            ? optional("background_intensity")
                            : std::nullopt});
   }
-  return s::aggregate(width, height, scale, samples);
+  const bool background_channel =
+      report.value("background_channel", std::string("disabled")) != "disabled";
+  return s::aggregate(width, height, scale, samples, background_channel);
 }
 int main(int argc, char **argv) {
   try {

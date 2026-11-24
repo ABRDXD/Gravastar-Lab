@@ -32,8 +32,12 @@ struct Grid {
   int width{}, height{}, scale{};
   std::vector<Pixel> pixels;
 };
+// background_channel: the scene enables the separate background channel.
+// When false, no sample may carry a background value and no pixel reports
+// one, so "disabled" is distinguishable from "hidden by the disk".
 inline Grid aggregate(int width, int height, int scale,
-                      const std::vector<Sample> &samples) {
+                      const std::vector<Sample> &samples,
+                      bool background_channel = false) {
   if (width < 1 || height < 1 || scale < 1 || scale > 8 ||
       width > 128 / scale || height > 128 / scale ||
       samples.size() !=
@@ -45,7 +49,7 @@ inline Grid aggregate(int width, int height, int scale,
     for (int x = 0; x < width; ++x) {
       auto &pixel = out.pixels[y * width + x];
       double alpha = 0, background = 0;
-      bool resolved = true, background_known = true;
+      bool resolved = true, background_known = background_channel;
       for (int sy = 0; sy < scale; ++sy)
         for (int sx = 0; sx < scale; ++sx) {
           const auto &s =
@@ -75,7 +79,7 @@ inline Grid aggregate(int width, int height, int scale,
             alpha += weight * *s.alpha;
           }
           if (s.background) {
-            if (s.classification != Class::escaped ||
+            if (!background_channel || s.classification != Class::escaped ||
                 !std::isfinite(*s.background) || *s.background < 0)
               throw std::invalid_argument("invalid background sample");
             background += weight * *s.background;
