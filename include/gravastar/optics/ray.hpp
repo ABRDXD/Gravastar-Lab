@@ -42,13 +42,6 @@ struct Settings {
   // radii must lie strictly inside r_in; the legacy inner cutoff is replaced.
   bool continue_core{false};
   double core_entry_radius{.75}, core_exit_radius{1.0};
-  // A resolved stationary point of a surface function closer to the surface
-  // than tangency_factor * max(absolute_tolerance, relative_tolerance*level)
-  // is recorded as a near tangency: whether the ray crossed there is below
-  // the trace's resolution. 0 disables. The measured position error at a
-  // shell join is ~10x the tolerance (docs/EVENT_COVERAGE.md), so the
-  // default leaves a ~100x margin.
-  double tangency_factor{1000};
 };
 enum class Outcome {
   escaped,
@@ -71,13 +64,6 @@ struct Crossing {
   std::string surface;
   Point point;
 };
-struct Tangency {
-  std::string surface;
-  Point point;           // the resolved stationary point
-  double value{};        // signed surface function there (<0 inside for r)
-  double margin{};       // threshold it fell below
-  bool terminal{};       // the surface ends the ray: the outcome may differ
-};
 struct Trace {
   Outcome outcome{Outcome::invalid_input};
   std::string detail;
@@ -87,10 +73,6 @@ struct Trace {
   double maximum_null_error{}, energy_error{}, angular_momentum_error{};
   std::vector<Point> trajectory;
   std::vector<Crossing> crossings;
-  // Near tangencies up to the final point. For nonterminal surfaces (shell
-  // joins) only the published crossing list is uncertain; the integrated
-  // path does not depend on it. For terminal ones the outcome is uncertain.
-  std::vector<Tangency> tangencies;
 };
 Trace trace(const Parameters &, const State &, const Settings & = {});
 // Opt-in regular angular integration. Initial state is in the named north or
@@ -101,20 +83,6 @@ Trace trace_angular(const Parameters &, const State &, Chart,
 struct Emission {
   double redshift{}, emitted_frequency{}, linear_intensity{};
 };
-// Prescribed disk motion. ZAMO is the original phenomenological choice.
-// keplerian_prograde follows the equatorial circular geodesic rotating toward
-// +phi: prescribed motion, not a self-consistent matter solution.
-enum class DiskMotion { zamo, keplerian_prograde };
-// Angular speed of that geodesic at an equatorial evaluation: the larger root
-// of d_r g_tt + 2 W d_r g_tphi + W^2 d_r g_phiphi = 0. Empty when there is no
-// real root or the orbit is not timelike. Needs equatorial reflection symmetry.
-std::optional<double> keplerian_omega(const geometry::Evaluation &);
-// True when every sampled radius of [inner, outer] on the equator has a
-// timelike prograde circular geodesic whose angular momentum grows outward
-// (stable). Samples include both ends.
-bool keplerian_annulus_supported(const Parameters &, double inner, double outer,
-                                 int samples = 64);
 Emission disk_emission(const Parameters &, const State &hit,
-                       double observer_frequency, double disk_inner,
-                       DiskMotion = DiskMotion::zamo);
+                       double observer_frequency, double disk_inner);
 } // namespace gravastar::optics

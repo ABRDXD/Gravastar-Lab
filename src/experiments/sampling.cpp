@@ -63,11 +63,8 @@ s::Grid grid(const J &report, int width, int height, int scale) {
                  ? std::nullopt
                  : std::optional(pixel.at(key).get<double>());
     };
-    samples.push_back({classification, optional("linear_intensity"),
-                       optional("alpha"),
-                       pixel.contains("background_intensity")
-                           ? optional("background_intensity")
-                           : std::nullopt});
+    samples.push_back(
+        {classification, optional("linear_intensity"), optional("alpha")});
   }
   return s::aggregate(width, height, scale, samples);
 }
@@ -179,7 +176,6 @@ int main(int argc, char **argv) {
       for (const auto &p : levels.back().pixels) {
         pixels.push_back({{"intensity", number(p.intensity)},
                           {"alpha", number(p.alpha)},
-                          {"background", number(p.background)},
                           {"class_fractions", p.fractions},
                           {"known_contribution", p.known_contribution}});
         unresolved_pixels += !p.intensity;
@@ -194,8 +190,6 @@ int main(int argc, char **argv) {
            {"raw_report", fs::relative(path, root).generic_string()},
            {"raw_report_sha256", u::sha256(bytes)},
            {"classifications", raw.at("classifications")},
-           {"near_tangent_rays", raw.at("near_tangent_pixels")},
-           {"outcome_uncertain_rays", raw.at("outcome_uncertain_pixels")},
            {"class_fractions", fractions},
            {"unresolved_base_pixels", unresolved_pixels},
            {"known_image_plane_mean_contribution", known_mean},
@@ -203,9 +197,7 @@ int main(int argc, char **argv) {
            {"pixels", pixels}});
       std::cout << "sampling scale " << scale
                 << ": unresolved base pixels=" << unresolved_pixels
-                << "; near-tangent rays=" << raw.at("near_tangent_pixels")
-                << " (outcome uncertain " << raw.at("outcome_uncertain_pixels")
-                << ")" << std::endl;
+                << std::endl;
     }
     const auto differences = s::compare(levels);
     J comparisons = J::array(), mask = J::array();
@@ -227,9 +219,7 @@ int main(int argc, char **argv) {
            {"mean_classification_tv", d.mean_classification_tv},
            {"maximum_classification_tv", d.maximum_classification_tv},
            {"mean_unresolved_fraction_change",
-            d.mean_unresolved_fraction_change},
-           {"background_pixels", d.background_pixels},
-           {"relative_l1_background", number(d.relative_l1_background)}});
+            d.mean_unresolved_fraction_change}});
     }
     const auto &last = differences.back();
     const double coverage =

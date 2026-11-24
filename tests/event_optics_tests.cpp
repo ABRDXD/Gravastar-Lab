@@ -101,30 +101,6 @@ void run() {
             miss.outcome == o::Outcome::affine_limit && miss.crossings.empty());
     diagnostics(label + " shallow crossing", hit);
 
-    // Near-tangency flag. The line's closest radius is exactly its impact,
-    // so the surface value at the resolved stationary point is b - 0.75.
-    // Margin: factor 1000 * max(1e-12, 1e-12 * 0.75) = 1e-9.
-    require(label + " 1e-8 hit and miss are beyond the tangency margin",
-            hit.tangencies.empty() && miss.tangencies.empty());
-    for (double offset : {2e-10, -2e-10}) {
-      const auto ray = trace(p, boundary + offset, chart, c);
-      const std::string tag =
-          label + " offset " + u::Json(offset).dump() + " terminal tangency";
-      require(tag + " outcome", offset > 0
-                                    ? ray.outcome == o::Outcome::affine_limit
-                                    : ray.outcome == o::Outcome::domain_limit);
-      // For the hit, the stationary point lies beyond the clipping first
-      // root; it must still be reported, because it is the uncertain one.
-      require(tag + " flagged once on the terminal surface",
-              ray.tangencies.size() == 1 &&
-                  ray.tangencies[0].surface == "inner_chart_limit" &&
-                  ray.tangencies[0].terminal &&
-                  ray.tangencies[0].margin == 1e-9);
-      if (ray.tangencies.size() == 1)
-        check(tag + " value is the analytic closest approach",
-              std::abs(ray.tangencies[0].value - offset), 1e-12);
-    }
-
     // M=Lambda=a=0 makes the toy family exactly Minkowski while retaining
     // its two diagnostic joins. The full step must publish both inner roots.
     auto shell = p;
@@ -149,12 +125,6 @@ void run() {
             std::abs(joins.crossings[1].point.affine - second), 2e-9);
     }
     diagnostics(label + " two join roots", joins);
-    const auto graze = trace(shell, boundary + 2e-10, chart, joined);
-    require(label + " join graze flagged as nonterminal, no crossings",
-            graze.outcome == o::Outcome::affine_limit &&
-                graze.crossings.empty() && graze.tangencies.size() == 1 &&
-                graze.tangencies[0].surface == "inner_shell_join" &&
-                !graze.tangencies[0].terminal);
     fixtures.push_back({{"chart", label},
                         {"impact", hit_b},
                         {"outcome", o::outcome_name(hit.outcome)},

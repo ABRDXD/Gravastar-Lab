@@ -131,29 +131,6 @@ int main() {
     corrupt.pixels[0].fractions[0] = std::numeric_limits<double>::quiet_NaN();
     check(reject([&] { (void)s::compare({smooth[0], corrupt}); }),
           "nonfinite aggregate rejected");
-    // Separate background channel: escaped samples carry it, the opaque
-    // disk hides it, and an escaped sample without it leaves it unknown.
-    using C = s::Class;
-    const auto b = s::aggregate(1, 1, 2,
-                                {{C::escaped, 0., 0., 1.},
-                                 {C::escaped, 0., 0., 3.},
-                                 {C::emitted, .5, 1., std::nullopt},
-                                 {C::escaped, 0., 0., 0.}});
-    check(b.pixels[0].background && near(*b.pixels[0].background, 1),
-          "background averages over all samples, disk contributes zero");
-    check(near(*b.pixels[0].intensity, .125),
-          "background does not enter the disk channel");
-    const auto missing = s::aggregate(1, 1, 2,
-                                      {{C::escaped, 0., 0., 1.},
-                                       {C::escaped, 0., 0., std::nullopt},
-                                       {C::emitted, .5, 1., std::nullopt},
-                                       {C::escaped, 0., 0., 0.}});
-    check(!missing.pixels[0].background,
-          "an escaped sample without background leaves the channel unknown");
-    check(reject([&] {
-            s::aggregate(1, 1, 1, {{C::emitted, .5, 1., 2.}});
-          }),
-          "background on a disk sample is rejected");
     std::cout << "PASS " << checks << " sampling arithmetic checks\n";
     return 0;
   } catch (const std::exception &e) {

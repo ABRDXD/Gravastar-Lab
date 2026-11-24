@@ -114,14 +114,6 @@ double surface_rate(const Parameters &p, const State &y, const State &dy,
   return surface.axis == -1 ? 2 * (y[2] * dy[2] + y[3] * dy[3])
                             : dy[surface.axis];
 }
-// Near-tangency threshold for one surface. Radial and polar surfaces use
-// their level; the angular disk q=1 and the normalized core ellipsoid are
-// already of order one.
-double tangency_margin(const Surface &surface, const Settings &c) {
-  const double level = surface.axis < 0 ? 1 : std::abs(surface.value);
-  return c.tangency_factor *
-         std::max(c.absolute_tolerance, c.relative_tolerance * level);
-}
 struct EventNode {
   double offset;
   State state;
@@ -193,8 +185,6 @@ void validate(const Parameters &p, const State &y, const Settings &c,
         c.maximum_affine, c.inner_radius, c.outer_radius, c.polar_margin})
     if (!std::isfinite(x) || x <= 0)
       throw std::invalid_argument("settings must be finite and positive");
-  if (!std::isfinite(c.tangency_factor) || c.tangency_factor < 0)
-    throw std::invalid_argument("tangency factor must be finite and >= 0");
   if (c.minimum_step > c.initial_step || c.initial_step > c.maximum_step ||
       c.inner_radius >= c.outer_radius ||
       c.polar_margin >= std::numbers::pi / 2 || c.maximum_attempts == 0 ||
@@ -525,11 +515,9 @@ static Trace trace_impl(const Parameters &p, const State &initial,
       }
       Point next{s + h, trial.next, residual(p, trial.next, chart), chart};
       std::vector<std::pair<Surface, Point>> hits;
-      std::vector<Tangency> near;
       std::optional<Outcome> terminal;
       Transition transition = Transition::none;
       std::size_t publish_count = 0;
-      std::string clip_surface;
       try {
         const auto &active =
             chart == Chart::core_cartesian ? core_surfaces : surfaces;
@@ -540,25 +528,9 @@ static Trace trace_impl(const Parameters &p, const State &initial,
           const double last_rate =
               surface_rate(p, trial.next, trial.end_rate, surface);
           if ((first_rate < 0 && last_rate > 0) ||
-              (first_rate > 0 && last_rate < 0)) {
+              (first_rate > 0 && last_rate < 0))
             nodes.push_back(stationary_point(p, y, trial, h, surface, c,
                                              out.rhs_calls, chart));
-            const auto &turn = nodes.back();
-            const double value = surface_value(p, turn.state, surface);
-            const double margin = tangency_margin(surface, c);
-            // A disk tangency outside the annulus cannot change the outcome.
-            const bool on_disk =
-                surface.terminal != Outcome::emitted ||
-                (turn.state[1] >= c.disk_inner && turn.state[1] <= c.disk_outer);
-            if (std::abs(value) < margin && on_disk)
-              near.push_back({surface.name,
-                              {s + turn.offset, turn.state,
-                               residual(p, turn.state, chart), chart},
-                              value,
-                              margin,
-                              // Core entry/exit only changes coordinates.
-                              surface.terminal.has_value()});
-          }
           nodes.push_back({h, trial.next});
           for (std::size_t n = 1; n < nodes.size(); ++n) {
             if (!brackets(surface_value(p, nodes[n - 1].state, surface),
@@ -582,7 +554,6 @@ static Trace trace_impl(const Parameters &p, const State &initial,
             terminal = surface.terminal;
             transition = surface.transition;
             next = hit;
-            clip_surface = surface.name;
             if (transition != Transition::none)
               change_core(next, transition);
             break;
@@ -597,14 +568,6 @@ static Trace trace_impl(const Parameters &p, const State &initial,
         h = std::max(c.minimum_step, h / 2);
         continue;
       }
-      // Tangencies beyond a clipping terminal or transition event belong to
-      // the discarded trial tail, except on the clipping surface itself: a
-      // shallow dip ends the trial at its first root, before the dip's
-      // stationary point, and that is exactly the uncertain decision.
-      for (const auto &tangency : near)
-        if (tangency.point.affine <= next.affine ||
-            tangency.surface == clip_surface)
-          out.tangencies.push_back(tangency);
       for (std::size_t i = 0; i < publish_count; ++i) {
         const auto &[surface, hit] = hits[i];
         monitor(hit);
@@ -649,54 +612,12 @@ Trace trace_angular(const Parameters &p, const State &initial, Chart chart,
   }
   return trace_impl(p, initial, c, chart);
 }
-std::optional<double> keplerian_omega(const geometry::Evaluation &g) {
-  const double tt = g.dg[1][0][0], tp = g.dg[1][0][3], pp = g.dg[1][3][3];
-  const double discriminant = tp * tp - tt * pp;
-  if (!std::isfinite(discriminant) || discriminant < 0 || !(pp > 0))
-    return {};
-  const double omega = (-tp + std::sqrt(discriminant)) / pp;
-  const auto &m = g.metric;
-  const double norm = m[0][0] + 2 * omega * m[0][3] + omega * omega * m[3][3];
-  if (!std::isfinite(omega) || !(norm < 0))
-    return {};
-  return omega;
-}
-bool keplerian_annulus_supported(const Parameters &p, double inner,
-                                 double outer, int samples) {
-  if (!(inner > 0 && outer > inner && samples >= 2))
-    return false;
-  double previous = -std::numeric_limits<double>::infinity();
-  for (int i = 0; i < samples; ++i) {
-    const double r = inner + (outer - inner) * i / (samples - 1);
-    try {
-      const auto g = metric(p, {0, r, std::numbers::pi / 2, 0});
-      const auto omega = keplerian_omega(g);
-      if (!omega)
-        return false;
-      const auto u = circular_frame(g, *omega).basis[0];
-      const double lz = g.metric[3][0] * u[0] + g.metric[3][3] * u[3];
-      if (!(lz > previous))
-        return false;
-      previous = lz;
-    } catch (const std::exception &) {
-      return false;
-    }
-  }
-  return true;
-}
 Emission disk_emission(const Parameters &p, const State &hit,
-                       double nu_observer, double inner, DiskMotion motion) {
+                       double nu_observer, double inner) {
   if (!std::isfinite(nu_observer) || nu_observer <= 0 ||
       !std::isfinite(inner) || inner <= 0)
     throw std::invalid_argument("invalid emission normalization");
-  const auto g_hit = metric(p, hit);
-  std::optional<double> omega;
-  if (motion == DiskMotion::keplerian_prograde) {
-    omega = keplerian_omega(g_hit);
-    if (!omega)
-      throw std::runtime_error("no timelike circular geodesic at disk hit");
-  }
-  double nu = frequency(hit, circular_frame(g_hit, omega).basis[0]);
+  double nu = frequency(hit, circular_frame(metric(p, hit)).basis[0]);
   if (nu <= 0)
     throw std::runtime_error("nonpositive emitted frequency");
   double g = nu_observer / nu;

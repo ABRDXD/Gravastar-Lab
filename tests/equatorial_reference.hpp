@@ -14,8 +14,6 @@
 // This is the Kerr equatorial radial potential with r-dependent m and L.
 // An incoming ray from r_start turns at the largest root of W below it.
 #pragma once
-#include <algorithm>
-#include <cmath>
 #include <stdexcept>
 
 namespace gravastar::test_reference {
@@ -61,50 +59,6 @@ inline Real turning_radius(const Model &q, Real b, Real r_start) {
     (W(q, mid, b) > 0 ? hi : lo) = mid;
   }
   return (lo + hi) / 2;
-}
-
-// Minimum of W on [r_target, r_start]. Dense samples locate every local
-// minimum; golden-section search refines each, so a narrow negative dip near
-// a photon-orbit double root is not missed between samples.
-inline Real minimum_W(const Model &q, Real b, Real r_target, Real r_start) {
-  const int n = 20000;
-  const Real h = (r_start - r_target) / n;
-  auto at = [&](int i) { return r_target + h * i; };
-  Real best = std::min(W(q, r_target, b), W(q, r_start, b));
-  for (int i = 1; i < n; ++i) {
-    const Real w0 = W(q, at(i - 1), b), w1 = W(q, at(i), b),
-               w2 = W(q, at(i + 1), b);
-    if (!(w1 <= w0 && w1 <= w2))
-      continue;
-    Real lo = at(i - 1), hi = at(i + 1);
-    const Real phi = (std::sqrt(Real(5)) - 1) / 2;
-    for (int k = 0; k < 200 && hi - lo > 1e-16L; ++k) {
-      const Real x1 = hi - phi * (hi - lo), x2 = lo + phi * (hi - lo);
-      if (W(q, x1, b) < W(q, x2, b))
-        hi = x2;
-      else
-        lo = x1;
-    }
-    best = std::min(best, W(q, (lo + hi) / 2, b));
-  }
-  return best;
-}
-// An incoming ray from r_start reaches r_target iff W > 0 there and at every
-// radius in between (W = 0 at r_target itself is the graze).
-inline bool reaches(const Model &q, Real b, Real r_target, Real r_start) {
-  return minimum_W(q, b, r_target, r_start) > 0;
-}
-// Bisection on b between a reaching and a non-reaching impact parameter.
-inline Real threshold(const Model &q, Real r_target, Real reach, Real miss,
-                      Real r_start) {
-  if (!reaches(q, reach, r_target, r_start) ||
-      reaches(q, miss, r_target, r_start))
-    throw std::runtime_error("threshold bracket does not straddle");
-  for (int i = 0; i < 80 && std::abs(miss - reach) > 1e-15L; ++i) {
-    const Real mid = (reach + miss) / 2;
-    (reaches(q, mid, r_target, r_start) ? reach : miss) = mid;
-  }
-  return (reach + miss) / 2;
 }
 
 } // namespace gravastar::test_reference
