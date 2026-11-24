@@ -2,6 +2,9 @@
 #include "gravastar/rendering/vulkan/WindowRenderer.hpp"
 #include "VulkanContext.hpp"
 
+#include <imgui.h>
+#include <imgui_impl_vulkan.h>
+
 #include <chrono>
 #include <fstream>
 
@@ -22,6 +25,10 @@ struct WindowRenderer::Impl {
     VkFence render_fence{}, present_fence{};
     VkSemaphore acquired{}, rendered{};
     bool acquire_pending{}, render_pending{}, present_pending{}, dirty{true}, finished{};
+    // ImGui overlay: requested by the caller, initialized once a swapchain
+    // (and so its format and image count) exists.
+    bool overlay_requested{}, overlay_ready{};
+    VkFormat overlay_format{};
     std::uint32_t last_phase{};
     std::function<void()> poll_events;
     // clang-format off
@@ -30,7 +37,8 @@ struct WindowRenderer::Impl {
     X(AcquireNextImageKHR) X(QueuePresentKHR) X(CreateSemaphore) X(DestroySemaphore) \
     X(ResetFences) X(ResetCommandPool) X(CreateImage) X(DestroyImage) \
     X(GetImageMemoryRequirements) X(BindImageMemory) X(CreateImageView) X(DestroyImageView) \
-    X(CmdPushConstants) X(CmdBlitImage) X(CmdCopyImageToBuffer)
+    X(CmdPushConstants) X(CmdBlitImage) X(CmdCopyImageToBuffer) \
+    X(CmdBeginRendering) X(CmdEndRendering)
 #define DECLARE(name) PFN_vk##name name{};
     WINDOW_FUNCTIONS(DECLARE)
 #undef DECLARE
@@ -43,6 +51,7 @@ struct WindowRenderer::Impl {
         Impl &owner;
         VkSwapchainKHR handle{};
         std::vector<VkImage> images;
+        std::vector<VkImageView> image_views; // overlay render targets
         VkExtent2D extent{};
         VkFormat format{};
         VkImage compute_image{};
@@ -54,6 +63,8 @@ struct WindowRenderer::Impl {
         explicit Swapchain(Impl &o) : owner(o) {}
         ~Swapchain() {
             auto &c = *owner.context;
+            for (auto v : image_views)
+                owner.DestroyImageView(c.device, v, nullptr);
             if (descriptors)
                 c.DestroyDescriptorPool(c.device, descriptors, nullptr);
             if (view)
@@ -232,6 +243,8 @@ struct WindowRenderer::Impl {
                                      "sRGB nonlinear color space");
         if (!(caps.supportedUsageFlags & VK_IMAGE_USAGE_TRANSFER_DST_BIT))
             throw std::runtime_error("Swapchain does not support transfer destinations");
+        if (overlay_requested && !(caps.supportedUsageFlags & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT))
+            throw std::runtime_error("Swapchain images cannot be overlay render targets");
         VkExtent2D extent = caps.currentExtent;
         if (extent.width == UINT32_MAX) {
             extent.width = std::clamp(width, caps.minImageExtent.width, caps.maxImageExtent.width);
@@ -273,7 +286,8 @@ struct WindowRenderer::Impl {
         info.imageColorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
         info.imageExtent = extent;
         info.imageArrayLayers = 1;
-        info.imageUsage = VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+        info.imageUsage = VK_IMAGE_USAGE_TRANSFER_DST_BIT |
+                          (overlay_requested ? VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT : 0);
         info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
         info.preTransform = caps.currentTransform;
         info.compositeAlpha = alpha;
@@ -287,6 +301,18 @@ struct WindowRenderer::Impl {
                 return GetSwapchainImagesKHR(c.device, candidate->handle, n, values);
             },
             "vkGetSwapchainImagesKHR");
+        if (overlay_requested)
+            for (auto swapchain_image : candidate->images) {
+                auto v = structure<VkImageViewCreateInfo>(VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO);
+                v.image = swapchain_image;
+                v.viewType = VK_IMAGE_VIEW_TYPE_2D;
+                v.format = format;
+                v.subresourceRange = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1};
+                VkImageView handle{};
+                check(CreateImageView(c.device, &v, nullptr, &handle),
+                      "vkCreateImageView(swapchain)");
+                candidate->image_views.push_back(handle);
+            }
         auto image_info = structure<VkImageCreateInfo>(VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO);
         image_info.imageType = VK_IMAGE_TYPE_2D;
         image_info.format = VK_FORMAT_R8G8B8A8_UNORM;
@@ -355,6 +381,44 @@ struct WindowRenderer::Impl {
         stats.height = extent.height;
         ++stats.recreations;
         dirty = false;
+        if (overlay_requested)
+            prepare_overlay(std::max(2U, caps.minImageCount),
+                            static_cast<std::uint32_t>(swapchain->images.size()));
+    }
+    static PFN_vkVoidFunction load_overlay_function(const char *name, void *user) {
+        auto &c = *static_cast<Impl *>(user)->context;
+        auto function = c.get_device(c.device, name);
+        return function ? function : c.get_instance(c.instance, name);
+    }
+    void prepare_overlay(std::uint32_t min_images, std::uint32_t images) {
+        if (overlay_ready) {
+            if (swapchain->format != overlay_format)
+                throw std::runtime_error("Swapchain format changed under the overlay");
+            ImGui_ImplVulkan_SetMinImageCount(min_images);
+            return;
+        }
+        auto &c = *context;
+        if (!ImGui_ImplVulkan_LoadFunctions(VK_API_VERSION_1_3, load_overlay_function, this))
+            throw std::runtime_error("ImGui could not load its Vulkan functions");
+        overlay_format = swapchain->format;
+        ImGui_ImplVulkan_InitInfo info{};
+        info.ApiVersion = VK_API_VERSION_1_3;
+        info.Instance = c.instance;
+        info.PhysicalDevice = c.physical;
+        info.Device = c.device;
+        info.QueueFamily = c.infos[c.selected].compute_family;
+        info.Queue = c.queue;
+        info.DescriptorPoolSize = 16; // ImGui creates and owns its pool
+        info.MinImageCount = min_images;
+        info.ImageCount = std::max(images, min_images);
+        info.UseDynamicRendering = true;
+        info.PipelineInfoMain.PipelineRenderingCreateInfo =
+            structure<VkPipelineRenderingCreateInfo>(VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO);
+        info.PipelineInfoMain.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
+        info.PipelineInfoMain.PipelineRenderingCreateInfo.pColorAttachmentFormats = &overlay_format;
+        if (!ImGui_ImplVulkan_Init(&info))
+            throw std::runtime_error("ImGui Vulkan backend initialization failed");
+        overlay_ready = true;
     }
     VkImageMemoryBarrier2 image_barrier(VkImage image, VkImageLayout old_layout,
                                         VkImageLayout new_layout, VkPipelineStageFlags2 src_stage,
@@ -450,18 +514,55 @@ struct WindowRenderer::Impl {
         region.dstOffsets[1] = region.srcOffsets[1];
         CmdBlitImage(command, image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, swapchain->images[index],
                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region, VK_FILTER_NEAREST);
-        const std::array after_copy{
-            image_barrier(swapchain->images[index], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                          VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, VK_PIPELINE_STAGE_2_TRANSFER_BIT,
-                          VK_ACCESS_2_TRANSFER_WRITE_BIT, VK_PIPELINE_STAGE_2_NONE, 0),
-            image_barrier(image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_IMAGE_LAYOUT_GENERAL,
-                          VK_PIPELINE_STAGE_2_TRANSFER_BIT, VK_ACCESS_2_TRANSFER_READ_BIT,
-                          VK_PIPELINE_STAGE_2_NONE, 0)};
-        barriers(after_copy);
+        ImDrawData *overlay = overlay_ready ? ImGui::GetDrawData() : nullptr;
+        if (overlay && overlay->Valid && overlay->CmdListsCount > 0) {
+            // The UI draws over the copied image; the compute image itself,
+            // which captures read, is untouched.
+            const std::array to_attachment{image_barrier(
+                swapchain->images[index], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_PIPELINE_STAGE_2_TRANSFER_BIT,
+                VK_ACCESS_2_TRANSFER_WRITE_BIT, VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+                VK_ACCESS_2_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT)};
+            barriers(to_attachment);
+            auto attachment =
+                structure<VkRenderingAttachmentInfo>(VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO);
+            attachment.imageView = swapchain->image_views.at(index);
+            attachment.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            attachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+            attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            auto rendering = structure<VkRenderingInfo>(VK_STRUCTURE_TYPE_RENDERING_INFO);
+            rendering.renderArea = {{0, 0}, swapchain->extent};
+            rendering.layerCount = 1;
+            rendering.colorAttachmentCount = 1;
+            rendering.pColorAttachments = &attachment;
+            CmdBeginRendering(command, &rendering);
+            ImGui_ImplVulkan_RenderDrawData(overlay, command);
+            CmdEndRendering(command);
+            ++stats.overlay_frames;
+            const std::array after_overlay{
+                image_barrier(swapchain->images[index], VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                              VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+                              VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+                              VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT, VK_PIPELINE_STAGE_2_NONE, 0),
+                image_barrier(image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_IMAGE_LAYOUT_GENERAL,
+                              VK_PIPELINE_STAGE_2_TRANSFER_BIT, VK_ACCESS_2_TRANSFER_READ_BIT,
+                              VK_PIPELINE_STAGE_2_NONE, 0)};
+            barriers(after_overlay);
+        } else {
+            const std::array after_copy{
+                image_barrier(swapchain->images[index], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                              VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, VK_PIPELINE_STAGE_2_TRANSFER_BIT,
+                              VK_ACCESS_2_TRANSFER_WRITE_BIT, VK_PIPELINE_STAGE_2_NONE, 0),
+                image_barrier(image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_IMAGE_LAYOUT_GENERAL,
+                              VK_PIPELINE_STAGE_2_TRANSFER_BIT, VK_ACCESS_2_TRANSFER_READ_BIT,
+                              VK_PIPELINE_STAGE_2_NONE, 0)};
+            barriers(after_copy);
+        }
         check(c.EndCommandBuffer(command), "vkEndCommandBuffer");
         check(ResetFences(c.device, 1, &render_fence), "vkResetFences(render)");
         auto submit = structure<VkSubmitInfo>(VK_STRUCTURE_TYPE_SUBMIT_INFO);
-        const VkPipelineStageFlags wait_stage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+        const VkPipelineStageFlags wait_stage =
+            VK_PIPELINE_STAGE_TRANSFER_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
         submit.waitSemaphoreCount = 1;
         submit.pWaitSemaphores = &acquired;
         submit.pWaitDstStageMask = &wait_stage;
@@ -577,6 +678,10 @@ struct WindowRenderer::Impl {
     }
     void release_resources() noexcept {
         auto &c = *context;
+        if (overlay_ready) {
+            ImGui_ImplVulkan_Shutdown(); // device is idle: finish() waited
+            overlay_ready = false;
+        }
         swapchain.reset();
         if (command_pool)
             c.DestroyCommandPool(c.device, command_pool, nullptr);
@@ -639,6 +744,20 @@ void WindowRenderer::capture(const std::filesystem::path &path) {
 }
 void WindowRenderer::finish() {
     impl_->finish();
+}
+void WindowRenderer::enable_overlay(std::uint32_t width, std::uint32_t height) {
+    if (impl_->swapchain)
+        throw std::logic_error("Enable the overlay before the first frame");
+    impl_->overlay_requested = true;
+    if (width && height)
+        impl_->recreate(width, height); // so the overlay is ready for frame one
+}
+bool WindowRenderer::overlay_ready() const {
+    return impl_->overlay_ready;
+}
+void WindowRenderer::begin_overlay_frame() {
+    if (impl_->overlay_ready)
+        ImGui_ImplVulkan_NewFrame();
 }
 WindowStatistics WindowRenderer::statistics() const {
     auto result = impl_->stats;

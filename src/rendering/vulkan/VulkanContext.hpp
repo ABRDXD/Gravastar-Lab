@@ -307,6 +307,8 @@ struct VulkanContext {
                     source ? "no combined graphics/compute/present queue" : "no compute queue";
             else if (!f13.synchronization2)
                 info.rejection = "synchronization2 unavailable";
+            else if (source && !f13.dynamicRendering)
+                info.rejection = "dynamicRendering unavailable (window overlay)";
             else if (p.limits.maxComputeWorkGroupInvocations < 64 ||
                      p.limits.maxComputeWorkGroupSize[0] < 64)
                 info.rejection = "64-invocation workgroup unsupported";
@@ -367,6 +369,8 @@ struct VulkanContext {
         auto requested = structure<VkPhysicalDeviceVulkan13Features>(
             VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_3_FEATURES);
         requested.synchronization2 = VK_TRUE;
+        // The window's ImGui overlay draws with Vulkan 1.3 dynamic rendering.
+        requested.dynamicRendering = source ? VK_TRUE : VK_FALSE;
         auto requested_maintenance = structure<VkPhysicalDeviceSwapchainMaintenance1FeaturesKHR>(
             VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SWAPCHAIN_MAINTENANCE_1_FEATURES_KHR);
         requested_maintenance.swapchainMaintenance1 = VK_TRUE;

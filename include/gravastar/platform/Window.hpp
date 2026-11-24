@@ -26,6 +26,8 @@ class Window final {
     void resize(int width, int height);
     void minimize();
     void restore();
+    // The GLFWwindow, for the ImGui GLFW backend only.
+    [[nodiscard]] void *native_handle() const;
 
   private:
     struct Impl;

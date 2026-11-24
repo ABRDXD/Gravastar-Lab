@@ -123,4 +123,7 @@ void Window::restore() {
     glfwRestoreWindow(impl_->window);
 }
 
+void *Window::native_handle() const {
+    return impl_->window;
+}
 } // namespace gravastar::platform

@@ -2,6 +2,10 @@
 #include "gravastar/platform/Window.hpp"
 #include "gravastar/rendering/vulkan/WindowRenderer.hpp"
 
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <implot.h>
+
 #include <charconv>
 #include <chrono>
 #include <fstream>
@@ -16,6 +20,26 @@ int integer(std::string_view text) {
         throw std::invalid_argument("Expected a nonnegative integer");
     return value;
 }
+// ImGui and ImPlot contexts plus the GLFW backend. Declared after the window
+// and before the renderer, so the renderer's ImGui Vulkan shutdown runs while
+// the context exists and the GLFW shutdown runs while the window exists.
+struct Interface final {
+    explicit Interface(void *native_window) {
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImPlot::CreateContext();
+        ImGui::GetIO().IniFilename = nullptr; // no imgui.ini in the working directory
+        if (!ImGui_ImplGlfw_InitForVulkan(static_cast<GLFWwindow *>(native_window), true))
+            throw std::runtime_error("ImGui GLFW backend initialization failed");
+    }
+    ~Interface() {
+        ImGui_ImplGlfw_Shutdown();
+        ImPlot::DestroyContext();
+        ImGui::DestroyContext();
+    }
+    Interface(const Interface &) = delete;
+    Interface &operator=(const Interface &) = delete;
+};
 std::vector<std::uint32_t> read_shader(const std::filesystem::path &path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
     if (!file)
@@ -84,9 +108,16 @@ int main(int argc, char **argv) {
                 capture = "out/window-smoke/final.ppm";
         }
         const auto shader = read_shader(shader_path);
-        gravastar::platform::Window window(width, height,
-                                      "KerrLab | Vulkan presentation diagnostic | Esc to close");
+        gravastar::platform::Window window(
+            width, height, "GravastarLab | Vulkan presentation diagnostic | Esc to close");
+        Interface interface(window.native_handle());
         gravastar::rendering::vulkan::WindowRenderer renderer(window.surface_source(), options, shader);
+        {
+            const auto size = window.framebuffer_size();
+            renderer.enable_overlay(size[0], size[1]);
+        }
+        std::array<float, 240> frame_ms{};
+        std::size_t frame_slot = 0;
         std::cout << "device=" << renderer.device().name
                   << " queue=" << renderer.device().compute_family << " validation="
                   << (renderer.validation_enabled() ? "enabled" : "disabled/unavailable")
@@ -143,6 +174,26 @@ int main(int argc, char **argv) {
                 }
             }
             const auto extent = window.framebuffer_size();
+            if (renderer.overlay_ready()) {
+                renderer.begin_overlay_frame();
+                ImGui_ImplGlfw_NewFrame();
+                ImGui::NewFrame();
+                frame_ms[frame_slot++ % frame_ms.size()] = 1000.0F / ImGui::GetIO().Framerate;
+                ImGui::SetNextWindowPos(ImVec2(12, 12), ImGuiCond_FirstUseEver);
+                ImGui::Begin("GravastarLab studio");
+                ImGui::TextUnformatted("Calibration pattern: not a black-hole image.");
+                ImGui::Text("Device: %s", renderer.device().name.c_str());
+                const auto now_stats = renderer.statistics();
+                ImGui::Text("Extent %u x %u, frames %llu", now_stats.width, now_stats.height,
+                            static_cast<unsigned long long>(now_stats.presented));
+                ImGui::Text("%.1f frames per second", ImGui::GetIO().Framerate);
+                if (ImPlot::BeginPlot("Frame time (ms)", ImVec2(320, 120))) {
+                    ImPlot::PlotLine("ms", frame_ms.data(), static_cast<int>(frame_ms.size()));
+                    ImPlot::EndPlot();
+                }
+                ImGui::End();
+                ImGui::Render();
+            }
             const auto status = renderer.draw(extent[0], extent[1], 0);
             if (status != gravastar::rendering::vulkan::FrameStatus::presented) {
                 window.wait(0.01);
@@ -176,6 +227,7 @@ int main(int argc, char **argv) {
         std::cout << "presented=" << result.presented << " recreations=" << result.recreations
                   << " suspended=" << result.suspended
                   << " acquire_retries=" << result.acquire_retries
+                  << " overlay_frames=" << result.overlay_frames
                   << " final_extent=" << result.width << 'x' << result.height
                   << " validation_errors=" << result.validation_errors << '\n';
         if (result.validation_errors)
@@ -183,13 +235,14 @@ int main(int argc, char **argv) {
 
         if (smoke &&
             (!resized || !resized_capture || !second_resize ||
-             result.recreations < 2 || result.presented < 24))
+             result.recreations < 2 || result.presented < 24 ||
+             result.overlay_frames < 20))
             throw std::runtime_error(
                 window.should_close()
                     ? "Window smoke cancelled: window closed before all 24 frames completed"
                     : "Window smoke lifecycle checks incomplete");
         std::cout << "PASS: Vulkan compute presentation"
-                  << (smoke ? ", resize, and exact pixel readback" : "") << '\n';
+                  << (smoke ? ", ImGui overlay, resize, and exact pixel readback" : "") << '\n';
         return 0;
     } catch (const std::exception &error) {
         std::cerr << "kerr_window: " << error.what() << '\n';

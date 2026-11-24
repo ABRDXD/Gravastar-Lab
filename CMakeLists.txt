@@ -287,7 +287,7 @@ if(GRAVASTAR_DESKTOP)
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third_party/include>)
     target_compile_features(gravastar_vulkan PUBLIC cxx_std_20)
-    target_link_libraries(gravastar_vulkan PRIVATE ${CMAKE_DL_LIBS})
+    target_link_libraries(gravastar_vulkan PRIVATE ${CMAKE_DL_LIBS} gravastar_imgui)
 
     enable_language(C)
     set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
@@ -328,7 +328,8 @@ if(GRAVASTAR_DESKTOP)
     target_link_libraries(gravastar_platform PUBLIC glfw)
 
     add_executable(gravastar_studio tools/gravastar_studio.cpp)
-    target_link_libraries(gravastar_studio PRIVATE gravastar_vulkan gravastar_platform)
+    target_link_libraries(gravastar_studio PRIVATE gravastar_vulkan gravastar_platform
+        gravastar_imgui)
     target_compile_definitions(gravastar_studio PRIVATE
         GRAVASTAR_PRESENTATION_SHADER="${GRAVASTAR_PRESENTATION_SPV}")
     add_dependencies(gravastar_studio gravastar_presentation_shader)
