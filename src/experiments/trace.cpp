@@ -229,7 +229,9 @@ int main(int argc, char **argv) {
       std::cout
           << "gravastar_trace image|ray [--root PATH] [--config "
              "benchmarks/optics_v1.json] [--output results/FILE.json] "
-             "[--x N --y N] [--resolution-scale N]\n"
+             "[--x N --y N] [--resolution-scale N] [--tolerance T]\n"
+             "--tolerance sets absolute and relative tolerance to T and the "
+             "event tolerance to 10 T (convergence studies).\n"
              "Future covariant photon momentum; past-directed "
              "integration. Optional angular patches; radial limits remain.\n";
       return 0;
@@ -240,6 +242,7 @@ int main(int argc, char **argv) {
              output = command == "ray" ? "results/p2_native_ray.json"
                                        : "results/p2_native_image.json";
     int x = -1, y = -1, scale = 1;
+    std::optional<double> tolerance;
     for (int i = 2; i < argc; ++i) {
       std::string flag = argv[i];
       if (i + 1 >= argc)
@@ -257,6 +260,12 @@ int main(int argc, char **argv) {
         if (used != value.size() || scale < 1 || scale > 8)
           throw std::invalid_argument(
               "resolution scale must be an integer in [1,8]");
+      } else if (flag == "--tolerance") {
+        std::size_t used;
+        const double value_t = std::stod(value, &used);
+        if (used != value.size() || !(value_t >= 1e-14 && value_t <= 1e-4))
+          throw std::invalid_argument("tolerance must be in [1e-14, 1e-4]");
+        tolerance = value_t;
       } else if (flag == "--x" || flag == "--y") {
         std::size_t used;
         int n = std::stoi(value, &used);
@@ -285,6 +294,14 @@ int main(int argc, char **argv) {
       throw std::invalid_argument("scaled image exceeds 128x128");
     s.width *= scale;
     s.height *= scale;
+    if (tolerance) {
+      s.settings.absolute_tolerance = s.settings.relative_tolerance = *tolerance;
+      s.settings.event_tolerance = 10 * *tolerance;
+      configuration["integrator"]["absolute_tolerance"] = *tolerance;
+      configuration["integrator"]["relative_tolerance"] = *tolerance;
+      configuration["integrator"]["event_tolerance"] = 10 * *tolerance;
+      configuration["integrator"]["tolerance_override"] = true;
+    }
     configuration["image"]["width"] = s.width;
     configuration["image"]["height"] = s.height;
     s.settings.save_trajectory = command == "ray";
