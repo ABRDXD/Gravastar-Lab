@@ -2,6 +2,7 @@
 #include "gravastar/platform/Window.hpp"
 #include "gravastar/rendering/vulkan/WindowRenderer.hpp"
 
+#include "studio_panels.hpp"
 #include "studio_render.hpp"
 
 #include <imgui.h>
@@ -66,9 +67,10 @@ int main(int argc, char **argv) {
         gravastar::rendering::vulkan::ComputeOptions options;
         bool smoke{};
         int width = 1001, height = 613, frames = 0;
-        std::filesystem::path capture, shader_path;
+        std::filesystem::path capture, shader_path, screenshot;
         std::filesystem::path scene_path = "benchmarks/optics_keplerian_stars_v1.json";
         std::optional<std::array<double, 3>> start_camera;
+        std::optional<std::array<int, 2>> start_inspect;
         for (int i = 1; i < argc; ++i) {
             const std::string_view arg(argv[i]);
             if (arg == "--help") {
@@ -77,6 +79,8 @@ int main(int argc, char **argv) {
                              "--frames N (0=until closed) | --capture image.ppm | --shader PATH\n"
                              "--scene benchmarks/X.json: angular-patch scene to render (FP64 GPU)\n"
                              "--camera r,theta,phi: start camera (clamped to the orbit limits)\n"
+                             "--inspect x,y: re-trace that render pixel on the CPU at start\n"
+                             "--screenshot image.ppm: last presented frame, panels included\n"
                              "--smoke: calibration pattern only; 24 frames, resize/minimize/restore "
                              "and exact compute-image captures\n"
                              "Escape closes the window. Minimized windows suspend GPU dispatch.\n";
@@ -99,11 +103,18 @@ int main(int argc, char **argv) {
                 frames = integer(value);
             else if (arg == "--capture")
                 capture = value;
+            else if (arg == "--screenshot")
+                screenshot = value;
             else if (arg == "--shader")
                 shader_path = value;
             else if (arg == "--scene")
                 scene_path = value;
-            else if (arg == "--camera") {
+            else if (arg == "--inspect") {
+                std::array<int, 2> xy{};
+                if (std::sscanf(std::string(value).c_str(), "%d,%d", &xy[0], &xy[1]) != 2)
+                    throw std::invalid_argument("--inspect expects x,y");
+                start_inspect = xy;
+            } else if (arg == "--camera") {
                 std::array<double, 3> c{};
                 if (std::sscanf(std::string(value).c_str(), "%lf,%lf,%lf", &c[0], &c[1], &c[2]) != 3)
                     throw std::invalid_argument("--camera expects r,theta,phi");
@@ -136,10 +147,7 @@ int main(int argc, char **argv) {
         if (render_scene) {
             if (scene_path.is_relative())
                 scene_path = std::filesystem::path(GRAVASTAR_SOURCE_ROOT) / scene_path;
-            std::ifstream file(scene_path);
-            if (!file)
-                throw std::runtime_error("Cannot open scene " + scene_path.string());
-            scene = gravastar::optics::parse_scene(gravastar::tools::Json::parse(file));
+            scene = gravastar::studio::load_scene(scene_path);
             if (!scene->angular)
                 throw std::runtime_error("The studio renders angular-patch scenes only");
         }
@@ -178,15 +186,44 @@ int main(int argc, char **argv) {
             camera.r = std::clamp(camera.r, r_min, r_max);
             camera.phi = std::remainder(camera.phi, 2 * std::numbers::pi);
         };
-        auto restart = [&] {
-            gravastar::studio::RenderJob job{*scene, scene_path.filename().string()};
-            job.scene.height = heights[quality];
-            job.scene.width = std::max(1, (heights[quality] * scene->width) / scene->height);
-            job.scene.position[1] = camera.r;
-            job.scene.position[2] = camera.theta;
-            job.scene.position[3] = camera.phi;
-            render->start(std::move(job));
+        // The scene as rendered now: chosen resolution and camera.
+        auto current_scene = [&] {
+            auto s = *scene;
+            s.height = heights[quality];
+            s.width = std::max(1, (heights[quality] * scene->width) / scene->height);
+            s.position[1] = camera.r;
+            s.position[2] = camera.theta;
+            s.position[3] = camera.phi;
+            return s;
         };
+        auto restart = [&] {
+            render->start({current_scene(), scene_path.filename().string()});
+        };
+        std::vector<gravastar::studio::SceneEntry> scenes;
+        int scene_index = -1;
+        std::optional<gravastar::optics::StarCatalogue> saved_background;
+        std::string emission_message;
+        gravastar::studio::Inspection inspection;
+        if (scene && start_inspect) {
+            clamp_camera();
+            inspection = gravastar::studio::inspect(current_scene(), (*start_inspect)[0],
+                                                    (*start_inspect)[1]);
+            std::cout << "inspect pixel=" << inspection.x << ',' << inspection.y << " outcome="
+                      << gravastar::optics::outcome_name(inspection.trace.outcome)
+                      << " crossings=" << inspection.trace.crossings.size()
+                      << " trajectory_points=" << inspection.trace.trajectory.size()
+                      << " chart_switches=" << inspection.trace.chart_switches
+                      << " error=" << (inspection.error.empty() ? "none" : inspection.error) << '\n';
+            for (const auto &c : inspection.trace.crossings)
+                std::cout << "  event " << c.surface << " s=" << c.point.affine << '\n';
+        }
+        if (scene) {
+            scenes = gravastar::studio::list_scenes(std::filesystem::path(GRAVASTAR_SOURCE_ROOT) /
+                                                    "benchmarks");
+            for (std::size_t i = 0; i < scenes.size(); ++i)
+                if (std::filesystem::equivalent(scenes[i].path, scene_path))
+                    scene_index = static_cast<int>(i);
+        }
         if (scene) {
             render.emplace(GRAVASTAR_TRACE64_SPV);
             clamp_camera();
@@ -255,7 +292,7 @@ int main(int argc, char **argv) {
                 ImGui_ImplGlfw_NewFrame();
                 ImGui::NewFrame();
                 frame_ms[frame_slot++ % frame_ms.size()] = 1000.0F / ImGui::GetIO().Framerate;
-                ImGui::SetNextWindowPos(ImVec2(12, 12), ImGuiCond_FirstUseEver);
+                gravastar::studio::place(gravastar::studio::Side::left, 12, 360, 250);
                 ImGui::Begin("GravastarLab studio");
                 ImGui::TextUnformatted(render ? "Rendering the scene below."
                                               : "Calibration pattern: not a black-hole image.");
@@ -286,10 +323,51 @@ int main(int argc, char **argv) {
                         clamp_camera();
                         restart();
                     }
+                    // Right-click: CPU re-trace of the pixel under the cursor, mapped
+                    // through the view shader's fit (framebuffer pixels).
+                    if (!io.WantCaptureMouse && ImGui::IsMouseClicked(ImGuiMouseButton_Right) &&
+                        view_width > 0) {
+                        const auto fb = renderer.statistics();
+                        const double mx = io.MousePos.x * io.DisplayFramebufferScale.x,
+                                     my = io.MousePos.y * io.DisplayFramebufferScale.y;
+                        const double scale = std::min(double(fb.width) / view_width,
+                                                      double(fb.height) / view_height);
+                        const double ox = 0.5 * (fb.width - scale * view_width),
+                                     oy = 0.5 * (fb.height - scale * view_height);
+                        const int px = int(std::floor((mx + 0.5 - ox) / scale)),
+                                  py = int(std::floor((my + 0.5 - oy) / scale));
+                        if (px >= 0 && py >= 0 && px < view_width && py < view_height)
+                            inspection = gravastar::studio::inspect(current_scene(), px, py);
+                    }
                     const auto st = render->status();
-                    ImGui::SetNextWindowPos(ImVec2(12, 260), ImGuiCond_FirstUseEver);
+                    gravastar::studio::place(gravastar::studio::Side::left, 274, 360, 426);
                     ImGui::Begin("Render");
-                    ImGui::Text("Scene: %s", scene_path.filename().string().c_str());
+                    if (!scenes.empty()) {
+                        const char *preview =
+                            scene_index >= 0 ? scenes[std::size_t(scene_index)].name.c_str() : "?";
+                        if (ImGui::BeginCombo("Scene", preview)) {
+                            for (std::size_t i = 0; i < scenes.size(); ++i)
+                                if (ImGui::Selectable(scenes[i].name.c_str(),
+                                                      int(i) == scene_index)) {
+                                    try {
+                                        auto next = gravastar::studio::load_scene(scenes[i].path);
+                                        scene = next;
+                                        scene_path = scenes[i].path;
+                                        scene_index = static_cast<int>(i);
+                                        home = {scene->position[1], scene->position[2],
+                                                scene->position[3]};
+                                        camera = home;
+                                        r_max = 0.9 * scene->settings.outer_radius;
+                                        saved_background.reset();
+                                        inspection = {};
+                                        restart();
+                                    } catch (const std::exception &e) {
+                                        emission_message = e.what();
+                                    }
+                                }
+                            ImGui::EndCombo();
+                        }
+                    }
                     ImGui::TextUnformatted("FP64 GPU tracer, CPU fallback (docs/GPU_TRACER.md).");
                     ImGui::TextUnformatted("Colours: diagnostic mapping of linear data.");
                     const char *labels[] = {"96 rows", "192 rows", "288 rows", "384 rows"};
@@ -358,6 +436,12 @@ int main(int argc, char **argv) {
                     if (!st.error.empty())
                         ImGui::TextColored(ImVec4(1, .4F, .4F, 1), "Error: %s", st.error.c_str());
                     ImGui::End();
+                    gravastar::studio::science_panel(*scene, scene_path.filename().string());
+                    if (gravastar::studio::emission_panel(*scene, saved_background,
+                                                          emission_message))
+                        restart();
+                    gravastar::studio::inspection_panel(inspection);
+                    gravastar::studio::recording_panel();
                 }
                 ImGui::Render();
             }
@@ -387,6 +471,9 @@ int main(int argc, char **argv) {
                              " | " + std::to_string(statistics.width) + " x " +
                              std::to_string(statistics.height) + " | Esc to close");
             }
+            if (frames > 0 && !screenshot.empty() &&
+                statistics.presented + 1 == static_cast<std::uint64_t>(frames))
+                renderer.screenshot(screenshot); // taken by the final frame
             if (frames > 0 && statistics.presented >= static_cast<std::uint64_t>(frames))
                 break;
         }

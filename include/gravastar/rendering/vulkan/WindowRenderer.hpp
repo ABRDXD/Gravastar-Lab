@@ -40,6 +40,8 @@ class WindowRenderer final {
     // Afterwards capture() no longer checks the calibration pattern.
     void set_source(std::uint32_t width, std::uint32_t height,
                     std::span<const std::uint32_t> rgba8);
+    // Writes the next presented frame, overlay included, as a PPM.
+    void screenshot(const std::filesystem::path &path);
     void finish();
     [[nodiscard]] WindowStatistics statistics() const;
     [[nodiscard]] const DeviceInfo &device() const;

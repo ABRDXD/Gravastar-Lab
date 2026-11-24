@@ -340,7 +340,8 @@ if(GRAVASTAR_DESKTOP)
     target_compile_features(gravastar_platform PUBLIC cxx_std_20)
     target_link_libraries(gravastar_platform PUBLIC glfw)
 
-    add_executable(gravastar_studio tools/gravastar_studio.cpp tools/studio_render.cpp)
+    add_executable(gravastar_studio tools/gravastar_studio.cpp tools/studio_render.cpp
+        tools/studio_panels.cpp)
     target_link_libraries(gravastar_studio PRIVATE gravastar_gpu_optics gravastar_platform
         gravastar_imgui)
     target_compile_definitions(gravastar_studio PRIVATE

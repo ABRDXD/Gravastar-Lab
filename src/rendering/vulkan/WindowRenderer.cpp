@@ -36,6 +36,10 @@ struct WindowRenderer::Impl {
     std::size_t source_capacity{};
     std::uint32_t source_width{}, source_height{};
     bool oracle{true}; // capture() checks the calibration pattern until a source is set
+    // Screenshot of the next presented frame, overlay included.
+    std::filesystem::path screenshot_path;
+    bool screenshots_supported{};
+    std::unique_ptr<detail::VulkanContext::Buffer> screenshot_buffer;
     std::uint32_t last_phase{};
     std::function<void()> poll_events;
     // clang-format off
@@ -329,7 +333,11 @@ struct WindowRenderer::Impl {
         info.imageExtent = extent;
         info.imageArrayLayers = 1;
         info.imageUsage = VK_IMAGE_USAGE_TRANSFER_DST_BIT |
-                          (overlay_requested ? VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT : 0);
+                          (overlay_requested ? VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT : 0) |
+                          (caps.supportedUsageFlags & VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+                               ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+                               : 0);
+        screenshots_supported = caps.supportedUsageFlags & VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
         info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
         info.preTransform = caps.currentTransform;
         info.compositeAlpha = alpha;
@@ -603,6 +611,30 @@ struct WindowRenderer::Impl {
                               VK_PIPELINE_STAGE_2_NONE, 0)};
             barriers(after_copy);
         }
+        const bool take_screenshot = !screenshot_path.empty() && screenshots_supported;
+        if (take_screenshot) {
+            // The image is in PRESENT_SRC; copy it out and give it back.
+            const auto bytes = std::size_t{stats.width} * stats.height * 4;
+            screenshot_buffer = std::make_unique<detail::VulkanContext::Buffer>(c);
+            screenshot_buffer->create(bytes, VK_BUFFER_USAGE_TRANSFER_DST_BIT);
+            const std::array to_copy{image_barrier(
+                swapchain->images[index], VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+                VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT,
+                VK_ACCESS_2_MEMORY_WRITE_BIT, VK_PIPELINE_STAGE_2_TRANSFER_BIT,
+                VK_ACCESS_2_TRANSFER_READ_BIT)};
+            barriers(to_copy);
+            VkBufferImageCopy copy{};
+            copy.imageSubresource = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 0, 1};
+            copy.imageExtent = {stats.width, stats.height, 1};
+            CmdCopyImageToBuffer(command, swapchain->images[index],
+                                 VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, screenshot_buffer->buffer, 1,
+                                 &copy);
+            const std::array to_present{image_barrier(
+                swapchain->images[index], VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, VK_PIPELINE_STAGE_2_TRANSFER_BIT,
+                VK_ACCESS_2_TRANSFER_READ_BIT, VK_PIPELINE_STAGE_2_NONE, 0)};
+            barriers(to_present);
+        }
         check(c.EndCommandBuffer(command), "vkEndCommandBuffer");
         check(ResetFences(c.device, 1, &render_fence), "vkResetFences(render)");
         auto submit = structure<VkSubmitInfo>(VK_STRUCTURE_TYPE_SUBMIT_INFO);
@@ -638,10 +670,32 @@ struct WindowRenderer::Impl {
         dirty = suboptimal || result == VK_SUBOPTIMAL_KHR || result == VK_ERROR_OUT_OF_DATE_KHR;
         swapchain->image_initialized = true;
         last_phase = phase;
+        if (take_screenshot)
+            write_screenshot();
         if (result == VK_ERROR_OUT_OF_DATE_KHR)
             return FrameStatus::retry;
         ++stats.presented;
         return FrameStatus::presented;
+    }
+    void write_screenshot() {
+        wait_fence(render_fence, "Wait screenshot copy (30s)");
+        render_pending = false;
+        screenshot_buffer->synchronize(true);
+        const auto *pixels = static_cast<const std::uint8_t *>(screenshot_buffer->mapped);
+        const bool bgra = swapchain->format == VK_FORMAT_B8G8R8A8_UNORM;
+        if (screenshot_path.has_parent_path())
+            std::filesystem::create_directories(screenshot_path.parent_path());
+        std::ofstream out(screenshot_path, std::ios::binary);
+        out << "P6\n" << stats.width << ' ' << stats.height << "\n255\n";
+        for (std::size_t i = 0; i < std::size_t{stats.width} * stats.height * 4; i += 4) {
+            const char rgb[3] = {char(pixels[i + (bgra ? 2 : 0)]), char(pixels[i + 1]),
+                                 char(pixels[i + (bgra ? 0 : 2)])};
+            out.write(rgb, 3);
+        }
+        if (!out)
+            throw std::runtime_error("Screenshot write failed: " + screenshot_path.string());
+        screenshot_buffer.reset();
+        screenshot_path.clear();
     }
     void capture(const std::filesystem::path &path) {
         if (finished || !swapchain || !swapchain->image_initialized)
@@ -731,6 +785,7 @@ struct WindowRenderer::Impl {
         }
         swapchain.reset();
         source_image.reset();
+        screenshot_buffer.reset();
         if (command_pool)
             c.DestroyCommandPool(c.device, command_pool, nullptr);
         if (acquired)
@@ -799,6 +854,11 @@ void WindowRenderer::enable_overlay(std::uint32_t width, std::uint32_t height) {
     impl_->overlay_requested = true;
     if (width && height)
         impl_->recreate(width, height); // so the overlay is ready for frame one
+}
+void WindowRenderer::screenshot(const std::filesystem::path &path) {
+    if (!impl_->screenshots_supported && impl_->swapchain)
+        throw std::runtime_error("This surface cannot copy presented images");
+    impl_->screenshot_path = path;
 }
 void WindowRenderer::set_source(std::uint32_t width, std::uint32_t height,
                                 std::span<const std::uint32_t> rgba8) {
