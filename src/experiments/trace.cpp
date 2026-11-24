@@ -18,6 +18,7 @@ struct Scene {
   o::Settings settings;
   o::Vector position;
   std::optional<double> omega;
+  o::DiskMotion disk_motion{o::DiskMotion::zamo};
   double fov;
   int width, height;
   bool angular{};
@@ -64,12 +65,20 @@ Scene scene(const J &j) {
         "maximum_attempts must be an integer in [1,10000000]");
   c.maximum_attempts = i.at("maximum_attempts");
   const auto &disk = j.at("disk");
-  if (disk.at("motion") != "ZAMO" ||
+  const auto motion = disk.at("motion").get<std::string>();
+  if ((motion != "ZAMO" && motion != "keplerian_prograde") ||
       disk.at("emissivity") != "bolometric_r_inverse_cubed")
     throw std::invalid_argument("unsupported emission prescription");
+  s.disk_motion = motion == "ZAMO" ? o::DiskMotion::zamo
+                                   : o::DiskMotion::keplerian_prograde;
   c.disk = disk.at("enabled");
   c.disk_inner = disk.at("inner_radius");
   c.disk_outer = disk.at("outer_radius");
+  // Prescribed orbits must stay in their supported timelike, stable domain.
+  if (c.disk && s.disk_motion == o::DiskMotion::keplerian_prograde &&
+      !o::keplerian_annulus_supported(s.geometry, c.disk_inner, c.disk_outer))
+    throw std::invalid_argument(
+        "Keplerian disk annulus leaves the stable timelike circular orbits");
   const auto &camera = j.at("camera");
   s.position = camera.at("position").get<o::Vector>();
   if (!camera.at("omega").is_null())
@@ -129,7 +138,7 @@ J ray(const Scene &s, const o::State &initial, const o::Trace &trace) {
                                         o::Chart::boyer_lindquist);
     auto emission =
         o::disk_emission(s.geometry, hit, o::frequency(initial, frame.basis[0]),
-                         s.settings.disk_inner);
+                         s.settings.disk_inner, s.disk_motion);
     result["linear_intensity"] = emission.linear_intensity;
     result["redshift"] = emission.redshift;
     result["alpha"] = 1;

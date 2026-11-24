@@ -649,12 +649,54 @@ Trace trace_angular(const Parameters &p, const State &initial, Chart chart,
   }
   return trace_impl(p, initial, c, chart);
 }
+std::optional<double> keplerian_omega(const geometry::Evaluation &g) {
+  const double tt = g.dg[1][0][0], tp = g.dg[1][0][3], pp = g.dg[1][3][3];
+  const double discriminant = tp * tp - tt * pp;
+  if (!std::isfinite(discriminant) || discriminant < 0 || !(pp > 0))
+    return {};
+  const double omega = (-tp + std::sqrt(discriminant)) / pp;
+  const auto &m = g.metric;
+  const double norm = m[0][0] + 2 * omega * m[0][3] + omega * omega * m[3][3];
+  if (!std::isfinite(omega) || !(norm < 0))
+    return {};
+  return omega;
+}
+bool keplerian_annulus_supported(const Parameters &p, double inner,
+                                 double outer, int samples) {
+  if (!(inner > 0 && outer > inner && samples >= 2))
+    return false;
+  double previous = -std::numeric_limits<double>::infinity();
+  for (int i = 0; i < samples; ++i) {
+    const double r = inner + (outer - inner) * i / (samples - 1);
+    try {
+      const auto g = metric(p, {0, r, std::numbers::pi / 2, 0});
+      const auto omega = keplerian_omega(g);
+      if (!omega)
+        return false;
+      const auto u = circular_frame(g, *omega).basis[0];
+      const double lz = g.metric[3][0] * u[0] + g.metric[3][3] * u[3];
+      if (!(lz > previous))
+        return false;
+      previous = lz;
+    } catch (const std::exception &) {
+      return false;
+    }
+  }
+  return true;
+}
 Emission disk_emission(const Parameters &p, const State &hit,
-                       double nu_observer, double inner) {
+                       double nu_observer, double inner, DiskMotion motion) {
   if (!std::isfinite(nu_observer) || nu_observer <= 0 ||
       !std::isfinite(inner) || inner <= 0)
     throw std::invalid_argument("invalid emission normalization");
-  double nu = frequency(hit, circular_frame(metric(p, hit)).basis[0]);
+  const auto g_hit = metric(p, hit);
+  std::optional<double> omega;
+  if (motion == DiskMotion::keplerian_prograde) {
+    omega = keplerian_omega(g_hit);
+    if (!omega)
+      throw std::runtime_error("no timelike circular geodesic at disk hit");
+  }
+  double nu = frequency(hit, circular_frame(g_hit, omega).basis[0]);
   if (nu <= 0)
     throw std::runtime_error("nonpositive emitted frequency");
   double g = nu_observer / nu;

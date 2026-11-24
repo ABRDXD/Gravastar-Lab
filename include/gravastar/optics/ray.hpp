@@ -101,6 +101,20 @@ Trace trace_angular(const Parameters &, const State &, Chart,
 struct Emission {
   double redshift{}, emitted_frequency{}, linear_intensity{};
 };
+// Prescribed disk motion. ZAMO is the original phenomenological choice.
+// keplerian_prograde follows the equatorial circular geodesic rotating toward
+// +phi: prescribed motion, not a self-consistent matter solution.
+enum class DiskMotion { zamo, keplerian_prograde };
+// Angular speed of that geodesic at an equatorial evaluation: the larger root
+// of d_r g_tt + 2 W d_r g_tphi + W^2 d_r g_phiphi = 0. Empty when there is no
+// real root or the orbit is not timelike. Needs equatorial reflection symmetry.
+std::optional<double> keplerian_omega(const geometry::Evaluation &);
+// True when every sampled radius of [inner, outer] on the equator has a
+// timelike prograde circular geodesic whose angular momentum grows outward
+// (stable). Samples include both ends.
+bool keplerian_annulus_supported(const Parameters &, double inner, double outer,
+                                 int samples = 64);
 Emission disk_emission(const Parameters &, const State &hit,
-                       double observer_frequency, double disk_inner);
+                       double observer_frequency, double disk_inner,
+                       DiskMotion = DiskMotion::zamo);
 } // namespace gravastar::optics
