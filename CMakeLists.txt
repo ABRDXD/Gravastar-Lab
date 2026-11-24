@@ -22,9 +22,6 @@ elseif(GRAVASTAR_SANITIZERS)
     message(FATAL_ERROR "GRAVASTAR_SANITIZERS requires GCC or Clang")
 endif()
 
-if(GRAVASTAR_GYOTO_REFERENCE)
-    add_subdirectory(reference/gyoto)
-endif()
 
 add_executable(gravastar_benchmark src/experiments/benchmark.cpp)
 target_link_libraries(gravastar_benchmark PRIVATE gravastar_geometry)
@@ -344,4 +341,9 @@ if(BUILD_TESTING)
     else()
         message(STATUS "ffmpeg/ffprobe not found: recording lifecycle test skipped")
     endif()
+endif()
+
+# Optional GPL GYOTO reference; needs gravastar_optics, so it comes last.
+if(GRAVASTAR_GYOTO_REFERENCE)
+    add_subdirectory(reference/gyoto)
 endif()
