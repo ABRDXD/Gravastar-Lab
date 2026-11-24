@@ -20,6 +20,10 @@ and no practical C++ route to SPIR-V exists. Everything that can run on the CPU
 stays C++20. Vendored code under `third_party/` keeps its upstream language and
 is audited in THIRD_PARTY.md.
 
+Documentation images are data, not code: PNG files are allowed only directly in
+`docs/images/` (added 2026-11-24 for the studio screenshot; the source-format
+check enforces it).
+
 Do not delete a legacy Python file until its replacement builds and passes
 equivalent CTest coverage. Record the migration evidence. If a capability
 cannot be implemented within the language constraint, explain the blocker.

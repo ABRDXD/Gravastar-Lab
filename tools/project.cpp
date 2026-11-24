@@ -12,6 +12,7 @@ void require(bool b, const std::string &message) {
 }
 // `path` is relative to the project root. GLSL compute shaders are the one
 // non-C++ source format, and only inside the top-level shaders/ directory.
+// PNG images are documentation, not code, and are allowed only in docs/images/.
 bool permitted_source(const fs::path &path) {
   static const std::set<std::string> names{"LICENSE", "NOTICE", ".gitignore",
                                            ".gitkeep", ".clang-format"};
@@ -21,6 +22,8 @@ bool permitted_source(const fs::path &path) {
   if (names.contains(path.filename().string()) ||
       extensions.contains(path.extension().string()))
     return true;
+  if (path.extension() == ".png")
+    return path.parent_path() == fs::path("docs") / "images";
   return !path.empty() && *path.begin() == "shaders" &&
          shader_extensions.contains(path.extension().string());
 }
@@ -59,6 +62,10 @@ int self_test(const fs::path &self) {
               !permitted_source("ray.glsl") &&
               !permitted_source("shaders/build.sh"),
           "shader formats only under shaders/");
+  require(permitted_source("docs/images/studio.png") && !permitted_source("studio.png") &&
+              !permitted_source("docs/studio.png") && !permitted_source("src/images/x.png") &&
+              !permitted_source("docs/images/nested/x.png"),
+          "PNG documentation images only in docs/images/");
   require(
       u::sha256("") ==
           "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
