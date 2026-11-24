@@ -32,6 +32,11 @@ double residual(const Parameters &p, const State &y, Chart chart) {
              ? null_residual(metric(p, y), y)
              : angular_null_residual(angular_metric(p, y), y);
 }
+State chart_rhs(const Parameters &p, const State &y, Chart chart) {
+  return chart == Chart::boyer_lindquist  ? rhs(p, y)
+         : chart == Chart::core_cartesian ? core_rhs(p, y)
+                                          : angular_rhs(p, y);
+}
 Step step(const Parameters &p, const State &y, double h, std::size_t &calls,
           Chart chart) {
   // Dormand-Prince 5(4) tableau; autonomous Hamiltonian system.
@@ -53,9 +58,7 @@ Step step(const Parameters &p, const State &y, double h, std::size_t &calls,
       for (int j = 0; j < s; ++j)
         v[i] += h * a[s][j] * k[j][i];
     ++calls;
-    k[s] = chart == Chart::boyer_lindquist  ? rhs(p, v)
-           : chart == Chart::core_cartesian ? core_rhs(p, v)
-                                            : angular_rhs(p, v);
+    k[s] = chart_rhs(p, v, chart);
   }
   Step out;
   out.start_rate = k.front();
@@ -126,6 +129,27 @@ struct EventNode {
   double offset;
   State state;
 };
+// Signed extremum of the surface function predicted from the clipping root
+// alone: f(root) = 0, so f_ext = -f'^2 / (2 f''), with f'' from rates a small
+// affine distance either side. Empty when the ray is not curving back
+// (f' f'' >= 0). This does not depend on where the step grid fell.
+std::optional<double> predicted_extremum(const Parameters &p, const State &y,
+                                         const Surface &surface, Chart chart,
+                                         std::size_t &calls) {
+  constexpr double delta = 1e-6;
+  ++calls;
+  const double rate = surface_rate(p, y, chart_rhs(p, y, chart), surface);
+  const auto ahead = step(p, y, delta, calls, chart);
+  const auto behind = step(p, y, -delta, calls, chart);
+  const double curvature =
+      (surface_rate(p, ahead.next, ahead.end_rate, surface) -
+       surface_rate(p, behind.next, behind.end_rate, surface)) /
+      (2 * delta);
+  if (!std::isfinite(rate) || !std::isfinite(curvature) ||
+      !(rate * curvature < 0))
+    return {};
+  return -rate * rate / (2 * curvature);
+}
 EventNode stationary_point(const Parameters &p, const State &y,
                            const Step &full, double h, const Surface &surface,
                            const Settings &c, std::size_t &calls, Chart chart) {
@@ -583,6 +607,24 @@ static Trace trace_impl(const Parameters &p, const State &initial,
             transition = surface.transition;
             next = hit;
             clip_surface = surface.name;
+            // The dip's stationary point may lie beyond this trial (the step
+            // grid can split root and extremum), so predict it from the root.
+            const bool found = std::any_of(
+                near.begin(), near.end(),
+                [&](const Tangency &n) { return n.surface == surface.name; });
+            if (!found) {
+              std::optional<double> value;
+              try {
+                value = predicted_extremum(p, hit.state, surface, chart,
+                                           out.rhs_calls);
+              } catch (const std::exception &) {
+                // A failed probe must not fail the ray; it gives no flag.
+              }
+              const double margin = tangency_margin(surface, c);
+              if (value && std::abs(*value) < margin)
+                near.push_back({surface.name, hit, *value, margin,
+                                surface.terminal.has_value()});
+            }
             if (transition != Transition::none)
               change_core(next, transition);
             break;

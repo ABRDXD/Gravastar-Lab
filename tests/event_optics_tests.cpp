@@ -24,22 +24,22 @@ void check(const std::string &name, double measured, double ceiling) {
 void require(const std::string &name, bool passed) {
   check(name, passed ? 0 : 1, 0);
 }
-o::State initial(double impact) {
-  // Exact Minkowski line (X,Y,Z)=(launch_x+s,impact,0), P=(-1,-1,0,0).
+o::State initial(double impact, double start = launch_x) {
+  // Exact Minkowski line (X,Y,Z)=(start+s,impact,0), P=(-1,-1,0,0).
   // Direct spherical covector pullback, independent of the production launch.
-  const double r = std::hypot(launch_x, impact);
+  const double r = std::hypot(start, impact);
   return {0,
           r,
           std::numbers::pi / 2,
-          std::atan2(impact, launch_x),
+          std::atan2(impact, start),
           -1,
-          -launch_x / r,
+          -start / r,
           0,
           impact};
 }
 o::Trace trace(const g::Parameters &p, double impact, o::Chart chart,
-               const o::Settings &settings) {
-  auto state = initial(impact);
+               const o::Settings &settings, double start = launch_x) {
+  auto state = initial(impact, start);
   if (chart == o::Chart::boyer_lindquist)
     return o::trace(p, state, settings);
   return o::trace_angular(
@@ -123,6 +123,41 @@ void run() {
       if (ray.tangencies.size() == 1)
         check(tag + " value is the analytic closest approach",
               std::abs(ray.tangencies[0].value - offset), 1e-12);
+    }
+    // Same 2e-10 dip, swept along the line so that for some starts the
+    // first root and the closest approach fall in different accepted steps.
+    // Then the trial holding the root has same-sign endpoint rates and no
+    // stationary point, so the flag must come from the root itself.
+    // (Ultrareview finding.) Straddles are recognised by a tangency recorded
+    // at the root rather than at the analytic closest approach.
+    {
+      const double offset = -2e-10;
+      std::size_t unflagged = 0, straddles = 0;
+      double worst = 0;
+      // A straddle needs the root within ~1.7e-5 of a step end: about one
+      // placement in 300, so sweep 2000 starts 1.2e-5 apart.
+      for (int k = 0; k < 2000; ++k) {
+        const double start = -.006 - 1.2e-5 * k;
+        auto sweep = c;
+        sweep.maximum_affine = -start + .02;
+        const auto ray = trace(p, boundary + offset, chart, sweep, start);
+        if (ray.outcome != o::Outcome::domain_limit ||
+            ray.tangencies.size() != 1 || !ray.tangencies[0].terminal) {
+          ++unflagged;
+          continue;
+        }
+        const auto &n = ray.tangencies[0];
+        straddles += std::abs(n.point.affine - ray.final.affine) < 1e-12;
+        worst = std::max(worst, std::abs(n.value - offset));
+      }
+      const std::string tag = label + " 2e-10 dip at 2000 step placements";
+      check(tag + ": rays not flagged exactly once as terminal", unflagged, 0);
+      require(tag + ": some placements straddle a step boundary", straddles > 0);
+      check(tag + ": flagged closest approach", worst, 1e-12);
+      fixtures.push_back({{"chart", label},
+                          {"sweep_starts", 2000},
+                          {"straddling_placements", straddles},
+                          {"unflagged", unflagged}});
     }
 
     // M=Lambda=a=0 makes the toy family exactly Minkowski while retaining
