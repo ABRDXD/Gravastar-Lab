@@ -6,6 +6,7 @@
 #include <imgui_impl_vulkan.h>
 
 #include <chrono>
+#include <cstring>
 #include <fstream>
 
 namespace gravastar::rendering::vulkan {
@@ -29,6 +30,12 @@ struct WindowRenderer::Impl {
     // (and so its format and image count) exists.
     bool overlay_requested{}, overlay_ready{};
     VkFormat overlay_format{};
+    // Optional source image for the view shader (binding 1). A small buffer
+    // always exists so the binding is valid for the calibration shader too.
+    std::unique_ptr<detail::VulkanContext::Buffer> source_image;
+    std::size_t source_capacity{};
+    std::uint32_t source_width{}, source_height{};
+    bool oracle{true}; // capture() checks the calibration pattern until a source is set
     std::uint32_t last_phase{};
     std::function<void()> poll_events;
     // clang-format off
@@ -114,12 +121,13 @@ struct WindowRenderer::Impl {
         if ((rgba_properties.optimalTilingFeatures & needed) != needed)
             throw std::runtime_error("RGBA8 storage/blit-source image support required");
 
-        VkDescriptorSetLayoutBinding binding{0, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1,
-                                             VK_SHADER_STAGE_COMPUTE_BIT, nullptr};
+        const std::array<VkDescriptorSetLayoutBinding, 2> binding{
+            {{0, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1, VK_SHADER_STAGE_COMPUTE_BIT, nullptr},
+             {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1, VK_SHADER_STAGE_COMPUTE_BIT, nullptr}}};
         auto descriptor_info = structure<VkDescriptorSetLayoutCreateInfo>(
             VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO);
-        descriptor_info.bindingCount = 1;
-        descriptor_info.pBindings = &binding;
+        descriptor_info.bindingCount = static_cast<std::uint32_t>(binding.size());
+        descriptor_info.pBindings = binding.data();
         check(c.CreateDescriptorSetLayout(c.device, &descriptor_info, nullptr, &descriptor_layout),
               "vkCreateDescriptorSetLayout");
         VkPushConstantRange push{VK_SHADER_STAGE_COMPUTE_BIT, 0, 16};
@@ -171,6 +179,40 @@ struct WindowRenderer::Impl {
               "vkCreateSemaphore(acquire)");
         check(CreateSemaphore(c.device, &semaphore_info, nullptr, &rendered),
               "vkCreateSemaphore(present)");
+        source_image = std::make_unique<detail::VulkanContext::Buffer>(c);
+        source_image->create(64);
+        source_capacity = 64;
+    }
+    void write_source_descriptor(Swapchain &chain) {
+        VkDescriptorBufferInfo info{source_image->buffer, 0, VK_WHOLE_SIZE};
+        auto write = structure<VkWriteDescriptorSet>(VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET);
+        write.dstSet = chain.descriptor;
+        write.dstBinding = 1;
+        write.descriptorCount = 1;
+        write.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+        write.pBufferInfo = &info;
+        context->UpdateDescriptorSets(context->device, 1, &write, 0, nullptr);
+    }
+    void set_source(std::uint32_t width, std::uint32_t height,
+                    std::span<const std::uint32_t> pixels) {
+        if (width > 65535 || height > 65535 ||
+            pixels.size() != std::size_t{width} * height)
+            throw std::invalid_argument("Source image size does not match its pixels");
+        wait_idle(); // the previous frame may still read the buffer
+        const std::size_t bytes = std::max<std::size_t>(64, pixels.size_bytes());
+        if (bytes > source_capacity) {
+            auto replacement = std::make_unique<detail::VulkanContext::Buffer>(*context);
+            replacement->create(bytes);
+            source_image = std::move(replacement);
+            source_capacity = bytes;
+            if (swapchain)
+                write_source_descriptor(*swapchain);
+        }
+        std::memcpy(source_image->mapped, pixels.data(), pixels.size_bytes());
+        source_image->synchronize(false);
+        source_width = width;
+        source_height = height;
+        oracle = false;
     }
     void wait_fence(VkFence fence, const char *label) {
         const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(30);
@@ -351,12 +393,13 @@ struct WindowRenderer::Impl {
         view.format = VK_FORMAT_R8G8B8A8_UNORM;
         view.subresourceRange = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1};
         check(CreateImageView(c.device, &view, nullptr, &candidate->view), "vkCreateImageView");
-        VkDescriptorPoolSize pool_size{VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1};
+        const std::array<VkDescriptorPoolSize, 2> pool_size{
+            {{VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1}, {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1}}};
         auto pool =
             structure<VkDescriptorPoolCreateInfo>(VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO);
         pool.maxSets = 1;
-        pool.poolSizeCount = 1;
-        pool.pPoolSizes = &pool_size;
+        pool.poolSizeCount = static_cast<std::uint32_t>(pool_size.size());
+        pool.pPoolSizes = pool_size.data();
         check(c.CreateDescriptorPool(c.device, &pool, nullptr, &candidate->descriptors),
               "vkCreateDescriptorPool");
         auto set =
@@ -375,6 +418,7 @@ struct WindowRenderer::Impl {
         write.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
         write.pImageInfo = &image_descriptor;
         c.UpdateDescriptorSets(c.device, 1, &write, 0, nullptr);
+        write_source_descriptor(*candidate);
         // Presentation fences were waited above; old resources are no longer used by WSI.
         swapchain = std::move(candidate);
         stats.width = extent.width;
@@ -493,7 +537,8 @@ struct WindowRenderer::Impl {
         c.CmdBindPipeline(command, VK_PIPELINE_BIND_POINT_COMPUTE, pipeline);
         c.CmdBindDescriptorSets(command, VK_PIPELINE_BIND_POINT_COMPUTE, pipeline_layout, 0, 1,
                                 &swapchain->descriptor, 0, nullptr);
-        const std::array<std::uint32_t, 4> parameters{stats.width, stats.height, phase, 0};
+        const std::array<std::uint32_t, 4> parameters{stats.width, stats.height, phase,
+                                                      source_width << 16 | source_height};
         static_assert(sizeof(parameters) == 16);
         CmdPushConstants(command, pipeline_layout, VK_SHADER_STAGE_COMPUTE_BIT, 0,
                          sizeof(parameters), parameters.data());
@@ -647,7 +692,7 @@ struct WindowRenderer::Impl {
         }
         staging.synchronize(true);
         const auto *pixels = static_cast<const std::uint8_t *>(staging.mapped);
-        for (std::uint32_t y = 0; y < stats.height; ++y)
+        for (std::uint32_t y = 0; oracle && y < stats.height; ++y)
             for (std::uint32_t x = 0; x < stats.width; ++x) {
                 std::array<std::uint32_t, 4> expected{
                     x * 255 / std::max(stats.width - 1, 1U),
@@ -672,9 +717,11 @@ struct WindowRenderer::Impl {
         out.flush();
         if (!out)
             throw std::runtime_error("Diagnostic capture write failed");
-        std::cout << "capture=" << path.string()
-                  << " oracle_pixels=" << std::uint64_t{stats.width} * stats.height
-                  << " exact_rgba8=pass\n";
+        std::cout << "capture=" << path.string();
+        if (oracle)
+            std::cout << " oracle_pixels=" << std::uint64_t{stats.width} * stats.height
+                      << " exact_rgba8=pass";
+        std::cout << '\n';
     }
     void release_resources() noexcept {
         auto &c = *context;
@@ -683,6 +730,7 @@ struct WindowRenderer::Impl {
             overlay_ready = false;
         }
         swapchain.reset();
+        source_image.reset();
         if (command_pool)
             c.DestroyCommandPool(c.device, command_pool, nullptr);
         if (acquired)
@@ -751,6 +799,10 @@ void WindowRenderer::enable_overlay(std::uint32_t width, std::uint32_t height) {
     impl_->overlay_requested = true;
     if (width && height)
         impl_->recreate(width, height); // so the overlay is ready for frame one
+}
+void WindowRenderer::set_source(std::uint32_t width, std::uint32_t height,
+                                std::span<const std::uint32_t> rgba8) {
+    impl_->set_source(width, height, rgba8);
 }
 bool WindowRenderer::overlay_ready() const {
     return impl_->overlay_ready;

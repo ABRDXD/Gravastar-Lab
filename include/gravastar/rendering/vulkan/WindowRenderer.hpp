@@ -35,6 +35,11 @@ class WindowRenderer final {
     void enable_overlay(std::uint32_t width, std::uint32_t height);
     [[nodiscard]] bool overlay_ready() const;
     void begin_overlay_frame();
+    // Image for a view shader to read at binding 1 (RGBA8, r in the low byte,
+    // row-major, width x height <= 65535 each). Waits for the previous frame.
+    // Afterwards capture() no longer checks the calibration pattern.
+    void set_source(std::uint32_t width, std::uint32_t height,
+                    std::span<const std::uint32_t> rgba8);
     void finish();
     [[nodiscard]] WindowStatistics statistics() const;
     [[nodiscard]] const DeviceInfo &device() const;

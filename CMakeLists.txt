@@ -267,6 +267,14 @@ if(GRAVASTAR_DESKTOP)
                     "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_stereographic.glsl"
             VERBATIM)
     endforeach()
+    set(GRAVASTAR_VIEW_SPV "${GRAVASTAR_SPV_DIR}/gravastar_view.spv")
+    add_custom_command(
+        OUTPUT "${GRAVASTAR_VIEW_SPV}"
+        COMMAND "${GLSLC_EXECUTABLE}" -O "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_view.comp"
+            -o "${GRAVASTAR_VIEW_SPV}"
+        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_view.comp"
+        VERBATIM)
+    add_custom_target(gravastar_view_shader DEPENDS "${GRAVASTAR_VIEW_SPV}")
     set(GRAVASTAR_TRACE64_SPV "${GRAVASTAR_SPV_DIR}/gravastar_trace64.spv")
     add_custom_command(
         OUTPUT "${GRAVASTAR_TRACE64_SPV}"
