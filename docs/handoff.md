@@ -4,12 +4,31 @@
 
 The two lines of work are combined on `integration/reconcile`, built from
 `codex/p2-reference-optics`, licensed GPL-3.0-or-later. Not pushed; `main` is
-unchanged. Phase A (reconcile) and Phase B (docs match measured results) of
+unchanged. Phases A (reconcile), B (docs match measured results) and C of
 [ROADMAP.md](../ROADMAP.md) are done. Measured build and test results are in
 [RECONCILE_STATUS.md](RECONCILE_STATUS.md).
 
-Next is Phase C, finishing P2 reference optics. Every Phase C step is marked
-[MAX] in the roadmap: stop and ask the owner to raise effort before starting.
+Phase C (finish P2 reference optics) is done, 2026-11-24:
+
+1. Ray families against an independent closed-form-Hamiltonian reference:
+   pole and core in one ray, join grazes, the buried Kerr photon orbit
+   (`ray_families`, docs/EVENT_COVERAGE.md).
+2. Near-tangency flag; both reference scenes end every sampled ray in a
+   named outcome with none censored or flagged.
+3. Optional pinned GYOTO 2.0.2 build: Kerr rays agree to 7.8e-11, toy rays
+   through an adapter to 2.7e-9 (docs/GYOTO_FEASIBILITY.md).
+4. Keplerian disk motion, separate star background channel, tolerance and
+   sample convergence (docs/EMISSION.md). The star background is not
+   sample-converged at 64 samples per pixel.
+
+Gate after step 4: GCC Release 31/31 (99 s), Clang desktop 33/33 (73 s),
+ASan/UBSan desktop 35/35 with no diagnostics (470 s), GCC Debug 31/31
+(634 s, -j2), optional GYOTO 1/1 (79 s). No compiler warnings in project
+code; GYOTO's upstream `Metric.C:502` warns once.
+
+Next is Phase D (GPU optics on the P2 contracts). Steps D1 and D2 are [MAX].
+Push with the timeout-safe SSH command in the owner's memory notes; a plain
+`git push` hung once on 2026-11-24.
 
 The section below is the pre-merge P2 handoff, kept as history. Its worktree
 path and push cadence no longer apply.
