@@ -14,6 +14,9 @@ struct Sample {
   Class classification;
   std::optional<double> intensity;
   std::optional<double> alpha;
+  // Separate celestial background channel, present on escaped samples only
+  // when the scene enables it. Opaque disk and capture samples hide it.
+  std::optional<double> background{};
 };
 struct Pixel {
   std::array<double, 4> fractions{};
@@ -21,6 +24,9 @@ struct Pixel {
   // Known contribution divided by ALL samples, never a resolved-only mean.
   // This is not a complete radiance estimate when any sample is unresolved.
   double known_contribution{};
+  // Background channel average over ALL samples; set only when every sample
+  // is resolved and every escaped sample carries a background value.
+  std::optional<double> background;
 };
 struct Grid {
   int width{}, height{}, scale{};
@@ -38,8 +44,8 @@ inline Grid aggregate(int width, int height, int scale,
   for (int y = 0; y < height; ++y)
     for (int x = 0; x < width; ++x) {
       auto &pixel = out.pixels[y * width + x];
-      double alpha = 0;
-      bool resolved = true;
+      double alpha = 0, background = 0;
+      bool resolved = true, background_known = true;
       for (int sy = 0; sy < scale; ++sy)
         for (int sx = 0; sx < scale; ++sx) {
           const auto &s =
@@ -68,10 +74,19 @@ inline Grid aggregate(int width, int height, int scale,
             pixel.known_contribution += weight * *s.intensity;
             alpha += weight * *s.alpha;
           }
+          if (s.background) {
+            if (s.classification != Class::escaped ||
+                !std::isfinite(*s.background) || *s.background < 0)
+              throw std::invalid_argument("invalid background sample");
+            background += weight * *s.background;
+          } else if (s.classification == Class::escaped)
+            background_known = false;
         }
       if (resolved) {
         pixel.intensity = pixel.known_contribution;
         pixel.alpha = alpha;
+        if (background_known)
+          pixel.background = background;
       }
     }
   return out;
@@ -82,6 +97,9 @@ struct Difference {
   std::optional<double> relative_l1_intensity;
   double mean_classification_tv{}, maximum_classification_tv{};
   double mean_unresolved_fraction_change{};
+  // Background channel on pixels where it is known at every level.
+  std::size_t background_pixels{};
+  std::optional<double> relative_l1_background;
 };
 // Every comparison uses the SAME mask: resolved at ALL supplied levels.
 // An empty mask or zero reference radiance cannot establish convergence.
@@ -120,9 +138,14 @@ inline std::vector<Difference> compare(const std::vector<Grid> &levels) {
       common[i] = common[i] && g.pixels[i].intensity.has_value();
     }
   }
+  std::vector<bool> background(n, true);
+  for (const auto &g : levels)
+    for (std::size_t i = 0; i < n; ++i)
+      background[i] = background[i] && g.pixels[i].background.has_value();
   std::vector<Difference> out;
   for (std::size_t level = 1; level < levels.size(); ++level) {
     Difference d;
+    long double background_reference = 0, background_difference = 0;
     long double reference_sum = 0, absolute_sum = 0;
     double maximum = 0;
     for (std::size_t i = 0; i < n; ++i) {
@@ -134,6 +157,11 @@ inline std::vector<Difference> compare(const std::vector<Grid> &levels) {
       d.maximum_classification_tv = std::max(d.maximum_classification_tv, tv);
       d.mean_unresolved_fraction_change +=
           std::abs(a.fractions[3] - b.fractions[3]) / n;
+      if (background[i]) {
+        ++d.background_pixels;
+        background_difference += std::abs(*a.background - *b.background);
+        background_reference += std::abs(*b.background);
+      }
       if (common[i]) {
         ++d.common_pixels;
         const double delta = std::abs(*a.intensity - *b.intensity);
@@ -148,6 +176,8 @@ inline std::vector<Difference> compare(const std::vector<Grid> &levels) {
     }
     if (d.common_pixels && reference_sum > 0)
       d.relative_l1_intensity = absolute_sum / reference_sum;
+    if (d.background_pixels && background_reference > 0)
+      d.relative_l1_background = background_difference / background_reference;
     out.push_back(d);
   }
   return out;
