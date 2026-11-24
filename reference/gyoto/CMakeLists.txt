@@ -70,13 +70,13 @@ file(READ "${gyoto_source}/lib/UniformSpectrometer.C" uniform_source)
 set(head "void Uniform::fillProperty(Gyoto::FactoryMessenger *fmp,")
 set(tail "#ifdef GYOTO_USE_XERCES\n\nvoid Gyoto::Spectrometer::Uniform::setParameters")
 string(FIND "${uniform_source}" "${head}" found_head)
-string(FIND "${uniform_source}" "#ifdef GYOTO_USE_XERCES\n\nvoid Gyoto::Spectrometer::Uniform::setParameters" found_tail)
+string(FIND "${uniform_source}" "${tail}" found_tail)
 if(found_head EQUAL -1 OR found_tail EQUAL -1)
     message(FATAL_ERROR "Pinned GYOTO XML-free spectrometer patch no longer matches")
 endif()
 string(REPLACE "${head}" "#ifdef GYOTO_USE_XERCES\n${head}" uniform_source "${uniform_source}")
-string(REPLACE "#ifdef GYOTO_USE_XERCES\n\nvoid Gyoto::Spectrometer::Uniform::setParameters"
-    "#else\nvoid Uniform::fillProperty(Gyoto::FactoryMessenger *, Property const &) const {\n  GYOTO_ERROR(\"XML-free reference: Spectrometer::Uniform XML output unsupported\");\n}\n#endif\n#ifdef GYOTO_USE_XERCES\n\nvoid Gyoto::Spectrometer::Uniform::setParameters"
+string(REPLACE "${tail}"
+    "#else\nvoid Uniform::fillProperty(Gyoto::FactoryMessenger *, Property const &) const {\n  GYOTO_ERROR(\"XML-free reference: Spectrometer::Uniform XML output unsupported\");\n}\n#endif\n${tail}"
     uniform_source "${uniform_source}")
 file(WRITE "${gyoto_source}/lib/UniformSpectrometer.C" "${uniform_source}")
 configure_file(config.hpp "${gyoto_source}/include/GyotoConfig.h" COPYONLY)

@@ -173,6 +173,8 @@ int main(int argc, char **argv) {
           raw.at("executable_sha256") != tracer_hash)
         throw std::runtime_error(
             "ray batch configuration or provenance mismatch");
+      // Reports from tracers built before the near-tangency counters lack
+      // them; they are recorded as null rather than failing the run.
       levels.push_back(grid(raw, width, height, scale));
       J pixels = J::array();
       std::array<double, 4> fractions{};
@@ -196,8 +198,8 @@ int main(int argc, char **argv) {
            {"raw_report", fs::relative(path, root).generic_string()},
            {"raw_report_sha256", u::sha256(bytes)},
            {"classifications", raw.at("classifications")},
-           {"near_tangent_rays", raw.at("near_tangent_pixels")},
-           {"outcome_uncertain_rays", raw.at("outcome_uncertain_pixels")},
+           {"near_tangent_rays", raw.value("near_tangent_pixels", J(nullptr))},
+           {"outcome_uncertain_rays", raw.value("outcome_uncertain_pixels", J(nullptr))},
            {"class_fractions", fractions},
            {"unresolved_base_pixels", unresolved_pixels},
            {"known_image_plane_mean_contribution", known_mean},
@@ -205,8 +207,8 @@ int main(int argc, char **argv) {
            {"pixels", pixels}});
       std::cout << "sampling scale " << scale
                 << ": unresolved base pixels=" << unresolved_pixels
-                << "; near-tangent rays=" << raw.at("near_tangent_pixels")
-                << " (outcome uncertain " << raw.at("outcome_uncertain_pixels")
+                << "; near-tangent rays=" << raw.value("near_tangent_pixels", J(nullptr))
+                << " (outcome uncertain " << raw.value("outcome_uncertain_pixels", J(nullptr))
                 << ")" << std::endl;
     }
     const auto differences = s::compare(levels);
