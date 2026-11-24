@@ -6,11 +6,9 @@
 // the CPU from each final state (no painted colours). With --compare-cpu it
 // also traces every ray on the CPU alone and reports per-pixel differences.
 #include "gravastar/optics/scene.hpp"
-#include "gravastar/rendering/vulkan/ComputeContext.hpp"
+#include "gravastar/rendering/GpuTracer.hpp"
 #include <algorithm>
 #include <chrono>
-#include <cstring>
-#include <fstream>
 #include <iostream>
 #include <thread>
 
@@ -21,52 +19,6 @@ namespace fs = std::filesystem;
 using J = u::Json;
 
 namespace {
-constexpr std::size_t header_size = 32, input_stride = 16, output_stride = 16;
-const char *reasons[] = {"none",          "core_entry",  "near_tangency",
-                         "affine_budget", "step_budget", "numerical_failure",
-                         "null_drift"};
-
-std::vector<std::uint32_t> spirv(const char *path) {
-  std::ifstream in(path, std::ios::binary | std::ios::ate);
-  if (!in)
-    throw std::runtime_error(std::string("missing SPIR-V ") + path);
-  const auto size = static_cast<std::size_t>(in.tellg());
-  std::vector<std::uint32_t> words(size / 4);
-  in.seekg(0);
-  in.read(reinterpret_cast<char *>(words.data()), static_cast<std::streamsize>(size));
-  return words;
-}
-
-std::array<double, header_size> header(const o::Scene &s) {
-  const auto &c = s.settings;
-  // The kernel's closed form is the toy family. With r_in = r_out = 0 every
-  // positive radius is exterior (m = M, no Lambda), which is exactly Kerr.
-  const bool kerr = s.geometry.family == gravastar::geometry::Family::kerr;
-  if (!kerr && s.geometry.family != gravastar::geometry::Family::toy)
-    throw std::invalid_argument("the GPU tracer supports the toy and Kerr families only");
-  std::array<double, header_size> h{};
-  const double values[] = {
-      s.geometry.mass, s.geometry.spin, s.geometry.cosmological_constant,
-      kerr ? 0. : s.geometry.r_in, kerr ? 0. : s.geometry.r_out, c.absolute_tolerance,
-      c.relative_tolerance, c.initial_step, c.minimum_step, c.maximum_step,
-      c.event_tolerance, c.null_tolerance, c.maximum_affine,
-      double(c.maximum_attempts), c.outer_radius, c.disk ? 1. : 0.,
-      c.disk_inner, c.disk_outer,
-      // Without core continuation the inner chart limit is terminal on the
-      // CPU; the GPU hands rays reaching either radius to the CPU.
-      c.continue_core ? c.core_entry_radius : c.inner_radius,
-      c.capture_radius.value_or(0), c.angular_switch_q, c.tangency_factor};
-  std::copy(std::begin(values), std::end(values), h.begin());
-  return h;
-}
-
-struct GpuRay {
-  int outcome{}, reason{};
-  o::Point final;
-  std::size_t accepted{}, rejected{}, rhs_calls{};
-  double maximum_null{};
-};
-
 J distribution(std::vector<double> x) {
   if (x.empty())
     return nullptr;
@@ -126,90 +78,46 @@ int main(int argc, char **argv) {
 
     v::ComputeOptions options;
     options.validation = v::ValidationMode::disabled;
-    v::ComputeContext gpu(options);
-    if (!gpu.selected_device().float64)
-      throw std::runtime_error("selected GPU has no shaderFloat64");
-    const auto code = spirv(GRAVASTAR_TRACE64_SPV);
-    const auto h = header(s);
-    std::vector<GpuRay> gpu_rays(n);
-    double gpu_ms = 0;
-    for (std::size_t first = 0; first < n; first += batch) {
-      const std::size_t count = std::min(batch, n - first);
-      std::vector<double> in(header_size + input_stride * count, 0);
-      std::copy(h.begin(), h.end(), in.begin());
-      for (std::size_t r = 0; r < count; ++r) {
-        for (int i = 0; i < 8; ++i)
-          in[header_size + input_stride * r + i] = start[first + r][i];
-        in[header_size + input_stride * r + 8] = patch == o::Chart::north ? 0 : 1;
-      }
-      const auto result = gpu.dispatch(code, std::as_bytes(std::span(in)),
-                                       count * output_stride * sizeof(double),
-                                       static_cast<std::uint32_t>((count + 63) / 64));
-      gpu_ms += result.gpu_milliseconds;
-      std::vector<double> out(count * output_stride);
-      std::memcpy(out.data(), result.output.data(), result.output.size());
-      for (std::size_t r = 0; r < count; ++r) {
-        const double *w = out.data() + output_stride * r;
-        auto &g = gpu_rays[first + r];
-        g.outcome = int(w[0]);
-        g.reason = int(w[1]);
-        for (int i = 0; i < 8; ++i)
-          g.final.state[i] = w[2 + i];
-        g.final.chart = w[10] == 0 ? o::Chart::north : o::Chart::south;
-        g.final.affine = w[11];
-        g.accepted = std::size_t(w[12]);
-        g.rejected = std::size_t(w[13]);
-        g.rhs_calls = std::size_t(w[14]);
-        g.maximum_null = w[15];
-      }
-    }
+    gravastar::rendering::GpuTracer tracer(GRAVASTAR_TRACE64_SPV, options);
+    const auto t_trace = std::chrono::steady_clock::now();
+    const auto traced = tracer.trace(s, start, patch, batch);
+    const double trace_seconds =
+        std::chrono::duration<double>(std::chrono::steady_clock::now() - t_trace).count();
+    const double gpu_ms = traced.gpu_milliseconds;
+    const auto &flagged = traced.fallback;
 
-    // Assemble the image: GPU-resolved rays use the GPU final state; flagged
-    // rays are re-traced on the CPU from the same launch.
+    // Assemble the image from the GPU results and the CPU re-traces.
     J pixels = J::array(), counts = J::object();
-    std::array<std::size_t, 7> flagged{};
-    const auto t_fallback = std::chrono::steady_clock::now();
+    const auto t_assembly = std::chrono::steady_clock::now();
     std::vector<o::Trace> combined(n);
+    std::vector<int> gpu_outcome(n);
     for (std::size_t i = 0; i < n; ++i) {
-      const auto &g = gpu_rays[i];
-      o::Trace t;
-      if (g.outcome == 0) {
-        ++flagged[std::clamp(g.reason, 0, 6)];
-        t = o::trace_angular(s.geometry, start[i], patch, s.settings);
-      } else {
-        t.outcome = g.outcome == 1   ? o::Outcome::escaped
-                    : g.outcome == 2 ? o::Outcome::emitted
-                                     : o::Outcome::capture_surface;
-        t.final = g.final;
-        t.accepted = g.accepted;
-        t.rejected = g.rejected;
-        t.rhs_calls = g.rhs_calls;
-        t.maximum_null_error = g.maximum_null;
-      }
-      combined[i] = t;
-      auto value = o::ray_report(s, initial[i], t);
+      const auto &ray = traced.rays[i];
+      combined[i] = ray.trace;
+      gpu_outcome[i] = ray.gpu_outcome;
+      auto value = o::ray_report(s, initial[i], ray.trace);
       value["x"] = int(i) % s.width;
       value["y"] = int(i) / s.width;
-      value["gpu_outcome"] = g.outcome;
-      value["gpu_reason"] = reasons[std::clamp(g.reason, 0, 6)];
-      const std::string outcome(o::outcome_name(t.outcome));
+      value["gpu_outcome"] = ray.gpu_outcome;
+      value["gpu_reason"] = gravastar::rendering::GpuTracer::reasons[ray.reason];
+      const std::string outcome(o::outcome_name(ray.trace.outcome));
       counts[outcome] = counts.value(outcome, 0) + 1;
       pixels.push_back(std::move(value));
     }
-    const double fallback_seconds =
-        std::chrono::duration<double>(std::chrono::steady_clock::now() - t_fallback).count();
+    const double assembly_seconds =
+        std::chrono::duration<double>(std::chrono::steady_clock::now() - t_assembly).count();
 
     J flagged_json = J::object();
     std::size_t total_flagged = 0;
     for (int r = 1; r <= 6; ++r) {
-      flagged_json[reasons[r]] = flagged[r];
+      flagged_json[gravastar::rendering::GpuTracer::reasons[r]] = flagged[r];
       total_flagged += flagged[r];
     }
     J report{{"schema_version", 1},
              {"configuration", configuration},
              {"input_sha256", u::sha256(input_bytes)},
              {"resolution_scale", scale},
-             {"device", gpu.selected_device().name},
+             {"device", tracer.device().name},
              {"precision", "FP64"},
              {"rays", n},
              {"gpu_resolved_rays", n - total_flagged},
@@ -217,7 +125,8 @@ int main(int argc, char **argv) {
              {"cpu_fallback_reasons", flagged_json},
              {"classifications", counts},
              {"gpu_milliseconds", gpu_ms},
-             {"assembly_and_cpu_fallback_seconds", fallback_seconds},
+             {"trace_seconds_including_cpu_fallback", trace_seconds},
+             {"report_assembly_seconds", assembly_seconds},
              {"pixels", pixels}};
 
     if (compare) {
@@ -240,7 +149,7 @@ int main(int argc, char **argv) {
           std::chrono::duration<double>(std::chrono::steady_clock::now() - t_cpu).count();
       for (std::size_t i = 0; i < n; ++i) {
         const auto &cpu = cpu_traces[i];
-        if (gpu_rays[i].outcome == 0)
+        if (gpu_outcome[i] == 0)
           continue; // identical CPU trace by construction
         const auto &t = combined[i];
         if (cpu.outcome != t.outcome) {

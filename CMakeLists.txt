@@ -320,6 +320,11 @@ if(GRAVASTAR_DESKTOP)
         target_compile_options(gravastar_imgui PRIVATE -w)
     endif()
 
+    # GPU tracer with CPU fallback (physics on top of the headless GPU layer).
+    add_library(gravastar_gpu_optics src/rendering/GpuTracer.cpp)
+    target_link_libraries(gravastar_gpu_optics PUBLIC gravastar_vulkan gravastar_optics
+        nlohmann_json::nlohmann_json)
+
     add_library(gravastar_platform src/platform/Window.cpp)
     target_include_directories(gravastar_platform PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -335,7 +340,7 @@ if(GRAVASTAR_DESKTOP)
     add_dependencies(gravastar_studio gravastar_presentation_shader)
 
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-        foreach(target gravastar_vulkan gravastar_platform gravastar_studio)
+        foreach(target gravastar_vulkan gravastar_gpu_optics gravastar_platform gravastar_studio)
             target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic)
             # PUBLIC so executables linking these libraries get the runtime too.
             if(GRAVASTAR_SANITIZERS)
@@ -376,8 +381,7 @@ if(GRAVASTAR_DESKTOP)
             GRAVASTAR_PRECISIONMIXED_SPV="${GRAVASTAR_PRECISIONMIXED_SPV}")
         add_dependencies(gravastar_gpu_precision gravastar_precision_shaders)
         add_executable(gravastar_gpu_trace src/experiments/gpu_trace.cpp)
-        target_link_libraries(gravastar_gpu_trace PRIVATE gravastar_vulkan gravastar_optics
-            nlohmann_json::nlohmann_json)
+        target_link_libraries(gravastar_gpu_trace PRIVATE gravastar_gpu_optics)
         target_compile_definitions(gravastar_gpu_trace PRIVATE
             GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}"
             GRAVASTAR_TRACE64_SPV="${GRAVASTAR_TRACE64_SPV}")
