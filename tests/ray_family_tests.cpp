@@ -136,6 +136,22 @@ u::Json pole_and_core_family(const g::Parameters &p) {
   coarse.null_tolerance = 1e-7;
   const std::vector<Real> radii{q.r_out, q.r_in, Real(fine.core_exit_radius),
                                 Real(fine.core_entry_radius)};
+  // Step-size invariance: the event search must give the same crossings
+  // whether a crossing falls inside a long step or across many short ones.
+  // This is sampled evidence about hidden extrema, not a certificate.
+  auto small_steps = fine, large_steps = fine;
+  small_steps.maximum_step = fine.maximum_step / 8;
+  small_steps.initial_step = small_steps.maximum_step; // must not exceed it
+  large_steps.maximum_step = fine.maximum_step * 8;
+  struct Level {
+    const char *name;
+    const o::Settings *settings;
+    double drift, event, escape;
+  };
+  const Level levels[] = {{"coarse", &coarse, 1e-9, 5e-7, 2e-6},
+                          {"fine", &fine, 1e-11, 5e-8, 5e-8},
+                          {"fine small steps", &small_steps, 1e-11, 5e-8, 5e-8},
+                          {"fine large steps", &large_steps, 1e-11, 5e-8, 5e-8}};
 
   // Launch at r = 10 with p_t = -1. p_phi = 0 rays cross the axis; the scan
   // that chose them is recorded in docs/EVENT_COVERAGE.md.
@@ -200,16 +216,15 @@ u::Json pole_and_core_family(const g::Parameters &p) {
       poles.push_back({{"affine", double(pole.affine)},
                        {"radius", double(pole.radius)}});
     row["reference_pole_crossings"] = poles;
-    for (const auto *settings : {&coarse, &fine}) {
-      const bool is_fine = settings == &fine;
-      const std::string tag = label + (is_fine ? " fine" : " coarse");
+    for (const auto &level : levels) {
+      const auto *settings = level.settings;
+      const std::string tag = label + " " + level.name;
       const auto t = o::trace_angular(p, initial, o::Chart::north, *settings);
       require(tag + " escapes", t.outcome == o::Outcome::escaped);
       check(tag + " null residual", t.maximum_null_error,
             settings->null_tolerance);
       check(tag + " energy and axial momentum drift",
-            std::max(t.energy_error, t.angular_momentum_error),
-            is_fine ? 1e-11 : 1e-9);
+            std::max(t.energy_error, t.angular_momentum_error), level.drift);
 
       std::vector<Event> got;
       for (const auto &c : t.crossings)
@@ -224,8 +239,7 @@ u::Json pole_and_core_family(const g::Parameters &p) {
       }
       require(tag + " event sequence matches reference", same);
       if (same)
-        check(tag + " event affine vs reference", event_error,
-              is_fine ? 5e-8 : 5e-7);
+        check(tag + " event affine vs reference", event_error, level.event);
 
       double escape_error = 0;
       if (t.outcome == o::Outcome::escaped &&
@@ -239,8 +253,8 @@ u::Json pole_and_core_family(const g::Parameters &p) {
       } else
         escape_error = 1;
       check(tag + " escape affine, time, p_r and direction vs reference",
-            escape_error, is_fine ? 5e-8 : 2e-6);
-      row[is_fine ? "fine" : "coarse"] = {
+            escape_error, level.escape);
+      row[level.name] = {
           {"outcome", o::outcome_name(t.outcome)},
           {"accepted_steps", t.accepted},
           {"chart_switches", t.chart_switches},
