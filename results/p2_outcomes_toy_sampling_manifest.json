@@ -1,0 +1,1535 @@
+{
+  "algorithm": "sha256",
+  "computational_sha256": "39ee2fdceed8772fe480969a653804b3cfaa68a4b11a3da430fb69cfb36bb19f",
+  "digest_encoding": "UTF-8 compact JSON of sorted records and object keys",
+  "documentation_sha256": "e8b2b1e3fba0101e920a7816a94b41d8067916746e80e84d2f0c88b486448a16",
+  "file_count": 254,
+  "files": [
+    {
+      "bytes": 2298,
+      "path": "AGENTS.md",
+      "scope": "documentation",
+      "sha256": "301521c0fe3fa3dff90238969c82270323eaee6afd3b3b35c75aaf026f51bfdc"
+    },
+    {
+      "bytes": 22284,
+      "path": "CMakeLists.txt",
+      "scope": "computational",
+      "sha256": "18dcf47c34805041ee60be730491c8d4b432e6210ad5bb094310beb62ec14132"
+    },
+    {
+      "bytes": 1873,
+      "path": "CMakePresets.json",
+      "scope": "computational",
+      "sha256": "118987cf3eb9b963c805b23f7b3303fed35e04028ecab83ea01ac1c17a10e37d"
+    },
+    {
+      "bytes": 34674,
+      "path": "LICENSE",
+      "scope": "documentation",
+      "sha256": "fb981668c18a279e285fc4d83fba1e836cc84dd4daa73c9697d3cfd2d8aca6e0"
+    },
+    {
+      "bytes": 838,
+      "path": "NOTICE",
+      "scope": "documentation",
+      "sha256": "489212a0dd87c28592e8191c86a95668ed802060adcbf1dc8d8d3e89cfb0a649"
+    },
+    {
+      "bytes": 39290,
+      "path": "PLAN.md",
+      "scope": "documentation",
+      "sha256": "686481f93ad7526a764746a5ce5652e36d50e914076a321222084a5debea1bfe"
+    },
+    {
+      "bytes": 5107,
+      "path": "README.md",
+      "scope": "documentation",
+      "sha256": "4567114f197dd2f6c7d2dff4f99f676f3c685556c9e74b52b04a0e3155c57198"
+    },
+    {
+      "bytes": 16068,
+      "path": "README.txt",
+      "scope": "documentation",
+      "sha256": "95c903ca06a383fb0098746e178d0fdd2367e774c67209a47a886c8bc493cc43"
+    },
+    {
+      "bytes": 8702,
+      "path": "THIRD_PARTY.md",
+      "scope": "documentation",
+      "sha256": "646822d5342ebe6778c07cdfba9830fd386ac239ed87362bd726b7c8b2bf5b84"
+    },
+    {
+      "bytes": 976,
+      "path": "benchmarks/optics_angular_kerr_v1.json",
+      "scope": "computational",
+      "sha256": "5711f100a3a6e5752421de7a77b1064bd7f84afb0f27276cb899d225a144be73"
+    },
+    {
+      "bytes": 950,
+      "path": "benchmarks/optics_angular_v1.json",
+      "scope": "computational",
+      "sha256": "e2c72ae9a0c8c87cff01de8affaa94fcfc76840b9901e18194f1a7164975e58c"
+    },
+    {
+      "bytes": 1233,
+      "path": "benchmarks/optics_core_long_v1.json",
+      "scope": "computational",
+      "sha256": "070becd4cb6c70455849ceffbf6b59ce87fd1841969a44501d16592af0491985"
+    },
+    {
+      "bytes": 1103,
+      "path": "benchmarks/optics_core_v1.json",
+      "scope": "computational",
+      "sha256": "ea8da312bd880a922667ee15161dc201a1c8f411017edbb1e72f36d7670debcf"
+    },
+    {
+      "bytes": 899,
+      "path": "benchmarks/optics_kerr_v1.json",
+      "scope": "computational",
+      "sha256": "ffda8cebbfb575cf1b1315dda8f97e8edf108bc22efe1990ac6df91b8c765a00"
+    },
+    {
+      "bytes": 898,
+      "path": "benchmarks/optics_v1.json",
+      "scope": "computational",
+      "sha256": "79853ee6055e465ba12c61d7dda4bad1dfffcea2253538247a29c1cae2b10cea"
+    },
+    {
+      "bytes": 1164,
+      "path": "benchmarks/rotating_v1.json",
+      "scope": "computational",
+      "sha256": "8066bf0b85cf53f97141a55a64827b0274fbe4bec397c81fe8b63904e323bb33"
+    },
+    {
+      "bytes": 319,
+      "path": "benchmarks/sampling_v1.json",
+      "scope": "computational",
+      "sha256": "79415424821b326d32ed8fcf63cfab1f6314f3ec8a1ed166208d51ec7025d543"
+    },
+    {
+      "bytes": 6794,
+      "path": "docs/ANGULAR_TRACING.md",
+      "scope": "documentation",
+      "sha256": "025aaafb75e394c8ee2e6e6aada02af6528d61347a0b2de697bdd14fcdb74463"
+    },
+    {
+      "bytes": 6706,
+      "path": "docs/ARCHITECTURE.md",
+      "scope": "documentation",
+      "sha256": "e1bd51abad9d7a7125c197f8032512d27b932e580fd32bb9f900d2e998676b69"
+    },
+    {
+      "bytes": 5890,
+      "path": "docs/AUDIT_2026-10-24.md",
+      "scope": "documentation",
+      "sha256": "6dedb64dbd44ac481037349ecbcc9dd9e326f2f4e9563ca2c03b4fc3d787c9b6"
+    },
+    {
+      "bytes": 9683,
+      "path": "docs/AXIS_CHART_DESIGN.md",
+      "scope": "documentation",
+      "sha256": "709d5fb540dceb8914ad85a0316b92a38d1955a177959c3c0730f0fca5560319"
+    },
+    {
+      "bytes": 11926,
+      "path": "docs/CORE_CONTINUATION.md",
+      "scope": "documentation",
+      "sha256": "fce5199a89744d113e1f18f65051ffc960cd5a1cb247e3a60698a864743f0c6a"
+    },
+    {
+      "bytes": 5360,
+      "path": "docs/ENVIRONMENT.md",
+      "scope": "documentation",
+      "sha256": "5a5fada68c4350ab3efcfdecea5358de2fed12e1b773de4a4d091332879fcfaf"
+    },
+    {
+      "bytes": 11612,
+      "path": "docs/EVENT_COVERAGE.md",
+      "scope": "documentation",
+      "sha256": "a53563b86594cee7128ca675d5c9969e63f54d6ff314c1b4b9f1e4b77c2c6c26"
+    },
+    {
+      "bytes": 4642,
+      "path": "docs/GYOTO_FEASIBILITY.md",
+      "scope": "documentation",
+      "sha256": "f9ce4485ba998da6143a1c4d52f0c69fd2036e71414a8409c1d290ae48e2f924"
+    },
+    {
+      "bytes": 4612,
+      "path": "docs/LICENSING.md",
+      "scope": "documentation",
+      "sha256": "a0b2ab21431295e7f55cc727c97c6b8829d3f340250086c9b2c9e18b0d8e24c1"
+    },
+    {
+      "bytes": 4350,
+      "path": "docs/MIGRATION.md",
+      "scope": "documentation",
+      "sha256": "9f9c392aef79924ab94772f82857f89e8aaa13eb036a0ec8dbfad2950d5fc68b"
+    },
+    {
+      "bytes": 7985,
+      "path": "docs/MODEL.md",
+      "scope": "documentation",
+      "sha256": "b9b602efffa1e39ee12fed4fcc18569eebc6a05f614d12d5b8b857826d697610"
+    },
+    {
+      "bytes": 7030,
+      "path": "docs/OPTICS.md",
+      "scope": "documentation",
+      "sha256": "4bfb72e5ff750f671111065d007e4223151e16e86bb40461a980a14c54bfe9ba"
+    },
+    {
+      "bytes": 24671,
+      "path": "docs/P2_STATUS.md",
+      "scope": "documentation",
+      "sha256": "1194a13f73a3a056b461fbf15e444d6f6d657fc259fbb2c4e16d1f7e5b2c1d9f"
+    },
+    {
+      "bytes": 4484,
+      "path": "docs/PROVENANCE.md",
+      "scope": "documentation",
+      "sha256": "396f161e6055ae2375fbdc84d7a406eda154cbefff470ed5f0cb786c6873ee54"
+    },
+    {
+      "bytes": 2972,
+      "path": "docs/RECONCILE_STATUS.md",
+      "scope": "documentation",
+      "sha256": "c46399801cad36147b62f2df37b45bbb1f474d07b116129a9a1a09928dc9f58c"
+    },
+    {
+      "bytes": 4700,
+      "path": "docs/SAMPLING.md",
+      "scope": "documentation",
+      "sha256": "e9fc61e96c32664d07ca9378cda942e4bc8db636b2974d836e75bb53f4a764eb"
+    },
+    {
+      "bytes": 7344,
+      "path": "docs/SOURCE_AUDIT.md",
+      "scope": "documentation",
+      "sha256": "614e1febbbe3a4c9a1a53b9ce7e4e2274d896720d4186873cf7ffdfa3b90ed75"
+    },
+    {
+      "bytes": 7247,
+      "path": "docs/STATUS.md",
+      "scope": "documentation",
+      "sha256": "56c0806ab6c06264514981b03b7f4f11b595db8d91b8ee7ae26e037435306ae0"
+    },
+    {
+      "bytes": 11663,
+      "path": "docs/handoff.md",
+      "scope": "documentation",
+      "sha256": "2f19895a41dd595664749c46ba5333d7272d21a0d353947e4fd53efd245ecefd"
+    },
+    {
+      "bytes": 1420,
+      "path": "include/gravastar/geometry/angular.hpp",
+      "scope": "computational",
+      "sha256": "2473a4e11e95fb93e9e81d052eeb3f5ab57dd30c208331579a4f0657d214aef1"
+    },
+    {
+      "bytes": 1226,
+      "path": "include/gravastar/geometry/core.hpp",
+      "scope": "computational",
+      "sha256": "a8c4c5fe7cf443328f4a0e87797634aeac2b034c0aeab0e9eddfac288b455246"
+    },
+    {
+      "bytes": 1839,
+      "path": "include/gravastar/geometry/geometry.hpp",
+      "scope": "computational",
+      "sha256": "be767235a639b3494b4043937278d6cd32b920d8d2e86c89728ae7fcf0eb8524"
+    },
+    {
+      "bytes": 2596,
+      "path": "include/gravastar/math/jet.hpp",
+      "scope": "computational",
+      "sha256": "381047885cfa8135e52eb0f2c37bc21303aacc24494e981ea80ce61ab9463261"
+    },
+    {
+      "bytes": 2376,
+      "path": "include/gravastar/math/spatial_jet.hpp",
+      "scope": "computational",
+      "sha256": "0b2b74b4d57062037aec1d8e4a587623f417222a50cb1d761ec501db2f3dc620"
+    },
+    {
+      "bytes": 1032,
+      "path": "include/gravastar/optics/chart.hpp",
+      "scope": "computational",
+      "sha256": "8235002ed0f0072ccc80feced8bcf24ab2b7bd5829629ea485d4df274f6456af"
+    },
+    {
+      "bytes": 1457,
+      "path": "include/gravastar/optics/core_chart.hpp",
+      "scope": "computational",
+      "sha256": "90643630a201d927f75beb3bba6199173189e14122447e3f120120f386ebd984"
+    },
+    {
+      "bytes": 4438,
+      "path": "include/gravastar/optics/ray.hpp",
+      "scope": "computational",
+      "sha256": "bfb5c4187516a82205d6585b39097621d69eec7d33324d817b6e0166dd256a23"
+    },
+    {
+      "bytes": 6479,
+      "path": "include/gravastar/optics/sampling.hpp",
+      "scope": "computational",
+      "sha256": "883834ce89bf6c87c4385ac846e8c63c0b144770520d370e76038dff5c05dd87"
+    },
+    {
+      "bytes": 976,
+      "path": "include/gravastar/platform/Window.hpp",
+      "scope": "computational",
+      "sha256": "659c0d96ca20a587955898565f71349bebcb4afe6cde6cb34b40465a15493ed6"
+    },
+    {
+      "bytes": 2577,
+      "path": "include/gravastar/recording/recorder.hpp",
+      "scope": "computational",
+      "sha256": "cefca455c6602722fbaf3e4600edfa2a96e17c35ab96ec91db12f4de059bba36"
+    },
+    {
+      "bytes": 3838,
+      "path": "include/gravastar/reference/angular.hpp",
+      "scope": "computational",
+      "sha256": "9bf621ba558db9131e73d8999488f936fdc4094db9df7eb325c3c977a1676404"
+    },
+    {
+      "bytes": 8368,
+      "path": "include/gravastar/reference/geometry.hpp",
+      "scope": "computational",
+      "sha256": "12c5f2abcfdeeba267df55872356278f35f0216c21e12a6725cc8ea5aa6efe3b"
+    },
+    {
+      "bytes": 12868,
+      "path": "include/gravastar/reference/number.hpp",
+      "scope": "computational",
+      "sha256": "2ebab15a252804e6765d24916a143dd12803a65adef28aae142be50effb4a2be"
+    },
+    {
+      "bytes": 6756,
+      "path": "include/gravastar/reference/polynomial.hpp",
+      "scope": "computational",
+      "sha256": "38e6a1533821ae4860552ed303ebcfe748d270227f45591388f9a8d5f0723f82"
+    },
+    {
+      "bytes": 1911,
+      "path": "include/gravastar/rendering/vulkan/ComputeContext.hpp",
+      "scope": "computational",
+      "sha256": "bb5eea309a3b428cc77a66daabe3322fa2b4adad69b457c790dbc94411f60210"
+    },
+    {
+      "bytes": 633,
+      "path": "include/gravastar/rendering/vulkan/SurfaceSource.hpp",
+      "scope": "computational",
+      "sha256": "8ca3e37ea99cc78d52f3b084e58bcd52836c277bb80dc9926d1f795b9a9b3f44"
+    },
+    {
+      "bytes": 1288,
+      "path": "include/gravastar/rendering/vulkan/WindowRenderer.hpp",
+      "scope": "computational",
+      "sha256": "b862732e624b36c70ff613e188323d9f36cf8303b9b214bd33dca53ab88d48a7"
+    },
+    {
+      "bytes": 7875,
+      "path": "include/gravastar/tools/artifacts.hpp",
+      "scope": "computational",
+      "sha256": "d7b09e853895c04b45bca50630a91a9bbac45d764095e75e476871af96067497"
+    },
+    {
+      "bytes": 984,
+      "path": "include/gravastar/tools/process.hpp",
+      "scope": "computational",
+      "sha256": "26591a8c5c9cde9a5707946afb9c4f982f89a6091a8fe3a4e1b1dbfaf11aba83"
+    },
+    {
+      "bytes": 862,
+      "path": "include/gravastar/tools/testing.hpp",
+      "scope": "computational",
+      "sha256": "5ff7c7e8d7393d8865891857bc895773f42d424ef5da2dd7b3b1d5ab9c1ab13d"
+    },
+    {
+      "bytes": 2989,
+      "path": "reference/gyoto/CMakeLists.txt",
+      "scope": "computational",
+      "sha256": "cf70d10bedd217a0996e971769b9b9a4800677d3200e5d1edd70543549352df5"
+    },
+    {
+      "bytes": 1943,
+      "path": "reference/gyoto/FetchSources.cmake",
+      "scope": "computational",
+      "sha256": "a460615ba2cba8904902400a0959acee97a37d17b8069bdac0f466bb819ceac7"
+    },
+    {
+      "bytes": 649,
+      "path": "reference/gyoto/config.hpp",
+      "scope": "computational",
+      "sha256": "cbfc6eb9d930fa94b9c219063d3d075d543bc299fa719357d0ccce636b115902"
+    },
+    {
+      "bytes": 4100,
+      "path": "shaders/gravastar_geodesic.comp",
+      "scope": "computational",
+      "sha256": "99450fa18f9ebdeaf6e4a0b3dd0e4ea166550719656b4483fbcd4dba41ab58cb"
+    },
+    {
+      "bytes": 4906,
+      "path": "shaders/gravastar_metric.comp",
+      "scope": "computational",
+      "sha256": "4f04da6df067d8c3f7403872e2bd6a6606dfdfca6f0c58054af51e14cc65f58b"
+    },
+    {
+      "bytes": 6254,
+      "path": "shaders/gravastar_physics.glsl",
+      "scope": "computational",
+      "sha256": "1f6b92d2259da01e38af3c5a9d48eba8b47ba5fb581f9db843c66df10db98c38"
+    },
+    {
+      "bytes": 798,
+      "path": "shaders/gravastar_presentation.comp",
+      "scope": "computational",
+      "sha256": "83da9109da3cbe3789ccd591e8b4a162a069862689dff2fc1e7d21e7ec7d5333"
+    },
+    {
+      "bytes": 8126,
+      "path": "src/experiments/angular_benchmark.cpp",
+      "scope": "computational",
+      "sha256": "00b8d18639ebaf66a5520fd0af214db16c5874aefd2ed829dd9265ab3ab6d4ea"
+    },
+    {
+      "bytes": 5420,
+      "path": "src/experiments/benchmark.cpp",
+      "scope": "computational",
+      "sha256": "e2327ce021cc42db304bc61d835260cb682ebc13666dbf71ce3c0beb46db7272"
+    },
+    {
+      "bytes": 9015,
+      "path": "src/experiments/ray_benchmark.cpp",
+      "scope": "computational",
+      "sha256": "9c53b0254ce3f1681efc84420def8a493a45246ecfaf8bed69863d921cf09a2d"
+    },
+    {
+      "bytes": 13913,
+      "path": "src/experiments/sampling.cpp",
+      "scope": "computational",
+      "sha256": "422bee451b9d19cd228f269dad730e9099c8225f3961dc55f8127b7ae99e2485"
+    },
+    {
+      "bytes": 16355,
+      "path": "src/experiments/trace.cpp",
+      "scope": "computational",
+      "sha256": "2f88a8d719f532d2f9da35c5fbe4f94e155e6a40261e2a0f0d5822a30d45e517"
+    },
+    {
+      "bytes": 26719,
+      "path": "src/experiments/validate.cpp",
+      "scope": "computational",
+      "sha256": "b90057b4804ec3f8aa8922169786062820b0daeb4210adbbcc88109d51a74671"
+    },
+    {
+      "bytes": 6603,
+      "path": "src/geometry/angular.cpp",
+      "scope": "computational",
+      "sha256": "8853624035ee7a69745bce8b517115d164645c26cc409b64e2615dac620a3fb5"
+    },
+    {
+      "bytes": 5019,
+      "path": "src/geometry/core.cpp",
+      "scope": "computational",
+      "sha256": "1c24088e8df9c987e2a4e63f291664d09e736cb1014222af2ce63e1c97e2acc8"
+    },
+    {
+      "bytes": 390,
+      "path": "src/geometry/curvature.hpp",
+      "scope": "computational",
+      "sha256": "cedb8cf8828ab6b5283d684003fac99213925da5a5fb093c7b4db639ba11f7a8"
+    },
+    {
+      "bytes": 9234,
+      "path": "src/geometry/geometry.cpp",
+      "scope": "computational",
+      "sha256": "04ab6922418c719ca27fd7b9d9db2d1c411da3546183aad6e00a72ded92d042a"
+    },
+    {
+      "bytes": 1551,
+      "path": "src/geometry/profile.hpp",
+      "scope": "computational",
+      "sha256": "8a74ca21fdee0273295e58313247b1caece2cf300e1a3bb5319263fd87373ac1"
+    },
+    {
+      "bytes": 5397,
+      "path": "src/optics/chart.cpp",
+      "scope": "computational",
+      "sha256": "e1fda4cf6f81ea80f409bae3e1e4628cfe3f496dfa78be06be377a23b310ad85"
+    },
+    {
+      "bytes": 8639,
+      "path": "src/optics/core_chart.cpp",
+      "scope": "computational",
+      "sha256": "31463405100641449e467589399622ed8ddc3854bd03d212fc1cb9d12c1be22d"
+    },
+    {
+      "bytes": 27131,
+      "path": "src/optics/ray.cpp",
+      "scope": "computational",
+      "sha256": "68e783d1b6714ab73865ca6571d44ab16a01b511c0d3c4391ba23872882c8075"
+    },
+    {
+      "bytes": 4138,
+      "path": "src/platform/Window.cpp",
+      "scope": "computational",
+      "sha256": "6656a82397e659bc0ef057db42c4f224175e8f350627327be08cd18393809b0e"
+    },
+    {
+      "bytes": 6684,
+      "path": "src/recording/recorder.cpp",
+      "scope": "computational",
+      "sha256": "fdc9e089835e01192abcafca08c2f9182a30e6f4c642384eb9bfdf880d0b99c1"
+    },
+    {
+      "bytes": 1515,
+      "path": "src/rendering/vulkan/ComputeContext.cpp",
+      "scope": "computational",
+      "sha256": "c5c2cde3819ff3b3bced408a36aa143b78e7ee021a5bde28b50df1054608108d"
+    },
+    {
+      "bytes": 34067,
+      "path": "src/rendering/vulkan/VulkanContext.hpp",
+      "scope": "computational",
+      "sha256": "177e36f0552a5f7b41eb102e8f57dffa3041c56f769ed547a211fcd2e9361a30"
+    },
+    {
+      "bytes": 33008,
+      "path": "src/rendering/vulkan/WindowRenderer.cpp",
+      "scope": "computational",
+      "sha256": "74cc131bc40b16933dd4acf0e1d5b24fcf5df8b70752e2c58e59840e0c855695"
+    },
+    {
+      "bytes": 8381,
+      "path": "tests/angular_geometry_tests.cpp",
+      "scope": "computational",
+      "sha256": "772d777fe670df4cf29bf159f245920df4bd9c94786e7cf0afe995b497f5dccc"
+    },
+    {
+      "bytes": 17147,
+      "path": "tests/angular_optics_tests.cpp",
+      "scope": "computational",
+      "sha256": "ead8da7259115f3e817f2e8528a30ae16dbe98ce2fa3cfd3da6702499b8ab479"
+    },
+    {
+      "bytes": 8804,
+      "path": "tests/angular_reference_tests.cpp",
+      "scope": "computational",
+      "sha256": "982cbc5064b3d210e11e87ef5b472d676b189c754cb68c921cbdc671ef0f4129"
+    },
+    {
+      "bytes": 14006,
+      "path": "tests/axis_chart_tests.cpp",
+      "scope": "computational",
+      "sha256": "727fa2208fa4ec010169e3476380b3450c22d7baf9f7a4f6557154da00096194"
+    },
+    {
+      "bytes": 8700,
+      "path": "tests/core_chart_tests.cpp",
+      "scope": "computational",
+      "sha256": "3aa749e52601af7292c6e38362eaac4fe645fc8e6fe6686b3a0fa7424a11cb55"
+    },
+    {
+      "bytes": 11784,
+      "path": "tests/core_cli_tests.cpp",
+      "scope": "computational",
+      "sha256": "c97a754eef6272e31e77f70534b538dd762ac02f5c8381aa7be6106eb8cebe98"
+    },
+    {
+      "bytes": 10536,
+      "path": "tests/core_geometry_tests.cpp",
+      "scope": "computational",
+      "sha256": "f35cee1c057d48e1a8fa4bfa34022016aeb7f7f3b051815e8aab12826f248810"
+    },
+    {
+      "bytes": 14624,
+      "path": "tests/core_optics_tests.cpp",
+      "scope": "computational",
+      "sha256": "5c0080f88a28c26f038abcb921d7a608fca480d911ddf1c4b7774fa4ca7f4b23"
+    },
+    {
+      "bytes": 12557,
+      "path": "tests/cpp_geometry.cpp",
+      "scope": "computational",
+      "sha256": "ac92f908fedf0b27ce69a71c4c613ec2399bb59906f20fe242735f9d17f3c885"
+    },
+    {
+      "bytes": 11927,
+      "path": "tests/critical_optics_tests.cpp",
+      "scope": "computational",
+      "sha256": "1be7fa4688b00cd11104075ef6ab58683e6421f1dde40f3eafdfc43df973adbe"
+    },
+    {
+      "bytes": 5605,
+      "path": "tests/deterministic_recording_test.cpp",
+      "scope": "computational",
+      "sha256": "d944637d4046a6382c6061e13ace2fb8aa5ffc34dcd819c0603c5ec97656ebcd"
+    },
+    {
+      "bytes": 4077,
+      "path": "tests/equatorial_reference.hpp",
+      "scope": "computational",
+      "sha256": "93c5c9f4de93eec700f9629a0ff39d475f8b8e44098654fc544a2b59c582c97c"
+    },
+    {
+      "bytes": 10693,
+      "path": "tests/event_optics_tests.cpp",
+      "scope": "computational",
+      "sha256": "f446b86c51c9138cd0ba74985678f84274e833f2ece342e580f081c25f7f26dc"
+    },
+    {
+      "bytes": 39310,
+      "path": "tests/geodesic_cross_validation.cpp",
+      "scope": "computational",
+      "sha256": "16eda8fe44b5edb8461045090d14efd5f585230bd89b0c01f647d66323ed521b"
+    },
+    {
+      "bytes": 15230,
+      "path": "tests/optics_cli_tests.cpp",
+      "scope": "computational",
+      "sha256": "00184791bdffae82534bab51d9e88eb794fbe531498ba0609f018d351f04629b"
+    },
+    {
+      "bytes": 16985,
+      "path": "tests/optics_tests.cpp",
+      "scope": "computational",
+      "sha256": "dc6fc77e2ee88dad363a0f0fa7add4789c5fad8d6cdb80c12872c37f148e58fd"
+    },
+    {
+      "bytes": 29315,
+      "path": "tests/ray_family_tests.cpp",
+      "scope": "computational",
+      "sha256": "80a9f225454494e1e947e5637925c054a4b7ee8acdb14d52ed8212788da637bd"
+    },
+    {
+      "bytes": 6598,
+      "path": "tests/reference_tests.cpp",
+      "scope": "computational",
+      "sha256": "dd190c498bf3ae022f4a17a0d8c5edf662f1cb56d3e707212a2f3f24211ee9b4"
+    },
+    {
+      "bytes": 6740,
+      "path": "tests/sampling_cli_tests.cpp",
+      "scope": "computational",
+      "sha256": "69cfc87fc89ba96b507dd937d54f712e58b5bfaaed91ff2927763cf6947d0105"
+    },
+    {
+      "bytes": 6443,
+      "path": "tests/sampling_tests.cpp",
+      "scope": "computational",
+      "sha256": "872474368f6df8a93e2fde775a19ef246dadeee52c1282466009554314ee2ffc"
+    },
+    {
+      "bytes": 10950,
+      "path": "tests/shell_turning_tests.cpp",
+      "scope": "computational",
+      "sha256": "c54f3bb2c61fcb41cc7ef345ee3ad97b992f5ac11ef1892603d252775a908d44"
+    },
+    {
+      "bytes": 8002,
+      "path": "tests/toy_ray_reference.hpp",
+      "scope": "computational",
+      "sha256": "545852880aebe476655ec45725693991c295f0fa47f79b826702028fda782f81"
+    },
+    {
+      "bytes": 2389,
+      "path": "tests/validation_failures.cpp",
+      "scope": "computational",
+      "sha256": "51dcaae09c4af9d696455d35c2793ce837c0aa290ebca977b624c79d2b0c9f10"
+    },
+    {
+      "bytes": 1975,
+      "path": "tests/vulkan_device_audit.cpp",
+      "scope": "computational",
+      "sha256": "ea975b6ca69503db7be281e9c12a760cf56195a978570a6450bb3dfbb9957d1b"
+    },
+    {
+      "bytes": 5452,
+      "path": "tests/vulkan_metric_comparison.cpp",
+      "scope": "computational",
+      "sha256": "981424985963effeea69b60452ef757d93fd6a5d5f176d0ca2750a055cd95274"
+    },
+    {
+      "bytes": 6166,
+      "path": "tests/vulkan_ray_comparison.cpp",
+      "scope": "computational",
+      "sha256": "38c8a7ac2c5af63cb0c14cf1ff9b607178f74ccad5ab3dc0c33026f30daedfa9"
+    },
+    {
+      "bytes": 55277,
+      "path": "tests/zamo_shadow_validation.cpp",
+      "scope": "computational",
+      "sha256": "dfdfd857d126e2154f521958cffa8a0712245c9c96fea4954268ba2162ff1317"
+    },
+    {
+      "bytes": 1275,
+      "path": "third_party/glfw/.editorconfig",
+      "scope": "computational",
+      "sha256": "499cc346b48da104a8922ee786038a93e5295508465d70af8aa1bf8310d85872"
+    },
+    {
+      "bytes": 147,
+      "path": "third_party/glfw/.github/CODEOWNERS",
+      "scope": "computational",
+      "sha256": "de2b101751b4f93b9ad755aeb6d3610eff6e937e645601f967fc936194edc221"
+    },
+    {
+      "bytes": 4057,
+      "path": "third_party/glfw/.github/workflows/build.yml",
+      "scope": "computational",
+      "sha256": "b3095a4d7447aef03d26a28a99772b4d33237957477b22db231095be1d8c82d6"
+    },
+    {
+      "bytes": 384,
+      "path": "third_party/glfw/.mailmap",
+      "scope": "computational",
+      "sha256": "ed6914588dbbfc8802834cee0acb601ee960edbfaec6f713bd93124702e8395b"
+    },
+    {
+      "bytes": 1653,
+      "path": "third_party/glfw/CMake/GenerateMappings.cmake",
+      "scope": "computational",
+      "sha256": "19f7b491f65c7d14f61c9d497af8dc83e4bb4fa9e079f7d56c0028ca17cf55f0"
+    },
+    {
+      "bytes": 1297,
+      "path": "third_party/glfw/CMake/Info.plist.in",
+      "scope": "computational",
+      "sha256": "19fe6a501764fc2f37f998a53d6422c1a64ea16c8e7c844153c617ab4cf6142b"
+    },
+    {
+      "bytes": 1117,
+      "path": "third_party/glfw/CMake/cmake_uninstall.cmake.in",
+      "scope": "computational",
+      "sha256": "e720f60e30bf9dcd6eafa092d3a8fe9eea48e038ce8a0cd8b41b5fc96ab69faf"
+    },
+    {
+      "bytes": 440,
+      "path": "third_party/glfw/CMake/glfw3.pc.in",
+      "scope": "computational",
+      "sha256": "90616f3779a2d7491e644b61d44a478b7c9cdfa06c3b8cb44c2ef2e515fc8008"
+    },
+    {
+      "bytes": 115,
+      "path": "third_party/glfw/CMake/glfw3Config.cmake.in",
+      "scope": "computational",
+      "sha256": "0d266f3f8b0ae324404dc36a8ca8af01b5bf58d15b1ce806e9e318e895e9b755"
+    },
+    {
+      "bytes": 596,
+      "path": "third_party/glfw/CMake/i686-w64-mingw32-clang.cmake",
+      "scope": "computational",
+      "sha256": "9cf42de30ad84095801b2dff752df930c692680089d8f47c77f9445cdacece24"
+    },
+    {
+      "bytes": 588,
+      "path": "third_party/glfw/CMake/i686-w64-mingw32.cmake",
+      "scope": "computational",
+      "sha256": "f26d94a113c02bba7cded9715bcf51a9d04ba40d497ccffc05b4ef256aa8399f"
+    },
+    {
+      "bytes": 747,
+      "path": "third_party/glfw/CMake/modules/FindEpollShim.cmake",
+      "scope": "computational",
+      "sha256": "3689ad05d6b6460d2b5313130d3cb474ab195f6698690737582d3ee98cb4c942"
+    },
+    {
+      "bytes": 445,
+      "path": "third_party/glfw/CMake/modules/FindOSMesa.cmake",
+      "scope": "computational",
+      "sha256": "0ab39cf837f390904cb4bf68db853346b53fa5d4dc047f554f188b44b4454643"
+    },
+    {
+      "bytes": 606,
+      "path": "third_party/glfw/CMake/x86_64-w64-mingw32-clang.cmake",
+      "scope": "computational",
+      "sha256": "7f2ea33c57c8726be2a1dfac703d2a4f7c3993c3345ce5c927f0fa1474fc2083"
+    },
+    {
+      "bytes": 598,
+      "path": "third_party/glfw/CMake/x86_64-w64-mingw32.cmake",
+      "scope": "computational",
+      "sha256": "e68df045d9aa039fef4f984a7c8e48cd6ac3df8960adc960f6e45674d3f6cee3"
+    },
+    {
+      "bytes": 5951,
+      "path": "third_party/glfw/CMakeLists.txt",
+      "scope": "computational",
+      "sha256": "9febf64a1d8cabfdb77c8cd5812232c65f58b8ad96271ef2975bde5058bdc344"
+    },
+    {
+      "bytes": 5328,
+      "path": "third_party/glfw/CONTRIBUTORS.md",
+      "scope": "computational",
+      "sha256": "3a196513663e7dac03434550ee923514fe5d147088ca087af38c0894a6f01bb3"
+    },
+    {
+      "bytes": 904,
+      "path": "third_party/glfw/LICENSE.md",
+      "scope": "computational",
+      "sha256": "149704059b5d0bf551637e50042dd4de9c2cae921021f6636298911e3a5f9462"
+    },
+    {
+      "bytes": 25748,
+      "path": "third_party/glfw/README.md",
+      "scope": "computational",
+      "sha256": "a055751aef88c5d95a688ca6d2446e84e9d289729976923676df08d990256455"
+    },
+    {
+      "bytes": 8053,
+      "path": "third_party/glfw/deps/getopt.c",
+      "scope": "computational",
+      "sha256": "170fbc3e023f7a4499b3407c3633f8d4a2d8bcba9d8f3d90a44cc2316d75378d"
+    },
+    {
+      "bytes": 2136,
+      "path": "third_party/glfw/deps/getopt.h",
+      "scope": "computational",
+      "sha256": "17999999aa29bca7239fee8d1c2fc98fb85682dc38d4f793b46e084f777401bd"
+    },
+    {
+      "bytes": 326437,
+      "path": "third_party/glfw/deps/glad/gl.h",
+      "scope": "computational",
+      "sha256": "372d175f3d334c59357828f01893fb140605ded6a285bf2977dcb0b9ee3b39ea"
+    },
+    {
+      "bytes": 81113,
+      "path": "third_party/glfw/deps/glad/gles2.h",
+      "scope": "computational",
+      "sha256": "fc72c16afbcb8fdf4f6465a0894b6c3148ebf44328363bd69f5ba0d6c2ea8ca7"
+    },
+    {
+      "bytes": 336197,
+      "path": "third_party/glfw/deps/glad/vulkan.h",
+      "scope": "computational",
+      "sha256": "e9a5eb14a8cd7d7b5e8d57ab4431e21086d4d8f9f6c8e4958938aee5c9311b2b"
+    },
+    {
+      "bytes": 14123,
+      "path": "third_party/glfw/deps/linmath.h",
+      "scope": "computational",
+      "sha256": "6b2d4f919f0d261d261ff89a97d695c034a439cc7d3b00fbc5cd9983b7772e1d"
+    },
+    {
+      "bytes": 3111,
+      "path": "third_party/glfw/deps/mingw/_mingw_dxhelper.h",
+      "scope": "computational",
+      "sha256": "f3145fbc30022e781a9836d72bd3a628a45495bda5b48f90983e9ae7ebe94b82"
+    },
+    {
+      "bytes": 112560,
+      "path": "third_party/glfw/deps/mingw/dinput.h",
+      "scope": "computational",
+      "sha256": "72316ef3309b6a9b60d16f064a84fc5af6efd84546d69ac557b117bc398e3aab"
+    },
+    {
+      "bytes": 7950,
+      "path": "third_party/glfw/deps/mingw/xinput.h",
+      "scope": "computational",
+      "sha256": "4f78d7a9df66252a02342dc874b786ed666f9c32b523ae3734d44d87e09fc0e7"
+    },
+    {
+      "bytes": 990698,
+      "path": "third_party/glfw/deps/nuklear.h",
+      "scope": "computational",
+      "sha256": "ef5ccb732c1d6733b237c322557b2ce427683b97aece7fd1d923c508a951f35e"
+    },
+    {
+      "bytes": 14081,
+      "path": "third_party/glfw/deps/nuklear_glfw_gl2.h",
+      "scope": "computational",
+      "sha256": "a2f3c9ba984ab12fac2181daf079b7a9ba01cdb7f611d24b3d4d9ead086022ee"
+    },
+    {
+      "bytes": 71221,
+      "path": "third_party/glfw/deps/stb_image_write.h",
+      "scope": "computational",
+      "sha256": "cbd5f0ad7a9cf4468affb36354a1d2338034f2c12473cf1a8e32053cb6914a05"
+    },
+    {
+      "bytes": 13065,
+      "path": "third_party/glfw/deps/tinycthread.c",
+      "scope": "computational",
+      "sha256": "7c3758f5fa55a7898c1f71ed2222f29711015b1e33ccf2a183b64d79f69b2b0c"
+    },
+    {
+      "bytes": 15660,
+      "path": "third_party/glfw/deps/tinycthread.h",
+      "scope": "computational",
+      "sha256": "3d5b4d2ef243b8a90775aa8c8dfead82fc1a0e127acc6ef274d4bce92e86cf6b"
+    },
+    {
+      "bytes": 4636,
+      "path": "third_party/glfw/deps/wayland/fractional-scale-v1.xml",
+      "scope": "computational",
+      "sha256": "5941de5d28f427ecdadddc8623a6f6af0a30b0ab4726847236ba7a7652b81316"
+    },
+    {
+      "bytes": 4017,
+      "path": "third_party/glfw/deps/wayland/idle-inhibit-unstable-v1.xml",
+      "scope": "computational",
+      "sha256": "c2ac9f002c6669ca6c02eb9b587b8e9108e3ce6deab4a2de58b576f4f864ca38"
+    },
+    {
+      "bytes": 15451,
+      "path": "third_party/glfw/deps/wayland/pointer-constraints-unstable-v1.xml",
+      "scope": "computational",
+      "sha256": "92553c58baa04931afcd409a9d947518b70bc986b847ccb1ef74f377779b0b5d"
+    },
+    {
+      "bytes": 6584,
+      "path": "third_party/glfw/deps/wayland/relative-pointer-unstable-v1.xml",
+      "scope": "computational",
+      "sha256": "ab4930dd3084f732b6fdd12ee6dbd0a112a758ed8a57b170366391dbeb1a22ff"
+    },
+    {
+      "bytes": 8232,
+      "path": "third_party/glfw/deps/wayland/viewporter.xml",
+      "scope": "computational",
+      "sha256": "b327b824ff2799032aa852d9607f8db8f0f672474444812a3b0997d87aa5dd0b"
+    },
+    {
+      "bytes": 144896,
+      "path": "third_party/glfw/deps/wayland/wayland.xml",
+      "scope": "computational",
+      "sha256": "053bdb354709893dbfb5cee4ee6fbb3eadb4fed78e6d761bb7dc8f30513d6541"
+    },
+    {
+      "bytes": 9016,
+      "path": "third_party/glfw/deps/wayland/xdg-activation-v1.xml",
+      "scope": "computational",
+      "sha256": "d8418be2d5738d50aff788bef1c7574f33f26659aa045447ff2ef9b78c58fe01"
+    },
+    {
+      "bytes": 7089,
+      "path": "third_party/glfw/deps/wayland/xdg-decoration-unstable-v1.xml",
+      "scope": "computational",
+      "sha256": "88e2d60f7ca8df5e034b816fb8a4b3f0b2abd6fc07b4ee6ca058a72404ea6904"
+    },
+    {
+      "bytes": 60418,
+      "path": "third_party/glfw/deps/wayland/xdg-shell.xml",
+      "scope": "computational",
+      "sha256": "b72112a7a1f9b2ad94ffa59468753ced568d6e7b2069df94a9d437e488b8506e"
+    },
+    {
+      "bytes": 241826,
+      "path": "third_party/glfw/include/GLFW/glfw3.h",
+      "scope": "computational",
+      "sha256": "aa370985f6b493bbe0358a36ab49f5780a6397c0209c6d98a62143dea595b73c"
+    },
+    {
+      "bytes": 21201,
+      "path": "third_party/glfw/include/GLFW/glfw3native.h",
+      "scope": "computational",
+      "sha256": "40035881fdc02a9ab265c2086338f749a0411e1c15b68fada678fa34e8bd8958"
+    },
+    {
+      "bytes": 13945,
+      "path": "third_party/glfw/src/CMakeLists.txt",
+      "scope": "computational",
+      "sha256": "2cb9fd73457e14a751f12fac3556c576fcffb54e25c462b5aeb7fe76d4d94aae"
+    },
+    {
+      "bytes": 24776,
+      "path": "third_party/glfw/src/cocoa_init.m",
+      "scope": "computational",
+      "sha256": "0ce5d37c469a75599257309d3a8d8775d6d1fbc3efa0c99152a77a172069fe1f"
+    },
+    {
+      "bytes": 1849,
+      "path": "third_party/glfw/src/cocoa_joystick.h",
+      "scope": "computational",
+      "sha256": "88fb37c0b8bbfea19343e75cfa7090eef7bed67c93bcd789af356ee6c2401210"
+    },
+    {
+      "bytes": 15740,
+      "path": "third_party/glfw/src/cocoa_joystick.m",
+      "scope": "computational",
+      "sha256": "eddd49dc3862a4e16be208c36e540f52fe7f987acf315c4d969eaa6ec32f09b0"
+    },
+    {
+      "bytes": 19638,
+      "path": "third_party/glfw/src/cocoa_monitor.m",
+      "scope": "computational",
+      "sha256": "6659a015ce51ca44f0cde5335b8c4e2baacf3a492cccaa883db10a7829a8263f"
+    },
+    {
+      "bytes": 12920,
+      "path": "third_party/glfw/src/cocoa_platform.h",
+      "scope": "computational",
+      "sha256": "b4d608d7fe69fe147ba600aee4700a9e0b40be225ae9abd698f711fdbf944320"
+    },
+    {
+      "bytes": 1890,
+      "path": "third_party/glfw/src/cocoa_time.c",
+      "scope": "computational",
+      "sha256": "a0094a28331172292a7c506935ee01adb0184d18e89e038ea471094781dd0ce4"
+    },
+    {
+      "bytes": 1378,
+      "path": "third_party/glfw/src/cocoa_time.h",
+      "scope": "computational",
+      "sha256": "596db814eaead6d4cf304fa6ae30688362ce98c9ee551eb3871c3cc166876804"
+    },
+    {
+      "bytes": 60250,
+      "path": "third_party/glfw/src/cocoa_window.m",
+      "scope": "computational",
+      "sha256": "1c280c56aae81d656f736acb69d3a35b8ac55db234665203df953560dd085a78"
+    },
+    {
+      "bytes": 25670,
+      "path": "third_party/glfw/src/context.c",
+      "scope": "computational",
+      "sha256": "839a96ff1dcc712129f9bcb9522b8d459b9d6a9b8d029ce32c729c523b9ea012"
+    },
+    {
+      "bytes": 29593,
+      "path": "third_party/glfw/src/egl_context.c",
+      "scope": "computational",
+      "sha256": "933150523fa2cf24e8f3e7cd279b0d8308635f769e052f035e4088c4ebc83ccf"
+    },
+    {
+      "bytes": 771,
+      "path": "third_party/glfw/src/glfw.rc.in",
+      "scope": "computational",
+      "sha256": "14f50b28f6d801c6a99549376face170970023ac139a33e4555affecfebe24f1"
+    },
+    {
+      "bytes": 23690,
+      "path": "third_party/glfw/src/glx_context.c",
+      "scope": "computational",
+      "sha256": "e04e784373d59a3f3b08e3de15c8fbfef61c22b9325a2f3d9922a21cc4dd504e"
+    },
+    {
+      "bytes": 14504,
+      "path": "third_party/glfw/src/init.c",
+      "scope": "computational",
+      "sha256": "61ac2188518cae852bc2bfe0c0f2363dad365f8166099a3aa78a3c9ff8504654"
+    },
+    {
+      "bytes": 41395,
+      "path": "third_party/glfw/src/input.c",
+      "scope": "computational",
+      "sha256": "f5efbc7ec6a38a6c462cd2311dbe51616a4810c4dc8d1a2f735195e5cf72c753"
+    },
+    {
+      "bytes": 35817,
+      "path": "third_party/glfw/src/internal.h",
+      "scope": "computational",
+      "sha256": "cc6e93eac5b9957c99bc90e95c34d62f184395345de33e554ab77c23a1148ae0"
+    },
+    {
+      "bytes": 12404,
+      "path": "third_party/glfw/src/linux_joystick.c",
+      "scope": "computational",
+      "sha256": "4e9b95479d3df624d3a5de2b9d708f418cf7e0870c5f05ff2f1a1f88ec84e608"
+    },
+    {
+      "bytes": 2322,
+      "path": "third_party/glfw/src/linux_joystick.h",
+      "scope": "computational",
+      "sha256": "af4e596d0ed1e7eed2699b6567d6ed46157f7c9887bfef15aad5ca15b2a17590"
+    },
+    {
+      "bytes": 256981,
+      "path": "third_party/glfw/src/mappings.h",
+      "scope": "computational",
+      "sha256": "66808cb6f704c7d963a7bae65c02a082f9bb2b5a854d033ce4bd57e22368433f"
+    },
+    {
+      "bytes": 5280,
+      "path": "third_party/glfw/src/mappings.h.in",
+      "scope": "computational",
+      "sha256": "4fba82df496c86a2364733716f214e5f73fbc40376a93e667cda9d877e085c79"
+    },
+    {
+      "bytes": 15194,
+      "path": "third_party/glfw/src/monitor.c",
+      "scope": "computational",
+      "sha256": "1671bbe37502419f08b8072e80a13a78494feea6c008ccb2727ebd44a43afd6a"
+    },
+    {
+      "bytes": 11919,
+      "path": "third_party/glfw/src/nsgl_context.m",
+      "scope": "computational",
+      "sha256": "a0d683795265b18cd183be6a185742e44b866ee80c21d7fcc4ad4363c16d2832"
+    },
+    {
+      "bytes": 14437,
+      "path": "third_party/glfw/src/null_init.c",
+      "scope": "computational",
+      "sha256": "041b02232d5378e9a3ac3fd12da1e91f8276ef1459303e2094ee820e675a3dd1"
+    },
+    {
+      "bytes": 1753,
+      "path": "third_party/glfw/src/null_joystick.c",
+      "scope": "computational",
+      "sha256": "5da9465db10034b81b87c3722328bff7dfc3b4a94670cce71672b7d464fd6820"
+    },
+    {
+      "bytes": 1424,
+      "path": "third_party/glfw/src/null_joystick.h",
+      "scope": "computational",
+      "sha256": "ccd7bec0a32632b0fc81d1c085bba3b89e01a9dc4b6b28cde9ea394909fc700d"
+    },
+    {
+      "bytes": 5178,
+      "path": "third_party/glfw/src/null_monitor.c",
+      "scope": "computational",
+      "sha256": "12face8cf2462b5590d8f1ac5502184e0246696f5d5b117dddca3dfbb5658759"
+    },
+    {
+      "bytes": 11827,
+      "path": "third_party/glfw/src/null_platform.h",
+      "scope": "computational",
+      "sha256": "a93596d5f503d0378de4c347f55d0cd63aad471022a09e3c474f516416520c0e"
+    },
+    {
+      "bytes": 18608,
+      "path": "third_party/glfw/src/null_window.c",
+      "scope": "computational",
+      "sha256": "244c6843b93298f97066a5d40324286b9a2de240200ead019470b0e8846595d9"
+    },
+    {
+      "bytes": 11935,
+      "path": "third_party/glfw/src/osmesa_context.c",
+      "scope": "computational",
+      "sha256": "2bb65aa05606a7bb652ee59fb481c45abb223795163fe9c57d808de3e082b09b"
+    },
+    {
+      "bytes": 6566,
+      "path": "third_party/glfw/src/platform.c",
+      "scope": "computational",
+      "sha256": "117f5e8698eb4f028d7f80ae594fd2b2eb141f55c6122a6c24fd45d1b90209bc"
+    },
+    {
+      "bytes": 6421,
+      "path": "third_party/glfw/src/platform.h",
+      "scope": "computational",
+      "sha256": "14498e12db44b36f695d5cacd2ca2763fd6d6c4d2c5ef3fdcfa103e79d54b49b"
+    },
+    {
+      "bytes": 1816,
+      "path": "third_party/glfw/src/posix_module.c",
+      "scope": "computational",
+      "sha256": "e78e668d01a15695b1d44da660daf8c0fd1696cce1c9b5cca0a2e4e41d67dbe1"
+    },
+    {
+      "bytes": 3044,
+      "path": "third_party/glfw/src/posix_poll.c",
+      "scope": "computational",
+      "sha256": "0432a56fef57a1cd39bee3c0c5120e17991ff8aa56ce8ce39ff1bdac425ce02a"
+    },
+    {
+      "bytes": 1292,
+      "path": "third_party/glfw/src/posix_poll.h",
+      "scope": "computational",
+      "sha256": "4aaeb5ddcc8e8b617463d07d769264d359c8c508a5a9cc9a02b4b49f8dadb3a5"
+    },
+    {
+      "bytes": 3245,
+      "path": "third_party/glfw/src/posix_thread.c",
+      "scope": "computational",
+      "sha256": "898502d86490e8c2e401a3de7a63e7c9566aa99333d676c5c4aaca69b35022b3"
+    },
+    {
+      "bytes": 1674,
+      "path": "third_party/glfw/src/posix_thread.h",
+      "scope": "computational",
+      "sha256": "10e4679442f9650ec2f423572537a0326e972b8f0c02cfb5fb76c3cd107733cd"
+    },
+    {
+      "bytes": 2206,
+      "path": "third_party/glfw/src/posix_time.c",
+      "scope": "computational",
+      "sha256": "548431aa62bc3ead2a82c1f049fd53659b7a92c8702abaa9d9176a0583edadb2"
+    },
+    {
+      "bytes": 1489,
+      "path": "third_party/glfw/src/posix_time.h",
+      "scope": "computational",
+      "sha256": "eccea70e4ada8f6c0fcca9eeb5de01781d2422d28bfe63e795aeb74a7400125c"
+    },
+    {
+      "bytes": 11947,
+      "path": "third_party/glfw/src/vulkan.c",
+      "scope": "computational",
+      "sha256": "5948e9f0b347640473d23f7dfd94cea82375149639f2cbd288491747312d3a33"
+    },
+    {
+      "bytes": 27071,
+      "path": "third_party/glfw/src/wgl_context.c",
+      "scope": "computational",
+      "sha256": "48c2cad35265f7311146182ec4ad811f551929cb6847ef3a0653abbedec88bf8"
+    },
+    {
+      "bytes": 28467,
+      "path": "third_party/glfw/src/win32_init.c",
+      "scope": "computational",
+      "sha256": "48d72f04c500d0c0b2e91444429e141972f81ae03072f6d28b26222ac06983c1"
+    },
+    {
+      "bytes": 26711,
+      "path": "third_party/glfw/src/win32_joystick.c",
+      "scope": "computational",
+      "sha256": "b9c95eed4eeed6eb64864fa031349de83e3421ab7a6c3dcd86cf80fd6b1ad8b1"
+    },
+    {
+      "bytes": 1870,
+      "path": "third_party/glfw/src/win32_joystick.h",
+      "scope": "computational",
+      "sha256": "41cd05e7477314241c5aca9b840682a4ba4b82c358d401612ab83e5bce167c39"
+    },
+    {
+      "bytes": 1822,
+      "path": "third_party/glfw/src/win32_module.c",
+      "scope": "computational",
+      "sha256": "58f0b4a96584b6ad582e90974b07ecbe9ed8d402cadbe54383afbb0ba37d6a0b"
+    },
+    {
+      "bytes": 16993,
+      "path": "third_party/glfw/src/win32_monitor.c",
+      "scope": "computational",
+      "sha256": "4645c2972d8dbf9e11e287b05333f6db585615541217e3dd5d61e9f9fca32e97"
+    },
+    {
+      "bytes": 25101,
+      "path": "third_party/glfw/src/win32_platform.h",
+      "scope": "computational",
+      "sha256": "f7b39efe79c9731762c9dd9848431e795a66fccc871d7ae72930c5e1aeed7c4c"
+    },
+    {
+      "bytes": 3085,
+      "path": "third_party/glfw/src/win32_thread.c",
+      "scope": "computational",
+      "sha256": "92ee8a23a6a729c2cff69975d2dfc46d019a2be0494d17b705495cd3042dcd36"
+    },
+    {
+      "bytes": 1956,
+      "path": "third_party/glfw/src/win32_thread.h",
+      "scope": "computational",
+      "sha256": "cefdd801463eb6901e3ebae02b8204e87e44bd06b2bdc562794dc890886ecc97"
+    },
+    {
+      "bytes": 1911,
+      "path": "third_party/glfw/src/win32_time.c",
+      "scope": "computational",
+      "sha256": "16c54578192e06205a0dbe675ffc93f73df1d971ace8e81ad2a0ba868c99c4e6"
+    },
+    {
+      "bytes": 1703,
+      "path": "third_party/glfw/src/win32_time.h",
+      "scope": "computational",
+      "sha256": "dabfeb7478945930cb6c4ded23cfe76f6e6577b68523c5d8ac2acb1b63b35b21"
+    },
+    {
+      "bytes": 81112,
+      "path": "third_party/glfw/src/win32_window.c",
+      "scope": "computational",
+      "sha256": "863d05bc961acab390e7d4329ced8a2d36f9b10106b9258376d2f72b0cac297f"
+    },
+    {
+      "bytes": 35148,
+      "path": "third_party/glfw/src/window.c",
+      "scope": "computational",
+      "sha256": "c102fd119fd7423ca0cebd17c1fba722d7fe149ef689f09962f6ff79c82dd289"
+    },
+    {
+      "bytes": 45024,
+      "path": "third_party/glfw/src/wl_init.c",
+      "scope": "computational",
+      "sha256": "56f0d25a4e665f959749427c7c90498f414c9f515403671027e2da6a0000f77d"
+    },
+    {
+      "bytes": 8627,
+      "path": "third_party/glfw/src/wl_monitor.c",
+      "scope": "computational",
+      "sha256": "47161326acd583a0787a37927535ffdbe03561923f40a316d9f02b40c28ec16b"
+    },
+    {
+      "bytes": 34576,
+      "path": "third_party/glfw/src/wl_platform.h",
+      "scope": "computational",
+      "sha256": "fb13b006ad8e13df67a8c267e880324f6f131e1d5cba8b072061e91efa30ee71"
+    },
+    {
+      "bytes": 102422,
+      "path": "third_party/glfw/src/wl_window.c",
+      "scope": "computational",
+      "sha256": "62e33d84a5f1ebc7d06979194aea50351a9a8d396b27f20e894fc693ed3a117f"
+    },
+    {
+      "bytes": 70476,
+      "path": "third_party/glfw/src/x11_init.c",
+      "scope": "computational",
+      "sha256": "4c091f59628d3221c6fc2fb3e1451b6147dc86118fa371f06984915581e735e8"
+    },
+    {
+      "bytes": 20136,
+      "path": "third_party/glfw/src/x11_monitor.c",
+      "scope": "computational",
+      "sha256": "cd1c15c5fc684a58472ded4cbad3509f383c6d6611b4437d8469b54feedbdaab"
+    },
+    {
+      "bytes": 44741,
+      "path": "third_party/glfw/src/x11_platform.h",
+      "scope": "computational",
+      "sha256": "c35ff50d31c47eee88a7613b8ff47611d6bd892657545b6d44b1911dc7b7466a"
+    },
+    {
+      "bytes": 106290,
+      "path": "third_party/glfw/src/x11_window.c",
+      "scope": "computational",
+      "sha256": "7c5a60a507767c5b311437a74e85e547914df631be4f74fa75746063762019da"
+    },
+    {
+      "bytes": 22943,
+      "path": "third_party/glfw/src/xkb_unicode.c",
+      "scope": "computational",
+      "sha256": "57ddc9155229a445c1f6e1542fe3ddce8d4ad0c5d5f7f0c3da476d58fb5f650c"
+    },
+    {
+      "bytes": 1288,
+      "path": "third_party/glfw/src/xkb_unicode.h",
+      "scope": "computational",
+      "sha256": "b80f53223f42108f4ff0fc51cb8e94c2c9b3ba87888760842958bf43bd4cd19a"
+    },
+    {
+      "bytes": 16670,
+      "path": "third_party/include/vk_video/vulkan_video_codec_av1std.h",
+      "scope": "computational",
+      "sha256": "76c408eb8dce6e1f068594eb3239e75a05e3395f2ce10fef512599bd916fe879"
+    },
+    {
+      "bytes": 4250,
+      "path": "third_party/include/vk_video/vulkan_video_codec_av1std_decode.h",
+      "scope": "computational",
+      "sha256": "2b912389d39d6627ee8af01e052e9557d213b27c0b79a0e25f5366cfe1942f1a"
+    },
+    {
+      "bytes": 5979,
+      "path": "third_party/include/vk_video/vulkan_video_codec_av1std_encode.h",
+      "scope": "computational",
+      "sha256": "93ad363de123988cd7b27acc7930f7f93497bc2e5d74f8420ee8ba18e8746e0a"
+    },
+    {
+      "bytes": 13853,
+      "path": "third_party/include/vk_video/vulkan_video_codec_h264std.h",
+      "scope": "computational",
+      "sha256": "05859b58e094a8dcc88cb3766a1fcbfd62bcaab20c93d2c3e5cec853628f277c"
+    },
+    {
+      "bytes": 2722,
+      "path": "third_party/include/vk_video/vulkan_video_codec_h264std_decode.h",
+      "scope": "computational",
+      "sha256": "d2be01f84f773644a24b7634f49e63ff8c6f0e807119b1bf609176585031f93a"
+    },
+    {
+      "bytes": 6878,
+      "path": "third_party/include/vk_video/vulkan_video_codec_h264std_encode.h",
+      "scope": "computational",
+      "sha256": "c68a1fa4ebadd1b50992a61fb93310a6686d5ea932b91b850d3ad9bc8dec488e"
+    },
+    {
+      "bytes": 23416,
+      "path": "third_party/include/vk_video/vulkan_video_codec_h265std.h",
+      "scope": "computational",
+      "sha256": "a5d0b2e7b47843db610d2769c7b0202c90cd7db82108b60fb2631d1c7976a395"
+    },
+    {
+      "bytes": 2428,
+      "path": "third_party/include/vk_video/vulkan_video_codec_h265std_decode.h",
+      "scope": "computational",
+      "sha256": "944646ced5bf9f49b79144c18369f0b932900c375fd81c262a3c30e9c60de8c6"
+    },
+    {
+      "bytes": 7462,
+      "path": "third_party/include/vk_video/vulkan_video_codec_h265std_encode.h",
+      "scope": "computational",
+      "sha256": "aa8c75beac0962abf752a5ec741a42b1a108ee28fb6b3abcdc995e57e20c6c14"
+    },
+    {
+      "bytes": 5376,
+      "path": "third_party/include/vk_video/vulkan_video_codec_vp9std.h",
+      "scope": "computational",
+      "sha256": "85d729b33906f815157bd63ddef986712f250f5279dedb52d6b81d0478836658"
+    },
+    {
+      "bytes": 2371,
+      "path": "third_party/include/vk_video/vulkan_video_codec_vp9std_decode.h",
+      "scope": "computational",
+      "sha256": "318a21532405f31a7b977c340effbf5bff30790734153c29ed6ad9a8230efbaf"
+    },
+    {
+      "bytes": 660,
+      "path": "third_party/include/vk_video/vulkan_video_codecs_common.h",
+      "scope": "computational",
+      "sha256": "7afc98e84d3bea72e40a65161463abbd4be2ff1e1853eca3f8c331afb7329a8b"
+    },
+    {
+      "bytes": 8164,
+      "path": "third_party/include/vulkan/vk_icd.h",
+      "scope": "computational",
+      "sha256": "6c80200a7fcc4c7da3170ef9dc674eab142c92767bfc9733c98649bce78aecb9"
+    },
+    {
+      "bytes": 7073,
+      "path": "third_party/include/vulkan/vk_layer.h",
+      "scope": "computational",
+      "sha256": "861cd0ea24c7d81b935e5726520d184dbbc00e571f9089e17a723ccbbc1944e2"
+    },
+    {
+      "bytes": 2828,
+      "path": "third_party/include/vulkan/vk_platform.h",
+      "scope": "computational",
+      "sha256": "2fa47dd60cd94eb6fd8d7615953878f5664eb57fdff3b1b9b856c1d8f1496737"
+    },
+    {
+      "bytes": 1616,
+      "path": "third_party/include/vulkan/vulkan.h",
+      "scope": "computational",
+      "sha256": "20c7e1ac42fe62b3ed526612c52ddfc21e2265f5c69ca9a5e9dd182cc4c8625b"
+    },
+    {
+      "bytes": 6330,
+      "path": "third_party/include/vulkan/vulkan_android.h",
+      "scope": "computational",
+      "sha256": "78fab3e0a766fd6eba180fa2796b349fb0a99cb0a9299449bb30d8f65f92a0dc"
+    },
+    {
+      "bytes": 16005,
+      "path": "third_party/include/vulkan/vulkan_beta.h",
+      "scope": "computational",
+      "sha256": "dfa916dcfdf7fcfd4eb77be0df2566181ff3040185688e21e0a02823b68d6d07"
+    },
+    {
+      "bytes": 1204373,
+      "path": "third_party/include/vulkan/vulkan_core.h",
+      "scope": "computational",
+      "sha256": "3172a758081a172f4c46771a88046a53d5791ef2bd24329ff4bd7ed8c6f12abd"
+    },
+    {
+      "bytes": 1952,
+      "path": "third_party/include/vulkan/vulkan_directfb.h",
+      "scope": "computational",
+      "sha256": "acff0a733105be109396347c0e9030f745fbfcb616b9d4863625663412dbb1ba"
+    },
+    {
+      "bytes": 12900,
+      "path": "third_party/include/vulkan/vulkan_fuchsia.h",
+      "scope": "computational",
+      "sha256": "57004582575a54b37810052fbb0baeec1718205b4145af1a5bbebf2c2bdb445a"
+    },
+    {
+      "bytes": 1939,
+      "path": "third_party/include/vulkan/vulkan_ggp.h",
+      "scope": "computational",
+      "sha256": "b2623cef3f52da5cee783abb89506332ba67bb4841919dfc3a52c47d22947ead"
+    },
+    {
+      "bytes": 1352,
+      "path": "third_party/include/vulkan/vulkan_ios.h",
+      "scope": "computational",
+      "sha256": "7969c250ac9bba67739fcfcdb6ec7cdf544acde4d0c9671c89cc53fa9c77c76f"
+    },
+    {
+      "bytes": 1384,
+      "path": "third_party/include/vulkan/vulkan_macos.h",
+      "scope": "computational",
+      "sha256": "45b7c4d4b4cd414fc39e41280e30904b9c5fbd2144a2a03ff7067f8d38f3b365"
+    },
+    {
+      "bytes": 8066,
+      "path": "third_party/include/vulkan/vulkan_metal.h",
+      "scope": "computational",
+      "sha256": "afa55b54122a392523867f1816894af6a631de3ea88dca4b3d1cbb1042519575"
+    },
+    {
+      "bytes": 1434,
+      "path": "third_party/include/vulkan/vulkan_ohos.h",
+      "scope": "computational",
+      "sha256": "631b721377ef49a5e54616afb86db8deffd38761ec01f14021bf15334aaa1135"
+    },
+    {
+      "bytes": 4193,
+      "path": "third_party/include/vulkan/vulkan_screen.h",
+      "scope": "computational",
+      "sha256": "3d5fa364a3456412be415547715b03de0a24b218017af724d4cc2622de487495"
+    },
+    {
+      "bytes": 1325,
+      "path": "third_party/include/vulkan/vulkan_vi.h",
+      "scope": "computational",
+      "sha256": "b0f1c42511ed8261e58b946fbd1abbb8e7112d1358d5822b3d17d3d2dffeb160"
+    },
+    {
+      "bytes": 1952,
+      "path": "third_party/include/vulkan/vulkan_wayland.h",
+      "scope": "computational",
+      "sha256": "31778a15a99e3b311d172d8e34f77be9d468aa252d81515dd7bda6eed8ec3f0a"
+    },
+    {
+      "bytes": 15757,
+      "path": "third_party/include/vulkan/vulkan_win32.h",
+      "scope": "computational",
+      "sha256": "256a5fb80fe43611f7218a63d8a1fc4d84e51d9e6b250f7254cae235d7c8d4a5"
+    },
+    {
+      "bytes": 1966,
+      "path": "third_party/include/vulkan/vulkan_xcb.h",
+      "scope": "computational",
+      "sha256": "ef1649726548e795adec965fc48123be7362efcab10ac78bc8fe146ac5cadfd0"
+    },
+    {
+      "bytes": 1947,
+      "path": "third_party/include/vulkan/vulkan_xlib.h",
+      "scope": "computational",
+      "sha256": "64c2aa82db9c3786dd6fccc47b3bf13593fb818d70e21c45cd87bcb754391555"
+    },
+    {
+      "bytes": 1497,
+      "path": "third_party/include/vulkan/vulkan_xlib_xrandr.h",
+      "scope": "computational",
+      "sha256": "a5d6e3fe02443dd249623f99bb66d2c03105e9180ce2cb94a051137020b17d4b"
+    },
+    {
+      "bytes": 0,
+      "path": "third_party/licenses/.gitkeep",
+      "scope": "computational",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 10280,
+      "path": "third_party/licenses/khronos-vulkan-headers-1.4.321-Apache-2.0.txt",
+      "scope": "computational",
+      "sha256": "074e6e32c86a4c0ef8b3ed25b721ca23aca83df277cd88106ef7177c354615ff"
+    },
+    {
+      "bytes": 1076,
+      "path": "third_party/licenses/nlohmann-json-3.12.0.txt",
+      "scope": "computational",
+      "sha256": "46a65cffd1ea955132d95a8dd921640714a8d6b537d2e4e482d31145ae95b603"
+    },
+    {
+      "bytes": 9832,
+      "path": "tools/gravastar_studio.cpp",
+      "scope": "computational",
+      "sha256": "da10810de7c85aec2cb6e24c67de2a9c024584edec0c1ca5d59bbc880db7db56"
+    },
+    {
+      "bytes": 9583,
+      "path": "tools/project.cpp",
+      "scope": "computational",
+      "sha256": "b202dfdbeee9484f058a3abe9f562d20956398a7dd4f5b36d2b0726dfb3c1dfa"
+    }
+  ],
+  "schema_version": 1,
+  "source_sha256": "576bd9269973c770a54af0474b7aa0c831dc23441136eff48ac4553420ad8bcf"
+}
