@@ -235,8 +235,22 @@ below it as history.
 1. **[MAX]** Broaden ray families: hidden extrema, near tangencies at both joins,
    prograde rays near the buried photon sphere, pole and core crossings in
    one ray.
+   **Done 2026-11-24** (`ray_families` CTest, 456 checks; details and
+   numbers in docs/EVENT_COVERAGE.md). New independent off-equatorial
+   reference from the closed-form Hamiltonian. Eight rays crossing one or
+   two poles and the core, including the Cartesian patch, match it to 8.7e-10
+   at crossings and 7.5e-9 at escape, at four step settings. Equatorial
+   grazes of both joins are classified correctly down to depth 5e-11 (fine)
+   and 5e-9 (coarse); the limit is accumulated position error, not the event
+   search. The Kerr prograde photon orbit (r=1.629) is inside the shell; the
+   toy model has none there, and its rays at b_ph(1+-1e-6) escape smoothly
+   while the Kerr rays wind or fall in. Found: grazes below resolution are
+   misclassified with no flag (feeds step 2). Not covered: off-equatorial
+   grazes, core-patch grazes, focal-disk rays against this reference.
 2. **[MAX]** Replace budget exhaustion with explicit outcomes. Gate: every pixel of
    the reference scene ends in a named outcome, with censored rays counted.
+   Also flag near-tangent crossings whose classification is below the
+   measured resolution (step 1 finding), instead of guessing silently.
 3. **[MAX]** GYOTO: try the CMake-only build of the pinned 2.0.2 subset as a separate
    optional GPL tool. Compare Kerr rays first, then the gravastar adapter.
    If it cannot be built, record that and leave the GYOTO gate open.

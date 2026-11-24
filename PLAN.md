@@ -642,9 +642,12 @@ questions whose answers can be found in the references or local environment.
       rays and passes fixed-scene image refinement criteria; the budget-40
       result remains recorded with one censored ray. Single-turning-excursion
       event isolation and six independent near-critical Schwarzschild reference
-      rays now pass; see docs/EVENT_COVERAGE.md. Actual GYOTO comparison,
-      arbitrary hidden extrema/tangencies, broader ray families and general
-      domain acceptance remain incomplete. See docs/GYOTO_FEASIBILITY.md,
+      rays now pass; see docs/EVENT_COVERAGE.md. Sampled broader families
+      (pole and core in one ray, join grazes, rays at the buried Kerr photon
+      orbit) match an independent off-equatorial reference; grazes below a
+      measured depth are not yet flagged. Actual GYOTO comparison,
+      arbitrary hidden extrema/tangencies and general domain acceptance
+      remain incomplete. See docs/GYOTO_FEASIBILITY.md,
       docs/CORE_CONTINUATION.md and docs/P2_STATUS.md.
 - [ ] Implement and compare P3 Vulkan optics.
       Optional desktop build only: Vulkan device layer and FP32 metric and
