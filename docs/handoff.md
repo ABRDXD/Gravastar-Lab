@@ -36,7 +36,15 @@ reference scenes (docs/GPU_TRACER.md). Gate: GCC Release 33/33, GCC
 desktop 40/40, Clang desktop 38/38, ASan/UBSan 40/40 with no diagnostics,
 GCC Debug 33/33; no compiler warnings.
 
-Next is Phase E (desktop studio).
+Phase E (desktop studio) is done, 2026-11-24 (docs/STUDIO.md): ImGui/ImPlot
+studio showing the real FP64 GPU render with progressive refinement, orbit
+camera, scene/emission/science/inspection panels and a real-render smoke
+test. Gate: GCC Release 33/33, GCC desktop 41/41, Clang desktop 39/39,
+ASan/UBSan 41/41 with no diagnostics, GCC Debug 33/33.
+
+Next is Phase F (recording). The full-HD acceptance run is about 41 GPU
+hours in FP64; the owner asked for it in parts. Plan: resumable recorder
+first, then measure an FP32 recording path before the owner chooses.
 Push with the timeout-safe SSH command in the owner's memory notes; a plain
 `git push` hung once on 2026-11-24.
 
