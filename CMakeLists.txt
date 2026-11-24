@@ -155,6 +155,12 @@ if(BUILD_TESTING)
     add_test(NAME optics_sampling_cli COMMAND gravastar_sampling_cli_tests
         $<TARGET_FILE:gravastar_sampling> $<TARGET_FILE:gravastar_trace>)
     set_tests_properties(optics_sampling_cli PROPERTIES TIMEOUT 180 LABELS optics)
+    add_executable(gravastar_convergence_cli_tests tests/convergence_cli_tests.cpp)
+    target_link_libraries(gravastar_convergence_cli_tests PRIVATE gravastar_optics nlohmann_json::nlohmann_json)
+    target_compile_definitions(gravastar_convergence_cli_tests PRIVATE GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}")
+    add_test(NAME convergence_cli COMMAND gravastar_convergence_cli_tests
+        $<TARGET_FILE:gravastar_convergence> $<TARGET_FILE:gravastar_trace>)
+    set_tests_properties(convergence_cli PROPERTIES TIMEOUT 180 LABELS optics)
     add_executable(gravastar_optics_tests tests/optics_tests.cpp)
     target_link_libraries(gravastar_optics_tests PRIVATE gravastar_optics nlohmann_json::nlohmann_json)
     target_compile_definitions(gravastar_optics_tests PRIVATE GRAVASTAR_SOURCE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}")

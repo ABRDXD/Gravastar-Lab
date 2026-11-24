@@ -7,6 +7,7 @@
 // separate background channel. Sample-count convergence is gravastar_sampling.
 #include "gravastar/tools/artifacts.hpp"
 #include "gravastar/tools/process.hpp"
+#include <charconv>
 #include <chrono>
 #include <cmath>
 #include <iostream>
@@ -78,6 +79,18 @@ J compare(const std::vector<Pixel> &a, const std::vector<Pixel> &b) {
           {"common_background_pixels", sky},
           {"background_relative_l1", ratio(sky_difference, sky_reference)}};
 }
+// Shortest text that reads back as exactly x, so the label, the output file
+// and the traced tolerance all equal the recorded value.
+std::string exact(double x) {
+  char buffer[64];
+  const auto result = std::to_chars(buffer, buffer + sizeof buffer, x);
+  if (result.ec != std::errc())
+    throw std::runtime_error("cannot format tolerance");
+  std::string text(buffer, result.ptr);
+  if (std::stod(text) != x)
+    throw std::runtime_error("tolerance text does not round-trip");
+  return text;
+}
 std::vector<double> list(const std::string &text) {
   std::vector<double> out;
   std::stringstream in(text);
@@ -105,7 +118,7 @@ int main(int argc, char **argv) {
     for (int i = 1; i < argc; ++i) {
       const std::string option = argv[i];
       if (option == "--help") {
-        std::cout << "gravastar_convergence [--scene benchmarks/X.json] "
+        std::cout << "gravastar_convergence [--root PATH] [--scene benchmarks/X.json] "
                      "[--tolerances 1e-8,...,1e-12] [--scale N] "
                      "[--output results/FILE.json] [--trace EXECUTABLE]\n";
         return 0;
@@ -113,7 +126,9 @@ int main(int argc, char **argv) {
       if (i + 1 >= argc)
         throw std::invalid_argument("missing option value");
       const std::string value = argv[++i];
-      if (option == "--scene")
+      if (option == "--root")
+        root = value;
+      else if (option == "--scene")
         scene = value;
       else if (option == "--tolerances")
         tolerances = value;
@@ -138,18 +153,20 @@ int main(int argc, char **argv) {
       throw std::runtime_error("cannot create convergence run directory");
     const fs::path run = name.data();
     const auto before = u::manifest(root);
+    const auto scene_bytes = u::read_file(fs::canonical(root / scene));
+    tracer = fs::canonical(tracer);
+    const auto tracer_hash = u::sha256(u::read_file(tracer));
     const auto start = std::chrono::steady_clock::now();
     std::vector<std::vector<Pixel>> images;
     std::vector<double> passed;
     J raw = J::array();
     for (double tolerance : levels) {
-      std::ostringstream label;
-      label << tolerance;
-      const auto path = run / ("tolerance-" + label.str() + ".json");
+      const std::string label = exact(tolerance);
+      const auto path = run / ("tolerance-" + label + ".json");
       const bool ok =
           u::run({tracer.string(), "image", "--root", root.string(), "--config",
                   scene.string(), "--output", path.string(), "--resolution-scale",
-                  scale, "--tolerance", label.str()}) == 0;
+                  scale, "--tolerance", label}) == 0;
       // A level whose rays fail their own accuracy checks is recorded, not
       // compared: the tracer refused to produce data there.
       auto file = path;
@@ -159,6 +176,18 @@ int main(int argc, char **argv) {
         throw std::runtime_error("trace level produced no report");
       const auto bytes = u::read_file(file);
       const auto report = J::parse(bytes);
+      // Every level must come from this tracer, this scene, this source tree
+      // and the requested tolerance, as gravastar_sampling requires.
+      const auto &integrator = report.at("configuration").at("integrator");
+      if (report.at("executable_sha256") != tracer_hash ||
+          report.at("input_sha256") != u::sha256(scene_bytes) ||
+          report.at("computational_source_sha256") !=
+              before.at("computational_sha256") ||
+          integrator.value("tolerance_override", false) != true ||
+          integrator.at("absolute_tolerance") != tolerance ||
+          integrator.at("relative_tolerance") != tolerance ||
+          integrator.at("event_tolerance") != 10 * tolerance)
+        throw std::runtime_error("tolerance level provenance mismatch");
       if (ok) {
         images.push_back(pixels(report));
         passed.push_back(tolerance);
@@ -172,10 +201,11 @@ int main(int argc, char **argv) {
                      {"elapsed_seconds", report.at("elapsed_seconds")}});
       std::cout << "tolerance " << tolerance << " done" << std::endl;
     }
-    if (images.size() < 2)
-      throw std::runtime_error("fewer than two tolerance levels passed");
+    // The floor applies to levels that passed, and the reference must be the
+    // tightest requested level; otherwise the report is written as failed.
+    const bool complete = passed.size() >= 3 && passed.back() == levels.back();
     J against_finest = J::array(), successive = J::array();
-    for (std::size_t i = 0; i + 1 < images.size(); ++i) {
+    for (std::size_t i = 0; complete && i + 1 < images.size(); ++i) {
       auto x = compare(images[i], images.back());
       x["tolerance"] = passed[i];
       against_finest.push_back(x);
@@ -190,6 +220,12 @@ int main(int argc, char **argv) {
              {"scene_sha256", u::sha256(u::read_file(root / scene))},
              {"resolution_scale", std::stoi(scale)},
              {"tolerances", levels},
+             {"passed_tolerances", passed},
+             {"reference_tolerance",
+              passed.empty() ? J(nullptr) : J(passed.back())},
+             {"minimum_passed_levels", 3},
+             {"comparison_complete", complete},
+             {"tracer_executable_sha256", tracer_hash},
              {"event_tolerance_rule", "10 x tolerance"},
              {"levels", raw},
              {"against_finest", against_finest},
@@ -203,9 +239,15 @@ int main(int argc, char **argv) {
              {"scope", "Differences between tolerance levels on a fixed pixel "
                        "set; the tightest level is a reference, not the exact "
                        "image. No global error bound."}};
+    if (!complete)
+      output.replace_filename(output.stem().string() + ".failed.json");
     u::atomic_json(output, report);
     std::cout << against_finest.dump(2) << '\n';
-    return 0;
+    if (!complete)
+      std::cerr << "convergence: fewer than three levels passed or the "
+                   "tightest requested level failed; report written as "
+                << output << '\n';
+    return complete ? 0 : 1;
   } catch (const std::exception &e) {
     std::cerr << "convergence: " << e.what() << '\n';
     return 1;
