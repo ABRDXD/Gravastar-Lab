@@ -342,6 +342,9 @@ if(GRAVASTAR_DESKTOP)
             GRAVASTAR_PRECISION64_SPV="${GRAVASTAR_PRECISION64_SPV}"
             GRAVASTAR_PRECISIONMIXED_SPV="${GRAVASTAR_PRECISIONMIXED_SPV}")
         add_dependencies(gravastar_gpu_precision gravastar_precision_shaders)
+        add_test(NAME gpu_precision COMMAND gravastar_gpu_precision --check
+            --width 32 --height 24 --output results/local/gpu_precision_ctest.json)
+        set_tests_properties(gpu_precision PROPERTIES TIMEOUT 300 LABELS desktop)
         # Needs a Wayland or X11 session.
         add_test(NAME vulkan_studio_smoke COMMAND gravastar_studio --smoke)
         set_tests_properties(vulkan_device_audit vulkan_studio_smoke vulkan_metric_fp32 vulkan_ray_fp32
@@ -351,7 +354,7 @@ if(GRAVASTAR_DESKTOP)
             # allocated inside the run-time-loaded GPU driver or libdbus, not in
             # project code. Address and undefined-behavior checks stay on.
             set_tests_properties(vulkan_device_audit vulkan_studio_smoke vulkan_metric_fp32 vulkan_ray_fp32
-                PROPERTIES ENVIRONMENT "ASAN_OPTIONS=detect_leaks=0")
+                gpu_precision PROPERTIES ENVIRONMENT "ASAN_OPTIONS=detect_leaks=0")
         endif()
     endif()
 endif()

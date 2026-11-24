@@ -32,6 +32,7 @@ struct Settings {
   double h = .01, r_outer = 10, r_inner = .75, switch_q = 1.5;
   int steps = 4000, width = 64, height = 48, repeats = 3;
   int reference_stride = 1; // CPU reference on every n-th ray only
+  bool check = false;        // exit 1 unless the measured ceilings hold
 };
 struct Result {
   std::array<long double, 8> state{};
@@ -166,6 +167,10 @@ int main(int argc, char **argv) {
     std::filesystem::path output = "results/p3_gpu_precision.json";
     for (int i = 1; i < argc; ++i) {
       const std::string option = argv[i];
+      if (option == "--check") {
+        s.check = true;
+        continue;
+      }
       if (i + 1 >= argc)
         throw std::invalid_argument("missing option value");
       const std::string value = argv[++i];
@@ -242,13 +247,14 @@ int main(int argc, char **argv) {
     auto summarize = [&](const char *name, const std::vector<Result> &run, double ms,
                          bool full) {
       std::vector<double> error, null;
-      std::size_t diverged = 0, invalid = 0;
+      std::size_t diverged = 0, invalid = 0, outcome = 0;
       long long steps = 0;
       for (const auto &x : run)
         steps += x.steps;
       for (std::size_t j = 0; j < sample.size(); ++j) {
         const auto &x = run[full ? sample[j] : j];
         invalid += x.status == 3;
+        outcome += x.status != ref[j].status; // ended by a different stop
         null.push_back(double(std::abs(x.H)));
         if (x.status != ref[j].status || x.steps != ref[j].steps ||
             x.switches != ref[j].switches)
@@ -259,6 +265,7 @@ int main(int argc, char **argv) {
       J level{{"rays_compared", sample.size()},
               {"same_stop_and_switch_steps", sample.size() - diverged},
               {"different_stop_or_switch_step", diverged},
+              {"different_stop_kind", outcome},
               {"invalid", invalid},
               {"error_vs_long_double", distribution(error)},
               {"final_abs_H", distribution(null)},
@@ -303,7 +310,37 @@ int main(int argc, char **argv) {
              {"computational_source_sha256", u::manifest(root)["computational_sha256"]},
              {"scope", "Arithmetic precision of one fixed-step algorithm; not the "
                        "RK4 truncation error and not the production tracer."}};
+    // Ceilings from the 2026-11-24 RTX 3050 measurements (docs/GPU_PRECISION.md),
+    // with margin: FP64 must match the long-double run to arithmetic level and
+    // take every stop and switch on the same step; FP32 must stay finite and
+    // within its measured rounding floor; no precision may change a stop kind.
+    bool pass = true;
+    std::string failures;
+    auto require = [&](bool ok, const std::string &what) {
+      if (!ok) {
+        pass = false;
+        failures += what + "; ";
+      }
+    };
+    const auto &l64 = levels["gpu_fp64"], &l32 = levels["gpu_fp32"];
+    require(l64["error_vs_long_double"]["max"].get<double>() <= 1e-10,
+            "FP64 GPU error above 1e-10");
+    require(l64["different_stop_or_switch_step"] == 0, "FP64 GPU took a different step");
+    require(l32["invalid"] == 0 && l64["invalid"] == 0, "invalid GPU ray");
+    require(l32["error_vs_long_double"]["median"].get<double>() <= 1e-3,
+            "FP32 GPU median error above 1e-3");
+    for (const char *k : {"gpu_fp32", "gpu_fp64", "gpu_mixed", "cpu_fp32", "cpu_fp64"})
+      require(levels[k]["different_stop_kind"] == 0,
+              std::string(k) + " changed a stop kind");
+    report["checks_passed"] = pass;
+    report["check_failures"] = failures;
+    if (s.check && !pass)
+      output.replace_filename(output.stem().string() + ".failed.json");
     u::atomic_json(output, report);
+    if (s.check && !pass) {
+      std::cerr << "gpu precision checks failed: " << failures << '\n';
+      return 1;
+    }
     std::cout << report["levels"].dump(2) << "\nFP64/FP32 GPU time " << ms64 / ms32
               << ", mixed/FP32 " << msmixed / ms32 << '\n';
     return 0;

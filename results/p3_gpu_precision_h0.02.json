@@ -1,0 +1,137 @@
+{
+  "check_failures": "",
+  "checks_passed": true,
+  "computational_source_sha256": "55a58d1cdae164a4553562ef36dd1d766a551bdf9915e6241d82890f7106369c",
+  "cpu_reference_seconds_all_three": 4.274009484,
+  "device": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+  "error_measure": "max(|dr|, |dt|/max(1,|t|), |d unit direction|) at the final step; rays whose stop or patch switch fell on another step are counted, not measured",
+  "fp64_over_fp32_time": 39.685888610309995,
+  "h": 0.02,
+  "image": [
+    64,
+    48
+  ],
+  "levels": {
+    "cpu_fp32": {
+      "different_stop_kind": 0,
+      "different_stop_or_switch_step": 95,
+      "error_vs_long_double": {
+        "max": 0.007219745931165565,
+        "median": 9.540285937941536e-05,
+        "p90": 0.0012121018966138345,
+        "p99": 0.0035314785508995363
+      },
+      "final_abs_H": {
+        "max": 0.17077161371707916,
+        "median": 0.0009705700795166194,
+        "p90": 0.07096850872039795,
+        "p99": 0.13438737392425537
+      },
+      "invalid": 0,
+      "ray_steps": 3095926,
+      "rays_compared": 3072,
+      "same_stop_and_switch_steps": 2977
+    },
+    "cpu_fp64": {
+      "different_stop_kind": 0,
+      "different_stop_or_switch_step": 0,
+      "error_vs_long_double": {
+        "max": 2.035339258243951e-11,
+        "median": 1.8677073776451891e-13,
+        "p90": 2.6369514211088685e-12,
+        "p99": 8.116574252980957e-12
+      },
+      "final_abs_H": {
+        "max": 0.17092490145154898,
+        "median": 0.0009777788016381661,
+        "p90": 0.0710101753108932,
+        "p99": 0.13435662030340695
+      },
+      "invalid": 0,
+      "ray_steps": 3095933,
+      "rays_compared": 3072,
+      "same_stop_and_switch_steps": 3072
+    },
+    "gpu_fp32": {
+      "different_stop_kind": 0,
+      "different_stop_or_switch_step": 116,
+      "error_vs_long_double": {
+        "max": 0.008683105607397589,
+        "median": 0.00011803629392459058,
+        "p90": 0.00155208043460962,
+        "p99": 0.004873243272183937
+      },
+      "final_abs_H": {
+        "max": 0.1711023598909378,
+        "median": 0.0009760437533259392,
+        "p90": 0.0710841715335846,
+        "p99": 0.1343172788619995
+      },
+      "gpu_milliseconds": 4.416064,
+      "invalid": 0,
+      "ray_steps": 3095951,
+      "ray_steps_per_second": 701065700.1347805,
+      "rays_compared": 3072,
+      "same_stop_and_switch_steps": 2956
+    },
+    "gpu_fp64": {
+      "different_stop_kind": 0,
+      "different_stop_or_switch_step": 0,
+      "error_vs_long_double": {
+        "max": 2.55031187140764e-11,
+        "median": 2.525184922275159e-13,
+        "p90": 3.2068722677358608e-12,
+        "p99": 1.037189431563057e-11
+      },
+      "final_abs_H": {
+        "max": 0.17092490145170683,
+        "median": 0.0009777788017525239,
+        "p90": 0.0710101753115485,
+        "p99": 0.13435662030325926
+      },
+      "gpu_milliseconds": 175.255424,
+      "invalid": 0,
+      "ray_steps": 3095933,
+      "ray_steps_per_second": 17665262.103385743,
+      "rays_compared": 3072,
+      "same_stop_and_switch_steps": 3072
+    },
+    "gpu_mixed": {
+      "different_stop_kind": 0,
+      "different_stop_or_switch_step": 115,
+      "error_vs_long_double": {
+        "max": 0.011807541018426687,
+        "median": 0.00010671837182231123,
+        "p90": 0.0015817076919200628,
+        "p99": 0.004856545474265111
+      },
+      "final_abs_H": {
+        "max": 0.1709345132112503,
+        "median": 0.0009527931688353419,
+        "p90": 0.07112735509872437,
+        "p99": 0.1339319348335266
+      },
+      "gpu_milliseconds": 12.417696,
+      "invalid": 0,
+      "ray_steps": 3095912,
+      "ray_steps_per_second": 249314526.62394056,
+      "rays_compared": 3072,
+      "same_stop_and_switch_steps": 2957
+    }
+  },
+  "maximum_steps": 2000,
+  "mixed_over_fp32_time": 2.8119375081520555,
+  "rays": 3072,
+  "rays_compared": 3072,
+  "reference": "CPU long double, same algorithm",
+  "reference_status_counts": {
+    "budget": 0,
+    "inner_core_stop": 147,
+    "invalid": 0,
+    "outer": 2925
+  },
+  "reference_stride": 1,
+  "schema_version": 1,
+  "scope": "Arithmetic precision of one fixed-step algorithm; not the RK4 truncation error and not the production tracer.",
+  "study": "fixed-step RK4, closed-form stereographic Hamiltonian, toy preset, optics_v1 camera"
+}
