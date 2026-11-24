@@ -14,6 +14,7 @@
 #include <cmath>
 #include <iostream>
 #include <numbers>
+#include <optional>
 #include <random>
 
 namespace o = gravastar::optics;
@@ -414,11 +415,147 @@ u::Json graze_family(const g::Parameters &p) {
   return rows;
 }
 
+// Turning radius from a trace: the first accepted pair where p_r changes
+// sign, with r = r_t + c p_r^2 eliminated between the two points.
+std::optional<double> fitted_turn(const o::Trace &t) {
+  for (std::size_t i = 1; i < t.trajectory.size(); ++i) {
+    const auto &a = t.trajectory[i - 1].state, &b = t.trajectory[i].state;
+    if (a[5] > 0 && b[5] <= 0) {
+      const double qa = a[5] * a[5], qb = b[5] * b[5];
+      return (a[1] * qb - b[1] * qa) / (qb - qa);
+    }
+  }
+  return {};
+}
+double azimuth_sweep(const o::Trace &t, const o::State &initial) {
+  return std::abs(t.final.state[3] - initial[3]);
+}
+
+// The Kerr prograde equatorial photon orbit of the exterior parameters lies
+// at r = 1.6288, inside the toy shell [1.5, 1.8]. In Kerr, rays near its
+// critical impact either fall in or wind; in the toy model the exterior that
+// would hold the orbit is replaced, so the same rays must turn and leave.
+// The independent equatorial potential (scan in docs/EVENT_COVERAGE.md) has
+// no local minimum for any prograde b in [1.8, 3.1]: no toy photon orbit.
+u::Json buried_photon_sphere(const g::Parameters &toy) {
+  const auto q = model(toy);
+  constexpr Real launch = 10;
+  const Real a = q.a, M = q.M;
+  const Real r_ph = 2 * M * (1 + std::cos(2 * std::acos(-a / M) / 3));
+  const Real b_ph = -(r_ph * r_ph * r_ph - 3 * M * r_ph * r_ph + a * a * r_ph +
+                      a * a * M) /
+                    (a * (r_ph - M));
+  // A pure-Kerr potential: the shell is moved far inside the domain used.
+  const ref::Model kerr_model{M, a, 0, .01L, .02L};
+  const Real dr = 1e-6L;
+  check("Kerr photon orbit is a double root of the Kerr potential",
+        double(std::max(std::abs(ref::W(kerr_model, r_ph, b_ph)),
+                        std::abs(ref::W(kerr_model, r_ph + dr, b_ph) -
+                                 ref::W(kerr_model, r_ph - dr, b_ph)) /
+                            (2 * dr))),
+        1e-9);
+  require("Kerr prograde photon orbit lies inside the toy shell",
+          r_ph > q.r_in && r_ph < q.r_out);
+
+  g::Parameters kerr = toy;
+  kerr.family = g::Family::kerr;
+  o::Settings c;
+  c.absolute_tolerance = c.relative_tolerance = 1e-12;
+  c.maximum_step = .02;
+  c.event_tolerance = 1e-12;
+  c.null_tolerance = 1e-8;
+  c.outer_radius = 20;
+  c.maximum_affine = 400;
+  auto kerr_settings = c;
+  kerr_settings.capture_radius = 1.55; // between r_+ = 1.484 and r_ph
+
+  u::Json rows = u::Json::array();
+  std::array<double, 2> toy_sweep{};
+  std::vector<double> slopes;
+  for (double eps : {1e-3, 1e-6}) {
+    for (double side : {-1.0, 1.0}) {
+      const Real b = b_ph * (1 + side * eps);
+      const std::string tag = "b = b_ph(1" + std::string(side < 0 ? "-" : "+") +
+                              u::Json(eps).dump() + ")";
+      const auto start =
+          ref::null_launch(q, launch, std::numbers::pi / 2, -1, 0, double(b));
+      o::State bl{};
+      for (int i = 0; i < 8; ++i)
+        bl[i] = double(start[i]);
+      u::Json row{{"relative_offset", side * eps}, {"impact", double(b)}};
+
+      const auto t = o::trace(toy, bl, c);
+      const Real r_t = ref::turning_radius(q, b, launch);
+      std::size_t inner = 0, outer = 0;
+      for (const auto &x : t.crossings) {
+        inner += x.surface == "inner_shell_join";
+        outer += x.surface == "outer_shell_join";
+      }
+      require("toy " + tag + " escapes", t.outcome == o::Outcome::escaped);
+      require("toy " + tag + " turns in the shell",
+              outer == 2 && inner == 0 && r_t > q.r_in && r_t < q.r_out);
+      const auto fit = fitted_turn(t);
+      require("toy " + tag + " has one radial turn", fit.has_value());
+      if (fit)
+        check("toy " + tag + " turning radius vs independent root",
+              std::abs(*fit - double(r_t)), 1e-10);
+      const double sweep = azimuth_sweep(t, bl);
+      toy_sweep[side < 0 ? 0 : 1] = sweep;
+      row["toy"] = {{"outcome", o::outcome_name(t.outcome)},
+                    {"reference_turning_radius", double(r_t)},
+                    {"fitted_turning_radius", fit.value_or(0)},
+                    {"azimuth_sweep", sweep},
+                    {"affine", t.final.affine}};
+
+      // Kerr with a numerical capture proxy: below b_ph rays cross the orbit
+      // and reach the proxy; above it they turn just outside r_ph and wind.
+      // The launch radius is in the exact Kerr exterior of both models, so
+      // the same state is null for Kerr too; that is checked here.
+      const auto k = o::trace(kerr, bl, kerr_settings);
+      check("Kerr " + tag + " launch null residual",
+            o::null_residual(o::metric(kerr, bl), bl), 1e-14);
+      u::Json kerr_row{{"outcome", o::outcome_name(k.outcome)},
+                       {"azimuth_sweep", azimuth_sweep(k, bl)},
+                       {"affine", k.final.affine}};
+      if (side < 0)
+        require("Kerr " + tag + " reaches the capture proxy",
+                k.outcome == o::Outcome::capture_surface);
+      else {
+        require("Kerr " + tag + " escapes", k.outcome == o::Outcome::escaped);
+        const Real kr = ref::turning_radius(kerr_model, b, launch);
+        const auto kfit = fitted_turn(k);
+        require("Kerr " + tag + " has one radial turn", kfit.has_value());
+        if (kfit)
+          check("Kerr " + tag + " turning radius vs independent root",
+                std::abs(*kfit - double(kr)), 1e-10);
+        kerr_row["reference_turning_radius"] = double(kr);
+        kerr_row["fitted_turning_radius"] = kfit.value_or(0);
+        require("Kerr " + tag + " winds more than the toy ray",
+                azimuth_sweep(k, bl) > sweep + std::numbers::pi);
+      }
+      row["kerr"] = kerr_row;
+      rows.push_back(row);
+    }
+    // Difference quotient of the toy azimuth sweep across b_ph.
+    slopes.push_back((toy_sweep[1] - toy_sweep[0]) / double(2 * eps * b_ph));
+  }
+  // No critical behaviour in the toy model: the sweep is differentiable at
+  // b_ph, so the quotients over 2e-3 and 2e-6 relative widths agree. Near a
+  // photon orbit the sweep instead grows like -log|b - b_c|.
+  check("toy azimuth sweep is smooth across b_ph (quotient change)",
+        std::abs(slopes[1] - slopes[0]) / std::abs(slopes[1]), 1e-2);
+  return {{"kerr_photon_orbit_radius", double(r_ph)},
+          {"kerr_photon_orbit_impact", double(b_ph)},
+          {"toy_sweep_quotients", slopes},
+          {"rays", rows}};
+}
+
 u::Json run() {
   g::Parameters p; // toy preset: M=1, a=7/8, Lambda=1/2, r_in=1.5, r_out=1.8
   hamiltonian_transcription(p);
   return {{"pole_and_core", pole_and_core_family(p)},
-          {"join_grazes", graze_family(p)}};
+          {"join_grazes", graze_family(p)},
+          {"buried_photon_sphere", buried_photon_sphere(p)}};
 }
 } // namespace
 
@@ -440,7 +577,8 @@ int main(int argc, char **argv) {
     report["complete_P2_acceptance"] = false;
     report["scope"] =
         "Toy-preset ray families against independent references: pole and "
-        "core crossings in one ray; equatorial grazes of both shell joins. "
+        "core crossings in one ray; equatorial grazes of both shell joins; "
+        "prograde rays at the buried Kerr photon orbit, with Kerr contrast. "
         "Sampled fixtures, not a certificate for arbitrary rays; grazes "
         "shallower than the stated depth are reported, not classified; no "
         "GYOTO comparison.";
