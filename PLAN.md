@@ -656,6 +656,9 @@ questions whose answers can be found in the references or local environment.
       extrema/tangencies and general domain acceptance remain incomplete. See docs/GYOTO_FEASIBILITY.md,
       docs/CORE_CONTINUATION.md and docs/P2_STATUS.md.
 - [ ] Implement and compare P3 Vulkan optics.
+      Phase D step 1 measured FP32/FP64 on the RTX 3050 with a trig-free
+      stereographic kernel: FP64 agrees with long double to 1e-11 at 74x
+      the cost; FP32 has a ~1e-4 floor (docs/GPU_PRECISION.md).
       Optional desktop build only: Vulkan device layer and FP32 metric and
       fixed-step ray kernels compared with the CPU (metric 1.74e-5; turning
       radius 2.4e-6 to 5.3e-5 vs exact). No GPU image renderer, no FP64

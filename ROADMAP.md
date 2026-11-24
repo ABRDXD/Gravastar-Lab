@@ -300,6 +300,13 @@ findings were checked against the code; each was fixed on
 
 1. **[MAX]** FP64 vs FP32 measurement on the RTX 3050 (throughput and error); choose
    precision from data.
+   **Done 2026-11-24** (docs/GPU_PRECISION.md). One fixed-step RK4 kernel on a
+   trig-free stereographic Hamiltonian, built FP32/FP64/mixed, against the
+   same algorithm in CPU long double. FP64: error 1e-11 at most, 2.25e7
+   ray-steps/s. FP32: median 8.6e-5, worst 4.2e-3, 4% of rays stop one step
+   off, never a different outcome; 1.67e9 ray-steps/s (74x faster). Mixed:
+   no gain at 4.8x the FP32 cost, dropped. Decision: one source, FP64 for
+   reference renders and the CPU/GPU gate, FP32 for labelled preview.
 2. **[MAX]** GPU kernels follow the same charts and outcomes as the CPU tracer, or flag
    the rays they cannot handle so the CPU can re-trace them.
 3. Remove the painted core colour; use the Phase C emission model.
