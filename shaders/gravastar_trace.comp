@@ -1,0 +1,304 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Phase D GPU tracer: the CPU tracer's adaptive Dormand-Prince 5(4) in the
+// north/south stereographic patches, with its error norm, step controller,
+// patch switch and terminal events (escape, disk, Kerr capture proxy).
+// It never guesses where the CPU tracer has more logic. Instead it ends
+// the ray as NEEDS_CPU with a reason, and the host re-traces it on the CPU:
+//   1 core entry (no Cartesian core patch here)  2 near tangency or a
+//   possible hidden crossing of a terminal surface  3 affine budget
+//   4 attempt budget  5 numerical failure  6 null drift.
+// Build with -DGRAVASTAR_FP64 (the Phase D step 1 decision for this path).
+//
+// Input (REAL[]): header[32], then 16 per ray: state[8] in its patch, patch
+// (0 north, 1 south), 7 unused.
+// header: 0 M, 1 a, 2 Lambda, 3 r_in, 4 r_out, 5 atol, 6 rtol, 7 h0,
+// 8 h_min, 9 h_max, 10 event_tol, 11 null_tol, 12 max_affine,
+// 13 max_attempts, 14 outer_radius, 15 disk (0/1), 16 disk_inner,
+// 17 disk_outer, 18 core_entry_radius (0: none), 19 capture_radius (0: none),
+// 20 switch_q, 21 tangency_factor.
+// Output (REAL[]): 16 per ray: 0 outcome (0 needs_cpu, 1 escaped, 2 emitted,
+// 3 capture_surface), 1 reason, 2..9 final state, 10 patch, 11 affine,
+// 12 accepted, 13 rejected, 14 rhs calls, 15 maximum null residual.
+#version 460
+#extension GL_GOOGLE_include_directive : enable
+
+layout(local_size_x = 64, local_size_y = 1, local_size_z = 1) in;
+
+#include "gravastar_stereographic.glsl"
+
+layout(std430, set = 0, binding = 0) readonly buffer Inputs { REAL v[]; } inp;
+layout(std430, set = 0, binding = 1) writeonly buffer Outputs { REAL v[]; } outp;
+
+StereoModel model;
+REAL atol, rtol, event_tol, null_tol, tangency_factor;
+uint rhs_calls;
+
+// Dormand-Prince 5(4), identical tableau and error weights to src/optics/ray.cpp.
+const REAL A21 = REAL(1) / REAL(5);
+const REAL A31 = REAL(3) / REAL(40), A32 = REAL(9) / REAL(40);
+const REAL A41 = REAL(44) / REAL(45), A42 = REAL(-56) / REAL(15), A43 = REAL(32) / REAL(9);
+const REAL A51 = REAL(19372) / REAL(6561), A52 = REAL(-25360) / REAL(2187),
+           A53 = REAL(64448) / REAL(6561), A54 = REAL(-212) / REAL(729);
+const REAL A61 = REAL(9017) / REAL(3168), A62 = REAL(-355) / REAL(33),
+           A63 = REAL(46732) / REAL(5247), A64 = REAL(49) / REAL(176),
+           A65 = REAL(-5103) / REAL(18656);
+const REAL B1 = REAL(35) / REAL(384), B3 = REAL(500) / REAL(1113), B4 = REAL(125) / REAL(192),
+           B5 = REAL(-2187) / REAL(6784), B6 = REAL(11) / REAL(84);
+const REAL E1 = REAL(35) / REAL(384) - REAL(5179) / REAL(57600);
+const REAL E3 = REAL(500) / REAL(1113) - REAL(7571) / REAL(16695);
+const REAL E4 = REAL(125) / REAL(192) - REAL(393) / REAL(640);
+const REAL E5 = REAL(-2187) / REAL(6784) + REAL(92097) / REAL(339200);
+const REAL E6 = REAL(11) / REAL(84) - REAL(187) / REAL(2100);
+const REAL E7 = REAL(-1) / REAL(40);
+
+struct Step {
+    REAL next[8];
+    REAL error[8];
+    REAL start_rate[8];
+    REAL end_rate[8];
+    bool ok;
+};
+
+bool rhs(REAL y[8], out REAL d[8]) {
+    REAL H;
+    ++rhs_calls;
+    return stereographic_rhs(model, y, d, H);
+}
+
+Step dp_step(REAL y[8], REAL h) {
+    Step s;
+    REAL k1[8], k2[8], k3[8], k4[8], k5[8], k6[8], k7[8], z[8];
+    s.ok = rhs(y, k1);
+    for (int i = 0; i < 8; ++i) z[i] = y[i] + h * (A21 * k1[i]);
+    s.ok = s.ok && rhs(z, k2);
+    for (int i = 0; i < 8; ++i) z[i] = y[i] + h * (A31 * k1[i] + A32 * k2[i]);
+    s.ok = s.ok && rhs(z, k3);
+    for (int i = 0; i < 8; ++i) z[i] = y[i] + h * (A41 * k1[i] + A42 * k2[i] + A43 * k3[i]);
+    s.ok = s.ok && rhs(z, k4);
+    for (int i = 0; i < 8; ++i)
+        z[i] = y[i] + h * (A51 * k1[i] + A52 * k2[i] + A53 * k3[i] + A54 * k4[i]);
+    s.ok = s.ok && rhs(z, k5);
+    for (int i = 0; i < 8; ++i)
+        z[i] = y[i] + h * (A61 * k1[i] + A62 * k2[i] + A63 * k3[i] + A64 * k4[i] + A65 * k5[i]);
+    s.ok = s.ok && rhs(z, k6);
+    for (int i = 0; i < 8; ++i)
+        s.next[i] = y[i] + h * (B1 * k1[i] + B3 * k3[i] + B4 * k4[i] + B5 * k5[i] + B6 * k6[i]);
+    s.ok = s.ok && rhs(s.next, k7);
+    for (int i = 0; i < 8; ++i) {
+        s.error[i] = h * (E1 * k1[i] + E3 * k3[i] + E4 * k4[i] + E5 * k5[i] + E6 * k6[i] + E7 * k7[i]);
+        s.start_rate[i] = k1[i];
+        s.end_rate[i] = k7[i];
+        if (isnan(s.next[i]) || isinf(s.next[i]) || isnan(s.error[i]) || isinf(s.error[i]))
+            s.ok = false;
+    }
+    return s;
+}
+
+// e^(-1/5) to double precision: float seed, then Newton on y^5 e = 1 (GLSL
+// has no double pow). Matches the CPU controller's std::pow(error, -.2).
+REAL inverse_fifth_root(REAL e) {
+    REAL y = REAL(pow(float(e), -0.2));
+    for (int i = 0; i < 2; ++i) {
+        REAL y5 = y * y * y * y * y;
+        y = y + y * (REAL(1) - y5 * e) / REAL(5);
+    }
+    return y;
+}
+
+REAL error_norm(Step s, REAL y[8]) {
+    REAL e = REAL(0);
+    for (int i = 0; i < 8; ++i)
+        e = max(e, abs(s.error[i]) / (atol + rtol * max(abs(y[i]), abs(s.next[i]))));
+    return e;
+}
+
+// Terminal surfaces: 0 escape r = outer, 1 disk q = 1, 2 capture r = rc,
+// 3 core entry r = re. Value and rate along the ray.
+REAL surface_value(int k, REAL y[8], REAL level) {
+    return k == 1 ? y[2] * y[2] + y[3] * y[3] - REAL(1) : y[1] - level;
+}
+REAL surface_rate(int k, REAL y[8], REAL d[8]) {
+    return k == 1 ? REAL(2) * (y[2] * d[2] + y[3] * d[3]) : d[1];
+}
+REAL surface_margin(int k, REAL level) {
+    REAL scale = k == 1 ? REAL(1) : abs(level);
+    return tangency_factor * max(atol, rtol * scale);
+}
+
+void main() {
+    uint id = gl_GlobalInvocationID.x;
+    uint rays = (uint(inp.v.length()) - 32u) / 16u;
+    if (id >= rays)
+        return;
+    model.M = inp.v[0];
+    model.a = inp.v[1];
+    model.Lambda = inp.v[2];
+    model.r_in = inp.v[3];
+    model.r_out = inp.v[4];
+    atol = inp.v[5];
+    rtol = inp.v[6];
+    REAL h = inp.v[7], h_min = inp.v[8], h_max = inp.v[9];
+    event_tol = inp.v[10];
+    null_tol = inp.v[11];
+    REAL max_affine = inp.v[12];
+    uint max_attempts = uint(inp.v[13]);
+    REAL levels[4] = REAL[4](inp.v[14], REAL(0), inp.v[19], inp.v[18]);
+    bool enabled[4] = bool[4](true, inp.v[15] != REAL(0), inp.v[19] > REAL(0), inp.v[18] > REAL(0));
+    REAL disk_inner = inp.v[16], disk_outer = inp.v[17], switch_q = inp.v[20];
+    tangency_factor = inp.v[21];
+    rhs_calls = 0u;
+
+    REAL y[8];
+    uint base = 32u + 16u * id;
+    for (int i = 0; i < 8; ++i) y[i] = inp.v[base + uint(i)];
+    uint chart = uint(inp.v[base + 8u]);
+    REAL s = REAL(0), max_null = REAL(0);
+    uint outcome = 0u, reason = 4u, accepted = 0u, rejected = 0u;
+    for (uint attempt = 0u; attempt < max_attempts; ++attempt) {
+        REAL remaining = max_affine - s;
+        if (remaining <= REAL(8) * REAL(2.220446049250313e-16) * max(REAL(1), max_affine)) {
+            reason = 3u;
+            break;
+        }
+        h = min(h, remaining);
+        Step trial = dp_step(y, h);
+        if (!trial.ok) {
+            ++rejected;
+            if (h <= h_min) { reason = 5u; break; }
+            h = max(h_min, h / REAL(2));
+            continue;
+        }
+        REAL e = error_norm(trial, y);
+        REAL factor = e == REAL(0) ? REAL(5) : clamp(REAL(0.9) * inverse_fifth_root(e), REAL(0.2), REAL(5));
+        if (e > REAL(1)) {
+            ++rejected;
+            if (h <= h_min) { reason = 5u; break; }
+            h = max(h_min, h * min(REAL(0.9), factor));
+            continue;
+        }
+        // Terminal events inside the trial: earliest root wins.
+        int hit = -1;
+        REAL hit_tau = h;
+        REAL hit_state[8];
+        bool retry = false, needs_cpu = false;
+        for (int k = 0; k < 4; ++k) {
+            if (!enabled[k]) continue;
+            REAL f0 = surface_value(k, y, levels[k]);
+            REAL f1 = surface_value(k, trial.next, levels[k]);
+            REAL r0 = surface_rate(k, y, trial.start_rate);
+            REAL r1 = surface_rate(k, trial.next, trial.end_rate);
+            REAL lo = REAL(0), hi = h;
+            bool crossing = (f0 < REAL(0) && f1 >= REAL(0)) || (f0 > REAL(0) && f1 <= REAL(0));
+            if (!crossing && ((r0 < REAL(0) && r1 > REAL(0)) || (r0 > REAL(0) && r1 < REAL(0)))) {
+                // A turning point inside the trial. The cubic Hermite of f
+                // predicts its extremum; only near the surface does it matter.
+                REAL d = f1 - f0;
+                REAL c2 = REAL(3) * d - h * (REAL(2) * r0 + r1);
+                REAL c3 = h * (r0 + r1) - REAL(2) * d;
+                // f(x) = f0 + h r0 x + c2 x^2 + c3 x^3; f'(x) = 0 on (0, 1).
+                REAL qa = REAL(3) * c3, qb = REAL(2) * c2, qc = h * r0;
+                REAL x = REAL(0.5);
+                if (abs(qa) > REAL(1e-30)) {
+                    REAL disc = max(REAL(0), qb * qb - REAL(4) * qa * qc);
+                    REAL x1 = (-qb + sqrt(disc)) / (REAL(2) * qa), x2 = (-qb - sqrt(disc)) / (REAL(2) * qa);
+                    x = (x1 > REAL(0) && x1 < REAL(1)) ? x1 : x2;
+                } else if (abs(qb) > REAL(1e-30)) {
+                    x = -qc / qb;
+                }
+                x = clamp(x, REAL(0), REAL(1));
+                REAL f_ext = f0 + h * r0 * x + c2 * x * x + c3 * x * x * x;
+                REAL margin = surface_margin(k, levels[k]);
+                // Generous gate (1e-3 of the level) keeps Hermite error far
+                // below the decision; anything near is left to the CPU.
+                REAL gate = max(REAL(1e3) * margin, REAL(1e-3) * (k == 1 ? REAL(1) : abs(levels[k])));
+                if (sign(f_ext) != sign(f0) || abs(f_ext) < gate) {
+                    needs_cpu = true;
+                    break;
+                }
+                continue;
+            }
+            if (!crossing) continue;
+            // Bisection on the substep length from the trial start, with the
+            // same local-error check as the CPU tracer's refine().
+            REAL best[8];
+            for (int i = 0; i < 8; ++i) best[i] = trial.next[i];
+            for (int it = 0; it < 80 && hi - lo > event_tol; ++it) {
+                REAL mid = (lo + hi) / REAL(2);
+                Step sub = dp_step(y, mid);
+                if (!sub.ok || error_norm(sub, y) > REAL(1)) { retry = true; break; }
+                REAL fm = surface_value(k, sub.next, levels[k]);
+                bool bracket = (f0 < REAL(0) && fm >= REAL(0)) || (f0 > REAL(0) && fm <= REAL(0));
+                if (bracket) {
+                    hi = mid;
+                    for (int i = 0; i < 8; ++i) best[i] = sub.next[i];
+                } else {
+                    lo = mid;
+                }
+            }
+            if (retry) break;
+            if (k == 1 && (best[1] < disk_inner || best[1] > disk_outer))
+                continue; // disk plane crossed outside the annulus
+            if (hi < hit_tau) {
+                hit = k;
+                hit_tau = hi;
+                for (int i = 0; i < 8; ++i) hit_state[i] = best[i];
+            }
+        }
+        if (retry) {
+            ++rejected;
+            if (h <= h_min) { reason = 5u; break; }
+            h = max(h_min, h / REAL(2));
+            continue;
+        }
+        if (needs_cpu) { reason = 2u; break; }
+        if (hit >= 0) {
+            // Shallow dip whose extremum lies past the root: predict it from
+            // the root as the CPU tracer does (f_ext = -f'^2 / (2 f'')).
+            REAL d0[8];
+            bool ok = rhs(hit_state, d0);
+            Step ahead = dp_step(hit_state, REAL(1e-6));
+            Step behind = dp_step(hit_state, REAL(-1e-6));
+            REAL rate = surface_rate(hit, hit_state, d0);
+            REAL curvature = (surface_rate(hit, ahead.next, ahead.end_rate) -
+                              surface_rate(hit, behind.next, behind.end_rate)) / REAL(2e-6);
+            if (!ok || !ahead.ok || !behind.ok) { reason = 5u; break; }
+            if (rate * curvature < REAL(0) &&
+                abs(rate * rate / (REAL(2) * curvature)) < surface_margin(hit, levels[hit])) {
+                reason = 2u;
+                break;
+            }
+            for (int i = 0; i < 8; ++i) y[i] = hit_state[i];
+            s += hit_tau;
+            ++accepted;
+            if (hit == 3) { reason = 1u; break; } // core entry: CPU continues
+            outcome = hit == 0 ? 1u : hit == 1 ? 2u : 3u;
+            reason = 0u;
+            break;
+        }
+        for (int i = 0; i < 8; ++i) y[i] = trial.next[i];
+        s += h;
+        ++accepted;
+        if (y[2] * y[2] + y[3] * y[3] >= switch_q) {
+            switch_patch(y);
+            chart ^= 1u;
+        }
+        // Normalized null residual, as a safety net only.
+        REAL dn[8], Hn;
+        if (!stereographic_rhs(model, y, dn, Hn)) { reason = 5u; break; }
+        REAL scale = abs(y[4] * dn[0]) + abs(y[5] * dn[1]) + abs(y[6] * dn[2]) + abs(y[7] * dn[3]);
+        REAL residual = scale > REAL(0) ? abs(REAL(2) * Hn) / scale : REAL(1);
+        max_null = max(max_null, residual);
+        if (residual > null_tol) { reason = 6u; break; }
+        h = clamp(h * factor, h_min, h_max);
+    }
+    uint o = 16u * id;
+    outp.v[o + 0u] = REAL(outcome);
+    outp.v[o + 1u] = REAL(outcome == 0u ? reason : 0u);
+    for (int i = 0; i < 8; ++i) outp.v[o + 2u + uint(i)] = y[i];
+    outp.v[o + 10u] = REAL(chart);
+    outp.v[o + 11u] = s;
+    outp.v[o + 12u] = REAL(accepted);
+    outp.v[o + 13u] = REAL(rejected);
+    outp.v[o + 14u] = REAL(rhs_calls);
+    outp.v[o + 15u] = max_null;
+}
