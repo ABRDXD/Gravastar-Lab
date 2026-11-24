@@ -206,7 +206,15 @@ position error measured above (~10x the tolerance at the inner join).
   approach to 1e-12. For the hit, the stationary point lies beyond the
   clipping first root; an early version dropped it there, and the fix keeps
   tangencies on the clipping surface. A 2e-10 join graze is flagged as
-  nonterminal with no crossings. `event_optics` now has 87 checks.
+  nonterminal with no crossings.
+- Review fix (ultrareview of PR #7): when the step grid put a shallow dip's
+  first root in one trial and its stationary point in the next, the ray
+  ended at the terminal surface unflagged; a flat 2e-10 dip swept over 240
+  start positions left 2 unflagged in BL. The tracer now predicts the
+  extremum at the clipping root (`OPTICS.md`). Swept over 2000 starts per
+  chart, every ray is flagged, 5-6 per chart truly straddle a step boundary,
+  and the predicted extremum is exact to 7.5e-15. `event_optics` now has 96
+  checks.
 
 **Outcome gate.** Sampling at 16x12, 32x24, 64x48 and 128x96 (16320 rays per
 scene), with the default flag:

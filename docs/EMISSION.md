@@ -16,10 +16,14 @@ d_r g_tt + 2 W d_r g_tphi + W^2 d_r g_phiphi = 0
 taken from the production metric derivatives. This is prescribed motion, not
 a self-consistent disk. A scene is rejected unless every sampled radius of
 its annulus (64 samples) has a timelike orbit whose angular momentum grows
-outward (stable). The emissivity is unchanged: `(r_inner/r)^3`, bolometric,
+outward (stable), checked by a central difference of L at every sample as
+well as between samples. (Comparing neighbouring samples alone accepted
+Schwarzschild [5.6, 100], whose inner edge is inside the ISCO at 6; found
+by ultrareview of PR #7.) The emissivity is unchanged: `(r_inner/r)^3`, bolometric,
 `I_obs = g^4 I_emit`.
 
-`tests/emission_tests.cpp` (67 checks) compares with the Kerr closed forms of
+`tests/emission_tests.cpp` (73 checks, including wide annuli from 0.99 and
+1.001 ISCO for both spins) compares with the Kerr closed forms of
 Bardeen, Press & Teukolsky (1972) for a in {-0.875, 0, 0.5, 0.875}:
 
 | Check | Measured |
@@ -48,7 +52,9 @@ It is a separate channel. Escaped rays carry `background_intensity`,
 `background_redshift` and `background_direction`; their `linear_intensity`
 stays zero and alpha stays zero. Sampling averages the channel per pixel:
 disk and capture samples hide it, and one escaped sample without it makes it
-unknown.
+unknown. When the scene has no background, no pixel reports one (not a zero),
+and a background value is rejected. The star catalogue is built once per
+scene; the image is bit-identical to the per-ray construction.
 
 `tests/background_tests.cpp` (9 checks): a one-star sphere integral against
 2 pi w^2 b (1e-7 relative, set by the quadrature), the exact Schwarzschild
@@ -66,7 +72,11 @@ continuation, budget 80) and the Kerr twins `optics_keplerian_kerr_v1`,
 `gravastar_convergence` traces one scene at decreasing tolerances on a fixed
 pixel set. `gravastar_trace --tolerance T` sets absolute and relative
 tolerance to T and event tolerance to 10 T. Levels are compared with the
-tightest one (1e-13). 64x48 rays per level:
+tightest one (1e-13). Labels are the shortest exact text of each tolerance.
+At least three levels must pass and the tightest requested level must pass,
+otherwise the report is written as `.failed.json` with no comparisons and the
+tool exits 1. Every level must match the tracer hash, scene hash, source
+digest and requested override (`convergence_cli` CTest). 64x48 rays per level:
 
 | Scene | Tolerance | Rays failing their null check | Disk L1 | Disk max per pixel | Disk g max | Background L1 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |

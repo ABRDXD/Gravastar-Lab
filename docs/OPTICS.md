@@ -77,7 +77,11 @@ value and the margin. `terminal` marks surfaces that end the ray (escape,
 disk annulus, capture proxy, chart limits): there the outcome itself is
 uncertain. For shell joins and core entry/exit only the crossing list is;
 the integrated path does not depend on it. A stationary point beyond a
-clipping event is still kept when it belongs to the clipping surface. Images
+clipping event is still kept when it belongs to the clipping surface. When a
+terminal or transition root clips a trial whose stationary point lies beyond
+it (the step grid split them), the extremum is predicted from the root,
+`f_ext = -f'^2/(2 f'')` with f'' from rates 1e-6 either side, and flagged when
+it is inside the margin, so the flag does not depend on step placement. Images
 count `near_tangent_pixels` and `outcome_uncertain_pixels`; sampling levels
 carry both. Only stationary points bracketed within one accepted step are
 seen; two extrema inside one step remain undetected.

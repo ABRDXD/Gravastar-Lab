@@ -278,6 +278,24 @@ below it as history.
    background is not converged at 64 (L1 0.29 toy, 0.82 Kerr). Wider stars
    converge.
 
+### Ultrareview of Phase C (PR #7, 2026-11-24)
+
+The owner's single ultrareview covered the Phase C code (23 files). All nine
+findings were checked against the code; each was fixed on
+`integration/reconcile` with a test that failed first where possible.
+
+| Finding | Severity | Fix |
+| --- | --- | --- |
+| Keplerian stability compared only neighbouring samples; Schwarzschild [5.6, 100] accepted | normal | Local dL/dr at every sample; wide-annulus tests |
+| Near-tangency flag lost when the step grid split a dip's root and extremum | normal | Extremum predicted at the clipping root; 2000-placement sweep per chart |
+| Disabled background channel reported 0 on disk pixels | nit | Explicit channel switch in `aggregate` |
+| Convergence labels rounded to 6 digits | nit | Shortest exact text |
+| Convergence floor applied only to requested levels; reference unrecorded | nit | Floor on passed levels, `.failed.json`, exit 1, reference recorded |
+| Sampling required counters older tracers lack | nit | Null default; checked with a real Phase A tracer |
+| Convergence had no provenance checks | nit | Tracer, scene, source and override checked per level |
+| Star catalogue rebuilt per ray | nit | Built once per scene; bit-identical image |
+| GYOTO patch duplicated its anchor text | nit | Uses the variable; patched file byte-identical |
+
 ### Phase D: redo P3 GPU optics on the P2 contracts
 
 1. **[MAX]** FP64 vs FP32 measurement on the RTX 3050 (throughput and error); choose
