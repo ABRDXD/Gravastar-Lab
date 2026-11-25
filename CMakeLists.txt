@@ -454,7 +454,7 @@ if(GRAVASTAR_DESKTOP)
         # Loose event tolerance (1e-2): roots often fall in the last bisection
         # interval of a step, where the kernel used to drop the hit (fixed
         # 2026-11-25). The old kernel failed both: Kerr 8 outcome mismatches and
-        # 451 rays handed back, toy 14 mismatches. Toy checks outcomes only: its
+        # 456 rays handed back, toy 14 mismatches. Toy checks outcomes only: its
         # step grids drift apart at the shell joins, so values may differ by up
         # to one bisection cell (docs/GPU_TRACER.md).
         add_test(NAME gpu_trace_loose_events_kerr COMMAND gravastar_gpu_trace --compare-cpu --check

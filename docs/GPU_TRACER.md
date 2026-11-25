@@ -10,8 +10,12 @@ brought across, and images use the Phase C emission model (`EMISSION.md`).
 ```text
 build/<desktop>/gravastar_gpu_trace --config benchmarks/optics_keplerian_stars_v1.json \
     --resolution-scale 8 --compare-cpu --check --summary
-ctest --test-dir build/<desktop> -R gpu_trace      # toy and Kerr, 32x24
+ctest --test-dir build/<desktop> -R gpu_trace      # toy and Kerr, 32x24, two event tolerances
 ```
+
+`--event-tolerance E` sets the event tolerance of the GPU path and the CPU
+reference alike. `--check-outcomes` keeps only the outcome and GPU-share
+ceilings of `--check` (for loose event tolerances, below).
 
 ## What the GPU does, and what it hands back
 
@@ -25,8 +29,10 @@ Same contracts as the CPU angular tracer (`OPTICS.md`):
   patch switch at q >= `angular_switch_q` at accepted endpoints.
 - Terminal events found by bisection on the substep length from the trial
   start, with the CPU's local-error check: escape, disk (q = 1 inside the
-  annulus) and the Kerr capture proxy. The extremum predicted at a clipping
-  root, `f_ext = -f'^2/(2 f'')`, is checked against the CPU's tangency margin.
+  annulus) and the Kerr capture proxy. As on the CPU, a root in the last
+  bisection interval ends the ray at the trial end (`hi = h`). The extremum
+  predicted at a clipping root, `f_ext = -f'^2/(2 f'')`, is checked against
+  the CPU's tangency margin.
 - Kerr scenes use the same closed form with zero shell radii (every radius
   exterior, m = M, no Lambda), which is exactly Kerr. Other families are
   refused.
@@ -70,6 +76,67 @@ with the toy shell radii, so rays near the capture proxy (r = 1.55) moved in
 the wrong metric: 3977 mismatched outcomes. The zero-radii fix and the Kerr
 CTest followed.
 
+## Bug found by the recording measurements: dropped last-interval roots (2026-11-25)
+
+The kernel kept the earliest terminal root with `hi < hit_tau`, where
+`hit_tau` starts at the trial length `h`. When a root lay in the last
+bisection interval before the trial end, bisection never lowered `hi`, so
+`hi == h`, the comparison failed and the hit was dropped. The step was then
+accepted past the surface. A dropped disk hit let the ray fly on through the
+disk. A dropped escape, capture or core-entry hit was usually healed by a CPU
+re-trace (affine budget, numerical failure), but not always. The CPU tracer
+has no such comparison. The fix counts the first hit by itself
+(`hit < 0 || hi < hit_tau`).
+
+How often: the last interval is about `event_tolerance/2` to
+`event_tolerance` long. At the recording tolerance (1e-6, so event tolerance
+1e-5) with steps up to 0.1, that is about 1 in 16,000 crossings. At scene
+tolerances (event tolerance 1e-9, steps 0.01 to 0.1) it is about 1 in 10^7
+to 10^8, so the 128x96 comparison above could not see it.
+
+Found on acceptance frame 0 (1920x1080, FP32 at 1e-6): 56 escaped pixels
+had all 48 neighbours (7x7) on the disk. All 56 were GPU-resolved, and the
+CPU tracer at the same settings put every one of them on the disk. The FP64
+kernel at 1e-6 missed 36 of the same 56. With the fix, none remain and
+emitted rays go from 1,169,974 to 1,170,031 (the FP64 scene-tolerance
+reference, rendered before the fix, had 1,170,051). Fresh measurements are in
+`RECORDING.md`.
+
+**Regression tests.** At event tolerance 1e-2 roots often fall in the last
+interval. GPU-resolved outcome mismatches against the CPU at the same
+settings, 32x24 rays:
+
+| Scene, event tolerance | Old kernel: mismatches, rays handed to the CPU | Fixed kernel |
+| --- | --- | --- |
+| Kerr, 1e-9 | 0, 0 | 0, 0 |
+| Kerr, 1e-3 | 2, 242 | 0, 0 |
+| Kerr, 1e-2 | 8, 456 | 0, 0 |
+| Kerr, 0.05 | 31, 579 | 0, 0 |
+| toy, 1e-9 | 0, 36 | 0, 36 |
+| toy, 1e-3 | 2, 38 | 0, 36 |
+| toy, 1e-2 | 14, 58 | 0, 36 |
+| toy, 0.05 | 68, 310 | 0, 36 |
+
+The fixed kernel also gives 0 mismatches at event tolerance 1. The toy
+scene's 36 hand-backs are core entries. `gpu_trace_loose_events_kerr` (full
+`--check`) and `gpu_trace_loose_events_toy` (`--check-outcomes`) run at
+1e-2; both fail on the old kernel.
+
+**Why toy values differ at loose event tolerances.** On the toy scene, a
+few GPU-resolved values differ from the CPU by up to one bisection cell, at
+most the event tolerance. Medians stay at rounding level. At event
+tolerance 1e-2 the largest final-position difference is 5.2e-3, with median
+7.7e-8. The step grids drift apart at the shell joins, where the metric is
+only C3. Rounding-level differences between the GPU closed form and the CPU
+then decide whether a step straddling a join is accepted. Measured on ray
+310 of the 32x24 toy scene: the two grids agree to 9e-9 until the outer
+join crossing at s = 8.619, differ by 1.3e-6 ten steps later, and by 1.9e-5
+at escape. Both paths stay accurate: at event tolerance 1e-12 the final
+radius and direction of the worst ten rays agree to 3e-9 and the affine
+parameter of the hit to 3e-8. A loose event tolerance only moves the final
+bisection cell. Kerr, with no joins, agrees at rounding level at
+every event tolerance. That is why the toy test checks outcomes only.
+
 ## Timing (honest)
 
 | Scene | GPU kernel | CPU, 12 threads, all rays | Ratio |
@@ -93,5 +160,6 @@ by the scene's attempt and affine budgets.
 
 No Cartesian core patch on the GPU (core rays go to the CPU: 4.7% of the toy
 scene). No nonterminal events (shell joins) on the GPU; they never affect a
-path. No FP32 build of this tracer. The CPU fallback is single-threaded.
-One GPU, one driver.
+path. The FP32 build is the recording path (`RECORDING.md`) and does not meet
+the per-pixel gate above. Since Phase F, the CPU fallback runs on every
+hardware thread; the timings above predate that. One GPU, one driver.
