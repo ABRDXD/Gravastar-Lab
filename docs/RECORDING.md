@@ -171,6 +171,32 @@ Only then is it renamed to `video.mp4`. Width and height must be even
 | `recording_fault_injection` | 600 frames: crash, stale lock, crash window, corrupt, truncated, missing, extra, temporary, orphan radiance, cancel; byte-identical to an uninterrupted job; encoder failures keep frames |
 | `recording_gpu_part1/part2/verify` | the real renderer: two-part smoke job, encode and probe, re-rendered frames identical |
 
+## Acceptance run (FP32, 2026-11-25)
+
+The acceptance spec, as published: 1920×1080, 60 fps, 600 frames, FP32 at
+tolerance 1e-6, one ray per pixel. Run in two parts with the commands above.
+
+- **Interrupted and resumed:** part 1 stopped at its 60-minute budget after
+  198 frames; part 2 resumed with all 198 kept (none adopted, quarantined or
+  missing) and rendered the other 402 in 126.7 min.
+- **Render time:** 3.08 h in total; 18.5 s per frame on average (16.0 to
+  23.2 s). Wall time from start to verified video: 13:27 to 16:39.
+- **Video:** `video.mp4` passed every ffprobe check: 1920×1080, 60/1 fps,
+  600 decoded frames with strictly increasing timestamps, 10.000 s, H.264
+  yuv420p.
+- **Against an uninterrupted render:** frames 0, 137, 299 and 599
+  re-rendered from scratch were byte-identical to the resumed job.
+- **Storage:** frames 545 MB, video 8.9 MB, logs 0.3 MB.
+
+Evidence: `results/p5_recording_acceptance.json` (summary, renderer
+identity) and `results/p5_recording_acceptance_verify.json`. The job directory
+itself (`results/local/acceptance_fp32/`) is not tracked. The machine ran with
+an external fan; the CPU averaged 94–96 °C per half hour (peak 99.6 °C,
+below its 100 °C limit) with no slowdown, and the GPU stayed at 50–55 °C.
+
+Still open for PLAN.md's recording acceptance: the preview-independence
+demonstration.
+
 ## Speed and accuracy at 1080p (RTX 3050 laptop GPU, 12 CPU threads)
 
 `--measure` on the acceptance spec compares each recording path with FP64

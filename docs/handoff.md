@@ -61,9 +61,15 @@ leak detection off for them, as for the other GPU tests, and those three
 then pass. The headless GCC Release and Debug suites were not rerun; no
 headless code changed.
 
-Next: the acceptance run itself (Phase F step 4), in parts, at the precision
-the owner picks. Do not rebuild or update the GPU driver between parts.
-PLAN.md's preview-independence demonstration is still to do.
+The FP32 acceptance run passed on 2026-11-25 (docs/RECORDING.md): 600
+frames at 1080p in two parts, ffprobe-verified video, frames 0/137/299/599
+byte-identical when re-rendered, 3.08 h. Still to do for P5: the
+preview-independence demonstration.
+
+Next (owner, 2026-11-25): GPU core patch [MAX], then presentation colours,
+then a Kerr-app-style studio layout that keeps the raw ImGui look, then the
+FP64 showpiece run (`benchmarks/recording_acceptance_fp64_v1.json`, not yet
+committed: it will gain the colour setting).
 Push with the timeout-safe SSH command in the owner's memory notes; a plain
 `git push` hung once on 2026-11-24.
 

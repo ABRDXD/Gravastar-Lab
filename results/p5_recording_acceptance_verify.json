@@ -1,0 +1,33 @@
+{
+  "all_identical": true,
+  "content_sha256": "d014162a5f99fb9fceebcd5cc46f69476360205f263ec9d584c06f5440132b74",
+  "frames": [
+    {
+      "frame": 0,
+      "identical": true,
+      "png_sha256": "cba248d13e6ea0630ff87141564435dab2334818c2504c5c164817cd46dea78a",
+      "seconds": 17.066159804
+    },
+    {
+      "frame": 137,
+      "identical": true,
+      "png_sha256": "7eb8684bd34b9c8ee23c300b2ad56753eb8a2825a2e6b9d32bc6a997d695d510",
+      "seconds": 18.190564386
+    },
+    {
+      "frame": 299,
+      "identical": true,
+      "png_sha256": "7403ecb84a5ead230e089845f47a3845a0e86ae5ffee607bbd67146d017f07b6",
+      "seconds": 21.344820649
+    },
+    {
+      "frame": 599,
+      "identical": true,
+      "png_sha256": "e8b21dd6a9cfd22c857949d20184fe0e432f76e7382c745fa6744c11cecbc3a8",
+      "seconds": 17.705024178
+    }
+  ],
+  "job": "results/local/acceptance_fp32",
+  "meaning": "each frame re-rendered from scratch in a fresh process state and compared byte for byte with the resumed job",
+  "schema_version": 1
+}

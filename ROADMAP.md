@@ -356,8 +356,10 @@ findings were checked against the code; each was fixed on
 **Status 2026-11-25:** steps 1–3 are done. For step 4 the recorder is done and
 measured at 1080p (docs/RECORDING.md). The measurement found a GPU kernel bug
 that let rays pass through the disk; it is fixed and covered by tests
-(docs/GPU_TRACER.md). The acceptance run itself has not been made, and
-PLAN.md's preview-independence demonstration is still open.
+(docs/GPU_TRACER.md). The FP32 acceptance run passed on 2026-11-25: two
+parts, verified video, four re-rendered frames byte-identical, 3.08 h
+(docs/RECORDING.md). PLAN.md's preview-independence demonstration is still
+open, so the P5 box stays unticked.
 
 **Next, before the FP64 showpiece run (owner, 2026-11-25):** a GPU Cartesian
 core patch. In FP32 at 1080p the GPU takes about 1.8 s of a 19 s frame; most

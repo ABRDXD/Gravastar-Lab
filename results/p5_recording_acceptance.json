@@ -1,0 +1,69 @@
+{
+  "completed": 600,
+  "content_sha256": "d014162a5f99fb9fceebcd5cc46f69476360205f263ec9d584c06f5440132b74",
+  "cpu_fallback_rays_total": 51325598,
+  "encode": {
+    "expected_duration_seconds": [
+      10,
+      1
+    ],
+    "probe": {
+      "codec_name": "h264",
+      "decoded_timestamps": 600,
+      "duration": "10.000000",
+      "height": 1080,
+      "nb_read_frames": "600",
+      "pix_fmt": "yuv420p",
+      "r_frame_rate": "60/1",
+      "timestamps_monotonic": true,
+      "width": 1920
+    },
+    "success": true,
+    "video": "results/local/acceptance_fp32/video.mp4"
+  },
+  "frame_seconds": {
+    "fastest": 16.038973681,
+    "mean": 18.486403890701677,
+    "slowest": 23.204725632
+  },
+  "job": "results/local/acceptance_fp32",
+  "note": "render time sums each frame's last logged render; time spent on abandoned (interrupted) frames is not included",
+  "render_hours_total": 3.0810673151169463,
+  "render_seconds_total": 11091.842334421006,
+  "renderer": {
+    "api_version": 4211039,
+    "cpu_fallback": "CPU tracer at the same settings; results do not depend on the thread count",
+    "device": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+    "device_id": 9644,
+    "driver_version": 2580775424,
+    "executable_sha256": "29ace876dd099ceb959c11579d4999654c0e121d0acafc3dd8284a6caf60eec5",
+    "kernel": "gravastar_trace32.spv",
+    "kernel_sha256": "658bf29f1d81e3decc1d4f71e027eeae92778404aa38b8d5eae4fce245629e0b",
+    "precision": "FP32",
+    "vendor_id": 4318
+  },
+  "schema_version": 1,
+  "sessions_started": 3,
+  "sessions_that_rendered": 2,
+  "state": "complete",
+  "storage_bytes": {
+    "frames": 545104072,
+    "logs": 280693,
+    "radiance": 0,
+    "video": 8936805
+  },
+  "timeline": {
+    "duration_seconds": [
+      10,
+      1
+    ],
+    "fps": [
+      60,
+      1
+    ],
+    "frame_count": 600,
+    "height": 1080,
+    "radiance_channels": 0,
+    "width": 1920
+  }
+}
