@@ -186,7 +186,10 @@ executable and kernel SHA-256. The table shows frame 0 / frame 300.
 | FP32, 1e-6 | 17.9 / 22.0 | 3.0–3.7 h | 5.2% / 5.8% | 93 / 74 | 42 / 47 | 57 / 62 | 58.0 / 56.6 dB |
 
 No image has a background pixel whose 48 neighbours (7×7) are all disk
-(`background_pixels_surrounded_by_disk` = 0 in all six).
+(`background_pixels_surrounded_by_disk` = 0 in all six). Every outcome change
+in both frames, at both precisions, is an edge pixel: one of its eight
+neighbours in the reference already has the new outcome (checked from
+per-pixel outcome maps, 2026-11-25).
 
 Almost all differing pixels are off by 1–2 levels: 99.9% at FP64 1e-6 and
 99.5% at FP32. In FP32, 1.8 s of each frame is GPU work. Most of the rest
