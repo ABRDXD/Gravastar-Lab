@@ -369,6 +369,16 @@ CPU ray by ray (no GPU-resolved outcome changes, value ceilings as in
 `gpu_trace_vs_cpu`, including the loose-event-tolerance tests); anything it
 cannot decide still goes to the CPU. **[MAX]**
 
+  **Status 2026-11-25:** implemented (`511453f`): a core-chart build of the
+  kernel, transitions on the host with the CPU's to_core/from_core
+  (docs/GPU_TRACER.md). Toy 128x96 against the CPU at scene tolerance:
+  0 mismatches, 12286/12288 rays on the GPU; its 577 core rays agree to
+  6.2e-10. All 17 GPU/recording CTests pass (GCC desktop). 1080p frame 0:
+  FP32 6.2 s per frame (was 17.9), FP64 scene tolerance 179.9 s (was 205.7).
+  Still to do: frame 300, regenerate `results/p3_gpu_image_*.json` and the
+  `p5_recording_measure_*` reports, update RECORDING.md, Clang and
+  sanitizer gates.
+
 ### Phase G: P6 release
 
 1. Fresh-clone build and test from the README alone.

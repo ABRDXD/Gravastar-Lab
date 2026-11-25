@@ -1,9 +1,11 @@
 # GPU tracer on the CPU tracer's contracts (Phase D steps 2–4, 2026-11-24)
 
 `shaders/gravastar_trace.comp` (built FP64, the Phase D step 1 decision in
-`GPU_PRECISION.md`) traces camera rays on the GPU. `gravastar_gpu_trace`
-drives it, re-traces flagged rays on the CPU, and evaluates emission and the
-background channel on the CPU from each final state. There is no painted
+`GPU_PRECISION.md`, plus an FP32 recording build) traces camera rays on the
+GPU, including their passage through the gravastar core (below).
+`gravastar_gpu_trace` drives it, re-traces flagged rays on the CPU, and
+evaluates emission and the background channel on the CPU from each final
+state. There is no painted
 colour anywhere: the old renderer that painted the core cyan was never
 brought across, and images use the Phase C emission model (`EMISSION.md`).
 
@@ -35,20 +37,68 @@ Same contracts as the CPU angular tracer (`OPTICS.md`):
   the CPU's tangency margin.
 - Kerr scenes use the same closed form with zero shell radii (every radius
   exterior, m = M, no Lambda), which is exactly Kerr. Other families are
-  refused.
+  refused, and so is core continuation outside the toy family, as on the
+  CPU.
+- With core continuation (`CORE_CONTINUATION.md`), the Cartesian core chart
+  in a second build of the kernel (below).
 
 Rays needing logic the GPU does not have end as `needs_cpu` with a reason,
 and the same CPU tracer re-traces them from the same launch:
 
 | Reason | When |
 | --- | --- |
-| `core_entry` | r reaches the core patch radius (or the inner chart limit without core continuation) |
+| `core_entry` | r reaches the inner chart limit without core continuation, or a launch lies inside the core entry radius |
 | `near_tangency` | a turning point of a terminal surface function whose cubic Hermite extremum lies within 1e-3 of the level (or 1000 margins), a predicted hidden crossing, or a clipping root inside the tangency margin |
 | `affine_budget`, `step_budget` | the CPU's limits |
 | `numerical_failure`, `null_drift` | invalid RHS, minimum step, or null residual above the scene ceiling |
 
 The near-tangency gate is deliberately wide: the GPU decides nothing close
 to a terminal surface.
+
+## The core chart: a second kernel build, transitions on the host (2026-11-25)
+
+Rays entering the core used to be handed to the CPU (4.7% of the toy scene's
+rays; at 1080p in FP32 their re-traces took 12–16 s of a 19 s frame). Now:
+
+- `gravastar_trace.comp` builds twice per precision. The angular build has
+  the stereographic patches, terminal events and core entry. The core build
+  (`-DGRAVASTAR_CORE_CHART`, `gravastar_trace_coreNN.spv`) has the core
+  right-hand side from `shaders/gravastar_core.glsl`: the closed form
+  `H = (-P_T^2/F + P.P - k W^2)/2` with evaluate_core's domain (exact toy
+  core ellipsoid, F > 64 epsilon). It also has the exit ellipsoid as its
+  only event surface.
+- A ray reaching an entry or exit root takes the clipped step and carries the
+  controller's next step, as the CPU does around `change_core`. It then
+  pauses with its integrator state: next step, affine parameter, counters,
+  attempts used.
+- `GpuTracer` transforms it with the CPU tracer's own `to_core`/`from_core`,
+  in the order of `change_core` and `switch_patch` with their null-residual
+  checks, and resumes it in the other build. A ray through the core takes
+  three dispatch rounds; re-entries take more. Any throw hands the ray to the
+  CPU, which re-traces it from its launch.
+- Event, tangency and hidden-crossing rules on the exit surface are the same
+  as for every other surface. Its level scale is 1, like the disk's.
+
+**Why two builds.** The first version (`bce84dd`) put both charts and
+GLSL transforms in one kernel. Every ray then ran about five times slower in
+FP32, even on Kerr with no core rays at all: 14 to 72 ms at 128x96. The
+driver's statistics (`VK_KHR_pipeline_executable_properties`) showed why.
+The old kernel already used all 255 registers per thread, and the combined
+kernel spilled 1776 bytes per thread to local memory instead of 32.
+Matrix-free transforms, position-only validation, moving the transform out
+of the event code and `-Os` did not change that; stubbing the transforms
+out did. With two builds:
+
+| Build | Registers | Local memory per thread |
+| --- | ---: | ---: |
+| angular FP32 (old single kernel) | 255 | 48 B (32 B) |
+| core FP32 | 224 | 32 B |
+| angular FP64 (old single kernel) | 255 | 1840 B (1808 B) |
+| core FP64 | 255 | 256 B |
+
+GPU time at 128x96, FP32 at 1e-6: Kerr 14 ms (14 before), toy 21 ms with
+every core ray on the GPU (18 ms before, plus 576 CPU re-traces). FP64 at
+scene tolerance: Kerr 923–988 ms (986), toy 1545 ms (1411 plus the CPU).
 
 ## Per-pixel comparison (128x96 Keplerian star scenes, RTX 3050, FP64)
 
@@ -58,9 +108,12 @@ compared; flagged rays are traced by the CPU tracer itself.
 | Scene | Rays on GPU | Re-traced on CPU | Outcome mismatches | Disk intensity (rel.) max | Disk redshift max | Background (rel.) max | Final position max |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
 | toy (`optics_keplerian_stars_v1`) | 11709 / 12288 | 577 core entry, 2 near tangency | 0 | 6.3e-9 | 3.5e-9 | 1.8e-5 | 8.4e-8 |
+| toy, two-kernel tracer (2026-11-25, report not yet regenerated) | 12286 / 12288 | 2 near tangency | 0 | 2.8e-9 | 1.4e-9 | 1.8e-5 | 8.4e-8 |
 | Kerr (`optics_keplerian_kerr_stars_v1`) | 12288 / 12288 | 0 | 0 | 5.2e-10 | 1.2e-10 | 6.5e-9 | 2.2e-8 |
 
-Medians are 1e-11 to 1e-10. Every maximum except one background value is
+In the two-kernel run the 577 core rays alone have 0 mismatches, final
+position max 6.2e-10 and background max 1e-9 (`gravastar_gpu_trace` reports
+them as `core_rays`). Medians are 1e-11 to 1e-10. Every maximum except one background value is
 below the CPU tracer's own integration error at the scene tolerance (about
 3e-7 per pixel against tolerance 1e-13, `EMISSION.md`). The toy background
 maximum 1.8e-5 is one ray on a steep flank of a 0.02-rad star, where a
@@ -158,8 +211,6 @@ by the scene's attempt and affine budgets.
 
 ## Not covered
 
-No Cartesian core patch on the GPU (core rays go to the CPU: 4.7% of the toy
-scene). No nonterminal events (shell joins) on the GPU; they never affect a
-path. The FP32 build is the recording path (`RECORDING.md`) and does not meet
+No nonterminal events (shell joins) on the GPU; they never affect a path. The FP32 build is the recording path (`RECORDING.md`) and does not meet
 the per-pixel gate above. Since Phase F, the CPU fallback runs on every
 hardware thread; the timings above predate that. One GPU, one driver.

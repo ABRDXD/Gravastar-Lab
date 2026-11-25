@@ -66,7 +66,16 @@ frames at 1080p in two parts, ffprobe-verified video, frames 0/137/299/599
 byte-identical when re-rendered, 3.08 h. Still to do for P5: the
 preview-independence demonstration.
 
-Next (owner, 2026-11-25): GPU core patch [MAX], then presentation colours,
+GPU core patch (2026-11-25, `bce84dd`, `511453f`): core rays are traced on the
+GPU by a second kernel build; transitions use the CPU's own to_core/from_core
+on the host. Toy 128x96 vs CPU: 0 mismatches, core rays agree to 6.2e-10.
+1080p frame 0 (`results/local/core/measure2_f0.json`, untracked): FP32
+6.2 s per frame, 52 outcome changes against the reference, 85 pixels off by
+more than 8 levels; FP64 at 1e-6 81.4 s; FP64 at scene tolerance 179.9 s.
+Stopped there because the owner needed the laptop: frame 300, the tracked
+reports, RECORDING.md and the Clang/sanitizer gates are still to do (ROADMAP.md).
+
+Next (owner, 2026-11-25): finish the core patch checks above, then presentation colours,
 then a Kerr-app-style studio layout that keeps the raw ImGui look, then the
 FP64 showpiece run (`benchmarks/recording_acceptance_fp64_v1.json`, not yet
 committed: it will gain the colour setting).
