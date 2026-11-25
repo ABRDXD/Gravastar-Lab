@@ -290,6 +290,7 @@ if(GRAVASTAR_DESKTOP)
             "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_trace.comp" -o "${GRAVASTAR_TRACE64_SPV}"
         DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_trace.comp"
                 "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_stereographic.glsl"
+                "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_core.glsl"
         VERBATIM)
     set(GRAVASTAR_TRACE32_SPV "${GRAVASTAR_SPV_DIR}/gravastar_trace32.spv")
     add_custom_command(
@@ -298,6 +299,7 @@ if(GRAVASTAR_DESKTOP)
             "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_trace.comp" -o "${GRAVASTAR_TRACE32_SPV}"
         DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_trace.comp"
                 "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_stereographic.glsl"
+                "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_core.glsl"
         VERBATIM)
     add_custom_target(gravastar_trace_shader DEPENDS "${GRAVASTAR_TRACE64_SPV}" "${GRAVASTAR_TRACE32_SPV}")
     add_custom_target(gravastar_precision_shaders

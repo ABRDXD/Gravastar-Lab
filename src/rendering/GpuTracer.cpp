@@ -29,6 +29,9 @@ std::array<double, header_size> header(const o::Scene &s) {
     const bool kerr = s.geometry.family == geometry::Family::kerr;
     if (!kerr && s.geometry.family != geometry::Family::toy)
         throw std::invalid_argument("the GPU tracer supports the toy and Kerr families only");
+    // The CPU tracer refuses core continuation outside an exact core.
+    if (kerr && c.continue_core)
+        throw std::invalid_argument("core continuation needs the toy family");
     std::array<double, header_size> h{};
     const double values[] = {
         s.geometry.mass, s.geometry.spin, s.geometry.cosmological_constant,
@@ -40,7 +43,10 @@ std::array<double, header_size> header(const o::Scene &s) {
         // Without core continuation the inner chart limit is terminal on the
         // CPU; the GPU hands rays reaching either radius to the CPU.
         c.continue_core ? c.core_entry_radius : c.inner_radius,
-        c.capture_radius.value_or(0), c.angular_switch_q, c.tangency_factor};
+        c.capture_radius.value_or(0), c.angular_switch_q, c.tangency_factor,
+        // With core continuation the GPU enters and leaves the Cartesian core
+        // itself (shaders/gravastar_core.glsl).
+        c.continue_core ? 1. : 0., c.core_exit_radius};
     std::copy(std::begin(values), std::end(values), h.begin());
     return h;
 }

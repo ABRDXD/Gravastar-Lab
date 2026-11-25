@@ -175,6 +175,10 @@ int main(int argc, char **argv) {
     if (compare) {
       std::size_t mismatched = 0;
       std::vector<double> intensity, redshift, background, position;
+      // The same comparison restricted to rays whose CPU trace entered the
+      // Cartesian core (traced by the GPU core chart since 2026-11-25).
+      std::size_t core_compared = 0, core_mismatched = 0;
+      std::vector<double> core_intensity, core_redshift, core_background, core_position;
       // CPU-only reference on every hardware thread, so the timing compares
       // the GPU with a parallel CPU rather than with one core.
       const unsigned threads = std::max(1u, std::thread::hardware_concurrency());
@@ -195,8 +199,12 @@ int main(int argc, char **argv) {
         if (gpu_outcome[i] == 0)
           continue; // identical CPU trace by construction
         const auto &t = combined[i];
+        const bool core = std::any_of(cpu.crossings.begin(), cpu.crossings.end(),
+                                      [](const o::Crossing &c) { return c.surface == "core_entry"; });
+        core_compared += core;
         if (cpu.outcome != t.outcome) {
           ++mismatched;
+          core_mismatched += core;
           continue;
         }
         const auto a = o::ray_report(s, initial[i], t), b = o::ray_report(s, initial[i], cpu);
@@ -205,11 +213,17 @@ int main(int argc, char **argv) {
                                        b["linear_intensity"].get<double>()) /
                               b["linear_intensity"].get<double>());
           redshift.push_back(std::abs(a["redshift"].get<double>() - b["redshift"].get<double>()));
+          if (core) {
+            core_intensity.push_back(intensity.back());
+            core_redshift.push_back(redshift.back());
+          }
         }
         if (cpu.outcome == o::Outcome::escaped && !b["background_intensity"].is_null()) {
           const double bb = b["background_intensity"].get<double>();
           background.push_back(std::abs(a["background_intensity"].get<double>() - bb) /
                                std::max(1e-12, bb));
+          if (core)
+            core_background.push_back(background.back());
         }
         // Chart-independent final position: r and the unit direction.
         if (cpu.final.chart != o::Chart::core_cartesian) {
@@ -218,6 +232,8 @@ int main(int argc, char **argv) {
           for (int k = 0; k < 3; ++k)
             e = std::max(e, std::abs(na[k] - nb[k]));
           position.push_back(e);
+          if (core)
+            core_position.push_back(e);
         }
       }
       report["comparison"] = {
@@ -228,6 +244,15 @@ int main(int argc, char **argv) {
           {"disk_redshift_absolute", distribution(redshift)},
           {"background_relative", distribution(background)},
           {"final_position_and_direction", distribution(position)},
+          {"core_rays",
+           {{"compared", core_compared},
+            {"outcome_mismatches", core_mismatched},
+            {"disk_intensity_relative", distribution(core_intensity)},
+            {"disk_redshift_absolute", distribution(core_redshift)},
+            {"background_relative", distribution(core_background)},
+            {"final_position_and_direction", distribution(core_position)},
+            {"note", "GPU-resolved rays whose CPU trace entered the Cartesian core; "
+                     "already included in the totals above."}}},
           {"note", "Rays the GPU flagged are re-traced by the same CPU tracer, "
                    "so only GPU-resolved rays are compared."}};
     }

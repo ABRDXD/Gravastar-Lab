@@ -1,12 +1,15 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Phase D GPU tracer: the CPU tracer's adaptive Dormand-Prince 5(4) in the
-// north/south stereographic patches, with its error norm, step controller,
-// patch switch and terminal events (escape, disk, Kerr capture proxy).
+// north/south stereographic patches and, with core continuation, the static
+// Cartesian core chart (gravastar_core.glsl), with its error norm, step
+// controller, patch switch, core entry/exit transitions and terminal events
+// (escape, disk, Kerr capture proxy).
 // It never guesses where the CPU tracer has more logic. Instead it ends
 // the ray as NEEDS_CPU with a reason, and the host re-traces it on the CPU:
-//   1 core entry (no Cartesian core patch here)  2 near tangency or a
-//   possible hidden crossing of a terminal surface  3 affine budget
-//   4 attempt budget  5 numerical failure  6 null drift.
+//   1 core entry without core continuation (or a launch inside the entry
+//   radius)  2 near tangency or a possible hidden crossing of an event
+//   surface  3 affine budget  4 attempt budget  5 numerical failure
+//   (including a failed chart transition)  6 null drift.
 // Build with -DGRAVASTAR_FP64 (the Phase D step 1 decision for reference
 // work). The FP32 build is the recording/preview path: it needs looser
 // tolerances (about 1e-6), and its results carry the FP32 floor measured in
@@ -18,7 +21,7 @@
 // 8 h_min, 9 h_max, 10 event_tol, 11 null_tol, 12 max_affine,
 // 13 max_attempts, 14 outer_radius, 15 disk (0/1), 16 disk_inner,
 // 17 disk_outer, 18 core_entry_radius (0: none), 19 capture_radius (0: none),
-// 20 switch_q, 21 tangency_factor.
+// 20 switch_q, 21 tangency_factor, 22 continue_core (0/1), 23 core_exit_radius.
 // Output (REAL[]): 16 per ray: 0 outcome (0 needs_cpu, 1 escaped, 2 emitted,
 // 3 capture_surface), 1 reason, 2..9 final state, 10 patch, 11 affine,
 // 12 accepted, 13 rejected, 14 rhs calls, 15 maximum null residual.
@@ -27,7 +30,7 @@
 
 layout(local_size_x = 64, local_size_y = 1, local_size_z = 1) in;
 
-#include "gravastar_stereographic.glsl"
+#include "gravastar_core.glsl"
 
 layout(std430, set = 0, binding = 0) readonly buffer Inputs { REAL v[]; } inp;
 layout(std430, set = 0, binding = 1) writeonly buffer Outputs { REAL v[]; } outp;
@@ -42,8 +45,9 @@ const REAL PROBE = REAL(1e-3);
 #endif
 
 StereoModel model;
-REAL atol, rtol, event_tol, null_tol, tangency_factor;
+REAL atol, rtol, event_tol, null_tol, tangency_factor, core_exit_radius;
 uint rhs_calls;
+uint chart; // 0 north, 1 south, 2 Cartesian core
 
 // Dormand-Prince 5(4), identical tableau and error weights to src/optics/ray.cpp.
 const REAL A21 = REAL(1) / REAL(5);
@@ -71,10 +75,13 @@ struct Step {
     bool ok;
 };
 
+bool chart_rhs(REAL y[8], out REAL d[8], out REAL H) {
+    return chart == 2u ? core_rhs(model, y, d, H) : stereographic_rhs(model, y, d, H);
+}
 bool rhs(REAL y[8], out REAL d[8]) {
     REAL H;
     ++rhs_calls;
-    return stereographic_rhs(model, y, d, H);
+    return chart_rhs(y, d, H);
 }
 
 Step dp_step(REAL y[8], REAL h) {
@@ -124,17 +131,24 @@ REAL error_norm(Step s, REAL y[8]) {
     return e;
 }
 
-// Terminal surfaces: 0 escape r = outer, 1 disk q = 1, 2 capture r = rc,
-// 3 core entry r = re. Value and rate along the ray.
+// Event surfaces. Angular patches: 0 escape r = outer, 1 disk q = 1,
+// 2 capture r = rc, 3 core entry r = re. Core chart: 4 core exit, the oblate
+// ellipsoid of radius core_exit_radius. Value and rate along the ray.
 REAL surface_value(int k, REAL y[8], REAL level) {
-    return k == 1 ? y[2] * y[2] + y[3] * y[3] - REAL(1) : y[1] - level;
+    return k == 1   ? y[2] * y[2] + y[3] * y[3] - REAL(1)
+           : k == 4 ? core_exit_value(model, core_exit_radius, y)
+                    : y[1] - level;
 }
 REAL surface_rate(int k, REAL y[8], REAL d[8]) {
-    return k == 1 ? REAL(2) * (y[2] * d[2] + y[3] * d[3]) : d[1];
+    return k == 1   ? REAL(2) * (y[2] * d[2] + y[3] * d[3])
+           : k == 4 ? core_exit_rate(model, core_exit_radius, y, d)
+                    : d[1];
 }
+// Level scale of a surface: the disk q and the normalized exit ellipsoid are
+// of order one, as tangency_margin() in src/optics/ray.cpp has it.
+REAL surface_scale(int k, REAL level) { return k == 1 || k == 4 ? REAL(1) : abs(level); }
 REAL surface_margin(int k, REAL level) {
-    REAL scale = k == 1 ? REAL(1) : abs(level);
-    return tangency_factor * max(atol, rtol * scale);
+    return tangency_factor * max(atol, rtol * surface_scale(k, level));
 }
 
 void main() {
@@ -154,8 +168,10 @@ void main() {
     null_tol = inp.v[11];
     REAL max_affine = inp.v[12];
     uint max_attempts = uint(inp.v[13]);
-    REAL levels[4] = REAL[4](inp.v[14], REAL(0), inp.v[19], inp.v[18]);
-    bool enabled[4] = bool[4](true, inp.v[15] != REAL(0), inp.v[19] > REAL(0), inp.v[18] > REAL(0));
+    const bool core_on = inp.v[22] != REAL(0);
+    core_exit_radius = inp.v[23];
+    REAL levels[5] = REAL[5](inp.v[14], REAL(0), inp.v[19], inp.v[18], REAL(0));
+    bool enabled[5] = bool[5](true, inp.v[15] != REAL(0), inp.v[19] > REAL(0), inp.v[18] > REAL(0), core_on);
     REAL disk_inner = inp.v[16], disk_outer = inp.v[17], switch_q = inp.v[20];
     tangency_factor = inp.v[21];
     rhs_calls = 0u;
@@ -163,10 +179,15 @@ void main() {
     REAL y[8];
     uint base = 32u + 16u * id;
     for (int i = 0; i < 8; ++i) y[i] = inp.v[base + uint(i)];
-    uint chart = uint(inp.v[base + 8u]);
+    chart = uint(inp.v[base + 8u]);
     REAL s = REAL(0), max_null = REAL(0);
     uint outcome = 0u, reason = 4u, accepted = 0u, rejected = 0u;
-    for (uint attempt = 0u; attempt < max_attempts; ++attempt) {
+    // The CPU enters the core before the first step from inside the entry
+    // radius; launches there are left to it.
+    uint attempts = core_on && y[1] <= levels[3] ? 0u : max_attempts;
+    if (attempts == 0u)
+        reason = 1u;
+    for (uint attempt = 0u; attempt < attempts; ++attempt) {
         REAL remaining = max_affine - s;
         if (remaining <= REAL(8) * REAL(2.220446049250313e-16) * max(REAL(1), max_affine)) {
             reason = 3u;
@@ -193,8 +214,9 @@ void main() {
         REAL hit_tau = h;
         REAL hit_state[8];
         bool retry = false, needs_cpu = false;
-        for (int k = 0; k < 4; ++k) {
-            if (!enabled[k]) continue;
+        for (int k = 0; k < 5; ++k) {
+            // The core chart has only its exit; the patches have the rest.
+            if (!enabled[k] || (k == 4) != (chart == 2u)) continue;
             REAL f0 = surface_value(k, y, levels[k]);
             REAL f1 = surface_value(k, trial.next, levels[k]);
             REAL r0 = surface_rate(k, y, trial.start_rate);
@@ -223,7 +245,7 @@ void main() {
                 // Generous gate (1e-3 of the level, or ten tangency margins
                 // at loose tolerances) keeps Hermite error far below the
                 // decision; anything near is left to the CPU.
-                REAL gate = max(REAL(10) * margin, REAL(1e-3) * (k == 1 ? REAL(1) : abs(levels[k])));
+                REAL gate = max(REAL(10) * margin, REAL(1e-3) * surface_scale(k, levels[k]));
                 if (sign(f_ext) != sign(f0) || abs(f_ext) < gate) {
                     needs_cpu = true;
                     break;
@@ -286,21 +308,34 @@ void main() {
             for (int i = 0; i < 8; ++i) y[i] = hit_state[i];
             s += hit_tau;
             ++accepted;
-            if (hit == 3) { reason = 1u; break; } // core entry: CPU continues
-            outcome = hit == 0 ? 1u : hit == 1 ? 2u : 3u;
-            reason = 0u;
-            break;
+            if (hit == 3) {
+                if (!core_on) { reason = 1u; break; } // inner chart limit: CPU decides
+                // Core entry: the clipped step is accepted in the new chart and
+                // the trace goes on with the same step controller (change_core).
+                if (!core_from_angular(model, y, chart == 0u)) { reason = 5u; break; }
+                chart = 2u;
+            } else if (hit == 4) {
+                // Core exit to the hemisphere of Z, as from_core is called.
+                uint destination = y[3] >= REAL(0) ? 0u : 1u;
+                if (!core_to_angular(model, y, destination == 0u)) { reason = 5u; break; }
+                chart = destination;
+            } else {
+                outcome = hit == 0 ? 1u : hit == 1 ? 2u : 3u;
+                reason = 0u;
+                break;
+            }
+        } else {
+            for (int i = 0; i < 8; ++i) y[i] = trial.next[i];
+            s += h;
+            ++accepted;
         }
-        for (int i = 0; i < 8; ++i) y[i] = trial.next[i];
-        s += h;
-        ++accepted;
-        if (y[2] * y[2] + y[3] * y[3] >= switch_q) {
+        if (chart != 2u && y[2] * y[2] + y[3] * y[3] >= switch_q) {
             switch_patch(y);
             chart ^= 1u;
         }
         // Normalized null residual, as a safety net only.
         REAL dn[8], Hn;
-        if (!stereographic_rhs(model, y, dn, Hn)) { reason = 5u; break; }
+        if (!chart_rhs(y, dn, Hn)) { reason = 5u; break; }
         REAL scale = abs(y[4] * dn[0]) + abs(y[5] * dn[1]) + abs(y[6] * dn[2]) + abs(y[7] * dn[3]);
         REAL residual = scale > REAL(0) ? abs(REAL(2) * Hn) / scale : REAL(1);
         max_null = max(max_null, residual);
