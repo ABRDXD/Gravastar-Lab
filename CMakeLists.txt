@@ -451,7 +451,21 @@ if(GRAVASTAR_DESKTOP)
         add_test(NAME gpu_trace_vs_cpu_kerr COMMAND gravastar_gpu_trace --compare-cpu --check
             --summary --config benchmarks/optics_keplerian_kerr_stars_v1.json --resolution-scale 2
             --output results/local/gpu_trace_kerr_ctest.json)
-        set_tests_properties(gpu_trace_vs_cpu gpu_trace_vs_cpu_kerr PROPERTIES TIMEOUT 300 LABELS desktop)
+        # Loose event tolerance (1e-2): roots often fall in the last bisection
+        # interval of a step, where the kernel used to drop the hit (fixed
+        # 2026-11-25). The old kernel failed both: Kerr 8 outcome mismatches and
+        # 451 rays handed back, toy 14 mismatches. Toy checks outcomes only: its
+        # step grids drift apart at the shell joins, so values may differ by up
+        # to one bisection cell (docs/GPU_TRACER.md).
+        add_test(NAME gpu_trace_loose_events_kerr COMMAND gravastar_gpu_trace --compare-cpu --check
+            --summary --config benchmarks/optics_keplerian_kerr_stars_v1.json --resolution-scale 2
+            --event-tolerance 1e-2 --output results/local/gpu_trace_loose_kerr_ctest.json)
+        add_test(NAME gpu_trace_loose_events_toy COMMAND gravastar_gpu_trace --compare-cpu
+            --check-outcomes --summary --config benchmarks/optics_keplerian_stars_v1.json
+            --resolution-scale 2 --event-tolerance 1e-2
+            --output results/local/gpu_trace_loose_toy_ctest.json)
+        set_tests_properties(gpu_trace_vs_cpu gpu_trace_vs_cpu_kerr gpu_trace_loose_events_kerr
+            gpu_trace_loose_events_toy PROPERTIES TIMEOUT 300 LABELS desktop)
         add_test(NAME gpu_precision COMMAND gravastar_gpu_precision --check
             --width 32 --height 24 --output results/local/gpu_precision_ctest.json)
         set_tests_properties(gpu_precision PROPERTIES TIMEOUT 300 LABELS desktop)
@@ -469,6 +483,7 @@ if(GRAVASTAR_DESKTOP)
             # project code. Address and undefined-behavior checks stay on.
             set_tests_properties(vulkan_device_audit vulkan_studio_smoke vulkan_studio_render_smoke
                 vulkan_metric_fp32 vulkan_ray_fp32 gpu_precision gpu_trace_vs_cpu gpu_trace_vs_cpu_kerr
+                gpu_trace_loose_events_kerr gpu_trace_loose_events_toy
                 PROPERTIES ENVIRONMENT "ASAN_OPTIONS=detect_leaks=0")
         endif()
     endif()

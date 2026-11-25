@@ -9,6 +9,7 @@
 #include "gravastar/rendering/GpuTracer.hpp"
 #include <algorithm>
 #include <chrono>
+#include <cmath>
 #include <iostream>
 #include <optional>
 #include <thread>
@@ -36,12 +37,17 @@ int main(int argc, char **argv) {
     int scale = 1;
     std::size_t batch = 4096;
     bool compare = false, check = false, summary_only = false, fp32 = false;
-    std::optional<double> tolerance;
+    bool outcomes_only = false; // --check-outcomes: no value ceilings
+    std::optional<double> tolerance, event_tolerance;
     unsigned fallback_threads = 0; // 0: every hardware thread
     for (int i = 1; i < argc; ++i) {
       const std::string option = argv[i];
       if (option == "--compare-cpu" || option == "--check" || option == "--summary") {
         (option == "--compare-cpu" ? compare : option == "--check" ? check : summary_only) = true;
+        continue;
+      }
+      if (option == "--check-outcomes") {
+        check = outcomes_only = true;
         continue;
       }
       if (i + 1 >= argc)
@@ -56,6 +62,7 @@ int main(int argc, char **argv) {
           throw std::invalid_argument("--precision must be fp64 or fp32");
         fp32 = value == "fp32";
       } else if (option == "--tolerance") tolerance = std::stod(value);
+      else if (option == "--event-tolerance") event_tolerance = std::stod(value);
       else if (option == "--fallback-threads") fallback_threads = std::stoul(value);
       else throw std::invalid_argument("unknown option " + option);
     }
@@ -74,6 +81,14 @@ int main(int argc, char **argv) {
     if (s.width > 128 || s.height > 128)
       throw std::invalid_argument("scaled image exceeds 128x128");
     s.settings.save_trajectory = false;
+    // Event tolerance for the GPU path and the CPU reference alike. A loose
+    // value makes roots fall in the last bisection interval of a step often,
+    // the case the 2026-11-25 kernel fix is about (docs/GPU_TRACER.md).
+    if (event_tolerance) {
+      if (!(*event_tolerance > 0) || !std::isfinite(*event_tolerance))
+        throw std::invalid_argument("--event-tolerance must be finite and positive");
+      s.settings.event_tolerance = *event_tolerance;
+    }
     const auto patch = s.position[2] <= std::numbers::pi / 2 ? o::Chart::north
                                                              : o::Chart::south;
 
@@ -90,8 +105,11 @@ int main(int argc, char **argv) {
     // The reference (CPU comparison) keeps the scene's own settings; the GPU
     // path and its CPU fallback may use a looser tolerance (FP32 needs ~1e-6).
     const auto reference_settings = s.settings;
-    if (tolerance)
+    if (tolerance) {
       s = o::with_tolerance(s, *tolerance);
+      if (event_tolerance)
+        s.settings.event_tolerance = *event_tolerance;
+    }
     gravastar::rendering::GpuTracer tracer(
         fp32 ? GRAVASTAR_TRACE32_SPV : GRAVASTAR_TRACE64_SPV, options,
         fp32 ? gravastar::rendering::GpuTracer::Precision::fp32
@@ -140,6 +158,8 @@ int main(int argc, char **argv) {
              {"precision", fp32 ? "FP32" : "FP64"},
              {"gpu_tolerance", s.settings.absolute_tolerance},
              {"reference_tolerance", reference_settings.absolute_tolerance},
+             {"gpu_event_tolerance", s.settings.event_tolerance},
+             {"reference_event_tolerance", reference_settings.event_tolerance},
              {"rays", n},
              {"gpu_resolved_rays", n - total_flagged},
              {"cpu_fallback_rays", total_flagged},
@@ -216,6 +236,11 @@ int main(int argc, char **argv) {
     // margin: no GPU-resolved ray may change outcome, and GPU-resolved disk,
     // redshift and position values must stay well inside the CPU tracer's
     // own integration error at scene tolerances (~3e-7 per pixel).
+    // --check-outcomes keeps only the outcome and GPU-share ceilings. It is
+    // for loose event tolerances: on toy scenes the GPU and CPU step grids
+    // drift apart at the C3 shell joins (rounding-level differences decide
+    // whether a step straddling a join is accepted), so a root can end one
+    // bisection cell, at most the event tolerance, from the CPU's.
     if (check) {
       if (!compare)
         throw std::invalid_argument("--check requires --compare-cpu");
@@ -225,11 +250,14 @@ int main(int argc, char **argv) {
       };
       std::string failures;
       if (c["gpu_resolved_outcome_mismatches"] != 0) failures += "outcome mismatch; ";
-      if (worst("disk_intensity_relative") > 1e-7) failures += "disk intensity; ";
-      if (worst("disk_redshift_absolute") > 1e-7) failures += "disk redshift; ";
-      if (worst("final_position_and_direction") > 1e-6) failures += "final position; ";
+      if (!outcomes_only) {
+        if (worst("disk_intensity_relative") > 1e-7) failures += "disk intensity; ";
+        if (worst("disk_redshift_absolute") > 1e-7) failures += "disk redshift; ";
+        if (worst("final_position_and_direction") > 1e-6) failures += "final position; ";
+      }
       if (report["gpu_resolved_rays"].get<std::size_t>() * 10 < n * 9)
         failures += "fewer than 90% of rays resolved on the GPU; ";
+      report["check_scope"] = outcomes_only ? "outcomes" : "outcomes_and_values";
       report["checks_passed"] = failures.empty();
       report["check_failures"] = failures;
       if (!failures.empty())
