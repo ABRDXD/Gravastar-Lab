@@ -484,6 +484,8 @@ if(GRAVASTAR_DESKTOP)
             set_tests_properties(vulkan_device_audit vulkan_studio_smoke vulkan_studio_render_smoke
                 vulkan_metric_fp32 vulkan_ray_fp32 gpu_precision gpu_trace_vs_cpu gpu_trace_vs_cpu_kerr
                 gpu_trace_loose_events_kerr gpu_trace_loose_events_toy
+                # Same driver/libdbus allocations (checked 2026-11-25 on part1).
+                recording_gpu_part1 recording_gpu_part2 recording_gpu_verify
                 PROPERTIES ENVIRONMENT "ASAN_OPTIONS=detect_leaks=0")
         endif()
     endif()
