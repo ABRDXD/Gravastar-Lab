@@ -489,8 +489,29 @@ int measure(const Spec &spec, std::uint64_t frame, const std::optional<fs::path>
                {"tolerance", v.tolerance ? J(*v.tolerance) : J("scene")},
                {"frame_seconds", img.stats.seconds},
                {"estimated_job_hours", img.stats.seconds * double(spec.timeline.frame_count) / 3600},
-               {"stats", img.stats.json()}};
+               {"stats", img.stats.json()},
+               {"renderer", renderer.identity()}};
         const std::size_t n = img.outcome.size();
+        // Escaped rays whose 48 neighbours (7x7) all hit the disk: the
+        // signature of a disk crossing missed inside the annulus (fixed
+        // 2026-11-25). Thin ring stripes cannot produce it.
+        {
+            const int w = spec.timeline.width, h = spec.timeline.height;
+            const auto at = [&](int x, int y) { return img.outcome[std::size_t(y) * w + x]; };
+            const auto escaped = std::uint8_t(o::Outcome::escaped), emitted = std::uint8_t(o::Outcome::emitted);
+            std::size_t holes = 0;
+            for (int y = 3; y + 3 < h; ++y)
+                for (int x = 3; x + 3 < w; ++x) {
+                    if (at(x, y) != escaped)
+                        continue;
+                    bool surrounded = true;
+                    for (int dy = -3; dy <= 3 && surrounded; ++dy)
+                        for (int dx = -3; dx <= 3 && surrounded; ++dx)
+                            surrounded = (dx == 0 && dy == 0) || at(x + dx, y + dy) == emitted;
+                    holes += surrounded;
+                }
+            item["background_pixels_surrounded_by_disk"] = holes;
+        }
         std::size_t differ = 0, over2 = 0, over8 = 0, over32 = 0, outcome = 0;
         int largest = 0;
         double squared = 0;
