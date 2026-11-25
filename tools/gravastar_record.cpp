@@ -190,6 +190,8 @@ struct Renderer {
         return {{"executable_sha256", u::sha256(u::read_file("/proc/self/exe"))},
                 {"kernel", fs::path(spirv).filename().string()},
                 {"kernel_sha256", u::sha256(u::read_file(spirv))},
+                {"core_kernel", fs::path(tracer.core_kernel_path()).filename().string()},
+                {"core_kernel_sha256", u::sha256(u::read_file(tracer.core_kernel_path()))},
                 {"precision", tracer.precision() == gr::GpuTracer::Precision::fp32 ? "FP32" : "FP64"},
                 {"device", d.name},
                 {"vendor_id", d.vendor_id},

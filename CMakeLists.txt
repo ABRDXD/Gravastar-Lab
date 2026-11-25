@@ -301,7 +301,26 @@ if(GRAVASTAR_DESKTOP)
                 "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_stereographic.glsl"
                 "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_core.glsl"
         VERBATIM)
-    add_custom_target(gravastar_trace_shader DEPENDS "${GRAVASTAR_TRACE64_SPV}" "${GRAVASTAR_TRACE32_SPV}")
+    # Core-chart builds of the same kernel; GpuTracer loads them from next to
+    # the angular builds (gravastar_trace_coreNN.spv).
+    foreach(bits 64 32)
+        set(core_spv "${GRAVASTAR_SPV_DIR}/gravastar_trace_core${bits}.spv")
+        set(core_flags -DGRAVASTAR_CORE_CHART)
+        if(bits EQUAL 64)
+            list(APPEND core_flags -DGRAVASTAR_FP64)
+        endif()
+        add_custom_command(
+            OUTPUT "${core_spv}"
+            COMMAND "${GLSLC_EXECUTABLE}" -I "${CMAKE_CURRENT_SOURCE_DIR}/shaders" -O ${core_flags}
+                "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_trace.comp" -o "${core_spv}"
+            DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_trace.comp"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_stereographic.glsl"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/shaders/gravastar_core.glsl"
+            VERBATIM)
+        list(APPEND GRAVASTAR_TRACE_CORE_SPVS "${core_spv}")
+    endforeach()
+    add_custom_target(gravastar_trace_shader DEPENDS "${GRAVASTAR_TRACE64_SPV}" "${GRAVASTAR_TRACE32_SPV}"
+        ${GRAVASTAR_TRACE_CORE_SPVS})
     add_custom_target(gravastar_precision_shaders
         DEPENDS "${GRAVASTAR_PRECISION32_SPV}" "${GRAVASTAR_PRECISION64_SPV}"
                 "${GRAVASTAR_PRECISIONMIXED_SPV}")

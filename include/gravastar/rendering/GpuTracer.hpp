@@ -8,6 +8,7 @@
 #include <array>
 #include <atomic>
 #include <span>
+#include <string>
 #include <vector>
 
 namespace gravastar::rendering {
@@ -32,18 +33,23 @@ class GpuTracer final {
     // FP64 is the reference path. FP32 (built without -DGRAVASTAR_FP64) is the
     // preview/recording path and needs scene tolerances of about 1e-6.
     enum class Precision { fp64, fp32 };
+    // spirv_path names the angular kernel build, gravastar_traceNN.spv; its
+    // core-chart build gravastar_trace_coreNN.spv must sit next to it.
     GpuTracer(const char *spirv_path, vulkan::ComputeOptions options = {},
               Precision precision = Precision::fp64);
     // Traces launch states given in `patch` (north or south) for one scene.
-    // Flagged rays are re-traced with the CPU tracer on fallback_threads()
-    // threads (rays are independent, so the result does not depend on the
-    // count). When `cancel` becomes true the call returns early with
-    // cancelled set and only the finished rays filled in.
+    // With core continuation, rays pause at core entry and exit roots, are
+    // transformed with optics::to_core/from_core and resume in the other
+    // kernel build. Flagged rays are re-traced with the CPU tracer on
+    // fallback_threads() threads (rays are independent, so the result does
+    // not depend on the count). When `cancel` becomes true the call returns
+    // early with cancelled set and only the finished rays filled in.
     [[nodiscard]] Result trace(const optics::Scene &, std::span<const optics::State> start,
                                optics::Chart patch, std::size_t batch = 4096,
                                const std::atomic<bool> *cancel = nullptr);
     [[nodiscard]] const vulkan::DeviceInfo &device() const;
     [[nodiscard]] Precision precision() const noexcept { return precision_; }
+    [[nodiscard]] const std::string &core_kernel_path() const noexcept { return core_path_; }
     void set_fallback_threads(unsigned n) noexcept { threads_ = n ? n : 1; }
     [[nodiscard]] unsigned fallback_threads() const noexcept { return threads_; }
 
@@ -53,6 +59,8 @@ class GpuTracer final {
                const std::atomic<bool> *);
     vulkan::ComputeContext gpu_;
     std::vector<std::uint32_t> code_;
+    std::string core_path_;
+    std::vector<std::uint32_t> core_code_;
     Precision precision_;
     unsigned threads_;
 };
