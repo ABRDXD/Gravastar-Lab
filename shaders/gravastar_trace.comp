@@ -251,7 +251,10 @@ void main() {
             if (retry) break;
             if (k == 1 && (best[1] < disk_inner || best[1] > disk_outer))
                 continue; // disk plane crossed outside the annulus
-            if (hi < hit_tau) {
+            // A root in the last bisection interval leaves hi = h, equal to
+            // hit_tau's start value, so the first hit must count by itself.
+            // Earliest root wins; on a tie the lower surface index stays.
+            if (hit < 0 || hi < hit_tau) {
                 hit = k;
                 hit_tau = hi;
                 for (int i = 0; i < 8; ++i) hit_state[i] = best[i];
