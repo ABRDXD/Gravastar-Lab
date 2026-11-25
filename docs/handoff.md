@@ -1,6 +1,6 @@
 # Handoff
 
-## Current: branch `integration/reconcile` (2026-11-24)
+## Current: branch `integration/reconcile` (2026-11-25)
 
 The two lines of work are combined on `integration/reconcile`, built from
 `codex/p2-reference-optics`, licensed GPL-3.0-or-later. Pushed to origin; `main` is
@@ -42,9 +42,28 @@ camera, scene/emission/science/inspection panels and a real-render smoke
 test. Gate: GCC Release 33/33, GCC desktop 41/41, Clang desktop 39/39,
 ASan/UBSan 41/41 with no diagnostics, GCC Debug 33/33.
 
-Next is Phase F (recording). The full-HD acceptance run is about 41 GPU
-hours in FP64; the owner asked for it in parts. Plan: resumable recorder
-first, then measure an FP32 recording path before the owner chooses.
+Phase F (recording), 2026-11-25: steps 1–3 and the recorder for step 4 are
+done (docs/RECORDING.md). That covers PNG frames with optional exact
+radiance, the resumable job directory (hashes, lock, settings check,
+crash-window reconciliation), the 600-frame fault-injection test, and
+`gravastar_record` driving the GPU tracer along the camera track. Measuring
+1080p frames found a GPU kernel bug: a hit whose root lay in the last
+bisection interval of a step was dropped, so some rays flew through the
+disk. It is fixed, and two loose-event-tolerance CTests fail on the old
+kernel (docs/GPU_TRACER.md). FP32 at 1e-6 now takes 18–22 s per 1080p frame
+(3.0–3.7 h for 600 frames), PSNR 57–58 dB against FP64 at scene tolerance.
+Neither measured frame shows background inside the disk.
+
+Gate at 0a83b47: GCC desktop 49/49 (129 s), Clang desktop 47/47 (91 s),
+ASan/UBSan desktop 46/49 (1227 s). The three failures were the recording GPU
+tests, on leak reports from libdbus and the GPU driver only. d5adb6c turns
+leak detection off for them, as for the other GPU tests, and those three
+then pass. The headless GCC Release and Debug suites were not rerun; no
+headless code changed.
+
+Next: the acceptance run itself (Phase F step 4), in parts, at the precision
+the owner picks. Do not rebuild or update the GPU driver between parts.
+PLAN.md's preview-independence demonstration is still to do.
 Push with the timeout-safe SSH command in the owner's memory notes; a plain
 `git push` hung once on 2026-11-24.
 

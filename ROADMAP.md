@@ -353,6 +353,12 @@ findings were checked against the code; each was fixed on
    sample budget, interrupted and resumed, selected frames compared with an
    uninterrupted render, ffprobe verified. Record wall time and storage.
 
+**Status 2026-11-25:** steps 1–3 are done. For step 4 the recorder is done and
+measured at 1080p (docs/RECORDING.md). The measurement found a GPU kernel bug
+that let rays pass through the disk; it is fixed and covered by tests
+(docs/GPU_TRACER.md). The acceptance run itself has not been made, and
+PLAN.md's preview-independence demonstration is still open.
+
 ### Phase G: P6 release
 
 1. Fresh-clone build and test from the README alone.
