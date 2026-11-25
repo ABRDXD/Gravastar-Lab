@@ -359,6 +359,14 @@ that let rays pass through the disk; it is fixed and covered by tests
 (docs/GPU_TRACER.md). The acceptance run itself has not been made, and
 PLAN.md's preview-independence demonstration is still open.
 
+**Next, before the FP64 showpiece run (owner, 2026-11-25):** a GPU Cartesian
+core patch. In FP32 at 1080p the GPU takes about 1.8 s of a 19 s frame; most
+of the rest is the CPU re-trace of the 3.5–4.7% of rays that enter the core.
+Accepted only if it follows the CPU core chart's contracts and matches the
+CPU ray by ray (no GPU-resolved outcome changes, value ceilings as in
+`gpu_trace_vs_cpu`, including the loose-event-tolerance tests); anything it
+cannot decide still goes to the CPU. **[MAX]**
+
 ### Phase G: P6 release
 
 1. Fresh-clone build and test from the README alone.
