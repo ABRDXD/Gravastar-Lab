@@ -174,32 +174,47 @@ Only then is it renamed to `video.mp4`. Width and height must be even
 ## Speed and accuracy at 1080p (RTX 3050 laptop GPU, 12 CPU threads)
 
 `--measure` on the acceptance spec compares each recording path with FP64
-at the scene's own tolerance (1e-10). Results are in
-`results/p5_recording_measure_f000.json` and `results/p5_recording_measure_f300.json`.
-The table shows frame 0 / frame 300.
+at the scene's own tolerance (1e-10). Measured 2026-11-25 with the fixed
+kernel (below). Results are in `results/p5_recording_measure_f000.json` and
+`results/p5_recording_measure_f300.json`. Each variant there records its
+executable and kernel SHA-256. The table shows frame 0 / frame 300.
+
+| Path | s per frame | 600-frame job | pixels differing | > 8 levels | > 32 levels | outcome changes | PSNR |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| FP64, scene tolerance (reference) | 205.7 / 178.3 | 30–34 h | — | — | — | — | — |
+| FP64, 1e-6 | 92.5 / 83.4 | 14–15 h | 2.4% / 2.9% | 30 / 26 | 17 / 19 | 20 / 24 | 61.3 / 61.2 dB |
+| FP32, 1e-6 | 17.9 / 22.0 | 3.0–3.7 h | 5.2% / 5.8% | 93 / 74 | 42 / 47 | 57 / 62 | 58.0 / 56.6 dB |
+
+No image has a background pixel whose 48 neighbours (7×7) are all disk
+(`background_pixels_surrounded_by_disk` = 0 in all six).
+
+Almost all differing pixels are off by 1–2 levels: 99.9% at FP64 1e-6 and
+99.5% at FP32. In FP32, 1.8 s of each frame is GPU work. Most of the rest
+is the CPU re-trace of the 3.5–4.7% of rays that enter the core (12–16 s),
+since the GPU kernel has no core patch. Each 1080p display frame is about
+0.9 MB, so the 600 frames take about 540 MB.
+
+**Fixed: rays passing through the disk (2026-11-25).** The earlier frames had
+background pixels in the middle of the disk image. The earlier note counted
+40 in FP32 frame 0 and one in the FP64 reference, at (86, 1012). Counted
+from ray outcomes, as `--measure` now does, the old FP32 frame 0 had 56.
+Each such pixel is a ray that crossed the disk plane inside the annulus
+without the hit counting. The GPU kernel dropped a hit whose root lay in the
+last bisection interval of a step (`GPU_TRACER.md`). All 56 and the
+reference pixel were GPU-resolved, and the CPU tracer at the same settings
+puts each on the disk; (86, 1012) hits it at r = 5.006. With the fix the
+reference gained exactly that ray (1,170,051 to 1,170,052 disk hits), and no
+image has such pixels. Rays whose escape hit was dropped used to run on to
+the affine budget and be re-traced on the CPU; that count fell from 73 to 3
+in FP32 frame 0.
+
+Before the fix (2026-11-24). The first three rows also predate the
+per-image camera observer, which removed 12–15 s of CPU work per frame
+without changing a byte:
 
 | Path | s per frame | 600-frame job | pixels differing | > 8 levels | > 32 levels | outcome changes | PSNR |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | FP64, scene tolerance (reference) | 250.6 / 223.8 | 37–42 h | — | — | — | — | — |
 | FP64, 1e-6 | 130.8 / 121.3 | 20–22 h | 2.4% / 2.9% | 87 / 95 | 65 / 76 | 75 / 86 | 52.8 / 54.1 dB |
 | FP32, 1e-6 | 33.8 / 36.6 | 5.6–6.1 h | 5.2% / 5.8% | 153 / 147 | 92 / 109 | 115 / 131 | 52.3 / 53.0 dB |
-
-These timings predate a change that computes the camera frame once per image
-instead of once per pixel. That change removed about 12–15 s of CPU work from
-every frame at any precision, and the frames are byte-identical. Afterwards,
-FP32 at 1e-6 frames 0 and 1 took 22.4 s and 20.2 s, about 3.5 h for the
-job. Most of what remains is the CPU re-trace of the 3.5–4.7% of rays that
-enter the core, since the GPU kernel has no core patch. Each 1080p display
-frame is about 0.9 MB, so the 600 frames take about 540 MB.
-
-Almost all differing pixels are off by 1–2 levels. The large differences are
-single pixels at outcome changes.
-
-**Open defect: rays passing through the disk.** In frame 0, count the pixels
-that show the background while all 48 of their 7×7 neighbours are disk:
-40 at FP32 1e-6, against 1 in the FP64 scene-tolerance reference, at
-(86, 1012). Such a pixel means the ray crossed the disk plane inside the
-annulus without the event being registered. The other specks (34, shared by
-both) lie along the higher-order ring stripes, which are narrower than a
-pixel, and are expected at one ray per pixel. This must be fixed before the
-acceptance run.
+| FP32, 1e-6, per-image observer (frames 0, 1) | 22.4 / 20.2 | about 3.5 h | | | | | |

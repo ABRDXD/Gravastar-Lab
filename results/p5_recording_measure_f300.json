@@ -54,9 +54,22 @@
   "schema_version": 1,
   "variants": [
     {
-      "estimated_job_hours": 37.29813710766667,
-      "frame_seconds": 223.788822646,
+      "background_pixels_surrounded_by_disk": 0,
+      "estimated_job_hours": 29.720988610666666,
+      "frame_seconds": 178.325931664,
       "precision": "FP64",
+      "renderer": {
+        "api_version": 4211039,
+        "cpu_fallback": "CPU tracer at the same settings; results do not depend on the thread count",
+        "device": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+        "device_id": 9644,
+        "driver_version": 2580775424,
+        "executable_sha256": "29ace876dd099ceb959c11579d4999654c0e121d0acafc3dd8284a6caf60eec5",
+        "kernel": "gravastar_trace64.spv",
+        "kernel_sha256": "44400ef54a01fcb392e3389e65508c0ef5615933d1751cc12453ac7fb8fb00fe",
+        "precision": "FP64",
+        "vendor_id": 4318
+      },
       "stats": {
         "cpu_fallback": {
           "affine_budget": 0,
@@ -66,14 +79,19 @@
           "numerical_failure": 0,
           "step_budget": 0
         },
-        "cpu_fallback_seconds": 51.038279587,
-        "gpu_milliseconds": 130787.71222399999,
+        "cpu_fallback_seconds": 34.907251668,
+        "gpu_milliseconds": 135949.333056,
         "near_tangent": 0,
         "outcomes": {
           "emitted": 1267799,
           "escaped": 805801
         },
-        "seconds": 223.788822646
+        "seconds": 178.325931664,
+        "stage_seconds": {
+          "launch": 0.044605396000000005,
+          "sample": 2.9906672109999994,
+          "trace": 174.93939899499992
+        }
       },
       "tolerance": "scene",
       "variant": "fp64_scene_tolerance",
@@ -89,73 +107,109 @@
       }
     },
     {
-      "estimated_job_hours": 20.213945618666667,
-      "frame_seconds": 121.283673712,
+      "background_pixels_surrounded_by_disk": 0,
+      "estimated_job_hours": 13.897191586,
+      "frame_seconds": 83.383149516,
       "precision": "FP64",
+      "renderer": {
+        "api_version": 4211039,
+        "cpu_fallback": "CPU tracer at the same settings; results do not depend on the thread count",
+        "device": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+        "device_id": 9644,
+        "driver_version": 2580775424,
+        "executable_sha256": "29ace876dd099ceb959c11579d4999654c0e121d0acafc3dd8284a6caf60eec5",
+        "kernel": "gravastar_trace64.spv",
+        "kernel_sha256": "44400ef54a01fcb392e3389e65508c0ef5615933d1751cc12453ac7fb8fb00fe",
+        "precision": "FP64",
+        "vendor_id": 4318
+      },
       "stats": {
         "cpu_fallback": {
-          "affine_budget": 37,
-          "core_entry": 96476,
+          "affine_budget": 0,
+          "core_entry": 96478,
           "near_tangency": 2414,
           "null_drift": 0,
-          "numerical_failure": 2,
+          "numerical_failure": 0,
           "step_budget": 0
         },
-        "cpu_fallback_seconds": 31.439844785000002,
-        "gpu_milliseconds": 58813.997727999995,
+        "cpu_fallback_seconds": 16.209201571999998,
+        "gpu_milliseconds": 59747.689184,
         "near_tangent": 445,
         "outcomes": {
-          "emitted": 1267737,
-          "escaped": 805863
+          "emitted": 1267799,
+          "escaped": 805801
         },
-        "seconds": 121.283673712
+        "seconds": 83.383149516,
+        "stage_seconds": {
+          "launch": 0.04438452,
+          "sample": 3.0472946799999994,
+          "trace": 80.11092076999998
+        }
       },
       "tolerance": 1e-06,
       "variant": "fp64_tolerance",
       "versus_reference": {
-        "largest_channel_difference": 202,
-        "outcome_changes": 86,
+        "largest_channel_difference": 115,
+        "outcome_changes": 24,
         "pixels": 2073600,
-        "pixels_differing": 59974,
-        "pixels_differing_more_than_2_levels": 108,
-        "pixels_differing_more_than_32_levels": 76,
-        "pixels_differing_more_than_8_levels": 95,
-        "psnr_db": 54.050716590836785
+        "pixels_differing": 59894,
+        "pixels_differing_more_than_2_levels": 32,
+        "pixels_differing_more_than_32_levels": 19,
+        "pixels_differing_more_than_8_levels": 26,
+        "psnr_db": 61.156447674328014
       }
     },
     {
-      "estimated_job_hours": 6.097703371833333,
-      "frame_seconds": 36.586220231,
+      "background_pixels_surrounded_by_disk": 0,
+      "estimated_job_hours": 3.6583786736666672,
+      "frame_seconds": 21.950272042,
       "precision": "FP32",
+      "renderer": {
+        "api_version": 4211039,
+        "cpu_fallback": "CPU tracer at the same settings; results do not depend on the thread count",
+        "device": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+        "device_id": 9644,
+        "driver_version": 2580775424,
+        "executable_sha256": "29ace876dd099ceb959c11579d4999654c0e121d0acafc3dd8284a6caf60eec5",
+        "kernel": "gravastar_trace32.spv",
+        "kernel_sha256": "658bf29f1d81e3decc1d4f71e027eeae92778404aa38b8d5eae4fce245629e0b",
+        "precision": "FP32",
+        "vendor_id": 4318
+      },
       "stats": {
         "cpu_fallback": {
-          "affine_budget": 46,
+          "affine_budget": 0,
           "core_entry": 96479,
           "near_tangency": 2417,
           "null_drift": 366,
           "numerical_failure": 0,
           "step_budget": 0
         },
-        "cpu_fallback_seconds": 16.894096919,
-        "gpu_milliseconds": 2351.3995840000002,
+        "cpu_fallback_seconds": 15.800590295000001,
+        "gpu_milliseconds": 1764.7208639999997,
         "near_tangent": 445,
         "outcomes": {
-          "emitted": 1267718,
-          "escaped": 805882
+          "emitted": 1267787,
+          "escaped": 805813
         },
-        "seconds": 36.586220231
+        "seconds": 21.950272042,
+        "stage_seconds": {
+          "launch": 0.041823657,
+          "sample": 2.9682990180000006,
+          "trace": 18.754757741
+        }
       },
       "tolerance": 1e-06,
       "variant": "fp32_tolerance",
       "versus_reference": {
-        "largest_channel_difference": 179,
-        "outcome_changes": 131,
+        "largest_channel_difference": 164,
+        "outcome_changes": 62,
         "pixels": 2073600,
-        "pixels_differing": 119647,
-        "pixels_differing_more_than_2_levels": 732,
-        "pixels_differing_more_than_32_levels": 109,
-        "pixels_differing_more_than_8_levels": 147,
-        "psnr_db": 53.04985758675109
+        "pixels_differing": 119569,
+        "pixels_differing_more_than_2_levels": 654,
+        "pixels_differing_more_than_32_levels": 47,
+        "pixels_differing_more_than_8_levels": 74,
+        "psnr_db": 56.63638892892415
       }
     }
   ],
