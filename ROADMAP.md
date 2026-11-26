@@ -375,9 +375,11 @@ cannot decide still goes to the CPU. **[MAX]**
   0 mismatches, 12286/12288 rays on the GPU; its 577 core rays agree to
   6.2e-10. All 17 GPU/recording CTests pass (GCC desktop). 1080p frame 0:
   FP32 6.2 s per frame (was 17.9), FP64 scene tolerance 179.9 s (was 205.7).
-  Still to do: frame 300, regenerate `results/p3_gpu_image_*.json` and the
-  `p5_recording_measure_*` reports, update RECORDING.md, Clang and
-  sanitizer gates.
+  **Done 2026-11-26** (`765fb5e`): frame 300 FP32 9.4 s (was 22.0), FP64
+  1e-6 75.6 s, FP64 scene tolerance 154.0 s; accuracy unchanged, no
+  core-entry CPU re-traces. Reports regenerated, RECORDING.md updated.
+  Gate at 765fb5e: GCC desktop 49/49 (184 s), Clang desktop 47/47 (133 s),
+  optimized ASan/UBSan desktop 49/49 (1403 s), no sanitizer diagnostics.
 
 ### Phase G: P6 release
 

@@ -72,10 +72,15 @@ on the host. Toy 128x96 vs CPU: 0 mismatches, core rays agree to 6.2e-10.
 1080p frame 0 (`results/local/core/measure2_f0.json`, untracked): FP32
 6.2 s per frame, 52 outcome changes against the reference, 85 pixels off by
 more than 8 levels; FP64 at 1e-6 81.4 s; FP64 at scene tolerance 179.9 s.
-Stopped there because the owner needed the laptop: frame 300, the tracked
-reports, RECORDING.md and the Clang/sanitizer gates are still to do (ROADMAP.md).
+Finished 2026-11-26 (`765fb5e`): frame 300 FP32 9.4 s per frame (was 22.0),
+FP64 1e-6 75.6 s, FP64 scene tolerance 154.0 s; tracked reports and
+RECORDING.md updated. Gate at 765fb5e: GCC desktop 49/49 (184 s), Clang
+desktop 47/47 (133 s), optimized ASan/UBSan desktop
+(`reconcile-sanitizers-opt`) 49/49 (1403 s), no diagnostics. The
+unoptimized `reconcile-sanitizers` Debug build times out on six CPU tests
+(4441 s) with no diagnostics; use the -opt build for the gate.
 
-Next (owner, 2026-11-25): finish the core patch checks above, then presentation colours,
+Next (owner, 2026-11-25): presentation colours,
 then a Kerr-app-style studio layout that keeps the raw ImGui look, then the
 FP64 showpiece run (`benchmarks/recording_acceptance_fp64_v1.json`, not yet
 committed: it will gain the colour setting).
