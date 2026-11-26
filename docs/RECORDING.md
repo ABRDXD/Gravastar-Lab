@@ -200,10 +200,27 @@ demonstration.
 ## Speed and accuracy at 1080p (RTX 3050 laptop GPU, 12 CPU threads)
 
 `--measure` on the acceptance spec compares each recording path with FP64
-at the scene's own tolerance (1e-10). Measured 2026-11-25 with the fixed
-kernel (below). Results are in `results/p5_recording_measure_f000.json` and
+at the scene's own tolerance (1e-10). Measured 2026-11-25/26 with the GPU
+core chart (`511453f`, `GPU_TRACER.md`): rays that enter the core are now
+traced on the GPU by a second kernel build instead of on the CPU. Results
+are in `results/p5_recording_measure_f000.json` and
 `results/p5_recording_measure_f300.json`. Each variant there records its
-executable and kernel SHA-256. The table shows frame 0 / frame 300.
+executable and kernel SHA-256s. The table shows frame 0 / frame 300.
+
+| Path | s per frame | 600-frame job | pixels differing | > 8 levels | > 32 levels | outcome changes | PSNR |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| FP64, scene tolerance (reference) | 179.9 / 154.0 | 26–30 h | — | — | — | — | — |
+| FP64, 1e-6 | 81.4 / 75.6 | 13–14 h | 2.4% / 2.9% | 30 / 26 | 17 / 19 | 20 / 24 | 61.3 / 61.2 dB |
+| FP32, 1e-6 | 6.2 / 9.4 | 1.0–1.6 h | 5.3% / 6.0% | 85 / 74 | 41 / 47 | 52 / 61 | 58.3 / 57.0 dB |
+
+No image has a background pixel whose 48 neighbours (7×7) are all disk
+(`background_pixels_surrounded_by_disk` = 0 in all six). No ray is re-traced
+on the CPU for entering the core; the remaining CPU re-traces are
+near-tangency and null-drift rays (FP32: 1,634 in frame 0, 2,777 in frame
+300). The accuracy columns match the run without the core chart to within a
+few pixels, so the core chart changes speed, not the picture.
+
+Before the core chart (2026-11-25, fixed disk-crossing kernel):
 
 | Path | s per frame | 600-frame job | pixels differing | > 8 levels | > 32 levels | outcome changes | PSNR |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -211,16 +228,15 @@ executable and kernel SHA-256. The table shows frame 0 / frame 300.
 | FP64, 1e-6 | 92.5 / 83.4 | 14–15 h | 2.4% / 2.9% | 30 / 26 | 17 / 19 | 20 / 24 | 61.3 / 61.2 dB |
 | FP32, 1e-6 | 17.9 / 22.0 | 3.0–3.7 h | 5.2% / 5.8% | 93 / 74 | 42 / 47 | 57 / 62 | 58.0 / 56.6 dB |
 
-No image has a background pixel whose 48 neighbours (7×7) are all disk
-(`background_pixels_surrounded_by_disk` = 0 in all six). Every outcome change
-in both frames, at both precisions, is an edge pixel: one of its eight
+Every outcome change in that run, in both frames, at both precisions, is an
+edge pixel: one of its eight
 neighbours in the reference already has the new outcome (checked from
 per-pixel outcome maps, 2026-11-25).
 
 Almost all differing pixels are off by 1–2 levels: 99.9% at FP64 1e-6 and
-99.5% at FP32. In FP32, 1.8 s of each frame is GPU work. Most of the rest
-is the CPU re-trace of the 3.5–4.7% of rays that enter the core (12–16 s),
-since the GPU kernel has no core patch. Each 1080p display frame is about
+99.5% at FP32. In FP32, 1.8 s of each frame was GPU work. Most of the rest
+was the CPU re-trace of the 3.5–4.7% of rays that enter the core (12–16 s),
+which the core chart above removes. Each 1080p display frame is about
 0.9 MB, so the 600 frames take about 540 MB.
 
 **Fixed: rays passing through the disk (2026-11-25).** The earlier frames had

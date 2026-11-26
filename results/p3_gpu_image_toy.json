@@ -1,6 +1,6 @@
 {
-  "assembly_and_cpu_fallback_seconds": 1.215835347,
   "check_failures": "",
+  "check_scope": "outcomes_and_values",
   "checks_passed": true,
   "classifications": {
     "emitted": 5453,
@@ -8,35 +8,54 @@
   },
   "comparison": {
     "background_relative": {
-      "count": 6256,
-      "max": 1.766402443282509e-05,
-      "median": 4.0120001129509483e-10,
-      "p99": 1.4502846444633628e-08
+      "count": 6833,
+      "max": 1.7661953215266257e-05,
+      "median": 3.4340766303211747e-10,
+      "p99": 1.3212625542744506e-08
     },
-    "cpu_only_seconds_all_threads": 3.238823769,
+    "core_rays": {
+      "background_relative": {
+        "count": 577,
+        "max": 1.0069690016104503e-09,
+        "median": 9.214297913372381e-11,
+        "p99": 6.364087161962338e-10
+      },
+      "compared": 577,
+      "disk_intensity_relative": null,
+      "disk_redshift_absolute": null,
+      "final_position_and_direction": {
+        "count": 577,
+        "max": 6.24078566602293e-10,
+        "median": 1.8625456732479506e-10,
+        "p99": 5.79879255724336e-10
+      },
+      "note": "GPU-resolved rays whose CPU trace entered the Cartesian core; already included in the totals above.",
+      "outcome_mismatches": 0
+    },
+    "cpu_only_seconds_all_threads": 6.730634836,
     "cpu_threads": 12,
     "disk_intensity_relative": {
       "count": 5453,
-      "max": 6.2739267333126505e-09,
-      "median": 2.4303809179122486e-11,
-      "p99": 2.775355965732981e-10
+      "max": 2.811346367565659e-09,
+      "median": 2.2902656846348208e-11,
+      "p99": 2.751950452258078e-10
     },
     "disk_redshift_absolute": {
       "count": 5453,
-      "max": 3.473891285743491e-09,
-      "median": 4.021671884402167e-12,
+      "max": 1.3870483650535448e-09,
+      "median": 3.9748204727629854e-12,
       "p99": 7.603806473355235e-11
     },
     "final_position_and_direction": {
-      "count": 11709,
-      "max": 8.383799721123353e-08,
-      "median": 1.1545076006314048e-10,
-      "p99": 5.581077822114366e-10
+      "count": 12286,
+      "max": 8.383607691397899e-08,
+      "median": 1.1712764091953431e-10,
+      "p99": 5.562323934782398e-10
     },
     "gpu_resolved_outcome_mismatches": 0,
     "note": "Rays the GPU flagged are re-traced by the same CPU tracer, so only GPU-resolved rays are compared."
   },
-  "computational_source_sha256": "76f115dca0452432deb576e7438d3f4a8c3ea5fb7e35433ace34f736340c5b36",
+  "computational_source_sha256": "ca6130da44773ae5b0356f731ac78c0620d5c8223f61b7abe4b354aca1f786d1",
   "configuration": {
     "background": {
       "model": "static_star_sphere_v1",
@@ -100,21 +119,29 @@
     "schema_version": 1,
     "scope": "Same as optics_core_long_v1 except disk motion: prograde Keplerian circular geodesics (prescribed motion, not a self-consistent disk). Annulus [3,6] lies outside the prograde ISCO 2.32 of the exact Kerr exterior. Adds the separate static-star background channel (artistic star field; physical frequency shift)."
   },
-  "cpu_fallback_rays": 579,
+  "cpu_fallback_rays": 2,
   "cpu_fallback_reasons": {
     "affine_budget": 0,
-    "core_entry": 577,
+    "core_entry": 0,
     "near_tangency": 2,
     "null_drift": 0,
     "numerical_failure": 0,
     "step_budget": 0
   },
+  "cpu_fallback_seconds": 0.006717593,
+  "cpu_fallback_threads": 12,
   "device": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
-  "gpu_milliseconds": 1411.829568,
-  "gpu_resolved_rays": 11709,
+  "gpu_event_tolerance": 1e-09,
+  "gpu_milliseconds": 1606.657536,
+  "gpu_resolved_rays": 12286,
+  "gpu_tolerance": 1e-10,
   "input_sha256": "bc03e8ed671fc4a9edfd84484bab0ff9ae30b53364a5fb9263d762e776e929ab",
   "precision": "FP64",
   "rays": 12288,
+  "reference_event_tolerance": 1e-09,
+  "reference_tolerance": 1e-10,
+  "report_assembly_seconds": 0.698521195,
   "resolution_scale": 8,
-  "schema_version": 1
+  "schema_version": 1,
+  "trace_seconds_including_cpu_fallback": 1.71140491
 }

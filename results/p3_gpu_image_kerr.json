@@ -1,6 +1,6 @@
 {
-  "assembly_and_cpu_fallback_seconds": 0.163733469,
   "check_failures": "",
+  "check_scope": "outcomes_and_values",
   "checks_passed": true,
   "classifications": {
     "capture_surface": 7011,
@@ -10,34 +10,43 @@
   "comparison": {
     "background_relative": {
       "count": 612,
-      "max": 6.511905053782771e-09,
-      "median": 3.966787676311732e-10,
-      "p99": 4.5251951087287756e-09
+      "max": 5.965670670778787e-09,
+      "median": 3.808285029879142e-10,
+      "p99": 4.230819466537745e-09
     },
-    "cpu_only_seconds_all_threads": 1.361897962,
+    "core_rays": {
+      "background_relative": null,
+      "compared": 0,
+      "disk_intensity_relative": null,
+      "disk_redshift_absolute": null,
+      "final_position_and_direction": null,
+      "note": "GPU-resolved rays whose CPU trace entered the Cartesian core; already included in the totals above.",
+      "outcome_mismatches": 0
+    },
+    "cpu_only_seconds_all_threads": 2.969252045,
     "cpu_threads": 12,
     "disk_intensity_relative": {
       "count": 4665,
       "max": 5.160614326069716e-10,
-      "median": 2.2685835139860003e-11,
-      "p99": 2.7751449727226046e-10
+      "median": 2.160728946715995e-11,
+      "p99": 2.758559588776118e-10
     },
     "disk_redshift_absolute": {
       "count": 4665,
       "max": 1.1647705022710397e-10,
-      "median": 2.9320990080350384e-12,
-      "p99": 6.727657320126923e-11
+      "median": 2.8914648453337577e-12,
+      "p99": 6.73575084597644e-11
     },
     "final_position_and_direction": {
       "count": 12288,
-      "max": 2.2494777401904642e-08,
-      "median": 4.364983929860955e-10,
-      "p99": 1.487333187860651e-08
+      "max": 2.1151785906114995e-08,
+      "median": 4.3350611989012577e-10,
+      "p99": 1.5115378171337568e-08
     },
     "gpu_resolved_outcome_mismatches": 0,
     "note": "Rays the GPU flagged are re-traced by the same CPU tracer, so only GPU-resolved rays are compared."
   },
-  "computational_source_sha256": "76f115dca0452432deb576e7438d3f4a8c3ea5fb7e35433ace34f736340c5b36",
+  "computational_source_sha256": "ca6130da44773ae5b0356f731ac78c0620d5c8223f61b7abe4b354aca1f786d1",
   "configuration": {
     "background": {
       "model": "static_star_sphere_v1",
@@ -107,12 +116,20 @@
     "numerical_failure": 0,
     "step_budget": 0
   },
+  "cpu_fallback_seconds": 9.62e-07,
+  "cpu_fallback_threads": 12,
   "device": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
-  "gpu_milliseconds": 978.9009920000001,
+  "gpu_event_tolerance": 1e-09,
+  "gpu_milliseconds": 969.839968,
   "gpu_resolved_rays": 12288,
+  "gpu_tolerance": 1e-10,
   "input_sha256": "69aa526cbb71c7a25372276523613c184bfcb4218fd4159734487180d15cc83f",
   "precision": "FP64",
   "rays": 12288,
+  "reference_event_tolerance": 1e-09,
+  "reference_tolerance": 1e-10,
+  "report_assembly_seconds": 0.466809627,
   "resolution_scale": 8,
-  "schema_version": 1
+  "schema_version": 1,
+  "trace_seconds_including_cpu_fallback": 1.013970494
 }

@@ -102,23 +102,23 @@ scene tolerance: Kerr 923–988 ms (986), toy 1545 ms (1411 plus the CPU).
 
 ## Per-pixel comparison (128x96 Keplerian star scenes, RTX 3050, FP64)
 
-Results: `results/p3_gpu_image_{toy,kerr}.json`. Only GPU-resolved rays are
+Results: `results/p3_gpu_image_{toy,kerr}.json` (regenerated 2026-11-26 with the two-kernel tracer, `511453f`). Only GPU-resolved rays are
 compared; flagged rays are traced by the CPU tracer itself.
 
 | Scene | Rays on GPU | Re-traced on CPU | Outcome mismatches | Disk intensity (rel.) max | Disk redshift max | Background (rel.) max | Final position max |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
-| toy (`optics_keplerian_stars_v1`) | 11709 / 12288 | 577 core entry, 2 near tangency | 0 | 6.3e-9 | 3.5e-9 | 1.8e-5 | 8.4e-8 |
-| toy, two-kernel tracer (2026-11-25, report not yet regenerated) | 12286 / 12288 | 2 near tangency | 0 | 2.8e-9 | 1.4e-9 | 1.8e-5 | 8.4e-8 |
-| Kerr (`optics_keplerian_kerr_stars_v1`) | 12288 / 12288 | 0 | 0 | 5.2e-10 | 1.2e-10 | 6.5e-9 | 2.2e-8 |
+| toy (`optics_keplerian_stars_v1`), two-kernel tracer | 12286 / 12288 | 2 near tangency | 0 | 2.8e-9 | 1.4e-9 | 1.8e-5 | 8.4e-8 |
+| Kerr (`optics_keplerian_kerr_stars_v1`) | 12288 / 12288 | 0 | 0 | 5.2e-10 | 1.2e-10 | 6.0e-9 | 2.1e-8 |
+| toy, before the core chart (single kernel) | 11709 / 12288 | 577 core entry, 2 near tangency | 0 | 6.3e-9 | 3.5e-9 | 1.8e-5 | 8.4e-8 |
 
-In the two-kernel run the 577 core rays alone have 0 mismatches, final
+The 577 core rays alone have 0 mismatches, final
 position max 6.2e-10 and background max 1e-9 (`gravastar_gpu_trace` reports
 them as `core_rays`). Medians are 1e-11 to 1e-10. Every maximum except one background value is
 below the CPU tracer's own integration error at the scene tolerance (about
 3e-7 per pixel against tolerance 1e-13, `EMISSION.md`). The toy background
 maximum 1.8e-5 is one ray on a steep flank of a 0.02-rad star, where a
 final-position difference of 8e-8 changes the sampled intensity; its p99 is
-1.5e-8.
+1.3e-8.
 
 The `--check` ceilings (no outcome mismatch; disk intensity and redshift
 within 1e-7; position within 1e-6; at least 90% of rays on the GPU) are
